@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects" class="active">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            {% if user_access['toggleDashboard'] == 'On' %}
+            <li class="active">
+              <a href="{{ url_for('projects') }}" class="link">
+                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleProjectStatus'] == 'On' %}
+            <li>
+              <a href="{{ url_for('prj_status') }}" class="link">
+                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleHoursEdit'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hours_edit') }}" class="link">
+                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleMaterialReceipt'] == 'On' %}
+            <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i class="fa-solid fa-industry"></i>
+                Material Receipt</a></li>
+            {% endif %}
+
+            {% if user_access['toggleHoursView'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hrs_view') }}" class="link">
+                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+              </a>
+            </li>
+            {% endif %}
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+      <div class="search_container">
+
+        <div class="timenav">
+          <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+          <ul id="menuList1" class="timebar">
+            {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+            department_code in [10, 11, 16, 1000]) %}
+            <li>
+              <a href="{{ url_for('project_details_page', id=project_id) }}" class="active">
+                <i class="fa-solid fa-chart-bar"></i> Overview
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+            department_code in [10, 11, 16, 1000]) %}
+            <li>
+              <a href="/prj_hrs_view?project_id={{ project_id }}">
+                <i class="fa-regular fa-clock"></i> Hrs View
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleGeneratePR'] == 'On' %}
+            <li>
+              <a href="/project_pr?project_id={{ project_id }}">
+                <i class="fa-solid fa-file-invoice"></i> Generate PR
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleprjViewPO'] == 'On' %}
+            <li>
+              <a href="/project_po?project_id={{ project_id }}">
+                <i class="fa-solid fa-file-contract"></i> View PO's
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleViewClaims'] == 'On' %}
+            <li>
+              <a href="/claiminfo?project_id={{ project_id }}">
+                <i class="fa-solid fa-receipt"></i> View Claims
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['togglePrjViewDO'] == 'On' %}
+            <li>
+              <a href="{{ url_for('project_do', project_id=project_id) }}">
+                <i class="fa-solid fa-truck-moving"></i> DO's
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['togglePaymentRequests'] == 'On' %}
+            <li>
+              <a href="{{ url_for('prj_pay_req', project_id=project_id) }}">
+                <i class="fa-solid fa-money-bill-wave"></i> Payment Request
+              </a>
+            </li>
+            {% endif %}
+
+            <li>
+              <a href="{{ url_for('prj_planner', project_id=project_id) }}">
+                <i class="fa-solid fa-calendar-check"></i> Planner
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="menu-icon1">
+            <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+          </div>
+        </div>
+
+        <div class="line1"></div>
+
+        <style>
+          .timenav .active i {
+            color: white !important;
+            /* Ensures icon turns white */
+          }
+
+          .search_container {
+
+            width: 100%;
+            padding: 10px;
+          }
+
+          .line1 {
+            margin: 3px auto;
+            /* Centers horizontally */
+            height: 2px;
+            background-color: rgb(82, 79, 79);
+            width: 97%;
+            display: block;
+            /* Ensures it behaves as a block element */
+          }
+
+
+          /* Style for headings and icons */
+          .timenav a,
+          .timenav i {
+            color: #8d7f5c !important;
+            font-weight: bold;
+          }
+
+          /* Active link style */
+          .timenav .active {
+            background-color: #FF6347 !important;
+            color: white !important;
+            padding: 10px;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+
+          .timebar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+          }
+
+          .timebar li {
+            flex: 1 1 20%;
+            margin: 5px;
+            text-align: center;
+          }
+
+          .link1 {
+            color: #8d7f5c;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            cursor: pointer;
+          }
+        </style>
+
+      </div>
+
+      <div class="title-box">
+        <div class="title-item cssanimation open">
+          <span>Project ID : {{project_details.id}} </span>
+        </div>
+
+        <div class="title-item cssanimation open">
+          <span>Project Name : {{project_details.project_name}}</span>
+        </div>
+
+        <div class="title-item cssanimation open">
+          <span>Project Manager : {{project_details.pm}}</span>
+        </div>
+
+        <style>
+          .title-box {
+            display: flex;
+            /* Arrange items in a row */
+            justify-content: space-between;
+            /* Distribute items with space between them */
+            align-items: center;
+            /* Vertically align items */
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+
+          .title-item {
+            display: flex;
+            align-items: center;
+            /* Align title and value on the same row */
+          }
+
+          .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+          }
+
+          .open {
+            justify-content: space-between;
+            /* Distribute items with space between them */
+            animation-name: open;
+            animation-duration: 1s;
+            /* Add duration */
+            animation-timing-function: ease-out;
+            /* Smooth animation */
+            animation-fill-mode: forwards;
+            /* Retain the final state of the animation */
+          }
+
+          @keyframes open {
+            from {
+              width: 20px;
+              /* Start with 0 width */
+            }
+
+            to {
+              width: 573px;
+              /* Animate to 473px width */
+            }
+          }
+
+          /* Responsive styling for smaller screens */
+          @media (max-width: 768px) {
+            .title-box {
+              flex-direction: column;
+              /* Stack items vertically on smaller screens */
+              align-items: flex-start;
+            }
+
+            .title-item {
+              margin-bottom: 15px;
+              /* Space between stacked items */
+            }
+          }
+        </style>
+
+      </div>
+
+      <style>
+        .wrapper {
+          background-color: whitesmoke;
+          padding: 5px;
+          border-radius: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 31px;
+        }
+
+        .widget {
+          position: relative;
+          box-sizing: content-box;
+          width: 228px;
+          height: 80px;
+          padding: 10px;
+          border-radius: 6px;
+          color: #fff;
+          box-shadow: 0 0 15px #ddd;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .widget:hover {
+          transform: scale(1.05);
+          /* Slightly increase size */
+          box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+          /* Darker shadow on hover */
+        }
+
+        .w_icon {
+          font-family: "FontAwesome";
+          float: left;
+          font-size: 1.2em;
+        }
+
+        .widget>div {
+          font-weight: 150;
+          position: absolute;
+          bottom: 10px;
+        }
+
+        .degree {
+          font-size: 1.3em;
+          font-weight: bold;
+        }
+
+        /* Widget Colors and w_icons */
+        .total-leaves {
+          background-color: #1a6a92;
+        }
+
+        .total-leaves .w_icon {
+          color: #fff;
+        }
+
+        .pending-leaves {
+          background-color: #e74c3c;
+        }
+
+        .pending-leaves .w_icon {
+          color: #fff;
+        }
+
+        .approved-leaves {
+          background-color: #16a085;
+        }
+
+        .approved-leaves .w_icon {
+          color: #fff;
+        }
+
+        .rejected-leaves {
+          background-color: #8e44ad;
+        }
+
+        .rejected-leaves .w_icon {
+          color: #fff;
+        }
+
+        .monthly-leaves {
+          background-color: #f39c12;
+        }
+
+        .monthly-leaves .w_icon {
+          color: #fff;
+        }
+
+        .today-leaves {
+          background-color: #2980b9;
+        }
+
+        .today-leaves .w_icon {
+          color: #fff;
+        }
+
+        .most-pr-on {
+          background-color: #d35400;
+        }
+
+        .most-pr-on .w_icon {
+          color: #fff;
+        }
+
+        .supplyer-on {
+          background-color: #34495e;
+        }
+
+        .supplyer-on .w_icon {
+          color: #fff;
+        }
+      </style>
+
+      <div class="wrapper">
+        <!-- Hours Spent Widget -->
+        <div class="widget rejected-leaves">
+          <i class="w_icon fa fa-clock">
+            <span style="margin-left: 3px; font-weight: 250">Hours Spent</span>
+          </i>
+          <div class="degree"> {{ "{:,.2f}".format(insights.total_hours_sum) }} hr's </div>
+        </div>
+
+        <!-- Over Time Hr Widget -->
+        <div class="widget total-leaves">
+          <i class="w_icon fa fa-hourglass-half">
+            <span style="margin-left: 3px; font-weight: 250">Over Time Hr</span>
+          </i>
+          <div class="degree">{{insights.ouvet_time}} hr's</div>
+        </div>
+
+        <!-- PR Count Widget -->
+        <div class="widget monthly-leaves" id="prCountCard">
+
+          <i class="w_icon fa fa-cogs">
+            <span style="margin-left: 3px; font-weight: 250">PR Count</span>
+          </i>
+          <div class="degree"> {{insights.PR_count}} </div>
+        </div>
+
+        <!-- Glassmorphism Popup Window -->
+        <div class="popup-overlay" id="popupOverlay">
+          <div class="popup-container">
+            <button class="close-btn" id="closePopup">X</button>
+            <h2>Purcahse Requests For Project ID {{ project_id }} </h2>
+
+            <!-- Table for PR Count Details -->
+            <div class="table-container">
+
+              <table class="table table-main" width="100%">
+                <thead>
+                  <tr>
+                    <th class="text-center">S.No</th>
+                    <th class="text-center">PR Date</th>
+                    <th class="text-center">PR No</th>
+                    <th class="text-center">Supplier</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">CreatedBy</th>
+                    <th class="text-center">ApprovedBy</th>
+                    <th class="text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not pr_data.empty %}
+                  {% for index, row in pr_data.iterrows() %}
+                  <tr>
+                    <td class="text-center">{{ index + 1 }}</td>
+                    <td class="text-center">{{ row['PR_Date'] }}</td>
+                    <td class="text-center">{{ row['PR_no']}}</td>
+                    <td class="text-center">{{ row['Supplier'] }}</td>
+                    <td class="text-center">$ {{ row['PR_Total'] }}</td>
+                    <td class="text-center">{{ row['Created_By'] }}</td>
+                    <td class="text-center">{{ row['Approved_by'] }}</td>
+
+                    <style>
+                      /* Common styles for all statuses */
+                      .status-label {
+                        font-weight: bold;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                      }
+
+                      /* Specific colors for each status */
+                      .status-label.created {
+                        background-color: #ffd966;
+                        /* Light Yellow */
+                        color: #e8e80f;
+                      }
+
+                      .status-label.approved {
+                        color: #1481e0;
+                      }
+
+                      .status-label.processed {
+                        color: #51ef0e;
+                      }
+                    </style>
+
+                    <td class="status-label {{ row['Status'] | lower }}">{{ row['Status'] }}</td>
+
+                  </tr>
+
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td colspan="15" class="text-center">No items available</td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
+        </div>
+
+        <style>
+          /* Popup styling */
+          .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            /* Glassmorphism effect */
+            justify-content: center;
+            align-items: flex-start;
+            /* Align content to the top */
+            z-index: 1000;
+          }
+
+          .popup-container {
+            background: rgba(255, 255, 255, 0.004);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            /* Adjust width to accommodate the table */
+            max-width: 1000px;
+            /* Maximum width for the popup */
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            /* Glassmorphism effect */
+            overflow: hidden;
+            margin-top: 30px;
+            /* Add top margin for better spacing */
+          }
+
+          .table-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            /* Add vertical scroll if content exceeds max height */
+            max-height: 700px;
+            /* Set maximum height for the table */
+            max-width: 100%;
+            margin-top: 20px;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          th,
+          td {
+            padding: 10px;
+            text-align: center;
+          }
+
+          th {
+            background-color: #4caf50;
+            color: white;
+          }
+
+          tbody tr:hover {
+            background-color: #f1f1f1;
+            color: black;
+          }
+
+          .delete-col {
+            width: 3%;
+          }
+
+          .delete-btn,
+          .edit-btn {
+            background-color: transparent;
+            border: none;
+            color: red;
+            cursor: pointer;
+          }
+
+          .delete-btn:hover,
+          .edit-btn:hover {
+            color: darkred;
+          }
+
+          .close-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+          }
+
+          /* Hover effect on PR Count Widget */
+          .widget.monthly-leaves {
+            cursor: pointer;
+            transition: transform 0.3s;
+          }
+
+          .widget.monthly-leaves:hover {
+            transform: scale(1.05);
+          }
+        </style>
+
+        <!-- PO Count Widget -->
+        <div class="widget pending-leaves" id="pocountCard">
+          <i class="w_icon fa fa-clipboard-check">
+            <span style="margin-left: 3px; font-weight: 250">PO Count</span>
+          </i>
+          <div class="degree">{{insights.PO_count}}</div>
+        </div>
+
+        <!-- Glassmorphism Popup Window for PO Count -->
+        <div class="popup-overlay" id="popupOverlayPO">
+          <div class="popup-container">
+            <button class="close-btn" id="closePopupPO">X</button>
+            <h2>Purchase Orders For Project ID {{ project_id }} <span
+                style="color: red; background-color: whitesmoke; border-radius: 5px; padding: 5px; margin-left: 20px; ">$
+                {{po_total_sum}}
+              </span> </h2>
+
+            <!-- Table for PO Count Details -->
+            <div class="table-container">
+              <table class="table table-main" width="100%">
+                <thead>
+                  <tr>
+                    <th class="text-center">S.No</th>
+                    <th class="text-center">PO Date</th>
+                    <th class="text-center">PO No</th>
+                    <th class="text-center">Supplier</th>
+                    <th class="text-center">Created By</th>
+                    <th class="text-center">Approved By</th>
+                    <th class="text-center">Issued By</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if not po_data.empty %}
+                  {% for index, row in po_data.iterrows() %}
+                  <tr>
+                    <td class="text-center">{{ index + 1 }}</td>
+                    <td class="text-center">{{ row['PO_Date'] }}</td>
+                    <td class="text-center">{{ row['PO_no'] }}</td>
+                    <td class="text-center">{{ row['Supplier'] }}</td>
+                    <td class="text-center">{{ row['Created_By'] }}</td>
+                    <td class="text-center">{{ row['Approved_by'] }}</td>
+                    <td class="text-center">{{ row['PO_Issued_by'] }}</td>
+                    <td class="text-center">$ {{ row['PR_Total'] }}</td>
+                    <style>
+                      /* Common styles for all statuses */
+                      .status-label {
+                        font-weight: bold;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                      }
+
+                      /* Specific colors for each status */
+                      .status-label.created {
+                        background-color: #ffd966;
+                        /* Light Yellow */
+                        color: #e8e80f;
+                      }
+
+                      .status-label.reissued {
+                        color: #4d9fe6;
+                      }
+
+                      .status-label.issued {
+                        color: #51ef0e;
+                      }
+                    </style>
+                    <td class="status-label {{ row['Status'] | lower }}">{{ row['Status'] }}</td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td colspan="15" class="text-center">No items available</td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          // PR Count Popup - on Click
+          const prCountCard = document.getElementById("prCountCard");
+          const popupOverlay = document.getElementById("popupOverlay");
+          const closePopup = document.getElementById("closePopup");
+
+          prCountCard.addEventListener("click", function () {
+            popupOverlay.style.display = "flex";
+          });
+
+          closePopup.addEventListener("click", function () {
+            popupOverlay.style.display = "none";
+          });
+
+          popupOverlay.addEventListener("click", function (event) {
+            if (event.target === popupOverlay) {
+              popupOverlay.style.display = "none";
+            }
+          });
+
+          // PO Count Popup - on Click
+          const pocountCard = document.getElementById("pocountCard");
+          const popupOverlayPO = document.getElementById("popupOverlayPO");
+          const closePopupPO = document.getElementById("closePopupPO");
+
+          pocountCard.addEventListener("click", function () {
+            popupOverlayPO.style.display = "flex";
+          });
+
+          closePopupPO.addEventListener("click", function () {
+            popupOverlayPO.style.display = "none";
+          });
+
+          popupOverlayPO.addEventListener("click", function (event) {
+            if (event.target === popupOverlayPO) {
+              popupOverlayPO.style.display = "none";
+            }
+          });
+        </script>
+
+
+        <!-- DO Count Widget -->
+        <div class="widget pending-leaves">
+          <i class="w_icon fa fa-clipboard-list">
+            <span style="margin-left: 3px; font-weight: 250">DO Count</span>
+          </i>
+          <div class="degree"></div>
+        </div>
+
+        <!-- Top Supplier Widget -->
+        <div class="widget supplyer-on">
+          <i class="w_icon fa fa-industry">
+            <span style="margin-left: 3px; font-weight: 250">Top Supplier</span>
+          </i>
+          <div class="degree">{{insights.most_visited_supplier_name[:12]}} ({{insights.most_visited_supplier_count}})
+          </div>
+        </div>
+
+        <!-- Claims Widget -->
+        <div class="widget approved-leaves">
+          <i class="w_icon fa fa-file-invoice">
+            <span style="margin-left: 3px; font-weight: 250">Claims</span>
+          </i>
+          <div class="degree"></div>
+        </div>
+
+        <!-- Planner Widget -->
+        <div class="widget today-leaves">
+          <i class="w_icon fa fa-users">
+            <span style="margin-left: 3px; font-weight: 250">Planner</span>
+          </i>
+          <div class="degree">Hr</div>
+        </div>
+
+      </div>
+
+      <div class="1Gcontainer">
+
+        <nav class="navbar11">
+          <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+          <ul id="menuList11" class="navitems11">
+
+            <li>
+              <input type="radio" id="estimation_timeRadio" name="sectionRadio"
+                onclick="showSection('estimation_time'); " style="display: none" />
+              <label for="estimation_timeRadio" class="link">
+                <i class="fa-solid fa-calculator" style="margin-right: 5px"></i>Resource
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="overhead_timeRadio" name="sectionRadio" onclick="showSection('overhead_time'); "
+                style="display: none" />
+              <label for="overhead_timeRadio" class="link">
+                <i class="fa-solid fa-boxes-stacked" style="margin-right: 5px"></i>Material
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="service_timeRadio" name="sectionRadio" onclick="showSection('service_time'); "
+                style="display: none" />
+              <label for="service_timeRadio" class="link">
+                <i class="fa-solid fa-hands-helping" style="margin-right: 5px"></i>Sub Contract
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="Warranty_timeRadio" name="sectionRadio" onclick="showSection('Warranty_time'); "
+                style="display: none" />
+              <label for="Warranty_timeRadio" class="link">
+                <i class="fa-solid fa-tools" style="margin-right: 5px"></i>Others
+              </label>
+            </li>
+          </ul>
+
+          <div class="menu-icon11">
+            <i class="fa-solid fa-bars" onclick="toggleMenu11()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList11");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu11() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+          <script>
+            function showSection(sectionId) {
+              // Hide all sections
+              var sections = document.querySelectorAll(
+                ".project_time, .estimation_time, .overhead_time,  .service_time, .Warranty_time, .leave_time"
+              );
+
+              sections.forEach(function (section) {
+                section.style.display = "none";
+              });
+
+              // Show the selected section
+              var selectedSection = document.getElementById(sectionId);
+              if (selectedSection) {
+                selectedSection.style.display = "block";
+              }
+            }
+
+            window.onload = function () {
+              // Set the default section to be shown
+              var defaultSectionId = "estimation_time"; // ID of the default section
+              var defaultRadioId = "estimation_timeRadio"; // ID of the default radio button
+
+              // Show the default section
+              showSection(defaultSectionId);
+
+              // Check the associated radio button
+              var defaultRadio = document.getElementById(defaultRadioId);
+              if (defaultRadio) {
+                defaultRadio.checked = true;
+              }
+
+              // If the 'show' value is provided from the backend, override the default behavior
+              var show = "{{ show }}"; // The value of 'show' from the backend
+              if (show === "project") {
+                showSection("project_time");
+                document.getElementById(
+                  "subContractRadio"
+                ).checked = true;
+              }
+            };
+          </script>
+
+          <style>
+            /* Active effect - when radio is checked */
+            input[type="radio"]:checked+.link {
+              background-color: rgb(77, 76, 76);
+              color: rgb(11, 201, 106);
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+              font-weight: bold;
+              border-bottom: 3px solid rgb(11, 201, 106);
+              /* Add bottom border */
+            }
+
+
+            /* Active state for icons (inherits from text) */
+            input[type="radio"]:checked+.link i {
+              color: inherit;
+              /* Ensures the icon color matches text color */
+            }
+
+            /* Navbar styles */
+            .navbar11 ul {
+              display: flex;
+              justify-content: space-between;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+            }
+
+            .navbar11 ul li {
+              list-style-type: none;
+            }
+
+            .navbar11 ul li a {
+              text-decoration: none;
+              color: #fff;
+            }
+
+            /* Responsive menu styles */
+            @media (max-width: 600px) {
+              .navbar11 ul {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                text-align: center;
+                background: #004274;
+                gap: 0;
+                overflow: hidden;
+                width: 100%;
+              }
+
+              .navbar11 ul li {
+                padding: 20px;
+                padding-top: 0;
+              }
+            }
+
+
+
+            .navbar11 {
+              margin-top: 5px;
+              padding: 10px 30px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              /* Changed from space-around to space-between */
+              position: relative;
+              height: 40px;
+            }
+
+            .navitems11 {
+              margin-top: 20px;
+              display: flex;
+              align-items: center;
+            }
+
+            .navbar11 ul li a:hover {
+              padding: 10px;
+              color: blue;
+              /* Light text color on hover */
+              border-radius: 4px;
+              /* Slight rounding of corners */
+              font-weight: bold;
+            }
+
+            .navbar11 ul li a.active {
+              padding: 10px;
+              background: #dd6b6b;
+              /* Background for the active state */
+              border-radius: 5px;
+              color: blue;
+              /* Text color for the active state */
+              font-weight: bold;
+              /* Bold text for the active state */
+            }
+
+            .navbar11 ul {
+              display: flex;
+              gap: 0;
+              /* Remove gap between list items */
+              margin: 0;
+              /* Remove default margin */
+              padding: 0;
+              /* Remove default padding */
+              width: 100%;
+              /* Make sure ul takes the full width */
+              justify-content: space-between;
+              /* Distribute list items evenly */
+            }
+
+            .navbar11 ul li {
+              list-style-type: none;
+            }
+
+            .navbar11 ul li a {
+              text-decoration: none;
+              color: #fff;
+            }
+
+            .menu-icon11 {
+              display: none;
+            }
+
+            .menu-icon11 i {
+              color: #fff;
+              font-size: 20px;
+            }
+
+            @media (max-width: 600px) {
+              .navbar11 ul {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                text-align: center;
+                background: #004274;
+                gap: 0;
+                overflow: hidden;
+                width: 100%;
+                /* Ensure full width in mobile view */
+              }
+
+              .navbar11 ul li {
+                padding: 20px;
+                padding-top: 0;
+              }
+
+              .menu-icon11 {
+                display: block;
+              }
+
+              #menuList11 {
+                transition: all 0.5s;
+              }
+            }
+          </style>
+
+        </nav>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <div class="estimation_time" id="estimation_time" style="display: none">
+
+          <div class="Gcontainer">
+            <div class="table-responsive13">
+              {% for range_key, table_data in tables_data.items() %}
+              {% if range_key == '1000-1999' %}
+              <table class="table table-main" width="100%">
+
+                <thead>
+
+                  <th>Code</th>
+                  <th>Alloc Hours</th>
+                  <th>Hours Spent</th>
+                  <th>Balance</th>
+
+
+                </thead>
+
+                <style>
+                  .table-main thead tr {
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    /* Ensure visibility */
+                    z-index: 10;
+                  }
+
+                  .table-main tfoot tr {
+                    position: sticky;
+                    bottom: 0;
+                    background: white;
+                    z-index: 10;
+                  }
+                </style>
+
+                <tbody>
+                  {% for row in table_data.rows %}
+                  <tr {% if row.balance < 0 %} class="negative-balance" {% endif %}>
+                    <td style="font-weight: bold;">{{ row.code }}</td>
+                    <td>{{ "{:,.2f}".format(row.allocated_hours) }}</td>
+                    <td>{{ "{:,.2f}".format(row.hours_worked) }}</td>
+                    <td>{{ "{:,.2f}".format(row.balance) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+                  <tr class="totals">
+                    <td style="font-weight: bold;">Total</td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.allocated_hours) }} </td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.hours_worked ) }}</td>
+                    <td style="text-align: left; font-weight: bold;">{{ "{:,.2f}".format(table_data.totals.balance) }}
+                    </td>
+                  </tr>
+                </tfoot>
+
+              </table>
+              {% endif %}
+              {% endfor %}
+              </table>
+            </div>
+
+
+            <div class="second-column">
+              <div id="department-hours-chart"></div>
+            </div>
+
+          </div>
+
+          <script>
+            // Data passed from Flask
+            const resourse_graphs_data = {{ resourse_graphs_data | tojson }};
+
+            // Chart options
+            const options = {
+              series: [
+                {
+                  name: 'Allocated Hours',
+                  data: resourse_graphs_data.allocated_hours,
+                },
+                {
+                  name: 'Hours Worked',
+                  data: resourse_graphs_data.hours_worked,
+                }
+              ],
+              chart: {
+                type: 'bar',
+                height: 400,
+              },
+              colors: ['#1E90FF', '#32CD32'], // Colors for allocated hours and hours worked
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                  columnWidth: '70%', // Increased bar width
+                  borderRadius: 8,
+                  borderRadiusApplication: 'end', // Apply border radius only to the top
+                }
+              },
+              dataLabels: {
+                enabled: true,
+              },
+              xaxis: {
+                categories: resourse_graphs_data.labels,
+                title: {
+                  text: 'Department Code',
+                },
+                labels: {
+                  rotate: 90,
+                  style: {
+                    fontSize: '12px',
+                    fontFamily: 'Arial',
+                  },
+                },
+              },
+              yaxis: {
+                title: {
+                  text: 'Hours',
+                },
+              },
+              title: {
+                text: '',
+                align: 'center',
+              },
+            };
+
+            // Create and render the chart
+            const chart = new ApexCharts(document.querySelector("#department-hours-chart"), options);
+            chart.render();
+          </script>
+
+          <style>
+            .departments {
+              font-family: arial, sans-serif;
+              border-collapse: collapse;
+              width: 100%;
+              color: black;
+            }
+
+            .departments td,
+            th {
+              border: 2px solid #dddddd;
+              text-align: left;
+              padding: 8px;
+            }
+
+            .tr:nth-child(even) {
+              background-color: #dddddd;
+            }
+          </style>
+
+          <table class="departments">
+            <tr>
+              <td>1000 - Admin</td>
+              <td>1001 - PM</td>
+              <td>1002 - PE</td>
+              <td>1003 - CE</td>
+              <td>1004 - AE</td>
+              <td>1005 - PS</td>
+              <td>1006 - DES</td>
+              <td>1007 - SC</td>
+              <td>1008 - DRAFT</td>
+            </tr>
+
+            <tr>
+              <td>1009 - SS</td>
+              <td>1010 - EL</td>
+              <td>1011 - WE</td>
+              <td>1012 - FT</td>
+              <td>1013 - SW</td>
+              <td>1014 - GW</td>
+              <td>1015 - DR</td>
+              <td>1016 -</td>
+              <td>1017 -</td>
+            </tr>
+
+          </table>
+
+        </div>
+
+        <div class="overhead_time" id="overhead_time" style="display: none">
+
+          <div class="Gcontainer">
+
+            <div class="table-responsive13">
+              {% for range_key, table_data in tables_data.items() %}
+              {% if range_key == '2000-3000' %}
+              <table class="table table-main" width="100%">
+
+                <thead>
+                  <th>Code</th>
+                  <th>Budget</th>
+                  <th>Spent</th>
+                  <th>Balance</th>
+                </thead>
+
+                <tbody>
+                  {% for row in table_data.rows %}
+                  <tr {% if row.balance < 0 %} class="negative-balance" {% endif %}>
+                    <td style="font-weight: bold;">{{ row.code }}</td>
+                    <td>{{ "{:,.2f}".format(row.allocated_hours) }}</td>
+                    <td>{{ "{:,.2f}".format(row.hours_worked) }}</td>
+                    <td>{{ "{:,.2f}".format(row.balance) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+                  <tr class="totals">
+                    <td style="font-weight: bold;">Total</td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.allocated_hours) }} </td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.hours_worked ) }}</td>
+                    <td style="text-align: left; font-weight: bold;">{{ "{:,.2f}".format(table_data.totals.balance) }}
+                    </td>
+                  </tr>
+                </tfoot>
+
+              </table>
+              {% endif %}
+              {% endfor %}
+              </table>
+            </div>
+
+            <div class="second-column">
+              <div id="chart-2000-3000"></div>
+            </div>
+
+          </div>
+
+          <table class="departments">
+            <tr>
+              <td>2001 - Mechanical</td>
+              <td>2002 - Electrical</td>
+              <td>2003 - Instrumental</td>
+              <td>2004 - PLC Hardware</td>
+              <td>2005 - Panel Hardware</td>
+            </tr>
+
+            <tr>
+              <td>2006 - Consumables</td>
+              <td>2007 - Tools</td>
+              <td>2008 - Civil</td>
+              <td>2009 - Computer</td>
+              <td></td>
+            </tr>
+          </table>
+
+        </div>
+
+        <div class="service_time" id="service_time" style="display: none">
+
+          <div class="Gcontainer">
+
+            <div class="table-responsive13">
+              {% for range_key, table_data in tables_data.items() %}
+              {% if range_key == '3000-4000' %}
+              <table class="table table-main" width="100%">
+
+                <thead>
+                  <th>Code</th>
+                  <th>Budget</th>
+                  <th>Spent</th>
+                  <th>Balance</th>
+                </thead>
+
+                <tbody>
+                  {% for row in table_data.rows %}
+                  <tr {% if row.balance < 0 %} class="negative-balance" {% endif %}>
+                    <td style="font-weight: bold;">{{ row.code }}</td>
+                    <td>{{ "{:,.2f}".format(row.allocated_hours) }}</td>
+                    <td>{{ "{:,.2f}".format(row.hours_worked) }}</td>
+                    <td>{{ "{:,.2f}".format(row.balance) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+                  <tr class="totals">
+                    <td style="font-weight: bold;">Total</td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.allocated_hours) }} </td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.hours_worked ) }}</td>
+                    <td style="text-align: left; font-weight: bold;">{{ "{:,.2f}".format(table_data.totals.balance) }}
+                    </td>
+                  </tr>
+                </tfoot>
+
+              </table>
+              {% endif %}
+              {% endfor %}
+              </table>
+            </div>
+
+            <div class="second-column">
+              <div id="chart-3000-4000"></div>
+            </div>
+
+          </div>
+
+
+          <table class="departments">
+            <tr>
+              <td>3001 - Scaffolding</td>
+              <td>3002 - Programming</td>
+              <td>3003 - E&I Fabrication</td>
+              <td>3004 - Mechanical Fabrication</td>
+              <td>3005 - Manpower Supply</td>
+            </tr>
+
+            <tr>
+              <td>3006 - LEW</td>
+              <td>3007 - Calibration</td>
+              <td>3008 - Equipment Rent</td>
+              <td>3009 - Servicing</td>
+              <td>3010 - Others</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="Warranty_time" id="Warranty_time" style="display: none">
+
+          <style>
+            .table-responsive13 {
+              width: 100%;
+              overflow: auto;
+              max-height: 320px;
+            }
+
+            .negative-balance {
+              background-color: #f8d7da;
+              /* Light red color */
+              color: #842029;
+              /* Darker red text for contrast */
+            }
+          </style>
+
+          <div class="Gcontainer">
+
+            <div class="table-responsive13">
+              {% for range_key, table_data in tables_data.items() %}
+              {% if range_key == '500-600' %}
+              <table class="table table-main" width="100%">
+
+                <thead>
+                  <th>Code</th>
+                  <th>Budget</th>
+                  <th>Spent</th>
+                  <th>Balance</th>
+                </thead>
+
+                <tbody>
+                  {% for row in table_data.rows %}
+                  <tr {% if row.balance < 0 %} class="negative-balance" {% endif %}>
+                    <td style="font-weight: bold;">{{ row.code }}</td>
+                    <td>{{ "{:,.2f}".format(row.allocated_hours) }}</td>
+                    <td>{{ "{:,.2f}".format(row.hours_worked) }}</td>
+                    <td>{{ "{:,.2f}".format(row.balance) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+                  <tr class="totals">
+                    <td style="font-weight: bold;">Total</td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.allocated_hours) }} </td>
+                    <td style="text-align: left; font-weight: bold;">{{
+                      "{:,.2f}".format(table_data.totals.hours_worked ) }}</td>
+                    <td style="text-align: left; font-weight: bold;">{{ "{:,.2f}".format(table_data.totals.balance) }}
+                    </td>
+                  </tr>
+                </tfoot>
+
+              </table>
+              {% endif %}
+              {% endfor %}
+              </table>
+            </div>
+
+
+            <div class="second-column">
+              <div id="chart-500-600"></div>
+            </div>
+
+          </div>
+
+
+          <table class="departments">
+            <tr>
+              <td>501 - Asset</td>
+              <td>502 - Property</td>
+              <td>503 - Insurence / Bond</td>
+              <td>504 - Vehicle</td>
+              <td>505 - Rental</td>
+              <td>506 - Renewal</td>
+              <td>507 - Salary</td>
+            </tr>
+
+            <tr>
+
+              <td>508 - Levy</td>
+              <td>509 - CPF</td>
+              <td>510 - Training</td>
+              <td>511 - Medical</td>
+              <td>512 - Utilities</td>
+              <td>513 - Travel</td>
+              <td>514 - Safety</td>
+            </tr>
+
+            <tr>
+
+              <td>515 - Office</td>
+              <td>516 - License</td>
+              <td>517 - Calibration</td>
+              <td>518 - Subscription</td>
+              <td>519 - Entertainment</td>
+              <td>520 - Others</td>
+
+            </tr>
+          </table>
+
+        </div>
+
+        <script>
+          // Data passed from Flask
+          const graphsData = {{ graphs_data | tojson }};
+
+          // Chart options for each range
+          const createChart = (containerId, data, title) => {
+            const options = {
+              series: [
+                {
+                  name: 'Budget',
+                  data: data.allocated_hours,
+                },
+                {
+                  name: 'Actual',
+                  data: data.hours_worked,
+                }
+              ],
+              chart: {
+                type: 'bar',
+                height: 350,
+              },
+              colors: ['#DC143C', '#008000'],
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                  columnWidth: '40%',
+                  borderRadius: 8,
+                  borderRadiusApplication: 'end', // Apply border radius only to the top
+                }
+              },
+              dataLabels: {
+                enabled: true,
+              },
+              xaxis: {
+                categories: data.labels,
+                title: {
+                  text: 'Code'
+                },
+                labels: {
+                  rotate: 90, // Rotate labels vertically
+                  style: {
+                    fontSize: '12px',
+                    fontFamily: 'Arial',
+                  }
+                }
+              },
+              yaxis: {
+                title: {
+                  text: 'Cost ($)'
+                }
+              },
+              title: {
+                text: title,
+                align: 'center',
+              },
+            };
+
+            const chart = new ApexCharts(document.querySelector(`#${containerId}`), options);
+            chart.render();
+          };
+
+          // Render each chart
+          createChart('chart-2000-3000', graphsData['2000-3000'], '');
+          createChart('chart-3000-4000', graphsData['3000-4000'], '');
+          createChart('chart-4000-5000', graphsData['4000-5000'], '');
+          createChart('chart-500-600', graphsData['500-600'], '');
+        </script>
+
+
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <style>
+    .table thead th:nth-child(1),
+    .table tbody td:nth-child(1) {
+      text-align: center;
+    }
+
+    .table thead th:nth-child(2),
+    .table tbody td:nth-child(2),
+    .table thead th:nth-child(3),
+    .table tbody td:nth-child(3),
+    .table thead th:nth-child(4),
+    .table tbody td:nth-child(4),
+    .table thead th:nth-child(5),
+    .table tbody td:nth-child(5),
+    .table thead th:nth-child(6),
+    .table tbody td:nth-child(6),
+    .table thead th:nth-child(7),
+    .table tbody td:nth-child(7),
+    .table thead th:nth-child(10),
+    .table tbody td:nth-child(10),
+    .table thead th:nth-child(9),
+    .table tbody td:nth-child(9),
+    .table thead th:nth-child(8),
+    .table tbody td:nth-child(8) {
+      text-align: left;
+    }
+
+
+    .records {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .record-header {
+      width: 100%;
+      padding: 10px;
+      background-color: #d8eaf3;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      background-color: #0dc438;
+    }
+
+    .double-container2 {
+      width: 100%;
+      /* Ensure the container occupies full width */
+      box-sizing: border-box;
+      /* Include padding and border in element's total width and height */
+      overflow-x: auto;
+      /* Allow horizontal scrolling if the table is too wide */
+      padding: 15px;
+      /* Add padding to the container */
+      border: 1px solid #ddd;
+      /* Optional: Add a border for visual separation */
+    }
+
+    .double-container {
+      width: 100%;
+      /* Ensure the container occupies full width */
+      box-sizing: border-box;
+      /* Include padding and border in element's total width and height */
+      overflow-x: auto;
+      /* Allow horizontal scrolling if the table is too wide */
+      padding: 15px;
+      /* Add padding to the container */
+      border: 1px solid #ddd;
+      /* Optional: Add a border for visual separation */
+    }
+
+    .container_hours {
+      width: 45%;
+      box-sizing: border-box;
+    }
+
+    .btn4 {
+      padding: 10px 12px;
+      /* Adjusted for better spacing */
+      font-size: 16px;
+      border-radius: 10px;
+      background-color: rgb(0, 75, 93);
+      color: whitesmoke;
+      margin: 2px;
+      cursor: pointer;
+      display: inline-block;
+      /* Ensure buttons align correctly */
+      text-align: center;
+      /* Center text inside the button */
+      flex: 1;
+      /* Allow buttons to grow and shrink to fit available space */
+    }
+
+    /* Hover state */
+    .btn4:hover {
+      background-color: #035153;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .btn4 {
+        font-size: 14px;
+        padding: 8px 12px;
+        /* Adjusted padding for smaller screens */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .btn4 {
+        font-size: 12px;
+        padding: 6px 10px;
+        /* Further adjusted padding */
+      }
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      /* Allow buttons to wrap to the next line */
+      gap: 5px;
+      /* Add some gap between buttons */
+    }
+
+    .row label {
+      flex: 1;
+      /* Allow labels to expand and fill available space */
+      margin: 2px 0;
+      /* Vertical margin to separate rows of buttons */
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 20px;
+      margin: 2px 0;
+      /* Reduce the top and bottom margin */
+      display: block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: #04aa6d;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .content-table {
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.9em;
+      border-radius: 5px 5px 0 0;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      padding: 10px;
+      width: 100%;
+    }
+
+    .container {
+      border-radius: 5px;
+      background-color: #f1ecec;
+      padding: 10px;
+      display: flex;
+      gap: 50px;
+      width: 100%;
+    }
+
+    .content-table thead tr {
+      background-color: #004b5d;
+      color: #e0cdcd;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .content-table th,
+    .content-table td {
+      padding: 12px 15px;
+    }
+
+    .content-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .content-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+
+    .content-table tbody tr:last-of-type {
+      border-bottom: 2px solid #004b5d;
+    }
+
+    .content-table tbody tr.active-row {
+      font-weight: bold;
+      color: #004b5d;
+    }
+  </style>
+
+  <style>
+    .Gcontainer {
+      display: grid;
+      background-color: white;
+      border-radius: 5px;
+      gap: 10px;
+      padding: 5px;
+      grid-template-columns: 25% 74.5%;
+    }
+
+    .second-column {
+      display: flex;
+      border-radius: 5px;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .box {
+      display: flex;
+      flex-wrap: wrap;
+      /* Ensures items wrap to the next row */
+      gap: 20px;
+      /* Space between widgets */
+      justify-content: space-between;
+      /* Distributes space evenly */
+      max-width: 100%;
+      overflow: hidden;
+      /* Prevents content from spilling out */
+      padding: 10px;
+      /* Adds some inner spacing */
+    }
+
+
+
+
+    @media screen and (max-width: 768px) {
+      .Gcontainer {
+        grid-template-columns: 1fr;
+        /* Stacks the columns on smaller screens */
+      }
+    }
+  </style>
+
+</body>
+
+</html>

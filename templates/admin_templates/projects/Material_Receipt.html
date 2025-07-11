@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects" class="active">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div id="pageLoader">
+         <div class="loader"></div>
+      </div>
+
+      <script>
+         window.addEventListener("load", function () {
+            document.getElementById("pageLoader").style.display = "none";
+         });
+      </script>
+
+      <style>
+         #pageLoader {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+         }
+
+         .loader {
+            border: 8px solid #f3f3f3;
+            /* Light grey */
+            border-top: 8px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+         }
+
+         @keyframes spin {
+            0% {
+               transform: rotate(0deg);
+            }
+
+            100% {
+               transform: rotate(360deg);
+            }
+         }
+      </style>
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  {% if user_access['toggleDashboard'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('projects') }}" class="link">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleProjectStatus'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('prj_status') }}" class="link">
+                        <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleHoursEdit'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hours_edit') }}" class="link">
+                        <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                  <li class="active"><a href="{{ url_for('Material_Receipt') }}" class="link"><i
+                           class="fa-solid fa-industry"></i>
+                        Material Receipt</a></li>
+                  {% endif %}
+
+                  {% if user_access['toggleHoursView'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hrs_view') }}" class="link">
+                        <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                     </a>
+                  </li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            <h3 style="color: #004274; margin-right: 10px ;">Material Receipt's (<span id="requestCount">0</span>) </h3>
+
+            <span class="span_tag" style="color: #e48912;">
+               Open : <span id="Open">0</span>
+            </span>
+
+            <span class="span_tag" style="color: #1123c7;">
+               Partial : <span id="Partial">0</span>
+            </span>
+
+            <span class="span_tag" style="color: #20d607;">
+               Closed : <span id="Closed">0</span>
+            </span>
+            <input type="text" id="searchInput" placeholder="Search........" onkeyup="filterTable()">
+
+            <script>
+
+               function filterTable() {
+                  const input = document.getElementById("searchInput").value.toLowerCase().trim();
+                  const keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+
+                  const poSections = document.querySelectorAll("tbody > tr.table-info");
+
+                  let visibleCount = 0;
+                  let openCount = 0;
+                  let partialCount = 0;
+                  let closedCount = 0;
+
+                  poSections.forEach(poRow => {
+                     const dataRow = poRow.nextElementSibling;
+
+                     const poNumber = poRow.querySelector("span.value")?.textContent.toLowerCase().trim() || "";
+                     const supplierName = poRow.querySelector("td:nth-child(2)")?.textContent.toLowerCase().trim() || "";
+                     const poStatusText = poRow.querySelector("span.value:last-child")?.textContent.toLowerCase().trim() || "";
+
+                     let matchedChild = false;
+                     let currentRow = dataRow;
+
+                     while (currentRow && !currentRow.classList.contains("table-info")) {
+                        const doNumber = currentRow.querySelector("td:nth-child(2)")?.textContent.toLowerCase().trim() || "";
+                        const receivedDate = currentRow.querySelector(".start-time")?.textContent.toLowerCase().trim() || "";
+                        const receivedBy = currentRow.querySelector("td:nth-child(4)")?.textContent.toLowerCase().trim() || "";
+                        const recordedBy = currentRow.querySelector("td:nth-child(5)")?.textContent.toLowerCase().trim() || "";
+
+                        const combinedText = `${poNumber} ${supplierName} ${poStatusText} ${doNumber} ${receivedDate} ${receivedBy} ${recordedBy}`;
+
+                        const shouldShow = keywords.every(keyword => combinedText.includes(keyword));
+
+                        currentRow.style.display = shouldShow ? "" : "none";
+                        if (shouldShow) matchedChild = true;
+
+                        currentRow = currentRow.nextElementSibling;
+                        if (!currentRow || currentRow.classList.contains("table-info")) break;
+                     }
+
+                     if (matchedChild) {
+                        poRow.style.display = "";
+                        visibleCount++;
+                        if (poStatusText.includes("open")) openCount++;
+                        else if (poStatusText.includes("partial")) partialCount++;
+                        else if (poStatusText.includes("closed")) closedCount++;
+                     } else {
+                        poRow.style.display = "none";
+                        // Hide its child rows
+                        currentRow = poRow.nextElementSibling;
+                        while (currentRow && !currentRow.classList.contains("table-info")) {
+                           currentRow.style.display = "none";
+                           currentRow = currentRow.nextElementSibling;
+                        }
+                     }
+                  });
+
+                  // Update status and request count
+                  document.getElementById("requestCount").textContent = visibleCount;
+                  document.getElementById("Open").textContent = `${openCount}`;
+                  document.getElementById("Partial").textContent = `${partialCount}`;
+                  document.getElementById("Closed").textContent = `${closedCount}`;
+               }
+
+               // Run once on page load to set counts
+               window.onload = filterTable;
+            </script>
+
+            <div class="title-item cssanimation open">
+               <button type="button" id="openModalForNewReceipt" class="new-enquiry-btn">
+                  + New Receipt
+               </button>
+            </div>
+
+            <div id="modal" class="modal">
+
+               <div class="modal-content">
+
+                  <div class="button-container1">
+
+                     <h2>New Receipt</h2>
+
+                     <span class="close-button">&times;</span>
+
+                  </div>
+
+                  <form class="p-3" method="POST" action="/update_material_receipt_to_add" enctype="multipart/form-data"
+                     onsubmit="validateForm(event)">
+
+                     <div class="container">
+
+                        <div class="invice_header">
+
+                           <div class="flex-item" style="margin-top: 5px; width: 100%;">
+                              <select class="form-control select2" id="po_number" name="po_number" required>
+                                 <option value="" disabled selected>Select PO Number</option>
+                                 {% for po in PO_Numbers %}
+                                 <option value="{{ po }}">{{ po }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
+
+                           <div class="add">
+                              <input type="text" id="supplier_name" name="supplier_name" class="form-control"
+                                 placeholder="Supplier Name" readonly>
+                           </div>
+
+                           <div class="flex-item">
+
+                              <select class="form-control" id="Received_by" name="Received_by" required>
+
+                                 {% for username in usernames %}
+                                 <option value="{{ username }}" {% if username==user['name'] %}selected{% endif %}>
+                                    {{ username }}
+                                 </option>
+                                 {% endfor %}
+                              </select>
+
+                           </div>
+
+                           <div class="add">
+                              <input type="text" id="do_number" name="do_number" class="form-control"
+                                 placeholder="Enter DO Number" required
+                                 value="{{ do_edit.do_number if do_edit else '' }}">
+                           </div>
+
+                           <div class="add">
+                              <input type="date" id="Received_date" name="Received_date" class="form-control" required>
+                           </div>
+
+                        </div>
+
+                        <div class="invice_header">
+
+                           <div class="flex-item">
+                              <label for="comments" class="form-label">Comments</label>
+                              <textarea class="form-control" id="comments" name="comments" rows="10"></textarea>
+                           </div>
+
+                           <style>
+                              .drop-zone {
+                                 border: 2px dashed #007bff;
+                                 border-radius: 10px;
+                                 padding: 5px;
+                                 text-align: center;
+                                 cursor: pointer;
+                                 transition: 0.3s;
+                              }
+
+                              .drop-zone:hover {
+                                 background-color: #f8f9fa;
+                              }
+
+                              .drop-zone p {
+                                 margin: 0;
+                                 font-weight: bold;
+                                 color: #007bff;
+                                 font-size: 11px;
+
+                              }
+
+                              .drop-zone input {
+                                 display: none;
+                              }
+
+                              .file-preview {
+                                 color: #333;
+                              }
+                           </style>
+
+                           <script>
+                              function handleDragOver(event) {
+                                 event.preventDefault();
+                                 event.dataTransfer.dropEffect = "copy";
+                              }
+
+                              function handleDrop(event) {
+                                 event.preventDefault();
+                                 const fileInput = document.getElementById('attachment');
+                                 fileInput.files = event.dataTransfer.files;
+                                 updateFileName(fileInput);
+                              }
+
+                              function updateFileName(input) {
+                                 const filePreview = document.getElementById("filePreview");
+                                 if (input.files.length > 0) {
+                                    filePreview.textContent = "" + input.files[0].name;
+                                 } else {
+                                    filePreview.textContent = "";
+                                 }
+                              }
+                           </script>
+
+                        </div>
+
+                        <div class="invice_header">
+
+                           <div class="flex-item">
+                              <label for="attachment" class="form-label">Attachment <span
+                                    style="color: red;">*</span></label>
+                              <div class="drop-zone" style="max-height: 160px; min-height: 160px;"
+                                 onclick="document.getElementById('attachment').click()" ondrop="handleDrop(event)"
+                                 ondragover="handleDragOver(event)">
+
+
+                                 <input type="file" class="form-control" id="attachment" name="attachment" accept="*/*"
+                                    onchange="updateFileName(this)">
+
+                                 <div class="file-preview" id="filePreview"></div>
+                              </div>
+                           </div>
+
+                           <style>
+                              #attachment {
+                                 display: block !important;
+                                 opacity: 1 !important;
+                                 position: static !important;
+                              }
+                           </style>
+
+                        </div>
+
+                     </div>
+
+                     <div class="table-responsive1" style="margin-top: 10px;">
+
+                        <table class="mat_rec_table" width="100%" id="dynamicTable">
+
+                           <thead>
+
+                              <tr>
+                                 <th style="width: 3%;">S/N</th>
+                                 <th style="width: 3%;">id</th>
+                                 <th style="width: 15%;">Part No</th>
+                                 <th style="width: 20%;">Item Name</th>
+                                 <th style="width: 8%;">UOM</th>
+                                 <th style="width: 8%;">Date</th>
+                                 <th style="width: 8%;">Ordered Qty</th>
+                                 <th style="width: 7%;">Balance</th>
+                                 <th style="width: 8%;">Received Qty</th>
+                                 <th style="width: 3%;">
+                                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
+                                 </th>
+                              </tr>
+
+                           </thead>
+
+                           <tbody id="itemsTableBody">
+
+                              <tr>
+                                 <td colspan="9" class="text-center animated-text">Select PO Number to load items</td>
+                              </tr>
+
+                           </tbody>
+
+                        </table>
+
+                        <style>
+                           .button-container1 {
+                              display: flex;
+                              flex: 1;
+                              justify-content: space-between;
+                              align-items: center;
+                              width: 100%;
+                              margin-top: 10px;
+                              gap: 10px;
+                           }
+
+                           .button-container {
+                              display: flex;
+                              flex: 1;
+                              justify-content: center;
+                              align-items: center;
+                              width: 100%;
+                              margin-top: 10px;
+                              gap: 10px;
+                           }
+                        </style>
+
+                     </div>
+
+                     <div class="button-container">
+
+                        <button type="submit" class="new-enquiry-btn">Update Materials</button>
+
+                     </div>
+
+                  </form>
+
+                  <script>
+
+                     let formSubmitted = false;
+
+                     function validateForm(event) {
+                        let isValid = true;
+
+                        if (formSubmitted) {
+                           alert("Form is already being submitted. Please wait...");
+                           event.preventDefault();
+                           return;
+                        }
+
+                        const checkboxes = document.querySelectorAll('input[name="selected_items[]"]:checked');
+                        const doNumberInput = document.getElementById('do_number');
+                        const received_by = document.getElementById('Received_by');
+                        const received_date = document.getElementById('Received_date');
+                        const attachment = document.getElementById('attachment');
+
+                        // Check attachment only if it's visible and not disabled
+                        if (!attachment.disabled && attachment.offsetParent !== null && !attachment.value) {
+                           alert('Attachment is required.');
+                           attachment.focus();
+                           isValid = false;
+                        }
+
+                        if (checkboxes.length === 0) {
+                           alert('Please select at least one item to update.');
+                           isValid = false;
+                        }
+
+                        if (!doNumberInput.value.trim()) {
+                           alert('DO Number is required.');
+                           doNumberInput.focus();
+                           isValid = false;
+                        }
+
+                        if (!received_by.value.trim()) {
+                           alert('Please select "Received by".');
+                           received_by.focus();
+                           isValid = false;
+                        }
+
+                        if (!received_date.value.trim()) {
+                           alert('Received Date is required.');
+                           received_date.focus();
+                           isValid = false;
+                        }
+
+                        for (const checkbox of checkboxes) {
+                           const row = checkbox.closest('tr');
+                           const receivedQuantityInput = row.querySelector('input[name="received_quantity[]"]');
+                           const pendingInput = row.querySelector('input[name="pending[]"]');
+                           const orderedInput = row.querySelector('input[name="quantity[]"]');
+
+                           const receivedQuantity = parseFloat(receivedQuantityInput.value) || 0;
+                           const pendingQuantity = parseFloat(pendingInput.value) || 0;
+                           const orderedQuantity = parseFloat(orderedInput.value) || 0;
+
+                           if (receivedQuantityInput.value.trim() === '') {
+                              alert('Please provide a received quantity for all selected items.');
+                              receivedQuantityInput.focus();
+                              isValid = false;
+                           }
+
+                           if (receivedQuantity < 0) {
+                              alert("Received quantity can't be less than zero.");
+                              receivedQuantityInput.focus();
+                              isValid = false;
+                           }
+
+                           if (receivedQuantity > pendingQuantity) {
+                              alert("Received quantity can't be more than the balance quantity.");
+                              receivedQuantityInput.focus();
+                              isValid = false;
+                           }
+
+                           if (receivedQuantity > orderedQuantity) {
+                              alert("Received quantity can't be more than the ordered quantity.");
+                              receivedQuantityInput.focus();
+                              isValid = false;
+                           }
+                        }
+
+                        if (!isValid) {
+                           alert("Please fill in all required fields correctly.");
+                           event.preventDefault();
+                        } else {
+                           formSubmitted = true; // Lock form
+                        }
+
+                     }
+
+                     document.addEventListener("DOMContentLoaded", function () {
+                        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                        const receivedDateInput = document.getElementById("Received_date");
+                        if (!receivedDateInput.value) {
+                           receivedDateInput.value = today;
+                        }
+                     });
+
+                     function toggleSelectAll(selectAllCheckbox) {
+                        const checkboxes = document.querySelectorAll('#itemsTableBody input[name="selected_items[]"]');
+                        checkboxes.forEach(checkbox => {
+                           checkbox.checked = selectAllCheckbox.checked;
+                        });
+                     }
+
+                     function validateReceivedQuantity(input) {
+                        const row = input.closest('tr');
+                        const pendingInput = row.querySelector('input[name="pending[]"]');
+                        const orderedInput = row.querySelector('input[name="quantity[]"]');
+
+                        const receivedQuantity = parseFloat(input.value) || 0;
+                        const pendingQuantity = parseFloat(pendingInput.value) || 0;
+                        const orderedQuantity = parseFloat(orderedInput.value) || 0;
+
+                        if (receivedQuantity < 0) {
+                           alert("Received quantity can't be less than zero.");
+                           input.value = '';
+                           input.focus();
+                        } else if (receivedQuantity > pendingQuantity) {
+                           alert("Received quantity can't be more than the balance quantity.");
+                           input.value = '';
+                           input.focus();
+                        } else if (receivedQuantity > orderedQuantity) {
+                           alert("Received quantity can't be more than the ordered quantity.");
+                           input.value = '';
+                           input.focus();
+                        }
+                     }
+
+                  </script>
+
+                  <script>
+
+                     // Fetch PO items
+                     $(document).ready(function () {
+                        $('#po_number').select2({
+                           placeholder: "Select PO Number",
+                           allowClear: true,
+                           width: '100%'
+                        });
+
+                        $('#po_number').on('change', function () {
+                           const poNumber = this.value.trim();
+                           const itemsTableBody = document.getElementById('itemsTableBody');
+                           const supplierNameInput = document.getElementById('supplier_name');
+                           const currentUser = "{{ user['name'] }}";
+                           const usernames = {{ usernames | tojson
+                        }};
+
+                     if (poNumber) {
+                        fetch(`/fetch_po_items_for_Material_Receipt/${poNumber}`)
+                           .then(response => response.json())
+                           .then(data => {
+                              itemsTableBody.innerHTML = '';
+                              supplierNameInput.value = data.supplier_name;
+
+                              data.items.forEach((item, index) => {
+                                 const dateValue = item.excepted_date ? item.excepted_date : '';
+
+                                 const row = `
+                                                   <tr>
+                                                      <td class="text-center">${index + 1}</td>
+                                                      <td><input class="form-control"  type="text" name="id[]" value="${item.id}" readonly></td>
+                                                      <td><input class="form-control" type="text" name="part_no[]" value="${item.part_no}" readonly></td>
+                                                      <td><input class="form-control" type="text" name="item_name[]" value="${item.item}" readonly></td>
+                                                      <td><input class="form-control" type="text" name="uom[]" value="${item.uom}" readonly></td>
+                                                      <td><input class="form-control" type="date" name="excepted_date[]" value="${dateValue}" readonly></td>
+                                                      <td><input class="form-control" step="any" type="number" name="quantity[]" value="${item.ordered_quantity}" readonly></td>
+                                                      <td><input class="form-control" step="any" type="number" name="pending[]" value="${item.pending_quantity}" readonly></td>
+                                                      <td><input class="form-control" type="number" name="received_quantity[]" oninput="validateReceivedQuantity(this)"></td>
+                                                      <td><input type="checkbox" name="selected_items[]" value="${item.part_no}"></td>
+                                                   </tr>`;
+                                 itemsTableBody.insertAdjacentHTML('beforeend', row);
+                              });
+                           })
+                           .catch(error => console.error('Error fetching PO data:', error));
+                     }
+                           
+                        });
+                     });
+
+
+                  </script>
+
+               </div>
+
+            </div>
+
+            <script>
+               document.getElementById('openModalForNewReceipt').onclick = async function () {
+                  const modal = document.getElementById('modal');
+                  const projectId = 4287
+                  modal.style.display = 'flex';
+
+               };
+
+
+               document.querySelector('.close-button').onclick = function () {
+                  document.getElementById('modal').style.display = 'none';
+                  window.location.reload();
+               };
+            </script>
+
+         </div>
+
+         <div class="table-responsive" style="background-color: white;">
+
+            <table class="table table-main" width="100%" id="projectTable">
+               <thead>
+
+                  <tr>
+                     <th>PO NO</th>
+                     <th>DO NO</th>
+                     <th>Received Date</th>
+                     <th>Receiver By</th>
+                     <th>Recorded By</th>
+                     {% if department_code == 1000 %}
+                     <th style="text-align: center;">Actions</th>
+                     {% endif %}
+                  </tr>
+
+               </thead>
+
+               <tbody>
+                  {% for po_number, data in grouped_data.items() %}
+
+                  <tr class="table-info">
+                     <td colspan="7">
+                        <div class="po-header">
+                           <span class="value">{{ po_number }}</span>
+
+                           <span class="label">Supplier:</span>
+                           <span class="value">{{ data.supplier_name }}</span>
+
+                           <span class="label">Status:</span>
+                           <span class="value">{{ data.do_staus }}</span>
+                        </div>
+                     </td>
+                  </tr>
+
+                  {% for row in data.do_items %}
+                  <tr class="mainRow">
+
+                     <td></td>
+                     <td>
+                        <a href="#" title="View Details" style="padding-right: 20px;"><i class="fa-solid fa-eye"
+                              style="color: orangered;"
+                              onclick="openPaymentDetails('{{ row.do_number }}', '{{ data.supplier_name }}')"></i>
+                        </a>
+
+                        {% if row['filename'] %}
+                        <a href="{{ url_for('view_do_file', filename=row['filename']) }}" target="_blank">
+                           {{ row['do_number'] }}
+                        </a>
+                        {% else %}
+                        <span>{{ row['do_number'] }}</span>
+                        {% endif %}
+
+                     </td>
+                     <td class="start-time">{{ row.received_date or '-' }}</td>
+                     <td>{{ row.received_by or '-' }}</td>
+                     <td>{{ row.received_on_behalf_of or '-' }}</td>
+                     {% if department_code == 1000 %}
+                     <td style="text-align: center;"> <button type="button" class="btn-delete"
+                           style="color: red; background: none; border: none; cursor: pointer;"
+                           onclick="deleteDO('{{ row.do_number }}', '{{ data.supplier_name }}')">
+                           <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                        </button>
+                     </td>
+                     {% endif %}
+
+                  </tr>
+                  {% endfor %}
+                  {% endfor %}
+               </tbody>
+
+            </table>
+
+         </div>
+
+         <script>
+            function deleteDO(doNumber, supplierName) {
+               if (!confirm("Are you sure you want to delete this delivery order?")) return;
+
+               fetch(`/delete_do?do_number=${encodeURIComponent(doNumber)}&supplier_name=${encodeURIComponent(supplierName)}`, {
+                  method: 'DELETE'
+               })
+                  .then(response => response.json())
+                  .then(data => {
+                     if (data.success) {
+                        alert("Deleted successfully.");
+                        location.reload();
+                     } else {
+                        alert("Deletion failed: " + data.message);
+                     }
+                  })
+                  .catch(error => {
+                     console.error("Error deleting:", error);
+                     alert("An error occurred while deleting.");
+                  });
+            }
+
+         </script>
+
+         <script>
+            function openPaymentDetails(doNumber, supplierName) {
+               fetch(`/get_mat_details?doNumber=${doNumber}&supplierName=${supplierName}`)
+                  .then(response => response.json())
+                  .then(data => {
+                     console.log(data)
+                     if (data.success) {
+                        document.getElementById('PO_Number1').textContent = data.delivery_order.po_number;
+                        document.getElementById('DO_number1').textContent = data.delivery_order.do_number;
+                        document.getElementById('supplier_name1').textContent = data.delivery_order.supplier_name;
+                        document.getElementById('Received_date1').textContent = data.delivery_order.delivery_date;
+                        document.getElementById('received_by1').textContent = data.material_receipts[0]?.received_by || '-';
+                        document.getElementById('recordedBy1').textContent = data.material_receipts[0]?.received_on_behalf_of || '-';
+
+                        document.getElementById('comments1').textContent = data.delivery_order.comments;
+                        let itemsTable = document.getElementById('modalItemsTable');
+                        itemsTable.innerHTML = "";
+                        data.material_receipts.forEach((material_receipts, index) => {
+                           let part_number = material_receipts.part_number || '';
+                           let itemName = material_receipts.item_name || '';
+                           let uom = material_receipts.uom || '';
+                           let quantity = material_receipts.quantity || '';
+                           let row = `<tr>
+                              <td style="text-align: center;">${index + 1}</td>  
+                              <td style=" text-align: left;">${part_number}</td>
+                              <td style=" text-align: left;">${itemName}</td>
+                              <td style=" text-align: center;">${uom}</td>
+                              <td style=" text-align: center;">${quantity}</td>
+                           </tr>`;
+                           itemsTable.innerHTML += row;
+                        });
+
+                        document.getElementById('paymentModal').style.display = 'block';
+                     } else {
+                        alert('Payment details not found!');
+                     }
+                  })
+                  .catch(error => console.error('Error fetching payment details:', error));
+            }
+
+            function closeModal() {
+               document.getElementById('paymentModal').style.display = 'none';
+            }
+
+         </script>
+
+
+         <div id="paymentModal" class="modal">
+
+            <div class="modal-content">
+
+               <div class="button-container1">
+
+                  <h2>Material Receipt Details
+                  </h2>
+
+                  <span class="close-button" onclick="closeModal()">&times;</span>
+
+               </div>
+
+               <style>
+                  .button-container1 h2 {
+                     font-size: 22px;
+                     font-weight: bold;
+                     color: #007AFF;
+                     /* Apple Blue */
+                     letter-spacing: 1px;
+                     background: linear-gradient(45deg, #007AFF, #34AADC);
+                     -webkit-background-clip: text;
+                     -webkit-text-fill-color: transparent;
+                     text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+                     animation: fadeIn 0.6s ease-in-out;
+                  }
+
+                  /* Smooth fade-in animation */
+                  @keyframes fadeIn {
+                     from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                     }
+
+                     to {
+                        opacity: 1;
+                        transform: translateY(0);
+                     }
+                  }
+               </style>
+
+               <style>
+                  .table-responsive1 {
+                     width: 100%;
+                     overflow: auto;
+                     max-height: 450px;
+                     border-radius: 10px;
+                     border: 1px solid #ddd;
+                  }
+
+                  .table-responsive {
+                     width: 100%;
+                     overflow: auto;
+                     max-height: 750px;
+                  }
+
+                  .table-main {
+                     width: 100%;
+                     border-collapse: collapse;
+                  }
+
+                  .table-main thead {
+                     position: sticky;
+                     top: 0;
+                     background: white;
+                     z-index: 10;
+                  }
+
+                  .container {
+                     padding: 10px;
+                     border-radius: 10px;
+                     display: flex;
+                     flex: 1;
+                     gap: 20px;
+                     margin-bottom: 15px;
+                  }
+
+                  .invoice-header {
+                     flex: 1;
+                     background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                     padding: 20px;
+                     border-radius: 12px;
+                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                     color: #004d40;
+                     transition: transform 0.2s ease-in-out;
+                  }
+
+                  .invoice-header:hover {
+                     transform: scale(1.02);
+                  }
+
+
+                  .invoice-row {
+                     display: grid;
+                     grid-template-columns: 140px auto;
+                     /* First column for labels, second for values */
+                     gap: 10px;
+                     align-items: center;
+                     padding: 5px 0;
+                  }
+
+                  .invoice-row p {
+                     margin: 0;
+                     font-weight: bold;
+                     text-align: left;
+                  }
+
+                  .invoice-row span {
+                     text-align: left;
+                  }
+
+                  .invice_header {
+                     width: 100%;
+                     padding: 10px;
+
+                  }
+
+                  .button-container1 {
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     margin-bottom: 15px;
+                  }
+
+                  .button-container1 h2 {
+                     margin: 0;
+                     font-size: 1.5em;
+                     color: #333;
+                  }
+
+                  .title-box {
+                     display: flex;
+                     padding: 5px;
+                     background-color: white;
+                     border-radius: 8px;
+                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                     margin-bottom: 10px;
+                     justify-content: space-between;
+
+                  }
+
+                  .title-item {
+                     display: flex;
+                     align-items: center;
+
+                     /* Align title and value on the same row */
+                  }
+
+                  .title-item span {
+                     font-size: 18px;
+                     font-weight: bold;
+                     color: #004b5d;
+                  }
+
+
+                  @keyframes open {
+                     from {
+                        width: 20px;
+                        /* Start with 0 width */
+                     }
+
+                     to {
+                        width: 573px;
+                        /* Animate to 473px width */
+                     }
+                  }
+
+                  /* Responsive styling for smaller screens */
+                  @media (max-width: 768px) {
+                     .title-box {
+                        flex-direction: column;
+                        /* Stack items vertically on smaller screens */
+                        align-items: flex-start;
+                     }
+
+                     .title-item {
+                        margin-bottom: 15px;
+                        /* Space between stacked items */
+                     }
+                  }
+               </style>
+
+               <div class="container">
+
+                  <div class="invoice-header">
+                     <div class="invoice-row">
+                        <p><strong>PO Number</strong></p>
+                        <span id="PO_Number1"></span>
+                     </div>
+
+                     <div class="invoice-row">
+                        <p><strong>DO Number</strong></p>
+                        <span id="DO_number1"></span>
+                     </div>
+
+                     <div class="invoice-row">
+                        <p><strong>Supplier</strong></p>
+                        <span id="supplier_name1"></span>
+                     </div>
+
+                     <div class="invoice-row">
+                        <p><strong>Received Date</strong></p>
+                        <span id="Received_date1"></span>
+                     </div>
+
+
+                  </div>
+
+                  <div class="invoice-header">
+
+                     <div class="invoice-row">
+                        <p><strong>Received By</strong></p>
+                        <span id="received_by1"></span>
+                     </div>
+                     <div class="invoice-row">
+                        <p><strong>Recorded By</strong></p>
+                        <span id="recordedBy1"></span>
+                     </div>
+
+                     <div class="invoice-row">
+                        <p><strong>Comments</strong></p>
+                        <span id="comments1"></span>
+                     </div>
+                  </div>
+
+               </div>
+
+               <div class="container">
+
+                  <div class="table-responsive1">
+
+                     <table class="table table-main" width="100%">
+
+                        <thead>
+                           <tr>
+                              <th style="text-align: center; width: 2%;">S/N</th>
+                              <th style="text-align: left; width: 5%;">Part No</th>
+                              <th style="text-align: left; width: 45%;">Item</th>
+                              <th style="text-align: center; width: 3%;">Uom</th>
+                              <th style="text-align: center; width: 7%;">Rec. Qty</th>
+                           </tr>
+                        </thead>
+                        <tbody id="modalItemsTable">
+                           <!-- Items will be inserted here -->
+                        </tbody>
+
+                     </table>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+         </div>
+
+
+      </div>
+
+   </div>
+
+
+   <!-- CSS for Modal -->
+   <style>
+      .modal {
+         display: none;
+         position: fixed;
+         z-index: 1000;
+         left: 0;
+         top: 0;
+         width: 100%;
+         height: 100%;
+         overflow: auto;
+         background: rgba(163, 59, 59, 0.1);
+         backdrop-filter: blur(10px);
+         justify-content: center;
+      }
+
+
+      .modal-content {
+         background-color: white;
+         margin: auto;
+         padding: 20px;
+         border-radius: 10px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+         width: 70%;
+      }
+
+      .close-button {
+         color: #aaa;
+         float: right;
+         font-size: 28px;
+         font-weight: bold;
+         cursor: pointer;
+      }
+   </style>
+
+   <style>
+      .po-header {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 1.5rem;
+         /* space between each label-value pair */
+         font-size: 0.95em;
+         align-items: center;
+      }
+
+      .po-header .label {
+         font-weight: bold;
+         color: #004085;
+         margin-right: 4px;
+      }
+
+      .po-header .value {
+         margin-right: 1.5rem;
+         color: #212529;
+      }
+
+      /* PO header row */
+      .table-main .table-info {
+         background-color: #e2f3f7;
+         color: #0c5460;
+         font-weight: bold;
+         padding: 5px;
+      }
+
+      .table-main .table-info td {
+         border-top: 2px solid #17a2b8;
+      }
+
+      /* DO rows */
+      .table-main .mainRow td {
+         border-bottom: 1px solid #dee2e6;
+
+      }
+
+      .table-main .mainRow:hover {
+         background-color: #f1f1f1;
+      }
+
+      .table-main .text-primary {
+         color: #007bff;
+      }
+
+      .table-main .text-danger {
+         color: #dc3545;
+      }
+
+      .text-center {
+         text-align: center;
+      }
+
+      .text-start {
+         text-align: left;
+      }
+
+      .ms-2 {
+         margin-left: 0.5rem;
+      }
+
+      /* Icon size override for action icons */
+      .fa-eye,
+      .fa-pen-to-square,
+      .fa-trash {
+         font-size: 1.1em;
+         cursor: pointer;
+      }
+   </style>
+
+   <style>
+      .records {
+         width: 100%;
+         overflow-x: auto;
+      }
+
+      .record-header {
+         width: 100%;
+         padding: 10px;
+         background-color: #d8eaf3;
+      }
+
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+         .btn4 {
+            font-size: 14px;
+            padding: 8px 12px;
+            /* Adjusted padding for smaller screens */
+         }
+      }
+
+      @media (max-width: 480px) {
+         .btn4 {
+            font-size: 12px;
+            padding: 6px 10px;
+            /* Further adjusted padding */
+         }
+      }
+   </style>
+
+   <style>
+      .container {
+         padding: 2px;
+         border-radius: 10px;
+         display: flex;
+         flex: 1;
+         gap: 10px;
+      }
+
+      .invice_header {
+         width: 100%;
+         padding: 7px;
+         background-color: #e0f7fa;
+         border-radius: 5px;
+      }
+   </style>
+
+   <style>
+      .animated-text {
+         color: #ff5722;
+         /* Bright orange color */
+         font-weight: bold;
+         font-size: 1.0em;
+         /* animation: fadeBlink 1s infinite alternate; */
+      }
+
+      @keyframes fadeBlink {
+         0% {
+            opacity: 1;
+            transform: scale(1);
+         }
+
+         50% {
+            opacity: 0.5;
+            transform: scale(1.1);
+         }
+
+         100% {
+            opacity: 1;
+            transform: scale(1);
+         }
+      }
+   </style>
+
+   <style>
+      .span_tag {
+         font-size: 14px;
+         font-weight: bold;
+         color: #004b5d;
+         padding: 5px 8px;
+         border: 1px solid #004b5d;
+         border-radius: 5px;
+         background-color: #f1f8ff;
+         color: #004b5d;
+         text-align: center;
+         margin-right: 10px;
+      }
+
+      #totalAmount {
+         color: #28a745;
+         /* Green for amount */
+      }
+
+      #totalGST {
+         color: #0c8de2;
+         /* Yellow for GST */
+      }
+
+      #overallTotal {
+         color: #dc3545;
+         /* Red for overall total */
+      }
+
+      .search_container {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         width: 100%;
+         padding: 10px;
+      }
+
+
+      #projectTable {
+         width: 100%;
+         border-collapse: separate;
+         border-spacing: 0;
+         border-radius: 10px;
+      }
+
+
+      #searchInput {
+         width: 40%;
+         padding: 2px;
+         margin: auto;
+         display: block;
+         border: 2px solid #ccc;
+         border-radius: 5px;
+         /* Rounded corners */
+         outline: none;
+         transition: all 0.3s ease-in-out;
+         text-align: center;
+         font-size: 16px;
+      }
+
+      #searchInput:hover {
+         background-color: #f0f0f0;
+      }
+
+      #searchInput:focus {
+         border-color: #004b5d;
+         box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      }
+   </style>
+
+   <style>
+      .form-label {
+         display: block;
+      }
+
+      .form-control {
+         width: 100%;
+         padding: 6px;
+         margin-bottom: 5px;
+         box-sizing: border-box;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         gap: 15px;
+      }
+
+      .select2 {
+         width: 100%;
+         margin-bottom: 5px;
+         box-sizing: border-box;
+      }
+
+      .modal {
+         display: none;
+         position: fixed;
+         z-index: 1000;
+         left: 0;
+         top: 0;
+         width: 100%;
+         height: 100%;
+         background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+         backdrop-filter: blur(4px);
+         animation: fadeIn 0.3s ease-in-out;
+      }
+
+      /* Optional animation for smoother appearance */
+      @keyframes fadeIn {
+         from {
+            opacity: 0;
+         }
+
+         to {
+            opacity: 1;
+         }
+      }
+   </style>
+
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+         // Function to format a date as DD/MM/YY
+         function formatDateAsDDMMYY(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+               console.error('Invalid date string:', dateString);
+               return dateString; // Return original if date is invalid
+            }
+            return date.toLocaleDateString('en-GB', options);
+         }
+
+         // Format date elements
+         const start_time_elements = document.querySelectorAll(".start-time");
+         start_time_elements.forEach(function (element) {
+            if (element.textContent.trim()) {
+               element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+            }
+         });
+
+         const end_time_elements = document.querySelectorAll(".end-time");
+         end_time_elements.forEach(function (element) {
+            if (element.textContent.trim()) {
+               element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+            }
+         });
+      });
+   </script>
+
+   <style>
+      .new-enquiry-btn {
+         background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+         background-size: 200% 200%;
+         color: white;
+         font-weight: bold;
+         border: none;
+         padding: 6px 12px;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 14px;
+         display: flex;
+         align-items: center;
+         transition: all 0.4s ease-in-out;
+         box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+         /* Soft shadow */
+      }
+
+      /* Hover effect: Darker Gradient + Glow */
+      .new-enquiry-btn:hover {
+         background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+         background-size: 200% 200%;
+         box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+         /* Stronger shadow on hover */
+         transform: scale(1.05);
+      }
+
+
+
+      #openModalButton:hover {
+         background-color: #04a389;
+         /* Darker shade for hover */
+         color: #ffffff;
+         /* Ensure text stays visible */
+         border-color: #ffffff;
+         /* Highlight border */
+         transform: scale(1.05);
+         /* Slight zoom effect */
+      }
+   </style>
+
+   <script>
+      const doNumberInput = document.getElementById('do_number');
+      const supplierNameInput = document.getElementById('supplier_name');
+
+      doNumberInput.addEventListener('keyup', function () {
+         const doNumber = doNumberInput.value;
+         const supplierName = supplierNameInput.value;
+
+         if (doNumber && supplierName) {
+            fetch('/check_do_number_supplier', {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json'
+               },
+               body: JSON.stringify({ do_number: doNumber, supplier_name: supplierName })
+            })
+               .then(response => response.json())
+               .then(data => {
+                  if (data.exists) {
+                     alert('The combination of DO Number and Supplier Name already exists!');
+                     doNumberInput.value = '';  // Clear the input field
+                  }
+               })
+               .catch(error => console.error('Error:', error));
+         }
+      });
+   </script>
+
+
+   <style>
+      .mat_rec_table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 0px;
+      }
+
+      .mat_rec_table th,
+      .mat_rec_table td {
+         padding: 5px;
+         text-align: center;
+      }
+
+      .mat_rec_table td {
+         margin: 0;
+         padding: 0;
+      }
+   </style>
+
+
+</body>
+
+</html>

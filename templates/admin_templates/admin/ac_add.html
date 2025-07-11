@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}" class="active"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="parent_container">
+
+                <div class="container table-responsive">
+
+                    <form id="budgetForm">
+
+                        <table id="budgetTable" class="content-table-leave">
+
+                            <thead>
+
+                                <tr id="totalsRow">
+                                    <td></td>
+                                    <td><strong></strong></td>
+                                    <td id="totalBudget"> <strong>0.00</strong></td>
+                                    <td id="totalAdded"> <strong>0.00</strong></td>
+                                    <td id="total"> <strong>0.00</strong></td>
+                                    <td></td>
+                                </tr>
+
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Expense Name</th>
+                                    <th>Budget</th>
+                                    <th>Added</th>
+                                    <th>Total</th>
+                                    <th>Del</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+                                <!-- Render rows from overhead_list -->
+                                {% for row in overhead_list %}
+                                <tr data-id="{{ row.id }}">
+                                    <td contenteditable="true" class="editable-cell">{{ row.code }}</td>
+                                    <td contenteditable="true" class="editable-cell">{{ row.expenses_name }}</td>
+                                    <td contenteditable="true" class="editable-cell">{{ row.budget }}</td>
+                                    <td contenteditable="true" class="editable-cell">{{ row.added }}</td>
+                                    <td><span class="total-cell">{{ row.total }}</span></td>
+                                    <td>
+                                        <button type="button" class="delete-row-btn"
+                                            style="border: none; cursor: pointer;">
+                                            <i class="fa-solid fa-trash" style="color: red;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <div class="button-container1">
+                            <button type="button" id="addRowBtn" class="custom-btn btn-2">+</button>
+                            <button type="button" id="submitFormBtn" class="custom-btn btn-2">Submit</button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+            <script>
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Attach event listener to all delete buttons
+                    document.querySelectorAll(".delete-row-btn").forEach(button => {
+                        button.addEventListener("click", function () {
+                            const row = this.closest("tr"); // Get the closest row
+                            const rowId = row.dataset.id; // Get the row ID from the data-id attribute
+
+                            if (rowId) {
+                                // Confirm deletion
+                                if (confirm("Are you sure you want to delete this row?")) {
+                                    // Send a DELETE request to the server
+                                    fetch(`/delete-overhead-row/${rowId}`, {
+                                        method: "DELETE",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        }
+                                    })
+                                        .then(response => {
+                                            if (response.ok) {
+                                                // Remove the row from the table
+                                                row.remove();
+                                                updateTotalRow();
+                                                alert("Row deleted successfully!");
+                                            } else {
+                                                return response.json().then(data => {
+                                                    throw new Error(data.error || "Failed to delete the row.");
+                                                });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error("Error deleting row:", error);
+                                            // alert("Error deleting row. Please try again.");
+                                        });
+                                }
+                            } else {
+                                alert("Invalid row ID.");
+                            }
+                        });
+                    });
+                });
+
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const budgetTable = document.getElementById("budgetTable").querySelector("tbody");
+
+                    // Function to update the total row
+                    function updateTotalRow() {
+                        let totalBudget = 0;
+                        let totalAdded = 0;
+                        let total = 0;
+
+                        const rows = budgetTable.querySelectorAll("tr");
+                        rows.forEach(row => {
+                            const budget = parseFloat(row.cells[2].textContent) || 0;
+                            const added = parseFloat(row.cells[3].textContent) || 0;
+                            const totalValue = budget + added;
+
+                            totalBudget += budget;
+                            totalAdded += added;
+                            total += totalValue;
+
+                            row.querySelector(".total-cell").textContent = totalValue.toFixed(2);
+                        });
+
+                        // Update the totals row
+                        document.getElementById("totalBudget").textContent = totalBudget.toFixed(2);
+                        document.getElementById("totalAdded").textContent = totalAdded.toFixed(2);
+                        document.getElementById("total").textContent = total.toFixed(2);
+                    }
+
+                    // Function to add a new row
+                    function addRow() {
+                        const newRow = document.createElement("tr");
+                        newRow.innerHTML = `
+                            <td contenteditable="true" class="editable-cell"></td>
+                            <td contenteditable="true" class="editable-cell"></td>
+                            <td contenteditable="true" class="editable-cell"></td>
+                            <td contenteditable="true" class="editable-cell"></td>
+                            <td><span class="total-cell"></span></td>
+                            <td>
+                                <button type="button" class="delete-row-btn" style="border: none; cursor: pointer;">
+                                    <i class="fa-solid fa-trash" style="color: red;"></i>
+                                </button>
+                            </td>
+                        `;
+                        budgetTable.appendChild(newRow);
+                        attachDeleteHandler(newRow);
+                        attachEditableHandler(newRow);
+                        updateTotalRow(); // Update totals after adding a new row
+                    }
+
+
+
+
+                    // Function to update the total column for a row
+                    function updateTotal(row) {
+                        const budget = parseFloat(row.cells[2].textContent) || 0;
+                        const added = parseFloat(row.cells[3].textContent) || 0;
+                        const total = budget + added;
+                        row.querySelector(".total-cell").textContent = total.toFixed(2);
+                        updateTotalRow(); // Update totals after editing a cell
+                    }
+
+                    // Attach handler for editable cells
+                    function attachEditableHandler(row) {
+                        row.querySelectorAll(".editable-cell").forEach(cell => {
+                            cell.addEventListener("input", () => updateTotal(row));
+                        });
+                    }
+
+                    // Attach editable handlers to all rows
+                    budgetTable.querySelectorAll("tr").forEach(attachEditableHandler);
+
+                    // Add new row handler
+                    document.getElementById("addRowBtn").addEventListener("click", addRow);
+
+                    // Submit form handler
+                    document.getElementById("submitFormBtn").addEventListener("click", function () {
+                        const rows = budgetTable.querySelectorAll("tr");
+                        const rowData = Array.from(rows).map(row => {
+                            return {
+                                code: row.cells[0].textContent.trim(),
+                                expenses_name: row.cells[1].textContent.trim(),
+                                budget: parseFloat(row.cells[2].textContent) || 0,
+                                added: parseFloat(row.cells[3].textContent) || 0,
+                                total: parseFloat(row.querySelector(".total-cell").textContent) || 0
+                            };
+                        });
+
+                        console.log("Submitting Data:", rowData);
+
+                        // Example: Send data to the server (replace with your backend URL)
+                        fetch("/submit-overhead-budget", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ rows: rowData })
+                        })
+                            .then(response => response.json())
+                            .then(data => alert("Data submitted successfully!"))
+                            .catch(error => console.error("Error:", error));
+                    });
+
+                    // Initialize the totals on page load
+                    updateTotalRow();
+                });
+
+            </script>
+
+            <style>
+                .container {
+                    width: 100%;
+                }
+
+                .sticky-container {
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                }
+
+                .content-table-leave {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+
+
+                .content-table-leave thead {
+                    position: sticky;
+                    top: 0;
+                    z-index: 2;
+                }
+
+                .content-table-leave thead th {
+                    background-color: white;
+                    color: black;
+                    text-align: left;
+                    font-weight: bold;
+                    border-bottom: 1.5px solid;
+                }
+
+                .content-table-leave th,
+                .content-table-leave td {
+                    padding: 3px 3.5px;
+                }
+
+                .content-table-leave tbody tr {
+                    border-bottom: 1px solid black;
+                }
+
+
+
+                .content-table-leave tbody tr:nth-of-type(even) {
+                    background-color: rgb(240, 238, 238);
+                }
+
+                .content-table-leave tbody tr:nth-of-type(odd) {
+                    background-color: white;
+                }
+
+
+
+                .content-table-leave thead th:nth-child(6),
+                .content-table-leave tbody td:nth-child(6) {
+                    text-align: center;
+                }
+
+
+
+                .content-table-leave .fa-trash,
+                .fa-edit {
+                    font-size: 1.2em;
+                }
+
+                /* Media query for mobile */
+                @media (max-width: 768px) {
+                    .mainbox {
+                        flex-direction: column;
+                    }
+                }
+            </style>
+
+            <style>
+                .button-container1 {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+                    margin-top: 10px;
+                    gap: 10px;
+                }
+
+                .parent_container {
+                    display: grid;
+                    grid-template-columns: 0.7fr 0.6fr;
+                    grid-template-rows: 1fr;
+                    grid-auto-columns: 1fr 2fr;
+                    gap: 10px;
+                    grid-auto-flow: row;
+                    justify-items: center;
+                    grid-template-areas:
+                        ". .";
+                }
+            </style>
+
+
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

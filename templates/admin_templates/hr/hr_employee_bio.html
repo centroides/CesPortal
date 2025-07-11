@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr" class="active">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  {% if user_access['toggleADD'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hr_add') }}" class="link">
+                        <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> Add
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleLeaveStats'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('leave_approvals') }}" class="link">
+                        <i class="fas fa-house-user" style="margin-right: 5px;"></i> Leaves
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  <li>
+                     <a href="{{ url_for('hr_trade') }}" class="link">
+                        <i class="fa-sharp fa-solid fa-mountain-sun" style="margin-right: 5px;"></i>Trade
+                     </a>
+                  </li>
+
+                  {% if user_access['toggleHRProfile'] == 'On' %}
+                  <li class="active">
+                     <a href="{{ url_for('hr_employee_bio') }}" class="link">
+                        <i class="fa-solid fa-users" style="margin-right: 5px;"></i> Profile
+                     </a>
+                  </li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            {% if content == 2 %}
+
+            <div class="timenav">
+               <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+               <ul id="menuList1" class="timebar">
+
+                  {% if user_access['toggleUpdateBio'] == 'On' %}
+
+                  <li>
+                     <input type="radio" id="addprojectRadio" name="sectionRadio"
+                        onclick="showSection('addproject'); toggleContainer('addproject')" style="display: none;">
+                     <label for="addprojectRadio" class="link1"> <i class="fa-solid fa-plus-square"
+                           style="margin-right: 5px;"></i>Update Bio</label>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleUpdateCourse'] == 'On' %}
+                  <li>
+                     <input type="radio" id="adduserRadio" name="sectionRadio"
+                        onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none;">
+                     <label for="adduserRadio" class="link1"> <i class="fa-solid fa-user-plus"
+                           style="margin-right: 5px;"> </i>Update Courses</label>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleUpdateAssets'] == 'On' %}
+                  <li>
+                     <input type="radio" id="subContractRadio" name="sectionRadio"
+                        onclick="showSection('Sub_contract'); toggleContainer('Sub_contract')" style="display: none;">
+                     <label for="subContractRadio" class="link1"><i class="fa-solid fa-circle-dollar-to-slot"
+                           style="margin-right: 5px;"></i>Update Assets</label>
+
+                  </li>
+                  {% endif %}
+                  {% if user_access['hr_option2'] == 'On' %}
+                  <li>
+                     <input type="radio" id="othersRadio" name="sectionRadio"
+                        onclick="showSection('Others'); toggleContainer('Others')" style="display: none;">
+                     <label for="othersRadio" class="link1"> <i class="fa-solid fa-industry"
+                           style="margin-right: 5px;"></i>option</label>
+                  </li>
+                  {% endif %}
+
+
+
+
+
+               </ul>
+
+               <div class="menu-icon1">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+               </div>
+
+            </div>
+
+            {% endif %}
+
+         </div>
+
+         <style>
+            .search_container {
+
+               width: 100%;
+               padding: 10px;
+            }
+
+
+            #projectTable {
+               width: 100%;
+               border-collapse: separate;
+               border-spacing: 0;
+               border-radius: 10px;
+            }
+         </style>
+
+         {% if content == 1 %}
+
+         <div class="record-header7">
+
+            <div class="profile-bio">
+
+               <div class="container12">
+
+                  {% for user in user_data %}
+
+                  <a href="{{ url_for('hr_employee_bio', employee_id=user.username) }}" style="text-decoration: none;">
+                     <div class="box">
+                        <div class="inner_box">
+                           <div class="content">
+                              <div class="percent" data-text="{{ user.profile_completion }}%"
+                                 style="--num: {{ user.profile_completion }}">
+                                 <div class="dot"></div>
+                                 <svg>
+                                    <circle cx="35" cy="35" r="35"></circle>
+                                    <circle cx="35" cy="35" r="35"></circle>
+                                 </svg>
+                              </div>
+                           </div>
+                           <div class="data">
+                              <span class="username">{{ user.username }}</span>
+                              <span class="department-code">{{ user.department_code }}</span>
+                           </div>
+                        </div>
+                     </div>
+                  </a>
+
+                  {% endfor %}
+
+               </div>
+
+               <form id="updateForm" action="{{ url_for('hr_employee_bio') }}" method="POST">
+
+                  <div class='flex-row'>
+                     <!-- <label for="employee_id" class="form-label">Employee Name: <span style="color: red;">*</span></label> -->
+                     <select class="form-control" id="employee_id" name="employee_id" required>
+                        <option value="">Select Employee</option>
+                        {% for username in usernames %}
+                        <option value="{{ username }}">{{ username }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+
+
+                  <div class="button-container">
+
+                     <button type="submit" class="custom-btn btn-2">Update</button>
+
+
+                  </div>
+
+               </form>
+
+               <script>
+                  // JavaScript to handle form submission with dynamically selected employee_id
+                  document.getElementById('updateForm').addEventListener('submit', function (event) {
+                     // Get the selected employee_id from the dropdown
+                     var employeeId = document.getElementById('employee_id').value;
+                     // Update the form action with the selected employee_id
+                     this.action = "{{ url_for('hr_employee_bio') }}" + "?employee_id=" + employeeId;
+                  });
+               </script>
+
+               <div class="container1">
+
+                  {% for user in user_data %}
+                  <a href="{{ url_for('hr_employee_bio', employee_id=user.username) }}" style="text-decoration: none;">
+                     <span class="username">{{ user.username }} ({{ user.department_code }})</span>
+                     <div class="progress2">
+
+                        <div class="progress-bar2" style="width: {{ user.profile_completion }}%;"></div>
+                        <div class="progress-text">
+
+                           <span class="completion-percent">{{ user.profile_completion }}%</span>
+                        </div>
+                     </div>
+                  </a>
+                  {% endfor %}
+
+               </div>
+
+            </div>
+
+
+
+         </div>
+
+         {% endif %}
+
+         {% if content == 2 %}
+
+         <input type="hidden" id="optionValue" value="{{ option}}">
+
+         <div class="addproject" id="addproject" style="display: none;">
+
+            <form class="p-3" action="/hr_employee_bio" method="POST">
+
+               <div class="main_box1">
+
+                  <div class="form-group col-md-6" style="display: none;">
+                     <label for="employee_id7" class="form-label">Employee Name: <span
+                           style="color: red;">*</span></label>
+                     <input type="text" class="form-control" id="employee_id7" name="employee_id7" required
+                        value="{{Semp}}" readonly>
+                  </div>
+
+                  <div class="container_box"> <!-- Employee details -->
+
+                     <div class="taskbar1">
+                        <ul class="list">
+                           <li><a href="#" class="link1" style="color: whitesmoke;">Employee Details</a></li>
+                        </ul>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Full_Employee_ID" class="form-label">Employee Name: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Full_Employee_ID" name="Full_Employee_ID" required
+                           value="{{ emp_data['Full_Employee_ID']}} ">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="display_Name" class="form-label">Display Name: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="display_Name" name="display_Name" required
+                           value="{{Semp}}" readonly style="background-color: bisque;">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Designation" class="form-label">Designation: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Designation" name="Designation" required
+                           value="{{ emp_data['Designation']  }}">
+                     </div>
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+                           <label for="Expense_Code" class="form-label">Code: <span style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="Expense_Code" name="Expense_Code" required
+                              value="{{ Semp_code }}" readonly style="background-color: bisque;">
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Sector" class="form-label">Sector:<span style="color: red;">*</span></label>
+                           <select class="form-select" class="form-control" id="Sector" name="Sector" required
+                              onchange="toggleFields()">
+                              <option value="" disabled selected>Select</option>
+                              <option value="Process" {{'selected' if emp_data and emp_data['Sector']=='Process' else ''
+                                 }}>Process</option>
+                              <option value="Construction" {{'selected' if emp_data and
+                                 emp_data['Sector']=='Construction' else '' }}>Construction</option>
+                              <option value="Marine" {{'selected' if emp_data and emp_data['Sector']=='Marine' else ''
+                                 }}>Marine</option>
+                              <option value="Manufacturing" {{'selected' if emp_data and
+                                 emp_data['Sector']=='Manufacturing' else '' }}>Manufacturing</option>
+                              <option value="Service" {{'selected' if emp_data and emp_data['Sector']=='Service' else ''
+                                 }}>Service</option>
+                           </select>
+                        </div>
+
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Employee_Status" class="form-label">Employee Status:<span
+                              style="color: red;">*</span></label>
+                        <select class="form-control" id="Employee_Status" name="Employee_Status" required>
+                           <option value="" disabled selected>Select Race</option>
+                           <option value="Live" {{ 'selected' if emp_data and emp_data['Employee_Status']=='Live'
+                              else '' }}>Live</option>
+                           <option value="Left" {{ 'selected' if emp_data and emp_data['Employee_Status']=='Left'
+                              else '' }}>Left</option>
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Email_Id" class="form-label">Email ID: <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Email_Id" name="Email_Id" required
+                           value="{{ emp_data['Email_Id'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Race" class="form-label">Race:<span style="color: red;">*</span></label>
+                        <select class="form-control" id="Race" name="Race" required>
+                           <option value="" disabled selected>Select Race</option>
+                           <option value="CDAC" {{ 'selected' if emp_data and emp_data['Race']=='CDAC' else '' }}>
+                              Chinese</option>
+                           <option value="SINDA" {{ 'selected' if emp_data and emp_data['Race']=='SINDA' else '' }}>
+                              Indian</option>
+                           <option value="ECF" {{ 'selected' if emp_data and emp_data['Race']=='ECF' else '' }}>Eurasian
+                           </option>
+                           <option value="MBMF" {{ 'selected' if emp_data and emp_data['Race']=='MBMF' else '' }}>Majlis
+                           </option>
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_Joined" class="form-label">Date Joined:</label>
+                        <input type="date" class="form-control" id="Date_Joined" name="Date_Joined"
+                           value="{{ emp_data['Date_Joined'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_Left" class="form-label">Date Left:</label>
+                        <input type="date" class="form-control" id="Date_Left" name="Date_Left"
+                           value="{{ emp_data['Date_Left'] }}">
+                     </div>
+
+                     <div class="flex-item" style="display: none;">
+                        <label for="Username_Portal" class="form-label">Username for Portal: </label>
+                        <input type="text" class="form-control" id="Username_Portal" name="Username_Portal"
+                           value="{{ emp_data['UserName_Portal'] }}">
+                     </div>
+
+                     <div class="flex-item" style="display: none;">
+                        <label for="Password_Portal" class="form-label">Password for Portal: </label>
+                        <input type="password" class="form-control" id="Password_Portal" name="Password_Portal"
+                           value="{{ emp_data['Password_Portal'] }}">
+                     </div>
+
+                  </div>
+
+                  <div class="container_box"> <!-- Documents -->
+
+                     <div class="taskbar1">
+                        <ul class="list">
+                           <li><a href="#" class="link1" style="color: whitesmoke;">Documents</a></li>
+                        </ul>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Nationality" class="form-label">Nationality:<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Nationality" name="Nationality" required
+                           value="{{ emp_data['Nationality'] }}">
+                     </div>
+
+                     <!-- <div class="flex-item">
+                        <label for="Pass_Type" class="form-label">Pass Type:<span style="color: red;">*</span></label>
+                        <select class="form-select" id="Pass_Type" name="Pass_Type" required onchange="toggleFields()">
+                              <option value="" disabled selected>Select</option>
+                              <option value="SGP">SGP</option>
+                              <option value="PR">PR</option>
+                              <option value="E-PASS">E-PASS</option>
+                              <option value="S-PASS">S-PASS</option>
+                              <option value="WP">WP</option>
+                        </select>
+                     </div> -->
+
+                     <div class="flex-item">
+                        <label for="Pass_Type" class="form-label">Pass Type:<span style="color: red;">*</span></label>
+                        <select class="form-select" id="Pass_Type" name="Pass_Type" required onchange="toggleFields()">
+                           <option value="" disabled>Select</option>
+                           <option value="SGP" {% if emp_data['Pass_Type']=='SGP' %} selected {% endif %}>SGP
+                           </option>
+                           <option value="PR" {% if emp_data['Pass_Type']=='PR' %} selected {% endif %}>PR
+                           </option>
+                           <option value="E-PASS" {% if emp_data['Pass_Type']=='E-PASS' %} selected {% endif %}>E-PASS
+                           </option>
+                           <option value="S-PASS" {% if emp_data['Pass_Type']=='S-PASS' %} selected {% endif %}>S-PASS
+                           </option>
+                           <option value="WP" {% if emp_data['Pass_Type']=='WP' %} selected {% endif %}>WP
+                           </option>
+                        </select>
+                     </div>
+
+                     <div class="flex-item" id="nric-field" style="display:none;">
+                        <label for="NRIC" class="form-label">NRIC:<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="NRIC" name="NRIC" value="{{ emp_data['NRIC'] }}">
+                     </div>
+
+                     <!-- id="fin-field" style="display:none;" -->
+
+                     <div class="flex-item">
+                        <label for="FIN" class="form-label">FIN:<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="FIN" name="FIN" value="{{ emp_data['FIN'] }}">
+                     </div>
+
+                     <div class="flex-item" id="wp-field" style="display:none;">
+                        <label for="WP_NO" class="form-label">WP NO:<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="WP_NO" name="WP_NO" value="{{ emp_data['WP'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Pass_Exp_Date" class="form-label">Pass Exp Date:</label>
+                        <input type="date" class="form-control" id="Pass_Exp_Date" name="Pass_Exp_Date"
+                           value="{{ emp_data['Pass_Exp_Date'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Passport_No" class="form-label">Passport No:<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Passport_No" name="Passport_No" required
+                           value="{{ emp_data['Passport_No'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Passport_Exp_Date" class="form-label"> Passport Exp Date:<span
+                              style="color: red;">*</span></label>
+                        <input type="date" class="form-control" id="Passport_Exp_Date" name="Passport_Exp_Date" required
+                           value="{{ emp_data['Passport_Exp_Date'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_of_Application" class="form-label"> Date of Application:<span
+                              style="color: red;">*</span></label>
+                        <input type="date" class="form-control" id="Date_of_Application" name="Date_of_Application"
+                           required value="{{ emp_data['Date_of_Application'] }}">
+                     </div>
+
+                     <div class="button-container">
+
+                        <button type="submit" name="action" value="Add_or_Update_bio" class="custom-btn btn-2">Add /
+                           Update</button>
+                        <input type="hidden" name="employee_id" value="{{ request.form.get('employee_id') }}">
+
+
+                     </div>
+
+                     <!-- Flash messages section -->
+                     <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                           {% for category, message in messages %}
+                           {% if category == 'hr_employee_bio_profile_success' %}
+                           <div class="alert alert-success">
+                              {{ message }}
+                           </div>
+                           {% elif category == 'hr_employee_bio_profile_success1' %}
+                           <div class="alert alert-danger">
+                              {{ message }}
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                     </div>
+
+                  </div>
+
+                  <div class="container_box"> <!-- Contact Details-->
+
+                     <div class="taskbar1">
+                        <ul class="list">
+                           <li><a href="#" class="link1" style="color: whitesmoke;">Contact Details</a></li>
+                        </ul>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Full_Employee_ID" class="form-label">Employee Name: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Full_Employee_ID" name="Full_Employee_ID" required
+                           value="{{ emp_data['Full_Employee_ID']}} ">
+                     </div>
+
+
+                     <div class="flex-item">
+                        <label for="DOB" class="form-label">DOB:<span style="color: red;">*</span></label>
+                        <input type="date" class="form-control" id="DOB" name="DOB" required
+                           value="{{ emp_data['DOB'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Phone_No" class="form-label">Phone No:<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Phone_No" name="Phone_No" required
+                           value="{{ emp_data['Phone_No'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Personal_Mail" class="form-label">Personal Mail:<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Personal_Mail" name="Personal_Mail" required
+                           value="{{ emp_data['Personal_Mail'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Address" class="form-label">Address: <span style="color: red;">*</span></label>
+                        <textarea class="form-control" id="Address" name="Address" required
+                           style="height: 70px;">{{ emp_data['Address'] }}</textarea>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Emergency_Contact" class="form-label">Emergency Contact:<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Emergency_Contact" name="Emergency_Contact" required
+                           value="{{ emp_data['Emergency_Contact']  }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Emergency_Contact_Address" class="form-label">Emergency Contact
+                           Address:<span style="color: red;">*</span></label>
+                        <textarea class="form-control" id="Emergency_Contact_Address" name="Emergency_Contact_Address"
+                           style="height: 70px;" required>{{ emp_data['Emergency_Contact_Address'] }}</textarea>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Relation_to_Employee" class="form-label">Relation to Employee:<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Relation_to_Employee" name="Relation_to_Employee"
+                           required value="{{ emp_data['Relation_to_Employee'] }}">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Emergency_Contact_No" class="form-label">Emergency Contact No:<span
+                              style="color: red;">*</span></label>
+                        <input type="number" class="form-control" id="Emergency_Contact_No" name="Emergency_Contact_No"
+                           required value="{{ emp_data['Emergency_Contact_No'] }}">
+                     </div>
+
+
+
+                  </div>
+
+                  <div class="container_box"> <!-- Package -->
+
+                     <div class="taskbar1">
+                        <ul class="list">
+                           <li><a href="#" class="link1" style="color: whitesmoke;">Package</a></li>
+                        </ul>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Basic" class="form-label">Basic:<span style="color: red;">*</span></label>
+                        <input type="number" step="any" class="form-control" id="Basic" name="Basic" required
+                           value="{{ emp_data['Basic'] }}">
+                     </div>
+
+                     <h4>Central Provident Fund (CPF)</h4>
+                     <div class='flex-row' style="display: none;" id="cpfFields">
+                        <div class="flex-item">
+                           <label for="Employee" class="form-label">Employee:</label>
+                           <input type="number" class="form-control" id="Employee_cpf" name="Employee_cpf" step="any"
+                              placeholder="Employee" value="{{ emp_data['Employee_cpf'] }}">
+                        </div>
+                        <div class="flex-item">
+                           <label for="Employer" class="form-label">Employer:</label>
+                           <input type="number" step="any" class="form-control" id="Employer_cpf" name="Employer_cpf"
+                              placeholder="Employer" value="{{ emp_data['Employer_cpf'] }}">
+                        </div>
+                     </div>
+
+                     <h4>Allowance</h4>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <input type="number" class="form-control" id="Allowance_Housing" name="Allowance_Housing"
+                              step="any" placeholder="Housing" value="{{ emp_data['Allowance_Housing'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <input type="number" step="any" class="form-control" id="Allowance_Transport"
+                              name="Allowance_Transport" placeholder="Transport"
+                              value="{{ emp_data['Allowance_Transport'] }}">
+                        </div>
+
+                     </div>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <input type="number" class="form-control" id="Allowance_Phone" name="Allowance_Phone"
+                              step="any" placeholder="Hand Phone" value="{{ emp_data['Allowance_Phone'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <input type="number" step="any" class="form-control" id="Allowance_Others"
+                              name="Allowance_Others" placeholder="Others" value="{{ emp_data['Allowance_Others'] }}">
+                        </div>
+
+                     </div>
+
+                     <div class="flex-item" id="shgFields" style="display: none;">
+                        <label for="SHG_Status" class="form-label">Self-Help Groups (SHG):<span
+                              style="color: red;">*</span></label>
+                        <select class="form-control" id="SHG_Status" name="SHG_Status" required
+                           onchange="toggleFields()">
+                           <option value="" disabled selected>Select SHG</option>
+                           <option value="Fund_CDAC" {{ 'selected' if emp_data and emp_data['Fund_CDAC'] else '' }}>CDAC
+                           </option>
+                           <option value="Fund_ECF" {{ 'selected' if emp_data and emp_data['Fund_ECF'] else '' }}>ECF
+                           </option>
+                           <option value="Fund_MBMF" {{ 'selected' if emp_data and emp_data['Fund_MBMF'] else '' }}>MBMF
+                           </option>
+                           <option value="Fund_SINDA" {{ 'selected' if emp_data and emp_data['Fund_SINDA'] else '' }}>
+                              SINDA</option>
+                        </select>
+                     </div>
+
+                     <div id="shgFields">
+                        <div class="flex-item" id="cdacField" style="display: none;">
+                           <label for="CDAC" class="form-label">CDAC:</label>
+                           <input type="number" class="form-control" id="Fund_CDAC" name="Fund_CDAC" step="any"
+                              placeholder="CDAC" value="{{ emp_data['Fund_CDAC'] }}">
+                        </div>
+                        <div class="flex-item" id="ecfField" style="display: none;">
+                           <label for="ECF" class="form-label">ECF:</label>
+                           <input type="number" step="any" class="form-control" id="Fund_ECF" name="Fund_ECF"
+                              placeholder="ECF" value="{{ emp_data['Fund_ECF'] }}">
+                        </div>
+                        <div class="flex-item" id="mbmfField" style="display: none;">
+                           <label for="MBMF" class="form-label">MBMF:</label>
+                           <input type="number" class="form-control" id="Fund_MBMF" name="Fund_MBMF" step="any"
+                              placeholder="MBMF" value="{{ emp_data['Fund_MBMF'] }}">
+                        </div>
+                        <div class="flex-item" id="sindaField" style="display: none;">
+                           <label for="SINDA" class="form-label">SINDA:</label>
+                           <input type="number" step="any" class="form-control" id="Fund_SINDA" name="Fund_SINDA"
+                              placeholder="SINDA" value="{{ emp_data['Fund_SINDA'] }}">
+                        </div>
+                     </div>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <label for="SDL" class="form-label">SDL:<span style="color: red;">*</span></label>
+                           <input type="number" step="any" class="form-control" id="SDL" name="SDL" required
+                              value="{{ emp_data['SDL'] }}">
+                        </div>
+
+                        <div class="flex-item" id="levyField" style="display: none;">
+                           <label for="Levy" class="form-label">Levy:<span style="color: red;">*</span></label>
+                           <input type="number" step="any" class="form-control" id="Levy" name="Levy"
+                              value="{{ emp_data['Levy'] }}">
+                        </div>
+
+                     </div>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <label for="Rate_per_hr" class="form-label">Rate per hr:</label>
+                           <input type="number" step="any" class="form-control" id="Rate_per_hr" name="Rate_per_hr"
+                              value="{{ emp_data['Rate_hr'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Rate_per_day" class="form-label">Rate per day:</label>
+                           <input type="number" step="any" class="form-control" id="Rate_per_day" name="Rate_per_day"
+                              value="{{ emp_data['Rate_day'] }}">
+                        </div>
+
+                     </div>
+
+                     <h4>Deduction</h4>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <input type="number" class="form-control" id="Deduction_Housing" name="Deduction_Housing"
+                              step="any" placeholder="Housing" value="{{ emp_data['Deduction_Housing'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <input type="number" step="any" class="form-control" id="Deduction_Transport"
+                              name="Deduction_Transport" placeholder="Transport"
+                              value="{{ emp_data['Deduction_Transport'] }}">
+                        </div>
+
+                     </div>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <input type="number" class="form-control" id="Deduction_Phone" name="Deduction_Phone"
+                              step="any" placeholder="Hand Phone" value="{{ emp_data['Deduction_Phone'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <input type="number" step="any" class="form-control" id="Deduction_Others"
+                              name="Deduction_Others" placeholder="Others" value="{{ emp_data['Deduction_Others'] }}">
+                        </div>
+
+                     </div>
+
+                     <div class='flex-row'>
+
+                        <div class="flex-item">
+                           <label for="Annual_Leave" class="form-label">Annual Leave:</label>
+                           <input type="text" class="form-control" id="Annual_Leave" name="Annual_Leave"
+                              value="{{ emp_data['Annual_Leave'] }}">
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Total" class="form-label">Total:<span style="color: red;">*</span></label>
+                           <input type="number" step="any" class="form-control" id="Total" name="Total" required
+                              value="{{ emp_data['Total'] }}">
+                        </div>
+
+                     </div>
+
+
+
+                  </div>
+
+               </div>
+
+            </form>
+
+         </div>
+
+         <div class="adduser" id="adduser" style="display: none;">
+
+            <div class="main_box1">
+
+               <div class="container_box1">
+
+                  <form id="updateForm" action="/hr_employee_bio" method="POST">
+
+                     <div class="flex-item">
+                        <label for="employee_id17" class="form-label">Employee Name: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="employee_id17" name="employee_id17" required
+                           value="{{Semp}}" readonly style="background-color: antiquewhite;">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="selected_course" class="form-label">Select Course: <span
+                              style="color: red;">*</span></label>
+                        <select class="form-control" id="selected_course" name="selected_course" required>
+                           <option value="">Select Course</option>
+                           {% for course_name in all_courses %}
+                           <option value="{{ course_name }}">{{ course_name }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_Attained" class="form-label">Date Attained: <span
+                              style="color: red;">*</span></label>
+                        <input type="date" class="form-control" id="Date_Attained" name="Date_Attained" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Expiry_Date" class="form-label">Expiry Date:</label>
+                        <input type="date" class="form-control" id="Expiry_Date" name="Expiry_Date">
+                     </div>
+
+                     <div class="button-container">
+
+                        <button type="submit" name="action" value="addCourse" class="custom-btn btn-2">Add
+                           Course</button>
+
+                     </div>
+
+                     <!-- Flash messages section -->
+                     <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                           {% for category, message in messages %}
+                           {% if category == 'hr_employee_add_course_error' %}
+                           <div class="alert alert-success">
+                              {{ message }}
+                           </div>
+                           {% elif category == 'hr_employee_add_course_error1' %}
+                           <div class="alert alert-danger">
+                              {{ message }}
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                     </div>
+
+                  </form>
+
+               </div>
+
+               <div class="container_box">
+
+                  <form id="updateForm" action="/hr_employee_bio" method="POST" onsubmit="return validateForm1()">
+
+                     <div class="table-responsive1">
+
+                        <div class="form-group col-md-6" style="display: none;">
+                           <label for="employee_id7" class="form-label">Employee Name: <span
+                                 style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="employee_id7" name="employee_id7" required
+                              value="{{Semp}}" readonly>
+                        </div>
+
+                        <style>
+                           .table td {
+                              margin: 0;
+                              padding: 0px;
+                           }
+
+                           .table th {
+                              margin: 0;
+                              padding: 7px;
+                           }
+                        </style>
+
+                        <table class="table table-main" width="100%">
+
+                           <thead>
+                              <tr>
+                                 <th class="text-center" scope="col"><input type="checkbox" id="select-all-checkbox1">
+                                 </th>
+                                 <th class="text-left" scope="col">Course Name</th>
+                                 <th class="text-left" style="width: 15%;" scope="col">Date Attained</th>
+                                 <th class="text-left" style="width: 15%;" scope="col">Expiry Date</th>
+                              </tr>
+                           </thead>
+
+                           <tbody>
+
+                              {% for course_name, details in courses_dict.items() %}
+                              <tr>
+                                 <td class="text-center">
+                                    <input type="checkbox" class="course-checkbox" name="selected_courses[]"
+                                       value="{{ details['course_id']}}">
+                                 </td>
+
+                                 <input class="form-control" type="text" name="course_name_{{ details['course_id']}}"
+                                    value="{{ course_name}}" style="display: none;">
+
+                                 <td class="text-left">{{ course_name}}</td>
+                                 <td> <input type="date" name="date_attained_{{ details['course_id']}}"
+                                       value="{{ details['date_attained']}}"> </td>
+                                 <td> <input type="date" name="expiry_date_{{ details['course_id']}}"
+                                       value="{{ details['expiry_date']}}"></td>
+
+                              </tr>
+                              {% endfor %}
+
+                           </tbody>
+
+                        </table>
+
+                        <div style="display: flex; justify-content: space-between;">
+
+                           <div class="button-container">
+
+                              <button type="submit" name="action" value="updateCourse" class="custom-btn btn-2">Update
+                                 Course</button>
+
+                           </div>
+
+                           <div class="button-container">
+
+                              <button type="submit" name="action" value="deleteCourse" class="custom-btn btn-2">Delete
+                                 Course</button>
+
+                           </div>
+
+                        </div>
+
+                     </div>
+
+                     <!-- Flash messages section -->
+                     <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                           {% for category, message in messages %}
+                           {% if category == 'employee_course_update_success' %}
+                           <div class="alert alert-success">
+                              {{ message }}
+                           </div>
+                           {% elif category == 'employee_course_update_success' %}
+                           <div class="alert alert-danger">
+                              {{ message }}
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                     </div>
+
+                  </form>
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Sub_contract" id="Sub_contract" style="display: none;">
+
+            <div class="main_box1">
+
+               <div class="container_box1">
+
+                  <form id="updateForm" action="/hr_employee_bio" method="POST">
+
+                     <div class="flex-item">
+                        <label for="employee_id7" class="form-label">Employee Name: <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="employee_id7" name="employee_id7" required
+                           value="{{Semp}}" readonly style="background-color: bisque;">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="selected_asset" class="form-label">Select Asset: <span
+                              style="color: red;">*</span></label>
+                        <select class="form-control" id="selected_asset" name="selected_asset" required
+                           onchange="fetchAssetDetails()">
+                           <option value="">Select Asset</option>
+                           {% for asset_name in asset_names %}
+                           <option value="{{ asset_name }}">{{ asset_name }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Model" class="form-label">Model: <span style="color: red;">*</span></label>
+                        <select class="form-control" id="Model" name="Model" required>
+                           <option value="">Select Model</option>
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="S_N" class="form-label">S/N : <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="S_N" name="S_N" required readonly>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_Issued" class="form-label">Date Issued: <span
+                              style="color: red;">*</span></label>
+                        <input type="date" class="form-control" id="Date_Issued" name="Date_Issued" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Date_Returned" class="form-label"> Date Returned:</label>
+                        <input type="date" class="form-control" id="Date_Returned" name="Date_Returned">
+                     </div>
+
+                     <div class="button-container">
+                        <button type="submit" name="action" value="AddAsset" class="custom-btn btn-2">Add
+                           Asset</button>
+                     </div>
+
+                  </form>
+
+                  <!-- Flash messages section -->
+                  <div>
+                     {% with messages = get_flashed_messages(with_categories=true) %}
+                     {% if messages %}
+                     <div class="alert-container">
+                        {% for category, message in messages %}
+                        {% if category == 'employee_asset_add_success' %}
+                        <div class="alert alert-success">
+                           {{ message }}
+                        </div>
+                        {% elif category == 'employee_asset_add_success' %}
+                        <div class="alert alert-danger">
+                           {{ message }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                     </div>
+                     {% endif %}
+                     {% endwith %}
+                  </div>
+
+               </div>
+
+               <div class="container_box">
+
+                  <form id="updateForm" action="/hr_employee_bio" method="POST" onsubmit="return validateForm()">
+
+                     <div class="table-responsive1">
+
+                        <div class="form-group col-md-6" style="display: none;">
+                           <label for="employee_id77" class="form-label">Employee Name: <span
+                                 style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="employee_id77" name="employee_id77" required
+                              value="{{ Semp }}">
+                        </div>
+
+                        <table class="table table-main" width="100%">
+
+                           <thead>
+
+                              <tr>
+
+                                 <th class="text-center" style="width: 10%;" scope="col"><input type="checkbox"
+                                       id="select-all-checkbox2"> </th>
+                                 <th class="text-left" style="width: 25%;" scope="col">Asset</th>
+                                 <th class="text-left" style="width: 25%;" scope="col">Model</th>
+                                 <th class="text-left" style="width: 25%;" scope="col">S/N</th>
+                                 <th class="text-left" style="width: 15%;" scope="col">Date Issued</th>
+                                 <th class="text-left" style="width: 25%;" scope="col">Date Returned</th>
+
+                              </tr>
+
+                           </thead>
+
+                           <tbody>
+
+                              {% for course_name, details in assect_dict.items() %}
+                              <tr>
+                                 <td class="text-center"> <input type="checkbox" class="asset-checkbox"
+                                       name="selected_assets[]" value="{{ details['asset_id']}}"> </td>
+                                 <input class="form-control" type="text" name="course_name_{{ details['asset_id']}}"
+                                    value="{{ course_name}}" style="display: none;">
+                                 <td class="text-left">{{ course_name}}</td>
+                                 <td class="text-left">{{ details['Model']}}</td>
+                                 <td class="text-left">{{ details['S_N']}}</td>
+                                 <input class="form-control" type="text" name="asset_name_{{ details['asset_id']}}"
+                                    value="{{ course_name}}" style="display: none;">
+                                 <input class="form-control" type="text" name="model_{{ details['asset_id']}}"
+                                    value="{{ details['Model']}}" style="display: none;">
+                                 <input class="form-control" type="text" name="serial_number_{{ details['asset_id']}}"
+                                    value="{{ details['S_N']}}" style="display: none;">
+                                 <td class="text-left"> <input class="form-control" type="date"
+                                       name="date_attained_{{ details['asset_id']}}"
+                                       value="{{ details['Date_Issued']}}"> </td>
+                                 <td class="text-left"><input class="form-control" type="date"
+                                       name="expiry_date_{{ details['asset_id']}}"
+                                       value="{{ details['Date_Returned']}}"> </td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+
+                        </table>
+
+                     </div>
+
+                     <div style="display: flex; justify-content: space-between;">
+
+                        <div class="button-container">
+                           <button type="submit" name="action" value="updateAsset" class="custom-btn btn-2">Update
+                              Asset</button>
+
+                        </div>
+
+                        <div class="button-container">
+                           <button type="submit" name="action" value="deleteAsset" class="custom-btn btn-2">Delete
+                              Asset</button>
+                        </div>
+
+                     </div>
+
+
+                     <!-- Flash messages section -->
+                     <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                           {% for category, message in messages %}
+                           {% if category == 'employee_asset_update_success' %}
+                           <div class="alert alert-success">
+                              {{ message }}
+                           </div>
+                           {% elif category == 'employee_asset_update_success' %}
+                           <div class="alert alert-danger">
+                              {{ message }}
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                     </div>
+
+                  </form>
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Others" id="Others" style="display: none;">
+
+            <div class="main_box">
+
+
+
+            </div>
+
+         </div>
+
+
+
+         {% endif %}
+
+
+
+
+      </div>
+
+   </div>
+
+
+
+   <style>
+      .taskbar1 {
+         padding: 10px;
+         background-color: #004B5D;
+         text-align: center;
+         margin-bottom: 10px;
+      }
+
+      .list {
+         list-style: none;
+         display: flex;
+         align-items: stretch;
+         /* Adjusted to stretch */
+         justify-content: center;
+         /* Adjusted for equal spacing */
+         gap: 40px;
+         text-align: center;
+      }
+
+
+      .link11 {
+         position: relative;
+         display: inline-block;
+         text-decoration: none;
+         color: whitesmoke;
+         font-weight: 700;
+         text-align: center;
+      }
+
+
+
+
+
+
+      .link11::before,
+      .link11::after {
+         content: '';
+         left: 0;
+         position: absolute;
+         width: 100%;
+         height: 2px;
+         background-color: whitesmoke;
+         transform: scaleX(0);
+         transition: transform 0.25s;
+      }
+
+      .link11::before {
+         top: -3px;
+         transform-origin: left;
+      }
+
+      .link11::after {
+         bottom: -3px;
+         transform-origin: right;
+      }
+
+      .link11:hover::before,
+      .link11:hover::after,
+      .active::before,
+      .active::after {
+         transform: scaleX(1);
+      }
+
+
+      .name {
+         position: absolute;
+         top: 70%;
+         font-size: 11px;
+         color: whitesmoke;
+         font-weight: 800;
+      }
+   </style>
+
+   <style>
+      .main_box1 {
+         position: relative;
+         padding: 10px;
+         background-color: white;
+         border-radius: 5px;
+         display: flex;
+         flex-wrap: wrap;
+         /* Allows wrapping of flex items on smaller screens */
+         justify-content: space-between;
+
+      }
+
+      .container_box {
+         padding: 10px;
+         background-color: white;
+         flex: 1 1 calc(25% - 20px);
+         /* Flex basis 25% with gap considered */
+         min-width: 200px;
+         /* Ensures that each box has a minimum width */
+         box-sizing: border-box;
+         /* Includes padding and border in the element's total width and height */
+      }
+
+      .container_box1 {
+         max-width: 20%;
+         padding: 10px;
+         background-color: white;
+         flex: 1 1 calc(25% - 20px);
+         /* Flex basis 50% with gap considered */
+         box-sizing: border-box;
+         /* Includes padding and border in the element's total width and height */
+      }
+
+      /* Optional media query for better responsiveness on smaller screens */
+      @media (max-width: 768px) {
+         .container_box {
+            flex: 1 1 calc(50% - 20px);
+            /* 2 boxes per row on smaller screens */
+         }
+      }
+
+      @media (max-width: 600px) {
+         .container_box {
+            flex: 1 1 100%;
+            /* Stacks all boxes vertically on very small screens */
+         }
+      }
+
+
+
+      .table thead th:nth-child(9),
+      .table tbody td:nth-child(9),
+      .table thead th:nth-child(3),
+      .table tbody td:nth-child(3),
+      .table thead th:nth-child(2),
+      .table tbody td:nth-child(2),
+      .table thead th:nth-child(4),
+      .table tbody td:nth-child(4),
+      .table thead th:nth-child(5),
+      .table tbody td:nth-child(5),
+      .table thead th:nth-child(6),
+      .table tbody td:nth-child(6),
+      .table thead th:nth-child(8),
+      .table tbody td:nth-child(8),
+      .table thead th:nth-child(7),
+      .table tbody td:nth-child(7) {
+         text-align: center;
+      }
+
+      .content-table .fa-trash,
+      .fa-edit {
+         font-size: 1.2em;
+      }
+
+      .main_box {
+         position: relative;
+         padding: 10px;
+         background-color: #e2e4e6;
+         border-radius: 5px;
+      }
+
+      .flex-item-full-width {
+         flex: 1;
+      }
+
+      textarea.form-control {
+         width: 100%;
+         /* Ensures the textarea takes up the full width of its container */
+         box-sizing: border-box;
+         /* Includes padding and border in the element's total width and height */
+         resize: vertical;
+         /* Allows the textarea to be resized vertically */
+         padding: 10px;
+         /* Adds padding inside the textarea */
+         border-radius: 4px;
+         /* Rounds the corners of the textarea */
+         border: 1px solid #ccc;
+         /* Adds a border to the textarea */
+         background-color: #fff;
+         /* Sets a background color for the textarea */
+      }
+
+      /* Optional: Adjust height if needed */
+      textarea.form-control {
+         height: 70px;
+         /* Sets a fixed height for the textarea */
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         gap: 15px;
+         /* Optional: add spacing between flex items within .flex-row */
+      }
+
+      input[type=text],
+      input[type=date],
+      input[type=number],
+      select {
+         width: 100%;
+         padding: 10px 20px;
+         margin: 2px 0;
+         /* Reduce the top and bottom margin */
+         display: block;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         box-sizing: border-box;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+         .record-header7 {
+            padding: 0.5rem;
+            flex-direction: column;
+            /* Stack the header content vertically */
+         }
+
+         .flex-row {
+            flex-direction: column;
+            /* Stack flex items vertically */
+            gap: 10px;
+            /* Adjust gap for smaller screens */
+         }
+
+         .main_box {
+            padding: 5px;
+            /* Reduce padding for smaller screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 1em;
+            /* Adjust icon size for smaller screens */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 8px 15px;
+            /* Reduce padding for smaller screens */
+         }
+
+         /* Adjust table column widths for better readability */
+         .table thead th,
+         .table tbody td {
+            padding: 5px;
+            /* Reduce cell padding */
+            font-size: 0.9em;
+            /* Reduce font size */
+         }
+      }
+
+      @media (max-width: 480px) {
+         .record-header7 {
+            padding: 0.25rem;
+         }
+
+         .flex-row {
+            gap: 5px;
+            /* Further reduce gap for very small screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 0.9em;
+            /* Further adjust icon size */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 6px 10px;
+            /* Further reduce padding */
+         }
+
+         /* Further adjust table column widths */
+         .table thead th,
+         .table tbody td {
+            padding: 3px;
+            font-size: 0.8em;
+            /* Further reduce font size */
+         }
+      }
+   </style>
+
+
+
+
+
+
+   <style>
+      /* General style for the profile-bio container */
+      .profile-bio {
+         display: flex;
+         flex-wrap: wrap;
+         /* Allow containers to wrap onto new lines if necessary */
+         justify-content: space-between;
+         /* Space out containers */
+         margin: 20px auto;
+         /* Center the entire profile-bio horizontally */
+      }
+
+      /* Style for container12 */
+      .container12 {
+         width: 43.5%;
+         /* Adjust width as needed */
+         height: 800px;
+         /* Fixed height for the container */
+         overflow-y: auto;
+         /* Vertical scrollbar if content overflows */
+         display: flex;
+         flex-wrap: wrap;
+         /* Allow child elements to wrap */
+         gap: 20px;
+         /* Space between items */
+      }
+
+      /* Style for container1 */
+      .container1 {
+         width: 20%;
+         /* Adjust width as needed */
+         height: 800px;
+         /* Fixed height for the container */
+         overflow-y: auto;
+         /* Vertical scrollbar if content overflows */
+         display: flex;
+         flex-direction: column;
+         /* Stack child elements vertically */
+         gap: 10px;
+         /* Space between progress bars */
+      }
+
+      /* Box styling for container12 */
+      .box {
+         position: relative;
+         width: 300px;
+         /* Fixed width for each box */
+         height: 100px;
+         /* Adjusted height to fit content */
+         display: flex;
+         align-items: center;
+         background-color: #f9f9f9;
+         /* Background color */
+         border-radius: 10px;
+         /* Rounded corners */
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+         /* Shadow for a 3D effect */
+         margin-bottom: 20px;
+         /* Space between boxes */
+      }
+
+      /* Inner box styling */
+      .inner_box {
+         display: flex;
+         align-items: center;
+         /* Align items horizontally */
+         width: 100%;
+         height: 100%;
+      }
+
+      /* Content styling */
+      .content {
+         position: relative;
+         width: 75px;
+         height: 75px;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+
+      /* Percent circle styling */
+      .content .percent {
+         position: relative;
+         width: 75px;
+         height: 75px;
+      }
+
+      .content .percent::before {
+         content: attr(data-text);
+         position: absolute;
+         inset: 10px;
+         background: #555;
+         border-radius: 50%;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         color: #fff;
+         font-size: 0.7rem;
+         letter-spacing: 0.1rem;
+         text-transform: uppercase;
+      }
+
+      .content .percent svg {
+         position: relative;
+         width: 75px;
+         height: 75px;
+         transform: rotate(270deg);
+      }
+
+      .content .percent svg circle {
+         width: 100%;
+         height: 100%;
+         fill: transparent;
+         stroke-width: 2;
+         stroke: rgba(0, 0, 0, 0.05);
+         transform: translate(2.5px, 2.5px);
+      }
+
+      .content .percent svg circle:nth-child(2) {
+         stroke: #555;
+         stroke-dasharray: 220;
+         stroke-dashoffset: calc(220 - (220 * var(--num)) / 100);
+         opacity: 0;
+         animation: fadeIn 1s linear forwards;
+         animation-delay: 2.5s;
+      }
+
+      @keyframes fadeIn {
+         0% {
+            opacity: 0;
+         }
+
+         100% {
+            opacity: 1;
+         }
+      }
+
+      .content .percent .dot {
+         position: absolute;
+         inset: 2.5px;
+         z-index: 10;
+         animation: animateDot 2s linear forwards;
+      }
+
+      @keyframes animateDot {
+         0% {
+            transform: rotate(0deg);
+         }
+
+         100% {
+            transform: rotate(calc(3.6deg * var(--num)));
+         }
+      }
+
+      .content .percent .dot::before {
+         content: '';
+         position: absolute;
+         top: -3.5px;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 7px;
+         height: 7px;
+         background: #555;
+         border-radius: 50%;
+      }
+
+      .data {
+         margin-left: 20px;
+         /* Space between the circle and the data */
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+         /* Align items to the start */
+      }
+
+      .data span {
+         display: block;
+         text-align: left;
+      }
+
+      .data .username {
+         font-weight: bold;
+         color: #004B5D;
+      }
+
+      .username {
+         font-weight: bold;
+         color: #004B5D;
+      }
+
+      .data .department-code {
+         font-style: italic;
+         color: #004B5D;
+      }
+
+      /* Progress bar styling */
+      .progress2 {
+         position: relative;
+         padding: 3px;
+         border-radius: 30px;
+         background: rgba(0, 0, 0, 0.25);
+         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+      }
+
+      .progress-bar2 {
+         height: 18px;
+         border-radius: 30px;
+         background-image: linear-gradient(to bottom, rgba(221, 194, 194, 0.3), rgba(255, 255, 255, 0.05));
+         transition: 0.4s linear;
+         background-color: #EF476F;
+      }
+
+      .progress2.progress-moved .progress-bar2 {
+         width: 0;
+         /* Start width for animation */
+         animation: progressAnimation 2s forwards;
+         /* Animation duration and fill mode */
+      }
+
+      @keyframes progressAnimation {
+         from {
+            width: 0;
+            /* Starting width */
+            background-color: #F9BCCA;
+            /* Starting color */
+         }
+
+         to {
+            width: 100%;
+            /* Ending width (change if you want it dynamic) */
+            background-color: #EF476F;
+            /* Ending color */
+         }
+      }
+
+      .progress-text {
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         width: 100%;
+         text-align: center;
+         color: #fff;
+         font-size: 0.7rem;
+         font-weight: bold;
+      }
+
+      .progress-text .completion-percent {
+         font-size: 1rem;
+      }
+   </style>
+
+
+   <script> // Course dates conditions
+      document.addEventListener('DOMContentLoaded', function () {
+         // Disable future dates for Date Attained
+         const dateAttainedInput = document.getElementById('Date_Attained');
+         const expiryDateInput = document.getElementById('Expiry_Date');
+
+         const today = new Date().toISOString().split('T')[0];
+         dateAttainedInput.setAttribute('max', today);
+
+         dateAttainedInput.addEventListener('change', function () {
+            // Ensure Expiry Date is greater than Date Attained
+            expiryDateInput.setAttribute('min', this.value);
+         });
+
+         expiryDateInput.addEventListener('change', function () {
+            if (this.value <= dateAttainedInput.value) {
+               alert('Expiry Date must be greater than Date Attained.');
+               this.value = '';
+            }
+         });
+      });
+   </script>
+
+   <script>// Function to calculate age from DOB
+
+      function calculateAge(dob) {
+         let diff = Date.now() - new Date(dob).getTime();
+         let age = new Date(diff);
+         return Math.abs(age.getUTCFullYear() - 1970);
+      }
+
+      // Function to calculate CPF contributions based on age
+      function calculateCPF() {
+         // Get the basic salary input value
+         let basicSalary = document.getElementById('Basic').value;
+         let dob = document.getElementById('DOB').value;
+
+         // Ensure basic salary and dob are valid
+         if (!isNaN(parseFloat(basicSalary)) && dob) {
+            basicSalary = parseFloat(basicSalary);
+            let age = calculateAge(dob);
+
+            // Cap basic salary at $6,800
+            basicSalary = Math.min(basicSalary, 6800);
+
+            // CPF rates based on age
+            let employeeRate;
+            let employerRate;
+
+            if (age <= 55) {
+               employeeRate = 0.20;
+               employerRate = 0.17;
+            } else if (age > 55 && age <= 60) {
+               employeeRate = 0.16;
+               employerRate = 0.15;
+            } else if (age > 60 && age <= 65) {
+               employeeRate = 0.105;
+               employerRate = 0.115;
+            } else if (age > 65 && age <= 70) {
+               employeeRate = 0.075;
+               employerRate = 0.09;
+            } else {
+               employeeRate = 0.05;
+               employerRate = 0.075;
+            }
+
+            // Calculate CPF contributions
+            let employeeCPF = basicSalary * employeeRate;
+            let employerCPF = basicSalary * employerRate;
+
+            // Update the input fields with calculated values
+            document.getElementById('Employee_cpf').value = employeeCPF.toFixed(2);
+            document.getElementById('Employer_cpf').value = employerCPF.toFixed(2);
+         } else {
+            // Handle case where basic salary or DOB input is not valid
+
+         }
+      }
+
+      // Call calculateCPF function when the Basic salary or DOB input changes
+      document.getElementById('Basic').addEventListener('input', calculateCPF);
+      document.getElementById('DOB').addEventListener('input', calculateCPF);
+   </script>
+
+
+   <script>// Function to calculate SDL
+
+      function calculateSDL() {
+         // Get the basic salary input value
+         let basicSalary = document.getElementById('Basic').value;
+
+         // Ensure basic salary is a valid number
+         if (!isNaN(parseFloat(basicSalary))) {
+            basicSalary = parseFloat(basicSalary);
+
+            // SDL rates based on total wages for the calendar month
+            let sdlRate;
+
+            // Determine SDL rate based on total wages
+            if (basicSalary <= 800) {
+               sdlRate = 2.00; // Minimum SDL payable
+            } else if (basicSalary > 800 && basicSalary <= 4500) {
+               // Linear interpolation for SDL between $800 and $4500
+               sdlRate = 5.00;
+            } else {
+               sdlRate = 11.25; // Maximum SDL payable for wages above $4500
+            }
+
+            // Update the SDL input field with calculated value
+            document.getElementById('SDL').value = sdlRate.toFixed(2);
+         } else {
+            // Handle case where basic salary input is not a valid number
+            alert('Please enter a valid number for Basic salary.');
+         }
+      }
+
+      // Call calculateSDL function when the Basic salary input changes
+      document.getElementById('Basic').addEventListener('input', calculateSDL);
+   </script>
+
+   <script>// Function to calculate and fill Fund contributions
+
+      function calculateFunds() {
+         // Get the basic salary input value
+         let basicSalary = document.getElementById('Basic').value;
+
+         // Ensure basic salary is a valid number
+         if (!isNaN(parseFloat(basicSalary))) {
+            basicSalary = parseFloat(basicSalary);
+
+            // Contribution rates based on monthly total wages
+            let fundCDAC, fundECF, fundMBMF, fundSINDA;
+
+            // Calculate CDAC contribution
+            if (basicSalary <= 2000) {
+               fundCDAC = 0.50;
+            } else if (basicSalary > 2000 && basicSalary <= 3500) {
+               fundCDAC = 1.00;
+            } else if (basicSalary > 3500 && basicSalary <= 5000) {
+               fundCDAC = 1.50;
+            } else if (basicSalary > 5000 && basicSalary <= 7500) {
+               fundCDAC = 2.00;
+            } else if (basicSalary > 5000 && basicSalary <= 7500) {
+               fundCDAC = 3.00;
+            }
+            // Calculate ECF contribution
+            if (basicSalary <= 1000) {
+               fundECF = 2;
+            } else if (basicSalary > 1000 && basicSalary <= 1500) {
+               fundECF = 4;
+            } else if (basicSalary > 1500 && basicSalary <= 2500) {
+               fundECF = 6;
+            } else if (basicSalary > 2500 && basicSalary <= 4000) {
+               fundECF = 9;
+            } else if (basicSalary > 4000 && basicSalary <= 7000) {
+               fundECF = 12;
+            } else if (basicSalary > 7000 && basicSalary <= 10000) {
+               fundECF = 16;
+            } else {
+               fundECF = 20; // Placeholder value if not within the defined range
+            }
+
+            // Calculate MBMF contribution
+            if (basicSalary <= 1000) {
+               fundMBMF = 3;
+            } else if (basicSalary > 1000 && basicSalary <= 2000) {
+               fundMBMF = 4.50;
+            } else if (basicSalary > 2000 && basicSalary <= 3000) {
+               fundMBMF = 6.50;
+            } else if (basicSalary > 3000 && basicSalary <= 4000) {
+               fundMBMF = 15;
+            } else if (basicSalary > 4000 && basicSalary <= 6000) {
+               fundMBMF = 19.50;
+            } else if (basicSalary > 6000 && basicSalary <= 8000) {
+               fundMBMF = 22;
+            } else if (basicSalary > 8000 && basicSalary <= 10000) {
+               fundMBMF = 24;
+            } else {
+               fundMBMF = 26; // Placeholder value if not within the defined range
+            }
+
+            // Calculate SINDA contribution
+            if (basicSalary <= 1000) {
+               fundSINDA = 1;
+            } else if (basicSalary > 1000 && basicSalary <= 1500) {
+               fundSINDA = 3;
+            } else if (basicSalary > 1500 && basicSalary <= 2500) {
+               fundSINDA = 5;
+            } else if (basicSalary > 2500 && basicSalary <= 4500) {
+               fundSINDA = 7;
+            } else if (basicSalary > 4500 && basicSalary <= 7500) {
+               fundSINDA = 9;
+            } else if (basicSalary > 7500 && basicSalary <= 10000) {
+               fundSINDA = 12;
+            } else if (basicSalary > 10000 && basicSalary <= 15000) {
+               fundSINDA = 18;
+            } else {
+               fundSINDA = 30; // Placeholder value if not within the defined range
+            }
+
+            // Update the Fund contribution input fields with calculated values
+            document.getElementById('Fund_CDAC').value = fundCDAC.toFixed(2);
+            document.getElementById('Fund_ECF').value = fundECF.toFixed(2);
+            document.getElementById('Fund_MBMF').value = fundMBMF.toFixed(2);
+            document.getElementById('Fund_SINDA').value = fundSINDA.toFixed(2);
+         } else {
+            // Handle case where basic salary input is not a valid number
+            alert('Please enter a valid number for Basic salary.');
+         }
+      }
+
+      // Call calculateFunds function when the Basic salary input changes
+      document.getElementById('Basic').addEventListener('input', calculateFunds);
+   </script>
+
+   <script> // conditions to show
+
+
+      function toggleFields() {
+         var passType = document.getElementById('Pass_Type').value;
+         var selectedRace = document.getElementById('SHG_Status').value;
+
+         var cpfFields = document.getElementById('cpfFields');
+         var shgFields = document.getElementById('shgFields');
+         var levyField = document.getElementById('levyField');
+
+         var nricField = document.getElementById("nric-field");
+         var wpField = document.getElementById("wp-field");
+
+         // Disable all fields initially
+         document.getElementById("NRIC").disabled = true;
+         document.getElementById("WP_NO").disabled = true;
+
+         // Reset display styles for all fields
+         nricField.style.display = "none";
+         wpField.style.display = "none";
+         shgFields.style.display = 'none'; // Initially hide SHG fields
+
+         // Show the appropriate field based on Pass_Type
+         if (passType === "SGP" || passType === "PR") {
+            nricField.style.display = "block";
+            document.getElementById("NRIC").disabled = false; // Enable NRIC field
+
+            cpfFields.style.display = 'flex';
+            shgFields.style.display = 'block'; // Show SHG fields
+            levyField.style.display = 'none';
+
+            // Make SHG_Status required
+            document.getElementById('SHG_Status').required = true;
+         } else if (passType === "WP") {
+            wpField.style.display = "block";
+            document.getElementById("WP_NO").disabled = false; // Enable WP_NO field
+
+            cpfFields.style.display = 'none';
+            shgFields.style.display = 'none'; // Hide SHG fields
+            levyField.style.display = 'block';
+
+            // Remove required attribute from SHG_Status
+            document.getElementById('SHG_Status').required = false;
+         } else {
+            cpfFields.style.display = 'none';
+            shgFields.style.display = 'none'; // Hide SHG fields
+            levyField.style.display = 'none';
+
+            // Remove required attribute from SHG_Status
+            document.getElementById('SHG_Status').required = false;
+         }
+
+         // Reset display and disable all SHG fields
+         document.getElementById('cdacField').style.display = 'none';
+         document.getElementById('Fund_CDAC').disabled = true;
+         document.getElementById('ecfField').style.display = 'none';
+         document.getElementById('Fund_ECF').disabled = true;
+         document.getElementById('mbmfField').style.display = 'none';
+         document.getElementById('Fund_MBMF').disabled = true;
+         document.getElementById('sindaField').style.display = 'none';
+         document.getElementById('Fund_SINDA').disabled = true;
+
+         // Show the selected SHG field based on selectedRace
+         if (selectedRace === 'Fund_CDAC') {
+            document.getElementById('cdacField').style.display = 'block';
+            document.getElementById('Fund_CDAC').disabled = false;
+         } else if (selectedRace === 'Fund_ECF') {
+            document.getElementById('ecfField').style.display = 'block';
+            document.getElementById('Fund_ECF').disabled = false;
+         } else if (selectedRace === 'Fund_MBMF') {
+            document.getElementById('mbmfField').style.display = 'block';
+            document.getElementById('Fund_MBMF').disabled = false;
+         } else if (selectedRace === 'Fund_SINDA') {
+            document.getElementById('sindaField').style.display = 'block';
+            document.getElementById('Fund_SINDA').disabled = false;
+         }
+      }
+
+      // Call toggleFields on page load to set initial state
+      document.addEventListener('DOMContentLoaded', function () {
+         toggleFields();
+      });
+
+
+   </script>
+
+   <script>/// asset selection
+      function fetchAssetDetails() {
+         var selectedAsset = document.getElementById('selected_asset').value;
+         if (selectedAsset === '') {
+            clearModelAndSNFields();
+            return;
+         }
+
+         // Perform AJAX request to fetch models for the selected asset
+         var xhr = new XMLHttpRequest();
+         xhr.open('GET', '/get_models?asset_name=' + encodeURIComponent(selectedAsset), true);
+
+         xhr.onload = function () {
+            if (xhr.status === 200) {
+               var models = JSON.parse(xhr.responseText);
+
+               // Populate the Model select box with fetched models
+               var modelSelect = document.getElementById('Model');
+               modelSelect.innerHTML = '<option value="">Select Model</option>'; // Clear and set default option
+
+               models.forEach(function (model) {
+                  var option = document.createElement('option');
+                  option.textContent = model;
+                  option.value = model;
+                  modelSelect.appendChild(option);
+               });
+
+               // Clear S/N field when changing asset or model
+               clearSNField();
+            } else {
+               console.error('Request failed. Status: ' + xhr.status);
+            }
+         };
+
+         xhr.send();
+      }
+
+      document.getElementById('Model').addEventListener('change', function () {
+         var selectedModel = this.value;
+
+         // Perform AJAX request to fetch S/N for the selected model
+         var xhr = new XMLHttpRequest();
+         xhr.open('GET', '/get_sn?model=' + encodeURIComponent(selectedModel), true);
+
+         xhr.onload = function () {
+            if (xhr.status === 200) {
+               var sn = xhr.responseText;
+
+               // Populate the S/N input field with fetched serial number
+               document.getElementById('S_N').value = sn;
+            } else {
+               console.error('Request failed. Status: ' + xhr.status);
+            }
+         };
+
+         xhr.send();
+      });
+
+      // Utility function to clear Model and S/N fields
+      function clearModelAndSNFields() {
+         document.getElementById('Model').innerHTML = '<option value="">Select Model</option>';
+         clearSNField();
+      }
+
+      // Utility function to clear S/N field
+      function clearSNField() {
+         document.getElementById('S_N').value = '';
+      }
+   </script>
+
+   <script>// Total cost
+      document.addEventListener('DOMContentLoaded', function () {
+         const basicField = document.getElementById('Basic');
+         const allowanceFields = [
+            document.getElementById('Allowance_Housing'),
+            document.getElementById('Allowance_Transport'),
+            document.getElementById('Allowance_Phone'),
+            document.getElementById('Allowance_Others')
+         ];
+         const deductionFields = [
+            document.getElementById('Deduction_Housing'),
+            document.getElementById('Deduction_Transport'),
+            document.getElementById('Deduction_Phone'),
+            document.getElementById('Deduction_Others')
+         ];
+         const cpfFields = [
+            document.getElementById('Employee_cpf')
+
+         ];
+         const shgFields = [
+            document.getElementById('Fund_CDAC'),
+            document.getElementById('Fund_ECF'),
+            document.getElementById('Fund_MBMF'),
+            document.getElementById('Fund_SINDA')
+         ];
+         const totalField = document.getElementById('Total');
+
+         function calculateTotal() {
+            let basic = parseFloat(basicField.value) || 0;
+
+            let totalAllowance = allowanceFields.reduce((sum, field) => {
+               return sum + (parseFloat(field.value) || 0);
+            }, 0);
+
+            let totalDeduction = deductionFields.reduce((sum, field) => {
+               return sum + (parseFloat(field.value) || 0);
+            }, 0);
+
+            let totalCPF = cpfFields.reduce((sum, field) => {
+               if (field.parentElement.parentElement.style.display !== 'none') {
+                  return sum + (parseFloat(field.value) || 0);
+               }
+               return sum;
+            }, 0);
+
+            let totalSHG = shgFields.reduce((sum, field) => {
+               if (field.parentElement.style.display !== 'none') {
+                  return sum + (parseFloat(field.value) || 0);
+               }
+               return sum;
+            }, 0);
+
+            let total = basic + totalAllowance - totalDeduction - totalCPF - totalSHG;
+            totalField.value = total.toFixed(2);
+         }
+
+         // Add event listeners to all relevant fields
+         basicField.addEventListener('input', calculateTotal);
+         allowanceFields.forEach(field => field.addEventListener('input', calculateTotal));
+         deductionFields.forEach(field => field.addEventListener('input', calculateTotal));
+         cpfFields.forEach(field => field.addEventListener('input', calculateTotal));
+         shgFields.forEach(field => field.addEventListener('input', calculateTotal));
+
+         // Initial calculation
+         calculateTotal();
+      });
+   </script>
+
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+         const carousel = document.querySelector(".carousel");
+         const arrowBtns = document.querySelectorAll(".wrapper i");
+         const wrapper = document.querySelector(".wrapper");
+
+         const firstCard = carousel.querySelector(".card7");
+         const firstCardWidth = firstCard.offsetWidth;
+
+         let isDragging = false,
+            startX,
+            startScrollLeft,
+            timeoutId;
+
+         const dragStart = (e) => {
+            isDragging = true;
+            carousel.classList.add("dragging");
+            startX = e.pageX;
+            startScrollLeft = carousel.scrollLeft;
+         };
+
+         const dragging = (e) => {
+            if (!isDragging) return;
+
+            // Calculate the new scroll position 
+            const newScrollLeft = startScrollLeft - (e.pageX - startX);
+
+            // Check if the new scroll position exceeds 
+            // the carousel boundaries 
+            if (newScrollLeft <= 0 || newScrollLeft >=
+               carousel.scrollWidth - carousel.offsetWidth) {
+
+               // If so, prevent further dragging 
+               isDragging = false;
+               return;
+            }
+
+            // Otherwise, update the scroll position of the carousel 
+            carousel.scrollLeft = newScrollLeft;
+         };
+
+         const dragStop = () => {
+            isDragging = false;
+            carousel.classList.remove("dragging");
+         };
+
+         const autoPlay = () => {
+
+            // Return if window is smaller than 800 
+            if (window.innerWidth < 800) return;
+
+            // Calculate the total width of all cards 
+            const totalCardWidth = carousel.scrollWidth;
+
+            // Calculate the maximum scroll position 
+            const maxScrollLeft = totalCardWidth - carousel.offsetWidth;
+
+            // If the carousel is at the end, stop autoplay 
+            if (carousel.scrollLeft >= maxScrollLeft) return;
+
+            // Autoplay the carousel after every 2500ms 
+            timeoutId = setTimeout(() =>
+               carousel.scrollLeft += firstCardWidth, 2500);
+         };
+
+         carousel.addEventListener("mousedown", dragStart);
+         carousel.addEventListener("mousemove", dragging);
+         document.addEventListener("mouseup", dragStop);
+         wrapper.addEventListener("mouseenter", () =>
+            clearTimeout(timeoutId));
+         wrapper.addEventListener("mouseleave", autoPlay);
+
+         // Add event listeners for the arrow buttons to 
+         // scroll the carousel left and right 
+         arrowBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+               carousel.scrollLeft += btn.id === "left" ?
+                  -firstCardWidth : firstCardWidth;
+            });
+         });
+      });
+
+   </script>
+
+   <script>
+      document.addEventListener('DOMContentLoaded', function () {
+         var optionValue = document.getElementById('optionValue').value;
+         if (optionValue === 'bio') {
+            document.getElementById('addprojectRadio').checked = true;
+            showSection('addproject');
+            toggleContainer('addproject');
+         }
+         if (optionValue === 'update_asset') {
+            document.getElementById('subContractRadio').checked = true;
+            showSection('Sub_contract');
+            toggleContainer('Sub_contract');
+         }
+         if (optionValue === 'update_course') {
+            document.getElementById('adduserRadio').checked = true;
+            showSection('adduser');
+            toggleContainer('adduser');
+         }
+      });
+
+      function showSection(sectionId) {
+         // Hide all sections
+         var sections = document.querySelectorAll('.addproject, .adduser, .Sub_contract, .Others');
+         sections.forEach(function (section) {
+            section.style.display = 'none';
+         });
+
+         // Show the selected section
+         var selectedSection = document.getElementById(sectionId);
+         if (selectedSection) {
+            selectedSection.style.display = 'block';
+         }
+      }
+
+      function toggleContainer(containerId) {
+         // You can add custom logic here if needed
+         console.log('Toggling container: ' + containerId);
+      }
+
+      // Consolidated validateForm function
+      function validateForm() {
+         var checkboxes = document.getElementsByName('selected_assets[]');
+         var isChecked = false;
+
+         for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+               isChecked = true;
+               break;
+            }
+         }
+
+         if (!isChecked) {
+            alert('Please select at least one Asset to update.');
+            return false; // Prevent form submission
+         }
+
+         // You can add additional validation logic here if needed
+
+         return true; // Allow form submission
+      }
+
+      function validateForm1() {
+         var checkboxes = document.getElementsByName('selected_courses[]');
+         var isChecked = false;
+
+         for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+               isChecked = true;
+               break;
+            }
+         }
+
+         if (!isChecked) {
+            alert('Please select at least one Course to update.');
+            return false; // Prevent form submission
+         }
+
+         // You can add additional validation logic here if needed
+
+         return true; // Allow form submission
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+         const selectAllCheckbox1 = document.getElementById('select-all-checkbox1');
+         const checkboxes1 = document.querySelectorAll('.course-checkbox');
+
+         selectAllCheckbox1.addEventListener('change', function () {
+            checkboxes1.forEach(function (checkbox) {
+               checkbox.checked = selectAllCheckbox1.checked;
+            });
+         });
+
+         const selectAllCheckbox2 = document.getElementById('select-all-checkbox2');
+         const checkboxes2 = document.querySelectorAll('.asset-checkbox');
+
+         selectAllCheckbox2.addEventListener('change', function () {
+            checkboxes2.forEach(function (checkbox) {
+               checkbox.checked = selectAllCheckbox2.checked;
+            });
+         });
+      });
+
+
+
+   </script>
+
+
+
+
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+
+</html>

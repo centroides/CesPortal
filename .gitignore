@@ -1,0 +1,7 @@
+__pycache__/
+docment_data/
+.vscode/
+node_modules/
+data/
+package-lock.json
+package.json

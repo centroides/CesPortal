@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects" class="active">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  {% if user_access['toggleDashboard'] == 'On' %}
+                  <li class="active">
+                     <a href="{{ url_for('projects') }}" class="link">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleProjectStatus'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('prj_status') }}" class="link">
+                        <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleHoursEdit'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hours_edit') }}" class="link">
+                        <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                  <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i class="fa-solid fa-industry"></i>
+                        Material Receipt</a></li>
+                  {% endif %}
+
+                  {% if user_access['toggleHoursView'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hrs_view') }}" class="link">
+                        <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                     </a>
+                  </li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            <div class="timenav">
+               <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+               <ul id="menuList1" class="timebar">
+                  {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+                  department_code in [10, 11, 16, 1000]) %}
+                  <li>
+                     <a href="{{ url_for('project_details_page', id=project_id) }}">
+                        <i class="fa-solid fa-chart-bar"></i> Overview
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+                  department_code in [10, 11, 16, 1000]) %}
+                  <li>
+                     <a href="/prj_hrs_view?project_id={{ project_id }}">
+                        <i class="fa-regular fa-clock"></i> Hrs View
+                     </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleGeneratePR'] == 'On' %}
+                  <li>
+                     <a href="/project_pr?project_id={{ project_id }}">
+                        <i class="fa-solid fa-file-invoice"></i> Generate PR
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleprjViewPO'] == 'On' %}
+                  <li>
+                     <a href="/project_po?project_id={{ project_id }}">
+                        <i class="fa-solid fa-file-contract"></i> View PO's
+                     </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleViewClaims'] == 'On' %}
+                  <li>
+                     <a href="/claiminfo?project_id={{ project_id }}" class="active">
+                        <i class="fa-solid fa-receipt"></i> View Claims
+                     </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['togglePrjViewDO'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('project_do', project_id=project_id) }}">
+                        <i class="fa-solid fa-truck-moving"></i> DO's
+                     </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['togglePaymentRequests'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('prj_pay_req', project_id=project_id) }}">
+                        <i class="fa-solid fa-money-bill-wave"></i> Payment Request
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  <li>
+                     <a href="{{ url_for('prj_planner', project_id=project_id) }}">
+                        <i class="fa-solid fa-calendar-check"></i> Planner
+                     </a>
+                  </li>
+
+               </ul>
+
+               <div class="menu-icon1">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+               </div>
+            </div>
+
+            <div class="line1"></div>
+
+            <style>
+               .timenav .active i {
+                  color: white !important;
+                  /* Ensures icon turns white */
+               }
+
+               .search_container {
+
+                  width: 100%;
+                  padding: 10px;
+               }
+
+               .line1 {
+                  margin: 3px auto;
+                  /* Centers horizontally */
+                  height: 2px;
+                  background-color: rgb(82, 79, 79);
+                  width: 97%;
+                  display: block;
+                  /* Ensures it behaves as a block element */
+               }
+
+
+               /* Style for headings and icons */
+               .timenav a,
+               .timenav i {
+                  color: #8d7f5c !important;
+                  font-weight: bold;
+               }
+
+               /* Active link style */
+               .timenav .active {
+                  background-color: #FF6347 !important;
+                  color: white !important;
+                  padding: 10px;
+                  font-weight: bold;
+                  border-top-left-radius: 5px;
+                  border-top-right-radius: 5px;
+               }
+
+               .timebar {
+                  display: flex;
+                  justify-content: space-around;
+                  align-items: center;
+                  list-style: none;
+                  margin: 0;
+                  padding: 0;
+                  width: 100%;
+               }
+
+               .timebar li {
+                  flex: 1 1 20%;
+                  margin: 5px;
+                  text-align: center;
+               }
+
+               .link1 {
+                  color: #8d7f5c;
+                  font-size: 16px;
+                  font-weight: bold;
+                  transition: color 0.3s ease;
+                  cursor: pointer;
+               }
+            </style>
+
+         </div>
+
+         <div class="title-box">
+
+            <div class="title-item cssanimation open">
+               <span>Project ID : {{project_details.id}} </span>
+            </div>
+
+            <div class="title-item cssanimation open">
+               <span>Project Name : {{project_details.project_name}}</span>
+            </div>
+
+            <div class="title-item cssanimation open">
+               <span>Project Manager : {{project_details.pm}}</span>
+            </div>
+
+            <div class="title-item cssanimation open">
+               <span style="color: red;">Total : $ {{total_sum}}</span>
+            </div>
+
+
+            <style>
+               .title-box {
+                  display: flex;
+                  /* Arrange items in a row */
+                  justify-content: space-between;
+                  /* Distribute items with space between them */
+                  align-items: center;
+                  /* Vertically align items */
+                  padding: 5px;
+                  background-color: white;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+               }
+
+               .title-item {
+                  display: flex;
+                  align-items: center;
+                  /* Align title and value on the same row */
+               }
+
+               .title-item span {
+                  font-size: 18px;
+                  font-weight: bold;
+                  color: #0fabf3;
+               }
+
+               .open {
+                  justify-content: space-between;
+                  /* Distribute items with space between them */
+                  animation-name: open;
+                  animation-duration: 1s;
+                  /* Add duration */
+                  animation-timing-function: ease-out;
+                  /* Smooth animation */
+                  animation-fill-mode: forwards;
+                  /* Retain the final state of the animation */
+               }
+
+               @keyframes open {
+                  from {
+                     width: 20px;
+                     /* Start with 0 width */
+                  }
+
+                  to {
+                     width: 573px;
+                     /* Animate to 473px width */
+                  }
+               }
+
+               /* Responsive styling for smaller screens */
+               @media (max-width: 768px) {
+                  .title-box {
+                     flex-direction: column;
+                     /* Stack items vertically on smaller screens */
+                     align-items: flex-start;
+                  }
+
+                  .title-item {
+                     margin-bottom: 15px;
+                     /* Space between stacked items */
+                  }
+               }
+            </style>
+
+         </div>
+
+         <style>
+            .wrapper {
+               background-color: whitesmoke;
+               padding: 5px;
+               border-radius: 5px;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               gap: 31px;
+            }
+
+            .widget {
+               position: relative;
+               box-sizing: content-box;
+               width: 228px;
+               height: 80px;
+               padding: 10px;
+               border-radius: 6px;
+               color: #fff;
+               box-shadow: 0 0 15px #ddd;
+               transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .widget:hover {
+               transform: scale(1.05);
+               /* Slightly increase size */
+               box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+               /* Darker shadow on hover */
+            }
+
+            .w_icon {
+               font-family: "FontAwesome";
+               float: left;
+               font-size: 1.2em;
+            }
+
+            .widget>div {
+               font-weight: 150;
+               position: absolute;
+               bottom: 10px;
+            }
+
+            .degree {
+               font-size: 1.3em;
+               font-weight: bold;
+            }
+
+            /* Widget Colors and w_icons */
+            .total-leaves {
+               background-color: #1a6a92;
+            }
+
+            .total-leaves .w_icon {
+               color: #fff;
+            }
+
+            .pending-leaves {
+               background-color: #e74c3c;
+            }
+
+            .pending-leaves .w_icon {
+               color: #fff;
+            }
+
+            .approved-leaves {
+               background-color: #16a085;
+            }
+
+            .approved-leaves .w_icon {
+               color: #fff;
+            }
+
+            .rejected-leaves {
+               background-color: #8e44ad;
+            }
+
+            .rejected-leaves .w_icon {
+               color: #fff;
+            }
+
+            .monthly-leaves {
+               background-color: #f39c12;
+            }
+
+            .monthly-leaves .w_icon {
+               color: #fff;
+            }
+
+            .today-leaves {
+               background-color: #2980b9;
+            }
+
+            .today-leaves .w_icon {
+               color: #fff;
+            }
+
+            .most-pr-on {
+               background-color: #d35400;
+            }
+
+            .most-pr-on .w_icon {
+               color: #fff;
+            }
+
+            .supplyer-on {
+               background-color: #34495e;
+            }
+
+            .supplyer-on .w_icon {
+               color: #fff;
+            }
+         </style>
+
+         <div class="table_gra_container">
+
+            <div class="table-responsive1">
+
+               <table class="table" width="100%">
+
+                  <thead>
+
+                     <th class="text-center" scope="col">View</th>
+                     <!-- <th class="text-center" scope="col">Bills</th> -->
+                     <th class="text-center" scope="col">Claim ID</th>
+                     <th class="text-center" scope="col">Claim By</th>
+                     <th class="text-center" scope="col" id="client-header">Claimed Date</th>
+                     <th class="text-center" scope="col">Approved Date</th>
+                     <th class="text-center" scope="col">Comments</th>
+                     <th class="text-center" scope="col">Total</th>
+                     <th class="text-center" scope="col">Status</th>
+
+                  </thead>
+
+                  <tbody>
+
+                     {% for claim in results %}
+                     {% if claim != none %}
+                     <tr>
+                        <td class="text-center" style="cursor: pointer;">
+                           <ion-icon class="fa-solid fa-eye" style="color: Tomato;"
+                              onclick="openClaimDetails('{{ claim['claim_id'] }}', '{{ project_id }}')"></ion-icon>
+                        </td>
+
+                        <td class="text-center">{{ claim['claim_id'] }}</td>
+                        <td class="text-center">{{ claim['claim_by'] }}</td>
+                        <td class="text-center start-time">{{ claim['claim_date'] }}</td>
+                        <td class="text-center start-time">{{ claim['approved_date'] }}</td>
+                        <td class="text-center">{{ claim['comments'] }}</td>
+                        <td class="text-center">$ {{ "{:,.2f}".format(claim['claim_Total']) }}</td>
+
+                        <td class="text-center">{{ claim['status'] }}</td>
+                     </tr>
+                     {% endif %}
+                     {% endfor %}
+
+                  </tbody>
+
+               </table>
+
+            </div>
+
+            <div class="popup-overlay" id="popupOverlayPO" style="display: none;">
+               <div class="popup-container">
+                  <button class="close-btn" id="closePopupPO">X</button>
+                  <h2>Claim Details</h2>
+                  <hr style="border: 1px solid #ccc; margin: 10px;">
+
+
+                  <!-- Claim Details Header -->
+                  <div id="claimHeader" style="display: flex;  justify-content: space-between; color: gold;">
+                     <!-- Populated dynamically -->
+                  </div>
+
+                  <!-- Table for Claim Items -->
+                  <div class="table-container">
+                     <table class="table table-main" width="100%">
+                        <thead>
+                           <tr>
+                              <th class="text-center">S.No</th>
+                              <th class="text-center">Date</th>
+                              <th class="text-center">Category</th>
+                              <th class="text-center">Sub Category</th>
+                              <th class="text-center">Item Name</th>
+                              <th class="text-center">Amount</th>
+                              <th class="text-center">GST %</th>
+                              <th class="text-center">GST Value</th>
+                              <th class="text-center">Total</th>
+                           </tr>
+                        </thead>
+                        <tbody id="claimDetailsBody">
+                           <!-- Populated dynamically -->
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+
+
+            <script>
+               async function openClaimDetails(claimId, projectId) {
+                  try {
+                     const response = await fetch(`/fetch_claim_items?claim_id=${claimId}&project_id=${projectId}`);
+                     const data = await response.json();
+
+                     if (response.ok) {
+                        // Populate claim details header
+                        const claimHeader = `
+                                 <p><strong>ID:</strong> ${data.claim_details.claim_id}</p>
+                                 <p><strong>Claim By:</strong> ${data.claim_details.claim_by}</p>
+                                 <p><strong>Claim Date:</strong> ${formatDateAsDDMMYY(data.claim_details.claim_date)}</p>
+                                 <p><strong>Status:</strong> ${data.claim_details.status}</p>
+                                 <p><strong>Total:</strong> $ ${data.total_sum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                           `;
+                        document.getElementById('claimHeader').innerHTML = claimHeader;
+
+                        // Populate items in the table
+                        const tbody = document.getElementById('claimDetailsBody');
+                        tbody.innerHTML = ''; // Clear previous data
+
+                        if (data.items.length > 0) {
+                           data.items.forEach((item, index) => {
+                              const row = `
+                                       <tr>
+                                           <td class="align-left">${index + 1}</td>
+                                           <td class="align-left">${formatDateAsDDMMYY(item.date)}</td>
+                                           <td class="align-left">${item.Category}</td>
+                                           <td class="align-left">${item.Sub_Category}</td>
+                                           <td class="align-left">${item.itemname}</td>
+                                           <td class="align-left">$ ${item.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                           <td class="align-left">${item.gst_percent} %</td>
+                                           <td class="align-left">$ ${item.gst_value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                           <td class="align-left">$ ${item.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+
+                                       </tr>
+                                   `;
+                              tbody.insertAdjacentHTML('beforeend', row);
+                           });
+                        } else {
+                           tbody.innerHTML = '<tr><td colspan="9" class="text-center">No items found</td></tr>';
+                        }
+
+                        // Show the popup
+                        document.getElementById('popupOverlayPO').style.display = 'flex';
+                     } else {
+                        alert(data.error || 'Failed to fetch claim details');
+                     }
+                  } catch (error) {
+                     console.error('Error fetching claim details:', error);
+                     alert('Error fetching claim details. Please try again.');
+                  }
+               }
+
+               // Close the popup
+               document.getElementById('closePopupPO').addEventListener('click', function () {
+                  document.getElementById('popupOverlayPO').style.display = 'none';
+               });
+            </script>
+
+
+            <div class="table-responsive1" style="display: none;">
+               <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+               <h1>sairam</h1>
+               <canvas id="claimsPieChart" width="100" height="100"></canvas>
+
+               <script>
+                  // Data from Flask
+                  const chartData = {{ chart_data| tojson }};
+                  const categories = Object.keys(chartData);
+                  const totals = Object.values(chartData);
+
+                  // Pie Chart Configuration
+                  const ctx = document.getElementById('claimsPieChart').getContext('2d');
+                  new Chart(ctx, {
+                     type: 'pie',
+                     data: {
+                        labels: categories,
+                        datasets: [{
+                           label: 'Total Cost by Category',
+                           data: totals,
+                           backgroundColor: [
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(54, 162, 235, 0.2)',
+                              'rgba(255, 206, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                              'rgba(153, 102, 255, 0.2)',
+                              'rgba(255, 159, 64, 0.2)'
+                           ],
+                           borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 206, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)',
+                              'rgba(255, 159, 64, 1)'
+                           ],
+                           borderWidth: 1
+                        }]
+                     },
+                     options: {
+                        responsive: true,
+                        plugins: {
+                           legend: {
+                              position: 'top',
+                           },
+                           tooltip: {
+                              enabled: true,
+                           }
+                        }
+                     }
+                  });
+               </script>
+            </div>
+
+         </div>
+
+
+      </div>
+
+   </div>
+
+   <style>
+      .table_gra_container {
+         margin-top: 10px;
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         grid-template-rows: 1fr;
+         grid-auto-columns: 1fr 2fr;
+         gap: 0px 0px;
+         grid-auto-flow: row;
+         justify-items: center;
+         grid-template-areas:
+            ". .";
+         height: 500px;
+      }
+
+      .table thead th:nth-child(6),
+      .table tbody td:nth-child(6),
+
+      .table thead th:nth-child(4),
+      .table tbody td:nth-child(4),
+      .table thead th:nth-child(5),
+      .table tbody td:nth-child(5),
+      .table thead th:nth-child(1),
+      .table tbody td:nth-child(1) {
+         text-align: center;
+      }
+
+      .table thead th:nth-child(7),
+      .table tbody td:nth-child(7),
+      .table thead th:nth-child(8),
+      .table tbody td:nth-child(8),
+      .table thead th:nth-child(3),
+      .table tbody td:nth-child(3),
+      .table thead th:nth-child(2),
+      .table tbody td:nth-child(2) {
+         text-align: left;
+      }
+
+
+      .records {
+         width: 100%;
+         overflow-x: auto;
+      }
+
+      .record-header {
+         width: 100%;
+         padding: 10px;
+         background-color: #d8eaf3;
+      }
+   </style>
+
+   <style>
+      .align-left {
+         text-align: left;
+         padding-left: 10px;
+         /* Optional for spacing */
+      }
+
+      /* Popup styling */
+      .popup-overlay {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.4);
+         backdrop-filter: blur(10px);
+         /* Glassmorphism effect */
+         justify-content: center;
+         align-items: flex-start;
+         /* Align content to the top */
+         z-index: 1000;
+      }
+
+      .popup-container {
+         background: rgba(255, 255, 255, 0.004);
+         border-radius: 10px;
+         padding: 30px;
+         width: 100%;
+         /* Adjust width to accommodate the table */
+         max-width: 1000px;
+         /* Maximum width for the popup */
+         text-align: center;
+         color: white;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+         backdrop-filter: blur(5px);
+         /* Glassmorphism effect */
+         overflow: hidden;
+         margin-top: 30px;
+         /* Add top margin for better spacing */
+      }
+
+      .table-container {
+         overflow-x: auto;
+         overflow-y: auto;
+         /* Add vertical scroll if content exceeds max height */
+         max-height: 700px;
+         /* Set maximum height for the table */
+         max-width: 100%;
+         margin-top: 20px;
+      }
+
+      table {
+         width: 100%;
+         border-collapse: collapse;
+      }
+
+      th,
+      td {
+         padding: 10px;
+         text-align: center;
+      }
+
+      th {
+         background-color: #4caf50;
+         color: white;
+      }
+
+      tbody tr:hover {
+         background-color: #f1f1f1;
+         color: black;
+      }
+
+      .delete-col {
+         width: 3%;
+      }
+
+      .delete-btn,
+      .edit-btn {
+         background-color: transparent;
+         border: none;
+         color: red;
+         cursor: pointer;
+      }
+
+      .delete-btn:hover,
+      .edit-btn:hover {
+         color: darkred;
+      }
+
+      .close-btn {
+         background-color: transparent;
+         border: none;
+         color: white;
+         font-size: 20px;
+         position: absolute;
+         top: 10px;
+         right: 20px;
+         cursor: pointer;
+      }
+
+      /* Hover effect on PR Count Widget */
+      .widget.monthly-leaves {
+         cursor: pointer;
+         transition: transform 0.3s;
+      }
+
+      .widget.monthly-leaves:hover {
+         transform: scale(1.05);
+      }
+   </style>
+
+   <script>
+
+
+      // Function to format a date as DD/MM/YY
+      function formatDateAsDDMMYY(dateString) {
+         const options = { day: 'numeric', month: 'numeric', year: '2-digit' };
+         const date = new Date(dateString);
+         return date.toLocaleDateString('en-GB', options);
+      }
+
+      // Call the formatDateAsDDMMYY function for each date element when the page loads
+      document.addEventListener("DOMContentLoaded", function () {
+         const start_time_elements = document.querySelectorAll(".start-time");
+
+         start_time_elements.forEach(function (element) {
+            element.textContent = formatDateAsDDMMYY(element.textContent);
+         });
+
+      });
+
+   </script>
+
+</body>
+
+</html>

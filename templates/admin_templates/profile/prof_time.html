@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile" class="active">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleAccountHub'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_act') }}" class="link">
+                                <i class="fa-solid fa-user" style="margin-right: 5px;"></i> Account Info
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('prof_time') }}" class="link">
+                                <i class="fas fa-clock" style="margin-right: 5px;"></i> Time Sheet
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pr') }}" class="link">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i> Purchase Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_po') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> Purchase Order
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_prj') }}" class="link">
+                                <i class="fa-solid fa-project-diagram" style="margin-right: 5px;"></i> Project Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pay') }}" class="link">
+                                <i class="fa-solid fa-hand-holding-dollar" style="margin-right: 5px;"></i> Payment
+                                Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_claim') }}" class="link">
+                                <i class="fa-solid fa-file-alt" style="margin-right: 5px;"></i> Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_do') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Delivery Order
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleprofSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_supplier') }}" class="link">
+                                <i class="fa-solid fa-truck" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <div class="timenav">
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+                    <ul id="menuList1" class="timebar">
+                        <li>
+                            <input type="radio" id="subContractRadio" name="sectionRadio"
+                                onclick="showSection('project_time'); toggleContainer('project_time')"
+                                style="display: none" />
+                            <label for="subContractRadio" class="link1">
+                                <i class="fa-solid fa-business-time" style="margin-right: 5px"></i>Project
+                            </label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="estimation_timeRadio" name="sectionRadio"
+                                onclick="showSection('estimation_time'); toggleContainer('estimation_time')"
+                                style="display: none" />
+                            <label for="estimation_timeRadio" class="link1">
+                                <i class="fa-sharp fa-solid fa-clipboard-question"
+                                    style="margin-right: 5px"></i>Estimation
+                            </label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="overhead_timeRadio" name="sectionRadio"
+                                onclick="showSection('overhead_time'); toggleContainer('overhead_time')"
+                                style="display: none" />
+                            <label for="overhead_timeRadio" class="link1">
+                                <i class="fa-solid fa-angle-double-up" style="margin-right: 5px"></i>Overhead
+                            </label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="service_timeRadio" name="sectionRadio"
+                                onclick="showSection('service_time'); toggleContainer('service_time')"
+                                style="display: none" />
+                            <label for="service_timeRadio" class="link1">
+                                <i class="fa-brands fa-servicestack" style="margin-right: 5px"></i>Service
+                            </label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="Warranty_timeRadio" name="sectionRadio"
+                                onclick="showSection('Warranty_time'); toggleContainer('Warranty_time')"
+                                style="display: none" />
+                            <label for="Warranty_timeRadio" class="link1">
+                                <i class="fa-solid fa-circle-exclamation" style="margin-right: 5px"></i>Warranty
+                            </label>
+                        </li>
+                    </ul>
+
+                    <div class="menu-icon1">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <style>
+                .search_container {
+
+                    width: 100%;
+                    padding: 10px;
+                }
+
+
+                #projectTable {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border-radius: 10px;
+                }
+            </style>
+
+            <div class="project_time" id="project_time" style="display: none">
+
+                <form class="p-3" id="pr_expenseForm" action="/prof_time" method="POST" enctype="multipart/form-data">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-main" id="project_dynamicTable">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%">Employee</th>
+                                    <th style="width: 4%">Code</th>
+                                    <th style="width: 5%">Project ID</th>
+                                    <th style="width: 15%">Project Name</th>
+                                    <th style="width: 10%">Client</th>
+                                    <th style="width: 7%">Date</th>
+                                    <th style="width: 5%">Standard</th>
+                                    <th style="width: 5%">× 1.5</th>
+                                    <th style="width: 5%">× 2.0</th>
+                                    <th style="width: 5%">Total</th>
+                                    <th style="width: 2%">Del</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in range(3) %}
+                                <tr>
+                                    <td>
+                                        <select name="employee_id[]" class="employee-select" required>
+                                            <option value="">Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}">
+                                                {{ username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="department_code[]" class="department-code-input"
+                                            readonly required />
+                                    </td>
+                                    <td>
+                                        <select name="project_id[]" class="Vehicle-no-select" required>
+                                            <option value="">Project ID</option>
+                                            {% for project in projects %}
+                                            <option value="{{ project[0] }}">
+                                                {{ project[0] }} - {{ project[1] }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="project_name[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="client[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="date" name="date[]" class="date-input" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="normal[]" class="normal-input" min="0"
+                                            required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="overhead1[]" class="overhead1-input"
+                                            min="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="overhead2[]" class="overhead2-input"
+                                            min="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="total[]" class="total-input" readonly
+                                            required />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn-delete" style="
+                      color: red;
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    " onclick="pr_deleteRow(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <script>
+                            // Get today's date in the required format (YYYY-MM-DD)
+                            const today = new Date().toISOString().split("T")[0];
+
+                            // Calculate the date 30 days ago
+                            const pastDate = new Date();
+                            pastDate.setDate(pastDate.getDate() - 30);
+                            const minDate = pastDate.toISOString().split("T")[0];
+
+                            // Set the min and max attributes for all date inputs
+                            document
+                                .querySelectorAll(".date-input")
+                                .forEach((dateInput) => {
+                                    dateInput.setAttribute("min", minDate);
+                                    dateInput.setAttribute("max", today);
+                                });
+                        </script>
+
+                        <div class="button-container1">
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" id="projectaddRowButton">
+                                    +
+                                </button>
+                            </div>
+
+                            <div class="flex-item">
+                                {% with messages =
+                                get_flashed_messages(with_categories=true) %} {% if
+                                messages %}
+                                <div class="alert-container">
+                                    {% for category, message in messages %} {% if category
+                                    == 'timesheet' %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                    {% elif category == 'timesheet1' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                    {% endif %} {% endfor %}
+                                </div>
+                                {% endif %} {% endwith %}
+                            </div>
+
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" name="submit" value="project_hours">
+                                    Add Hours
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                        <style>
+                            table {
+                                border-collapse: collapse;
+                                width: 60%;
+                                background: #fff;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                                overflow: hidden;
+                            }
+
+                            th,
+                            td {
+                                text-align: left;
+                                padding: 12px 20px;
+                            }
+
+                            th {
+
+                                font-size: 18px;
+                            }
+                        </style>
+
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>10</td>
+                                                <td>General Manager</td>
+                                                <td>11</td>
+                                                <td>Operation Manager</td>
+                                                <td>12</td>
+                                                <td>Accounts</td>
+                                                <td>13</td>
+                                                <td>HR</td>
+                                                <td>14</td>
+                                                <td>Purchaser</td>
+                                            </tr>
+                                            <tr>
+                                                <td>15</td>
+                                                <td>Business Development</td>
+                                                <td>16</td>
+                                                <td>Project Co-Ordinator</td>
+                                                <td>17</td>
+                                                <td>Material Co-Ordinator</td>
+                                                <td>18</td>
+                                                <td>Finance Manager</td>
+                                                <td>19</td>
+                                                <td>Team Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1001</td>
+                                                <td>Project Manager</td>
+                                                <td>1002</td>
+                                                <td>Sr. Project Engineer</td>
+                                                <td>1003</td>
+                                                <td>Sr. Controls Engineer</td>
+                                                <td>1004</td>
+                                                <td>Controls Engineer</td>
+                                                <td>1005</td>
+                                                <td>Project Supervisor</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1006</td>
+                                                <td>Designer</td>
+                                                <td>1007</td>
+                                                <td>Safety Co-Ordinator</td>
+                                                <td>1008</td>
+                                                <td>Site Supervisor</td>
+                                                <td>1009</td>
+                                                <td>Drafter</td>
+                                                <td>1010</td>
+                                                <td>Electrician</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1011</td>
+                                                <td>Welder</td>
+                                                <td>1012</td>
+                                                <td>Fitter</td>
+                                                <td>1013</td>
+                                                <td>Skilled Worker</td>
+                                                <td>1014</td>
+                                                <td>General Worker</td>
+                                                <td>1015</td>
+                                                <td>Driver</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+                </form>
+
+                <script>
+
+                    document.addEventListener("DOMContentLoaded", () => {
+                        // Set the default and date range for all existing date inputs
+                        const today = new Date().toISOString().split("T")[0];
+                        const pastDate = new Date();
+                        pastDate.setDate(pastDate.getDate() - 30);
+                        const minDate = pastDate.toISOString().split("T")[0];
+
+                        document
+                            .querySelectorAll('input[type="date"]')
+                            .forEach((dateInput) => {
+                                dateInput.setAttribute("min", minDate);
+                                dateInput.setAttribute("max", today);
+                                dateInput.value = today; // Default date to today's date
+                            });
+
+                        function calculateTotal(row) {
+                            const normalInput = row.querySelector(".normal-input");
+                            const overhead1Input =
+                                row.querySelector(".overhead1-input");
+                            const overhead2Input =
+                                row.querySelector(".overhead2-input");
+                            const totalField = row.querySelector(".total-input");
+
+                            const normal = parseFloat(normalInput.value) || 0;
+                            const overhead1 = parseFloat(overhead1Input.value) || 0;
+                            const overhead2 = parseFloat(overhead2Input.value) || 0;
+
+                            let total = normal + overhead1 + overhead2;
+
+                            // Ensure total does not exceed 24
+                            if (total > 24) {
+                                alert("Oops! Total cannot exceed 24 hours.");
+
+                                // Clear input fields data
+                                normalInput.value = "";
+                                overhead1Input.value = "";
+                                overhead2Input.value = "";
+
+                                // Clear the total field after resetting other fields
+                                totalField.value = "";
+
+                                return; // Exit the function early
+                            }
+
+                            totalField.value = total.toFixed(2);
+                        }
+
+                        // Event delegation for handling employee selection
+                        document
+                            .getElementById("project_dynamicTable")
+                            .addEventListener("change", function (event) {
+                                if (
+                                    event.target &&
+                                    event.target.classList.contains("employee-select")
+                                ) {
+                                    const employeeUsername = event.target.value;
+                                    const row = event.target.closest("tr");
+                                    const departmentCodeInput = row.querySelector(
+                                        ".department-code-input"
+                                    );
+
+                                    if (employeeUsername) {
+                                        // Fetch department code dynamically
+                                        fetch(
+                                            `/get_department_code_ts?username=${employeeUsername}`
+                                        )
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                departmentCodeInput.value =
+                                                    data.department_code || "";
+                                            })
+                                            .catch((error) =>
+                                                console.error(
+                                                    "Error fetching department code:",
+                                                    error
+                                                )
+                                            );
+                                    } else {
+                                        departmentCodeInput.value = ""; // Clear department code if no employee selected
+                                    }
+                                }
+                            });
+
+                        // Event delegation for handling project ID selection
+                        document
+                            .getElementById("project_dynamicTable")
+                            .addEventListener("change", function (event) {
+                                if (
+                                    event.target &&
+                                    event.target.classList.contains("Vehicle-no-select")
+                                ) {
+                                    const projectId = event.target.value;
+                                    const row = event.target.closest("tr");
+
+                                    if (projectId) {
+                                        // Fetch project details dynamically
+                                        fetch(
+                                            `/get_project_details_ts?project_id=${projectId}`
+                                        )
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                row.querySelector(
+                                                    'input[name="project_name[]"]'
+                                                ).value = data.project_name || "";
+                                                row.querySelector(
+                                                    'input[name="client[]"]'
+                                                ).value = data.client || "";
+                                            })
+                                            .catch((error) =>
+                                                console.error(
+                                                    "Error fetching project details:",
+                                                    error
+                                                )
+                                            );
+                                    } else {
+                                        // Clear fields if no project selected
+                                        row.querySelector(
+                                            'input[name="project_name[]"]'
+                                        ).value = "";
+                                        row.querySelector('input[name="client[]"]').value =
+                                            "";
+                                    }
+                                }
+                            });
+
+                        // Add new row with dynamic dropdowns and inputs
+                        document
+                            .getElementById("projectaddRowButton")
+                            .addEventListener("click", function (event) {
+                                event.preventDefault();
+
+                                const tableBody = document.querySelector(
+                                    "#project_dynamicTable tbody"
+                                );
+                                const newRow = document.createElement("tr");
+
+                                newRow.innerHTML = `
+                          <td>
+                              <select name="employee_id[]" class="employee-select"  required>
+                                  <option value="">Select Employee</option>
+                                  {% for username in usernames %}
+                                  <option value="{{ username }}">{{ username }}</option>
+                                  {% endfor %}
+                              </select>
+                          </td>
+                          <td><input type="text" name="department_code[]" class="department-code-input" required readonly></td>
+                          <td>
+                              <select name="project_id[]" class="Vehicle-no-select"  required>
+                                  <option value="">Project ID</option>
+                                  {% for project in projects %}
+                                  <option value="{{ project[0] }}">{{ project[0] }} - {{ project[1] }}</option>
+                                  {% endfor %}
+                              </select>
+                          </td>
+                          <td><input type="text" name="project_name[]" value="" required readonly></td>
+                          <td><input type="text" name="client[]" value="" required readonly></td>
+                          <td><input type="date" name="date[]" class="date-input" required></td>
+                          <td><input type="number" step="0.01" name="normal[]" class="normal-input" min="0" required></td>
+                          <td><input type="number" step="0.01" name="overhead1[]" class="overhead1-input" min="0" ></td>
+                          <td><input type="number" step="0.01" name="overhead2[]" class="overhead2-input" min="0"></td>
+                          <td><input type="number" step="0.01" name="total[]" class="total-input" readonly required></td>
+                          <td>
+                              <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="pr_deleteRow(this)">
+                                  <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                              </button>
+                          </td>
+                      `;
+
+                                tableBody.appendChild(newRow);
+
+                                // Set date restrictions for new row's date input
+                                const newDateInput =
+                                    newRow.querySelector('input[type="date"]');
+                                newDateInput.setAttribute("min", minDate);
+                                newDateInput.setAttribute("max", today);
+                                newDateInput.value = today; // Default to today's date
+
+                                // Add event listeners for the new row's inputs
+                                newRow
+                                    .querySelectorAll(
+                                        ".normal-input, .overhead1-input, .overhead2-input"
+                                    )
+                                    .forEach((input) => {
+                                        input.addEventListener("input", () =>
+                                            calculateTotal(newRow)
+                                        );
+                                    });
+                            });
+
+                        // Delete row functionality
+                        window.pr_deleteRow = function (button) {
+                            const row = button.closest("tr");
+                            row.remove();
+                        };
+
+                        // Add event listeners for existing rows
+                        document.querySelectorAll("tbody tr").forEach((row) => {
+                            row
+                                .querySelectorAll(
+                                    ".normal-input, .overhead1-input, .overhead2-input"
+                                )
+                                .forEach((input) => {
+                                    input.addEventListener("input", () =>
+                                        calculateTotal(row)
+                                    );
+                                });
+                        });
+                    });
+
+                </script>
+
+            </div>
+
+            <div class="estimation_time" id="estimation_time" style="display: none">
+
+                <form class="p-3" action="/prof_time" method="POST" enctype="multipart/form-data">
+
+                    <div class="table-responsive">
+                        <table class="table table-main" id="estimation_dynamicTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 12%;">Employee</th>
+                                    <th style="width: 6%;">Code</th>
+                                    <th style="width: 10%;">Enquary ID</th>
+                                    <th style="width: 30%;">Project Name</th>
+                                    <th style="width: 20%;">Client</th>
+                                    <th style="width: 10%;">Date</th>
+                                    <th style="width: 10%;">Hours Worked</th>
+                                    <th style="width: 10%;">Del</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in range(3) %}
+                                <tr>
+                                    <td>
+                                        <select name="estemployee_id[]" class="est_employee-select" required>
+                                            <option value="">Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}">
+                                                {{ username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="est_department_code[]"
+                                            class="enq_department-code-input" required readonly />
+                                    </td>
+
+                                    <td>
+                                        <select name="enq_id[]" class="enq-no-select" required>
+                                            <option value="">Enquary ID</option>
+                                            {% for enq_id in enq_ids %}
+                                            <option value="{{ enq_id[0] }}">
+                                                {{ enq_id[0] }} - {{ enq_id[1] }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="enq_name[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="enq_client[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="date" name="enq_date[]" class="date-input" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="enq_hours[]" max="24" min="0" required />
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn-delete" style="
+                      color: red;
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    " onclick="enq_delete_Row(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            <script>
+                                // Set date limits for all date inputs with name "enq_date[]"
+                                document.addEventListener(
+                                    "DOMContentLoaded",
+                                    function () {
+                                        const today = new Date()
+                                            .toISOString()
+                                            .split("T")[0];
+                                        const pastDate = new Date();
+                                        pastDate.setDate(pastDate.getDate() - 30);
+                                        const minDate = pastDate
+                                            .toISOString()
+                                            .split("T")[0];
+
+                                        document
+                                            .querySelectorAll('input[name="enq_date[]"]')
+                                            .forEach((dateInput) => {
+                                                dateInput.setAttribute("min", minDate);
+                                                dateInput.setAttribute("max", today);
+                                                dateInput.value = today; // Set default to today’s date
+                                            });
+                                    }
+                                );
+                            </script>
+                        </table>
+
+                        <div class="button-container1">
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" id="estimationaddRowButton">
+                                    +
+                                </button>
+                            </div>
+
+                            <div class="flex-item">
+                                {% with messages =
+                                get_flashed_messages(with_categories=true) %} {% if
+                                messages %}
+                                <div class="alert-container">
+                                    {% for category, message in messages %} {% if category
+                                    == 'estimation_time' %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                    {% elif category == 'estimation_time1' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                    {% endif %} {% endfor %}
+                                </div>
+                                {% endif %} {% endwith %}
+                            </div>
+
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" name="submit" value="estimation_hours">
+                                    Add Hours
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <script>
+                    // Event delegation for handling employee selection
+                    document
+                        .getElementById("estimation_dynamicTable")
+                        .addEventListener("change", function (event) {
+                            if (
+                                event.target &&
+                                event.target.classList.contains("est_employee-select")
+                            ) {
+                                const employeeUsername = event.target.value;
+                                const row = event.target.closest("tr");
+                                const departmentCodeInput = row.querySelector(
+                                    ".enq_department-code-input"
+                                );
+
+                                if (employeeUsername) {
+                                    // Make an AJAX request to fetch the department code
+                                    fetch(
+                                        `/get_department_code_ts?username=${employeeUsername}`
+                                    )
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            // Set the department code value
+                                            // departmentCodeInput.value = data.est_department_code;
+                                            departmentCodeInput.value = data.department_code;
+                                        })
+                                        .catch((error) =>
+                                            console.error(
+                                                "Error fetching department code:",
+                                                error
+                                            )
+                                        );
+                                } else {
+                                    departmentCodeInput.value = ""; // Clear the department code if no employee selected
+                                }
+                            }
+                        });
+
+                    // Set current date in date inputs
+                    document
+                        .querySelectorAll('input[type="date"]')
+                        .forEach(function (dateInput) {
+                            const today = new Date().toISOString().split("T")[0];
+                            dateInput.value = today;
+                        });
+
+                    // Add new row with dynamic dropdowns
+                    document
+                        .getElementById("estimationaddRowButton")
+                        .addEventListener("click", function (e) {
+                            e.preventDefault();
+
+                            var tableBody = document.querySelector(
+                                "#estimation_dynamicTable tbody"
+                            );
+                            var newRow = document.createElement("tr");
+
+                            newRow.innerHTML = `
+                      <td>
+                          <select name="estemployee_id[]" class="est_employee-select"  required>
+                              <option value="">Select Employee</option>
+                              {% for username in usernames %}
+                              <option value="{{ username }}">{{ username }}</option>
+                              {% endfor %}
+                          </select>
+                      </td>
+                      <td><input type="text" name="est_department_code[]" class="enq_department-code-input" required readonly></td>
+                      <td>
+                          <select name="enq_id[]" class="enq-no-select"  required>
+                              <option value="">Enquiry ID</option>
+                              {% for enq_id in enq_ids %}
+                              <option value="{{ enq_id[0] }}">{{ enq_id[0] }} - {{ enq_id[1] }}</option>
+                              {% endfor %}
+                          </select>
+                      </td>
+                      <td><input type="text" name="enq_name[]" value="" required readonly></td>
+                      <td><input type="text" name="enq_client[]" value="" required readonly></td>
+                      <td><input type="date" name="enq_date[]" class="date-input" required></td>
+                      <td><input type="number" step="0.01" name="enq_hours[]" max="24" min="0" required></td>
+                      <td>
+                          <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="enq_delete_Row(this)">
+                              <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                          </button>
+                      </td>
+                  `;
+
+                            tableBody.appendChild(newRow);
+
+                            // Set min and max date attributes for the new date input
+                            const today = new Date().toISOString().split("T")[0];
+                            const pastDate = new Date();
+                            pastDate.setDate(pastDate.getDate() - 30);
+                            const minDate = pastDate.toISOString().split("T")[0];
+
+                            var newDateInput =
+                                newRow.querySelector('input[type="date"]');
+                            newDateInput.setAttribute("min", minDate);
+                            newDateInput.setAttribute("max", today);
+                            newDateInput.value = today; // Set default date to today
+                        });
+
+                    // Delete row functionality
+                    function enq_delete_Row(button) {
+                        var row = button.closest("tr");
+                        row.remove();
+                    }
+
+                    // Add event listeners for newly added rows
+                    document
+                        .getElementById("estimationaddRowButton")
+                        .addEventListener("click", function (event) {
+                            event.preventDefault(); // Prevent form submission
+
+                            // Code to clone the last row and append it
+                            const tableBody = document.querySelector(
+                                "#estimation_dynamicTable tbody"
+                            );
+                            const lastRow = tableBody.querySelector("tr:last-child");
+                            const newRow = lastRow.cloneNode(true);
+
+                            // Clear input values for the new row
+                            newRow
+                                .querySelectorAll("input")
+                                .forEach((input) => (input.value = ""));
+
+                            // Append the new row
+                            // tableBody.appendChild(newRow);
+                        });
+
+                    // Event delegation for handling project ID selection
+                    document
+                        .getElementById("estimation_dynamicTable")
+                        .addEventListener("change", function (event) {
+                            if (
+                                event.target &&
+                                event.target.classList.contains("enq-no-select")
+                            ) {
+                                var projectId = event.target.value;
+                                var row = event.target.closest("tr"); // Get the current row
+
+                                if (projectId) {
+                                    // AJAX request to get the project details
+                                    fetch(`/get_enq_details_ts?enq_id=${projectId}`)
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            if (data.enq_name && data.enq_client) {
+                                                // Update project name and client input fields
+                                                row.querySelector(
+                                                    'input[name="enq_name[]"]'
+                                                ).value = data.enq_name;
+                                                row.querySelector(
+                                                    'input[name="enq_client[]"]'
+                                                ).value = data.enq_client;
+                                            } else {
+                                                alert("Project details not found!");
+                                            }
+                                        })
+                                        .catch((error) => {
+                                            console.error(
+                                                "Error fetching project details:",
+                                                error
+                                            );
+                                        });
+                                } else {
+                                    // Clear the project name and client fields if no project ID is selected
+                                    row.querySelector('input[name="enq_name[]"]').value =
+                                        "";
+                                    row.querySelector(
+                                        'input[name="enq_client[]"]'
+                                    ).value = "";
+                                }
+                            }
+                        });
+                </script>
+
+            </div>
+
+            <div class="overhead_time" id="overhead_time" style="display: none">
+                <form class="p-3" action="/prof_time" method="POST" enctype="multipart/form-data">
+                    <div class="table-responsive">
+                        <table class="table table-main" id="overhead_dynamicTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Code</th>
+                                    <th>Date</th>
+                                    <th>Hours Worked</th>
+                                    <th>Del</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in range(3) %}
+                                <tr>
+                                    <td>
+                                        <select name="ovremployee_id[]" class="ovr_employee-select" required>
+                                            <option value="">Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}">
+                                                {{ username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="ovr_department_code[]"
+                                            class="ovr_department-code-input" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="date" name="ovr_date[]" id="currentDate" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="ovr_hours[]" max="24" min="0" required />
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn-delete" style="
+                      color: red;
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    " onclick="enq_delete_Row(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            <script>
+                                // Set date restrictions for existing rows
+                                document.addEventListener(
+                                    "DOMContentLoaded",
+                                    function () {
+                                        const today = new Date()
+                                            .toISOString()
+                                            .split("T")[0];
+                                        const pastDate = new Date();
+                                        pastDate.setDate(pastDate.getDate() - 30);
+                                        const minDate = pastDate
+                                            .toISOString()
+                                            .split("T")[0];
+
+                                        // Apply the date restrictions to all current date inputs
+                                        document
+                                            .querySelectorAll('input[name="ovr_date[]"]')
+                                            .forEach((input) => {
+                                                input.setAttribute("min", minDate);
+                                                input.setAttribute("max", today);
+                                                input.value = today; // Set default date to today
+                                            });
+                                    }
+                                );
+                            </script>
+                        </table>
+
+                        <div class="button-container1">
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" id="overheadaddRowButton">
+                                    +
+                                </button>
+                            </div>
+
+                            <div class="flex-item">
+                                {% with messages =
+                                get_flashed_messages(with_categories=true) %} {% if
+                                messages %}
+                                <div class="alert-container">
+                                    {% for category, message in messages %} {% if category
+                                    == 'overhead_time' %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                    {% elif category == 'overhead_time1' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                    {% endif %} {% endfor %}
+                                </div>
+                                {% endif %} {% endwith %}
+                            </div>
+
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" name="submit" value="overhead_hours">
+                                    Add Hours
+                                </button>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Event delegation for handling employee selection
+                            document
+                                .getElementById("overhead_dynamicTable")
+                                .addEventListener("change", function (event) {
+                                    if (
+                                        event.target &&
+                                        event.target.classList.contains(
+                                            "ovr_employee-select"
+                                        )
+                                    ) {
+                                        const employeeUsername = event.target.value;
+                                        const row = event.target.closest("tr");
+                                        const departmentCodeInput = row.querySelector(
+                                            ".ovr_department-code-input"
+                                        );
+
+                                        if (employeeUsername) {
+                                            // Make an AJAX request to fetch the department code
+                                            fetch(
+                                                `/get_department_code_ts?username=${employeeUsername}`
+                                            )
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    // Set the department code value
+                                                    // departmentCodeInput.value = data.est_department_code;
+                                                    departmentCodeInput.value =
+                                                        data.department_code;
+                                                })
+                                                .catch((error) =>
+                                                    console.error(
+                                                        "Error fetching department code:",
+                                                        error
+                                                    )
+                                                );
+                                        } else {
+                                            departmentCodeInput.value = ""; // Clear the department code if no employee selected
+                                        }
+                                    }
+                                });
+
+                            // Set current date in date inputs
+                            document
+                                .querySelectorAll('input[type="date"]')
+                                .forEach(function (dateInput) {
+                                    const today = new Date().toISOString().split("T")[0];
+                                    dateInput.value = today;
+                                });
+
+                            // Add new row with dynamic dropdowns
+                            document
+                                .getElementById("overheadaddRowButton")
+                                .addEventListener("click", function (e) {
+                                    e.preventDefault();
+
+                                    var tableBody = document.querySelector(
+                                        "#overhead_dynamicTable tbody"
+                                    );
+                                    var newRow = document.createElement("tr");
+
+                                    newRow.innerHTML = `
+                              <td>
+                                  <select name="ovremployee_id[]" class="ovr_employee-select"  required>
+                                      <option value="">Select Employee</option>
+                                      {% for username in usernames %}
+                                      <option value="{{ username }}">{{ username }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </td>
+                              <td><input type="text" name="ovr_department_code[]" class="ovr_department-code-input" required readonly></td>
+                              <td><input type="date" name="ovr_date[]" class="date-input" required></td>
+                              <td><input type="number" step="0.01" name="ovr_hours[]" max="24" min="0" required></td>
+                              <td>
+                                  <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="enq_delete_Row(this)">
+                                      <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                  </button>
+                              </td>
+                          `;
+
+                                    tableBody.appendChild(newRow);
+
+                                    // Set min and max date attributes for the new date input
+                                    const today = new Date().toISOString().split("T")[0];
+                                    const pastDate = new Date();
+                                    pastDate.setDate(pastDate.getDate() - 30);
+                                    const minDate = pastDate.toISOString().split("T")[0];
+
+                                    var newDateInput =
+                                        newRow.querySelector('input[type="date"]');
+                                    newDateInput.setAttribute("min", minDate);
+                                    newDateInput.setAttribute("max", today);
+                                    newDateInput.value = today; // Set default date to today
+                                });
+
+                            // Delete row functionality
+                            function enq_delete_Row(button) {
+                                var row = button.closest("tr");
+                                row.remove();
+                            }
+
+                            // Add event listeners for newly added rows
+                            document
+                                .getElementById("overheadaddRowButton")
+                                .addEventListener("click", function (event) {
+                                    event.preventDefault(); // Prevent form submission
+
+                                    // Code to clone the last row and append it
+                                    const tableBody = document.querySelector(
+                                        "#overhead_dynamicTable tbody"
+                                    );
+                                    const lastRow =
+                                        tableBody.querySelector("tr:last-child");
+                                    const newRow = lastRow.cloneNode(true);
+
+                                    // Clear input values for the new row
+                                    newRow
+                                        .querySelectorAll("input")
+                                        .forEach((input) => (input.value = ""));
+
+                                    // Append the new row
+                                    // tableBody.appendChild(newRow);
+                                });
+                        </script>
+                    </div>
+                </form>
+            </div>
+
+            <div class="service_time" id="service_time" style="display: none">
+                <form class="p-3" action="/prof_time" method="POST" enctype="multipart/form-data">
+                    <div class="table-responsive">
+                        <table class="table table-main" id="service_dynamicTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%">Employee</th>
+                                    <th style="width: 10%">Code</th>
+                                    <th style="width: 20%">Client</th>
+                                    <th style="width: 20%">Site</th>
+                                    <th style="width: 15%">Date</th>
+                                    <th style="width: 5%">Standard</th>
+                                    <th style="width: 5%">× 1.5</th>
+                                    <th style="width: 5%">× 2.0</th>
+                                    <th style="width: 10%">Total</th>
+                                    <th style="width: 5%">Del</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in range(3) %}
+                                <tr>
+                                    <td>
+                                        <select name="seremployee_id[]" class="ser_employee-select" required>
+                                            <option value="">Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}">
+                                                {{ username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="ser_department_code[]"
+                                            class="ser_department-code-input" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="ser_client[]" value="" required />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="ser_site[]" value="" required />
+                                    </td>
+                                    <td>
+                                        <input type="date" name="ser_date[]" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="ser_normal[]" class="normal-input"
+                                            min="0" max="24" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="ser_overhead1[]" class="overhead1-input"
+                                            min="0" max="24" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="ser_overhead2[]" class="overhead2-input"
+                                            min="0" max="24" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="ser_total[]" class="total-input" readonly
+                                            required />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn-delete" style="
+                      color: red;
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    " onclick="ser_delete_Row(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="button-container1">
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" id="serviceaddRowButton">
+                                    +
+                                </button>
+                            </div>
+
+                            <div class="flex-item">
+                                {% with messages =
+                                get_flashed_messages(with_categories=true) %} {% if
+                                messages %}
+                                <div class="alert-container">
+                                    {% for category, message in messages %} {% if category
+                                    == 'service_time' %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                    {% elif category == 'service_time1' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                    {% endif %} {% endfor %}
+                                </div>
+                                {% endif %} {% endwith %}
+                            </div>
+
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" name="submit" value="service_hours">
+                                    Add Hours
+                                </button>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Event delegation for handling employee selection
+                            document
+                                .getElementById("service_dynamicTable")
+                                .addEventListener("change", function (event) {
+                                    if (
+                                        event.target &&
+                                        event.target.classList.contains(
+                                            "ser_employee-select"
+                                        )
+                                    ) {
+                                        const employeeUsername = event.target.value;
+                                        const row = event.target.closest("tr");
+                                        const departmentCodeInput = row.querySelector(
+                                            ".ser_department-code-input"
+                                        );
+
+                                        if (employeeUsername) {
+                                            // Make an AJAX request to fetch the department code
+                                            fetch(
+                                                `/get_department_code_ts?username=${employeeUsername}`
+                                            )
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    // Set the department code value
+                                                    departmentCodeInput.value =
+                                                        data.department_code;
+                                                })
+                                                .catch((error) =>
+                                                    console.error(
+                                                        "Error fetching department code:",
+                                                        error
+                                                    )
+                                                );
+                                        } else {
+                                            departmentCodeInput.value = ""; // Clear the department code if no employee selected
+                                        }
+                                    }
+                                });
+
+                            // Add new row with dynamic dropdowns
+                            document
+                                .getElementById("serviceaddRowButton")
+                                .addEventListener("click", function (e) {
+                                    e.preventDefault();
+
+                                    var tableBody = document.querySelector(
+                                        "#service_dynamicTable tbody"
+                                    );
+                                    var newRow = document.createElement("tr");
+
+                                    newRow.innerHTML = `
+                              <td>
+                                  <select name="seremployee_id[]" class="ser_employee-select"  required>
+                                      <option value="">Select Employee</option>
+                                      {% for username in usernames %}
+                                      <option value="{{ username }}">{{ username }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </td>
+                              <td><input type="text" name="ser_department_code[]" class="ser_department-code-input" required></td>
+                              <td><input type="text" name="ser_client[]" value="" required></td>
+                              <td><input type="text" name="ser_site[]" value="" required></td>
+                              <td><input type="date" name="ser_date[]" class="date-input" required></td>
+                              <td><input type="number" step="0.01" name="ser_normal[]" class="normal-input" min="0" max="24" required></td>
+                              <td><input type="number" step="0.01" name="ser_overhead1[]" class="overhead1-input" min="0" max="24" ></td>
+                              <td><input type="number" step="0.01" name="ser_overhead2[]" class="overhead2-input" min="0" max="24" ></td>
+                              <td><input type="number" step="0.01" name="ser_total[]" class="total-input" readonly required></td>
+                              <td>
+                                  <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="ser_delete_Row(this)">
+                                      <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                  </button>
+                              </td>
+                          `;
+
+                                    tableBody.appendChild(newRow);
+
+                                    // Set min and max date attributes for the new date input
+                                    const today = new Date().toISOString().split("T")[0];
+                                    const pastDate = new Date();
+                                    pastDate.setDate(pastDate.getDate() - 30);
+                                    const minDate = pastDate.toISOString().split("T")[0];
+
+                                    var newDateInput =
+                                        newRow.querySelector('input[type="date"]');
+                                    newDateInput.setAttribute("min", minDate);
+                                    newDateInput.setAttribute("max", today);
+                                    newDateInput.value = today; // Set default date to today
+                                });
+
+                            // Calculate total function
+                            function calculateTotal(row) {
+                                const normalInput = row.querySelector(".normal-input");
+                                const overhead1Input =
+                                    row.querySelector(".overhead1-input");
+                                const overhead2Input =
+                                    row.querySelector(".overhead2-input");
+                                const totalField = row.querySelector(".total-input");
+
+                                const normal = parseFloat(normalInput.value) || 0;
+                                const overhead1 = parseFloat(overhead1Input.value) || 0;
+                                const overhead2 = parseFloat(overhead2Input.value) || 0;
+
+                                let total = normal + overhead1 + overhead2;
+
+                                // Ensure total does not exceed 24
+                                if (total > 24) {
+                                    alert("Oops! Total cannot exceed 24 hours.");
+
+                                    // Clear input fields data
+                                    normalInput.value = "";
+                                    overhead1Input.value = "";
+                                    overhead2Input.value = "";
+
+                                    // Clear the total field after resetting other fields
+                                    totalField.value = "";
+
+                                    return; // Exit the function early
+                                }
+
+                                totalField.value = total.toFixed(2);
+                            }
+
+                            // Delete row functionality
+                            function ser_delete_Row(button) {
+                                var row = button.closest("tr");
+                                row.remove();
+                            }
+
+                            // Add event listeners to calculate total for existing rows
+                            document
+                                .querySelectorAll("#service_dynamicTable tbody tr")
+                                .forEach(function (row) {
+                                    row
+                                        .querySelectorAll('input[type="number"]')
+                                        .forEach(function (input) {
+                                            input.addEventListener("input", function () {
+                                                calculateTotal(row);
+                                            });
+                                        });
+                                });
+                        </script>
+                    </div>
+                </form>
+            </div>
+
+            <div class="Warranty_time" id="Warranty_time" style="display: none">
+                <form class="p-3" id="pr_expenseForm" action="/prof_time" method="POST" enctype="multipart/form-data">
+                    <div class="table-responsive">
+                        <table class="table table-main" id="Warranty_dynamicTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%">Employee</th>
+                                    <th style="width: 4%">Code</th>
+                                    <th style="width: 5%">Project ID</th>
+                                    <th style="width: 15%">Project Name</th>
+                                    <th style="width: 10%">Client</th>
+                                    <th style="width: 7%">Date</th>
+                                    <th style="width: 5%">Standard</th>
+                                    <th style="width: 5%">× 1.5</th>
+                                    <th style="width: 5%">× 2.0</th>
+                                    <th style="width: 5%">Total</th>
+                                    <th style="width: 2%">Del</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in range(3) %}
+
+                                <tr>
+                                    <td>
+                                        <select name="war_employee_id[]" class="war_employee-select" required>
+                                            <option value="">Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}">
+                                                {{ username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="war_department_code[]"
+                                            class="war_department-code-input" required readonly />
+                                    </td>
+
+                                    <td>
+                                        <select name="war_project_id[]" class="war-project-no-select" required>
+                                            <option value="">Project ID</option>
+                                            {% for project in projects %}
+                                            <option value="{{ project[0] }}">
+                                                {{ project[0] }} - {{ project[1] }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" name="war_project_name[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="war_client[]" value="" required readonly />
+                                    </td>
+                                    <td>
+                                        <input type="date" name="war_date[]" class="date-input" required />
+                                    </td>
+
+                                    <td>
+                                        <input type="number" step="0.01" name="war_normal[]" class="normal-input"
+                                            min="0" required />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="war_overhead1[]" class="overhead1-input"
+                                            min="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="war_overhead2[]" class="overhead2-input"
+                                            min="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="war_total[]" class="total-input" readonly
+                                            required />
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn-delete" style="
+                      color: red;
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    " onclick="pr_deleteRow(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="button-container1">
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" id="warrantyaddRowButton">
+                                    +
+                                </button>
+                            </div>
+
+                            <div class="flex-item">
+                                {% with messages =
+                                get_flashed_messages(with_categories=true) %} {% if
+                                messages %}
+                                <div class="alert-container">
+                                    {% for category, message in messages %} {% if category
+                                    == 'Warranty_time' %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                    {% elif category == 'Warranty_time1' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                    {% endif %} {% endfor %}
+                                </div>
+                                {% endif %} {% endwith %}
+                            </div>
+
+                            <div class="flex-item">
+                                <button class="custom-btn btn-2" name="submit" value="Warranty_hours">
+                                    Add Hours
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const dateInputs =
+                            document.querySelectorAll('input[type="date"]');
+                        const today = new Date();
+                        const last30Days = new Date(today);
+                        last30Days.setDate(today.getDate() - 30);
+
+                        const formatDate = (date) =>
+                            date.toISOString().split("T")[0];
+                        const todayStr = formatDate(today);
+                        const last30DaysStr = formatDate(last30Days);
+
+                        dateInputs.forEach((input) => {
+                            input.setAttribute("max", todayStr); // Set today's date as max
+                            input.setAttribute("min", last30DaysStr); // Set the last 30 days as min
+                        });
+                    });
+                </script>
+
+                <script>
+                    // Event delegation for handling employee selection
+                    document
+                        .getElementById("Warranty_dynamicTable")
+                        .addEventListener("change", function (event) {
+                            if (
+                                event.target &&
+                                event.target.classList.contains("war_employee-select")
+                            ) {
+                                const employeeUsername = event.target.value;
+                                const row = event.target.closest("tr");
+                                const departmentCodeInput = row.querySelector(
+                                    ".war_department-code-input"
+                                );
+
+                                if (employeeUsername) {
+                                    // Make an AJAX request to fetch the department code
+                                    fetch(
+                                        `/get_department_code_ts?username=${employeeUsername}`
+                                    )
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            // Set the department code value
+                                            departmentCodeInput.value = data.department_code;
+                                        })
+                                        .catch((error) =>
+                                            console.error(
+                                                "Error fetching department code:",
+                                                error
+                                            )
+                                        );
+                                } else {
+                                    departmentCodeInput.value = ""; // Clear the department code if no employee selected
+                                }
+                            }
+                        });
+
+                    // Set current date in date inputs
+                    document
+                        .querySelectorAll('input[type="date"]')
+                        .forEach(function (dateInput) {
+                            const today = new Date().toISOString().split("T")[0];
+                            dateInput.value = today;
+                        });
+
+                    // Add new row with dynamic dropdowns
+                    document
+                        .getElementById("warrantyaddRowButton")
+                        .addEventListener("click", function (e) {
+                            e.preventDefault();
+
+                            var tableBody = document.querySelector(
+                                "#Warranty_dynamicTable tbody"
+                            );
+                            var newRow = document.createElement("tr");
+
+                            newRow.innerHTML = `
+                      <tr>
+                          <td>
+                              <select name="war_employee_id[]" class="war_employee-select"  required>
+                                  <option value="">Select Employee</option>
+                                  {% for username in usernames %}
+                                  <option value="{{ username }}">{{ username }}</option>
+                                  {% endfor %}
+                              </select>
+                          </td>
+
+                          <td><input type="text" name="war_department_code[]" class="war_department-code-input" required readonly></td>
+
+                          <td>
+                              <select name="war_project_id[]" class="war-project-no-select"  required>
+                                  <option value="">Project ID</option>
+                                  {% for project in projects %}
+                                  <option value="{{ project[0] }}">{{ project[0] }} - {{ project[1] }}</option>
+                                  {% endfor %}
+                              </select>
+                          </td>
+
+                          <td><input type="text" name="war_project_name[]" value="" required readonly></td>
+                          <td><input type="text" name="war_client[]" value="" required readonly></td>
+                          <td><input type="date" name="war_date[]" class="war-date-input" required></td>
+                          <td><input type="number" step="0.01" name="war_normal[]" class="normal-input" min="0" required></td>
+                          <td><input type="number" step="0.01" name="war_overhead1[]" class="overhead1-input" min="0" ></td>
+                          <td><input type="number" step="0.01" name="war_overhead2[]" class="overhead2-input" min="0" ></td>
+                          <td><input type="number" step="0.01" name="war_total[]" class="total-input" readonly required></td>
+
+                          <td>
+                              <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="pr_deleteRow(this)">
+                                  <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                              </button>
+                          </td>
+                      </tr>
+                  `;
+
+                            tableBody.appendChild(newRow);
+
+                            // Set the current date for the newly added date input
+                            var newDateInput =
+                                newRow.querySelector('input[type="date"]');
+                            const today = new Date().toISOString().split("T")[0];
+                            newDateInput.value = today;
+
+                            // Set the min and max date values for the newly added date input
+                            var thirtyDaysAgo = new Date();
+                            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                            var minDate = thirtyDaysAgo.toISOString().split("T")[0];
+
+                            newDateInput.setAttribute("min", minDate); // Set the min date to 30 days ago
+                            newDateInput.setAttribute("max", today); // Set the max date to today's date
+                        });
+
+                    // Delete row functionality
+                    function pr_deleteRow(button) {
+                        var row = button.closest("tr");
+                        row.remove();
+                    }
+
+                    // Add event listeners for newly added rows
+                    document
+                        .getElementById("warrantyaddRowButton")
+                        .addEventListener("click", function (event) {
+                            event.preventDefault(); // Prevent form submission
+
+                            // Code to clone the last row and append it
+                            const tableBody = document.querySelector(
+                                "#Warranty_dynamicTable tbody"
+                            );
+                            const lastRow = tableBody.querySelector("tr:last-child");
+                            const newRow = lastRow.cloneNode(true);
+
+                            // Clear input values for the new row
+                            newRow
+                                .querySelectorAll("input")
+                                .forEach((input) => (input.value = ""));
+
+                            // Append the new row
+                            // tableBody.appendChild(newRow);
+                        });
+
+                    // Event delegation for handling project ID selection
+                    document
+                        .getElementById("Warranty_dynamicTable")
+                        .addEventListener("change", function (event) {
+                            if (
+                                event.target &&
+                                event.target.classList.contains("war-project-no-select")
+                            ) {
+                                var projectId = event.target.value;
+                                var row = event.target.closest("tr"); // Get the current row
+
+                                if (projectId) {
+                                    // AJAX request to get the project details
+                                    fetch(
+                                        `/get_project_details_ts?project_id=${projectId}`
+                                    )
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            if (data.project_name && data.client) {
+                                                // Update project name and client input fields
+                                                row.querySelector(
+                                                    'input[name="war_project_name[]"]'
+                                                ).value = data.project_name;
+                                                row.querySelector(
+                                                    'input[name="war_client[]"]'
+                                                ).value = data.client;
+                                            } else {
+                                                alert("Project details not found!");
+                                            }
+                                        })
+                                        .catch((error) => {
+                                            console.error(
+                                                "Error fetching project details:",
+                                                error
+                                            );
+                                        });
+                                } else {
+                                    // Clear the project name and client fields if no project ID is selected
+                                    row.querySelector(
+                                        'input[name="project_name[]"]'
+                                    ).value = "";
+                                    row.querySelector('input[name="client[]"]').value =
+                                        "";
+                                }
+                            }
+                        });
+                </script>
+            </div>
+
+
+            <style>
+                .table-main {
+                    margin: auto;
+                }
+
+                input[type="text"],
+                input[type="date"],
+                input[type="number"],
+                select {
+                    width: 100%;
+                    padding: 10px 20px;
+                    margin: 2px 0;
+                    /* Reduce the top and bottom margin */
+                    display: block;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                }
+
+                input[type="submit"] {
+                    width: 100%;
+                    background-color: #04aa6d;
+                    color: white;
+                    padding: 14px 20px;
+                    margin: 8px 0;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: #45a049;
+                }
+
+                .table-responsive1 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 450px;
+                    border-radius: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .table-responsive {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 750px;
+                }
+
+
+
+                .table-main {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: auto;
+                    /* Centers the table */
+                }
+
+
+
+                .table-main thead {
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    z-index: 10;
+                }
+
+                .container {
+                    background-color: white;
+                    /* Light Gray - Similar to Apple's typical background */
+                    padding: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    flex: 1;
+                    gap: 20px;
+                    border: 2px solid #d3d3d3;
+                    /* Slightly darker light gray for border */
+                    margin-bottom: 15px;
+                }
+
+                .invoice-header {
+                    flex: 1;
+                }
+
+                .invoice-row {
+                    display: grid;
+                    grid-template-columns: 120px auto;
+                    /* First column for labels, second for values */
+                    gap: 10px;
+                    align-items: center;
+                    padding: 5px 0;
+                }
+
+                .invoice-row p {
+                    margin: 0;
+                    font-weight: bold;
+                    text-align: left;
+                }
+
+                .invoice-row span {
+                    text-align: left;
+                }
+
+
+                .invice_header {
+                    width: 100%;
+                    padding: 10px;
+
+                }
+
+                .button-container1 {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                }
+
+                .button-container1 h2 {
+                    margin: 0;
+                    font-size: 1.5em;
+                    color: #333;
+                }
+
+
+
+                .title-box {
+                    display: flex;
+                    padding: 5px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 10px;
+                    justify-content: space-between;
+
+                }
+
+                .title-item {
+                    display: flex;
+                    align-items: center;
+
+                    /* Align title and value on the same row */
+                }
+
+                .title-item span {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #004b5d;
+                }
+
+
+                @keyframes open {
+                    from {
+                        width: 20px;
+                        /* Start with 0 width */
+                    }
+
+                    to {
+                        width: 573px;
+                        /* Animate to 473px width */
+                    }
+                }
+
+                /* Responsive styling for smaller screens */
+                @media (max-width: 768px) {
+                    .title-box {
+                        flex-direction: column;
+                        /* Stack items vertically on smaller screens */
+                        align-items: flex-start;
+                    }
+
+                    .title-item {
+                        margin-bottom: 15px;
+                        /* Space between stacked items */
+                    }
+                }
+            </style>
+
+
+
+        </div>
+
+    </div>
+
+    <script>
+        // Hide flash messages after 3 seconds
+        setTimeout(function () {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }, 5000); // 3000 milliseconds = 3 seconds
+    </script>
+
+    <style>
+        .custom-btn1 {
+            height: 20px;
+            color: whitesmoke;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 300;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-21 {
+            background: #004B5D;
+            background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+            border: none;
+        }
+
+        .btn-21:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        .btn-21:hover {
+            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5),
+                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+        }
+    </style>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll(
+                ".project_time, .estimation_time, .overhead_time,  .service_time, .Warranty_time, .leave_time"
+            );
+
+            sections.forEach(function (section) {
+                section.style.display = "none";
+            });
+
+            // Show the selected section
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = "block";
+            }
+        }
+
+        window.onload = function () {
+            // Set the estimation_time section to be shown by default
+
+            // If the 'show' value is provided from the backend, override the default behavior
+            var show = "{{ show }}"; // The value of 'show' from the backend
+            if (show === "project") {
+                showSection("project_time");
+                document.getElementById("subContractRadio").checked = true;
+            } else if (show === "estimation") {
+                showSection("estimation_time");
+                document.getElementById("estimation_timeRadio").checked = true;
+            } else if (show === "overhead_time") {
+                showSection("overhead_time");
+                document.getElementById("overhead_timeRadio").checked = true;
+            } else if (show === "service_time") {
+                showSection("service_time");
+                document.getElementById("service_timeRadio").checked = true;
+            } else if (show === "Warranty_time") {
+                showSection("Warranty_time");
+                document.getElementById("Warranty_timeRadio").checked = true;
+            } else if (show === "leave_time") {
+                showSection("leave_time");
+                document.getElementById("leave_timeRadio").checked = true;
+            }
+        };
+    </script>
+
+</body>
+
+</html>

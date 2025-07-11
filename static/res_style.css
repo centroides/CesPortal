@@ -1,0 +1,1162 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+    --main-color: #1b4a69;
+    --color-dark: #34425A;
+    --text-grey: #B0B0B0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style-type: none;
+    box-sizing: border-box;
+    font-family: 'Merriweather', sans-serif;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+    width: 165px;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(200deg, #0C2238, #0c2e4d, #0C2238);
+    /* Approximated gradient */
+    transition: left 300ms;
+}
+
+
+
+@keyframes floatingEffect {
+    0% {
+        transform: translateY(0);
+        /* Start at normal position */
+    }
+
+    50% {
+        transform: translateY(-5px);
+        /* Move up slightly */
+    }
+
+    100% {
+        transform: translateY(0);
+        /* Return to original position */
+    }
+}
+
+.side-header {
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 /10%);
+    background-color: #0C2238;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-header h3,
+.side-header span {
+    color: #fff;
+    font-weight: 400;
+    font-size: 2rem;
+    display: inline-block;
+    position: relative;
+    background: linear-gradient(45deg, white, whitesmoke, white);
+
+    /* Gradient text color */
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    /* animation: floatingEffect 2s ease-in-out infinite; */
+    /* Apply the floating effect */
+    /* Text Shadow */
+    text-shadow: 4px 4px 6px rgb(234, 238, 241);
+}
+
+
+.profile-img {
+    height: 80px;
+    width: 80px;
+    display: inline-block;
+    margin: 0 auto .5rem auto;
+    border: 3px solid #899DC1;
+}
+
+.profile h4 {
+    color: #fff;
+    font-weight: 500;
+}
+
+.profile small {
+    color: #899DC1;
+    font-weight: 600;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.side-menu li {
+    display: flex;
+    align-items: center;
+    /* Ensures vertical alignment */
+    justify-content: flex-start;
+    /* Aligns items properly */
+}
+
+.side-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #b0b0b0;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.side-menu a span {
+    font-size: 1.5rem;
+    width: 25px;
+    /* Ensures all icons have the same width */
+    text-align: center;
+    /* Centers the icon */
+}
+
+.side-menu a small {
+    font-size: 1.0rem;
+    font-weight: 500;
+    flex-grow: 1;
+    /* Allows text to expand properly */
+}
+
+.side-menu a:hover {
+    width: 100%;
+    border-radius: 5px;
+    background-color: #0e1c2c;
+    /* Darker shade of navy blue to highlight the hover */
+    color: white;
+    /* border-left: 10px solid white; */
+    transform: translateY(-3px);
+    box-shadow: 0px 4px 15px rgba(0, 48, 74, 0.2);
+    transition: all 0.3s ease;
+}
+
+
+
+
+.side-content {
+    height: calc(100vh - 60px);
+    overflow: auto;
+}
+
+/* width */
+.side-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.side-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+.side-content::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.side-content::-webkit-scrollbar-thumb:hover {
+    background: #b30000;
+}
+
+.profile {
+    text-align: center;
+    padding: 0.5rem 0rem;
+}
+
+.bg-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+
+
+.side-menu a.active {
+    border-radius: 5px;
+    border-left: 8px solid white;
+    color: white;
+    font-weight: bold;
+}
+
+
+
+#menu-toggle:checked~.sidebar {
+    width: 60px;
+}
+
+#menu-toggle:checked~.sidebar .side-header span {
+    display: none;
+}
+
+#menu-toggle:checked~.main-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+}
+
+#menu-toggle:checked~.main-content header {
+    left: 60px;
+}
+
+#menu-toggle:checked~.sidebar .profile,
+#menu-toggle:checked~.sidebar .side-menu a small {
+    display: none;
+}
+
+#menu-toggle:checked~.sidebar .side-menu a span {
+    font-size: 1.3rem;
+}
+
+.main-content {
+    margin-left: 165px;
+    width: calc(100% - 165px);
+    transition: margin-left 300ms;
+}
+
+header {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 165px;
+    z-index: 100;
+    height: 60px;
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 /10%);
+    background: #fff;
+    transition: left 300ms;
+}
+
+.header-content,
+.header-menu {
+    display: flex;
+    align-items: center;
+}
+
+.header-content {
+    justify-content: space-between;
+    padding: 0rem 1rem;
+}
+
+.header-content label:first-child span {
+    font-size: 1.3rem;
+}
+
+.header-content label {
+    cursor: pointer;
+}
+
+.header-menu {
+    justify-content: flex-end;
+    padding-top: .5rem;
+}
+
+.header-menu label,
+.header-menu .notify-icon {
+    margin-right: 2rem;
+    position: relative;
+}
+
+.header-menu label span,
+.notify-icon span:first-child {
+    font-size: 1.3rem;
+}
+
+.notify-icon span:last-child {
+    position: absolute;
+    background: var(--main-color);
+    height: 16px;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    right: -5px;
+    top: -5px;
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user div,
+.client-img {
+    height: 40px;
+    width: 40px;
+    margin-right: 1rem;
+}
+
+.user span:last-child {
+    display: inline-block;
+    margin-left: .3rem;
+    font-size: .8rem;
+}
+
+main {
+    margin-top: 60px;
+}
+
+.page-header {
+    padding: 1.3rem 1rem;
+    background: #E9edf2;
+    border-bottom: 1px solid #dee2e8;
+}
+
+.page-header h1,
+.page-header small {
+    color: #74767d;
+}
+
+.page-content {
+    padding: 1.3rem 1rem;
+    background: #f1f4f9;
+    width: 100%;
+    height: 100vh;
+    /* Full viewport height */
+    box-sizing: border-box;
+    /* Ensures padding doesn't exceed 100vh */
+}
+
+
+.analytics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2rem;
+    margin-top: .5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
+    background: #fff;
+    padding: 1rem;
+    border-radius: 3px;
+}
+
+.card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-head h2 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.card-head span {
+    font-size: 3.2rem;
+    color: var(--text-grey);
+}
+
+.card-progress small {
+    color: #777;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.card-indicator {
+    margin: .7rem 0rem;
+    height: 10px;
+    border-radius: 4px;
+    background: #e9edf2;
+    overflow: hidden;
+}
+
+.indicator {
+    height: 10px;
+    border-radius: 4px;
+}
+
+.indicator.one {
+    background: #22baa0;
+}
+
+.indicator.two {
+    background: #11a8c3;
+}
+
+.indicator.three {
+    background: #f6d433;
+}
+
+.indicator.four {
+    background: #f25656;
+}
+
+.records {
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
+    background: #fff;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.record-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* Ensure the header takes full width */
+}
+
+.add,
+.browse {
+    display: flex;
+    align-items: center;
+}
+
+.add span {
+    display: inline-block;
+    margin-right: .6rem;
+    font-size: .9rem;
+    color: #666;
+}
+
+input,
+button,
+select {
+    outline: none;
+}
+
+.add select,
+.browse input,
+.browse select {
+    height: 35px;
+    border: 1px solid #b0b0b0;
+    border-radius: 3px;
+    display: inline-block;
+    width: 175px;
+    padding: 0rem .5rem;
+    margin-right: .8rem;
+    color: black;
+}
+
+.add button {
+    background: var(--main-color);
+    color: #fff;
+    height: 37px;
+    border-radius: 4px;
+    padding: 0rem 1rem;
+    border: none;
+    font-weight: 600;
+}
+
+.browse input {
+    width: 150px;
+}
+
+.browse select {
+    width: 100px;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow: auto;
+    max-height: 700px;
+    border-radius: 10px;
+}
+
+.table-responsive1 {
+    width: 100%;
+    overflow: auto;
+    max-height: 500px;
+    border-radius: 10px;
+}
+
+.table-container {
+    overflow-y: auto;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+thead th {
+    position: sticky;
+    /* Make header sticky */
+    top: 0;
+    /* Stick to the top of the container */
+    background: white;
+    /* Shadow effect */
+
+    /* Background color to cover scrolling content */
+    z-index: 1;
+    /* Ensure header is above other content */
+    padding: 1rem 0rem;
+    text-align: left;
+    color: black;
+    font-size: .9rem;
+}
+
+table thead tr {
+    /* background: #e9edf2; */
+    background-color: white;
+    color: black;
+}
+
+table thead {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Shadow effect */
+}
+
+
+
+table thead th {
+    padding: 1rem 0rem;
+    text-align: left;
+    color: black;
+    font-size: .9rem;
+    border-bottom: 2px solid;
+    background-color: white;
+    /* Border to separate header from table body */
+}
+
+table thead th:first-child {
+    padding-left: 1rem;
+}
+
+table tbody td {
+    padding: 1rem 0rem;
+    color: 444;
+}
+
+table tbody td:first-child {
+    padding-left: 1rem;
+    /* color: var(--main-color); */
+    font-size: .9rem;
+}
+
+.table td,
+.table th {
+    margin: 0;
+    padding: 5px;
+}
+
+.table th {
+    margin: 0;
+    padding: 7px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid whitesmoke;
+
+}
+
+.client {
+    display: flex;
+    align-items: center;
+}
+
+.client-img {
+    margin-right: .5rem;
+    border: 2px solid #b0b0b0;
+    height: 45px;
+    width: 45px;
+}
+
+.client-info h4 {
+    color: #555;
+    font-size: .95rem;
+}
+
+.client-info small {
+    color: #777;
+}
+
+.actions span {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin-right: .5rem;
+}
+
+.paid {
+    display: inline-block;
+    text-align: center;
+    font-weight: 600;
+    color: var(--main-color);
+    background: #e5f8ed;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    font-size: .8rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.custom-btn {
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+    outline: none;
+    font-size: 15px;
+}
+
+.btn-2 {
+    background: #004B5D;
+    background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+    border: none;
+}
+
+.btn-2:before {
+    height: 0%;
+    width: 2px;
+}
+
+.btn-2:hover {
+    box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+        -4px -4px 6px 0 rgba(116, 125, 136, .5),
+        inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+        inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+}
+
+
+.navbar,
+.navbar1 {
+    border-radius: 5px;
+}
+
+.alert-container {
+    margin-top: 10px;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+    /* Light gray background on hover */
+    cursor: pointer;
+    /* Change cursor to indicate clickable row */
+}
+
+
+/* Transparent / Minimal Scrollbar */
+.table-responsive1::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+
+.table-responsive1::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    /* Light, almost transparent thumb */
+    border-radius: 4px;
+}
+
+.table-responsive1::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+/* Transparent / Minimal Scrollbar */
+.table-responsive::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: black;
+    /* Light, almost transparent thumb */
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn4 {
+        font-size: 14px;
+        padding: 8px 12px;
+        /* Adjusted padding for smaller screens */
+    }
+
+    .row1 {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn4 {
+        font-size: 12px;
+        padding: 6px 10px;
+        /* Further adjusted padding */
+    }
+}
+
+@media (max-width: 768px) {
+    .flex-item {
+        flex: 1 1 100%;
+    }
+}
+
+
+
+
+@media only screen and (max-width: 1200px) {
+    .analytics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .analytics {
+        grid-template-columns: 100%;
+    }
+
+    .sidebar {
+        left: -165px;
+        z-index: 90;
+    }
+
+    header {
+        left: 0;
+        width: 100%;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #menu-toggle:checked~.sidebar {
+        left: 0;
+    }
+
+    #menu-toggle:checked~.sidebar {
+        width: 165px;
+    }
+
+    #menu-toggle:checked~.sidebar .side-header span {
+        display: inline-block;
+    }
+
+    #menu-toggle:checked~.sidebar .profile,
+    #menu-toggle:checked~.sidebar .side-menu a small {
+        display: block;
+    }
+
+    #menu-toggle:checked~.sidebar .side-menu a span {
+        font-size: 1.7rem;
+    }
+
+    #menu-toggle:checked~.main-content header {
+        left: 0px;
+    }
+
+    table {
+        width: 900px;
+    }
+
+    #content-table {
+        width: 900px;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .content-table {
+        font-size: 0.8em;
+        width: 50%;
+    }
+
+    .content-table th,
+    .content-table td {
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-table {
+        font-size: 0.7em;
+        width: 50%;
+    }
+
+    .content-table th,
+    .content-table td {
+        padding: 8px 10px;
+    }
+}
+
+
+.button-container1 h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #007AFF;
+    /* Apple Blue */
+    letter-spacing: 1px;
+    background: linear-gradient(45deg, #007AFF, #34AADC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* top nav bar stylings */
+
+
+.line {
+    margin-top: 10px;
+    height: 2px;
+    background-color: rgb(82, 79, 79);
+}
+
+.menu-icon {
+    display: none;
+}
+
+/* Base styles for links */
+.link {
+    display: inline-block;
+    padding: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    color: transparent;
+    background: linear-gradient(135deg, #c0392b, #8e44ad, #2c3e50);
+    background-clip: text;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+li.active a.link {
+    background: linear-gradient(135deg, #f39c12, #8e44ad, #2c3e50);
+    /* Bright and dark gradient */
+    color: transparent;
+    /* Keeps text color transparent for background-clip */
+    background-clip: text;
+    /* Keep gradient on text */
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: transparent;
+    /* Transparent background so gradient shows */
+}
+
+/* Optional: If you want background color and text color change together */
+li.active a.link {
+    color: white;
+    /* Ensure text is visible on the gradient background */
+    background: linear-gradient(135deg, #f39c12, #8e44ad, #2c3e50);
+    /* Bright and dark gradient */
+}
+
+.navbar1 {
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.navitems1 {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Add this to space out items in horizontal layout */
+}
+
+.navbar1 ul {
+    display: flex;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.menu-icon1 {
+    display: none;
+}
+
+.menu-icon1 i {
+    color: #fff;
+    font-size: 20px;
+}
+
+@media (max-width: 600px) {
+    .navbar1 ul {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #004274;
+        gap: 0;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .navbar1 ul li {
+        padding: 20px;
+        padding-top: 0;
+    }
+
+    .menu-icon1 {
+        display: block;
+    }
+
+    #menuList1 {
+        transition: all 0.5s;
+    }
+}
+
+/* Specific styles for links when hovered on mobile */
+@media (max-width: 600px) {
+    .link:hover {
+        background-color: #003d57;
+        color: white;
+    }
+
+    .link {
+        padding: 12px;
+        font-size: 18px;
+        text-align: center;
+    }
+}
+
+
+
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Active link styling */
+.dropdown-content a.active {
+    background: linear-gradient(135deg, #0072ff, #004e92);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Dropdown button */
+/* Dropdown button */
+.dropbtn,
+.dropbtn1 {
+    display: inline-block;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    color: transparent;
+    background: linear-gradient(135deg, #c0392b, #8e44ad, #2c3e50);
+    /* Gradient background */
+    background-clip: text;
+    /* Keep gradient on text */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
+}
+
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: linear-gradient(135deg, #1f5ed3, #36b4d3, #13547a);
+    /* New gradient with dark and bright tones */
+    min-width: 200px;
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
+    /* Increased box shadow for a stronger depth effect */
+    border-radius: 8px;
+    /* Slightly larger border-radius for a softer look */
+    z-index: 9999;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: white;
+    /* Change text color for contrast */
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background: linear-gradient(135deg, #8e44ad, #c0392b);
+    /* Slightly different hover effect */
+    color: white;
+    font-weight: bold;
+}
+
+/* Links inside the dropdown */
+.dropdown-content li {
+    list-style: none;
+}
+
+/* Show the dropdown menu on click */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+
+
+
+/* Active state styling */
+.timebar input[type="radio"]:checked+label {
+    color: transparent;
+    font-weight: bold;
+    position: relative;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    /* Blue gradient */
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Apply gradient color to the icon inside the active label */
+.timebar input[type="radio"]:checked+label i {
+    color: transparent;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Underline effect for active selection */
+.timebar input[type="radio"]:checked+label::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border-radius: 2px;
+}
+
+/* Layout styling */
+.timebar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.timebar li {
+    flex: 1 1 20%;
+    margin: 5px;
+    text-align: center;
+}
+
+/* Link styling with gradient */
+.link1 {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: transparent;
+    background: linear-gradient(135deg, #00c6ff, #0072ff, #004e92);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background 0.3s ease;
+    /* text-shadow: 2px 2px 4px rgba(83, 83, 81, 0.5); */
+}
+
+/* Hover effect with gradient */
+.link1:hover {
+    background: linear-gradient(135deg, #0072ff, #004e92, #002b5b);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Icon gradient effect */
+.link1 i {
+    color: transparent;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Hover effect for icons */
+.link1:hover i {
+    background: linear-gradient(135deg, #0072ff, #004e92, #002b5b);
+    -webkit-background-clip: text;
+    background-clip: text;
+}

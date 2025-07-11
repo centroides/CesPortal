@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase" class="active">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['togglePurchaseRequest'] == 'On' %}
+                        <li><a href="{{ url_for('pur_purchase') }}" class="link"><i class="fas fa-cart-plus"></i>
+                                PR's</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglePurchaseOrder'] == 'On' %}
+                        <li><a href="{{ url_for('pur_po') }}" class="link"><i class="fa-solid fa-folder-open"></i>
+                                PO's</a>
+                        </li>
+                        {% endif %}
+
+
+
+                        {% if user_access['togglePOUpdate'] == 'On' %}
+                        <li><a href="{{ url_for('pur_poupdate') }}" class="link"><i class="fa-solid fa-pen-nib"></i> PO
+                                Update</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglepurSuppliers'] == 'On' %}
+                        <li><a href="{{ url_for('pur_suppliers') }}" class="link"><i class="fa-solid fa-file-alt"></i>
+                                Suppliers</a></li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <form class="p-3" action="/pur_genpr" method="POST" enctype="multipart/form-data">
+
+                <div class="container">
+
+                    <div class="double-container">
+
+                        <div class="flex-item" style="display: none;">
+                            <label for="PR_no" class="form-label">PR Number</label>
+                            <input type="text" class="form-control" id="PR_no" name="PR_no" readonly value="Auto Gen"
+                                style="background-color: antiquewhite;">
+                        </div>
+
+                        <div class="flex-item" style="display: none;">
+                            <label for="PR_Date" class="form-label">PR Date<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="PR_Date" name="PR_Date"
+                                value="{{ current_date }}" readonly style="background-color: antiquewhite;" required>
+                        </div>
+
+
+                        <div class="flex-item">
+                            <label for="project_id" class="form-label">Project Number <span
+                                    style="color: red;">*</span></label>
+                            <select name="project_id" style="padding: 5px; width: 100%;" required>
+                                <option value="">Project ID</option>
+                                {% for project in projects %}
+                                <option value="{{ project[0] }}">{{ project[0] }} - {{ project[1] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="flex-row">
+
+                            <div class="flex-item">
+                                <label for="Attn" class="form-label">Attn <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" id="Attn" name="Attn" required>
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="Quote_Ref" class="form-label">Quote Ref <span
+                                        style="color: red;">*</span></label>
+                                <input type="text" class="form-control" id="Quote_Ref" name="Quote_Ref" required>
+                            </div>
+
+                        </div>
+
+                        <div class="flex-row">
+
+                            <div class="flex-item">
+                                <label for="Expenses" class="form-label">Expenses <span
+                                        style="color: red;">*</span></label>
+                                <select class="form-control" id="Expenses" name="Expenses" required
+                                    onchange="updateDescriptionOptions()">
+                                    <option value="" disabled selected>Select Type</option>
+                                    <option value="2000">Material</option>
+                                    <option value="3000">Sub Contract</option>
+                                    <option value="4000">Site</option>
+                                    <option value="500">Others</option>
+                                </select>
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="Description" class="form-label">Description<span
+                                        style="color: red;">*</span></label>
+                                <select class="form-control" id="Description" name="Description" required
+                                    onchange="updateCode()">
+                                    <option value="" disabled selected>Select Description</option>
+                                </select>
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="code_number" class="form-label">Code</label>
+                                <input type="number" class="form-control" id="code_number" name="code_number" readonly
+                                    style="background-color: antiquewhite;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="double-container">
+
+                        <div class="flex-row">
+
+                            <div class="flex-item">
+
+                                <label for="Supplier_Name" class="form-label">Supplier Name<span
+                                        style="color: red;">*</span></label>
+                                <select class="form-control" id="Supplier_Name" name="Supplier_Name" required>
+                                    <option value="">Select Supplier</option>
+                                    {% for supplier in Supplier_Names %}
+                                    <option value="{{ supplier }}">{{
+                                        supplier }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="Payment_Terms" class="form-label">Payment Terms <span
+                                        style="color: red;">*</span></label>
+                                <input type="text" class="form-control" id="Payment_Terms" name="Payment_Terms"
+                                    required>
+                            </div>
+
+                        </div>
+
+                        <div class="flex-row">
+
+                            <div class="flex-item">
+                                <label for="Currency" class="form-label">Currency <span
+                                        style="color: red;">*</span></label>
+                                <input type="text" class="form-control" id="Currency" name="Currency" required>
+                            </div>
+
+
+                            <div class="flex-item">
+                                <label for="leat_time" class="form-label">Lead Time<span
+                                        style="color: red;">*</span></label>
+                                <input type="number" class="form-control" id="leat_time" name="leat_time" required>
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="Unit" class="form-label">Unit <span style="color: red;">*</span></label>
+                                <select class="form-control" id="Unit" name="Unit" required>
+                                    <option value="" disabled selected>Select Unit</option>
+                                    <option value="Days" selected>Days</option>
+                                    <option value="Weeks">Weeks</option>
+                                    <option value="Months">Months</option>
+                                </select>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="flex-row">
+                            <div class="flex-item">
+                                <label for="Contact" class="form-label">Select Username</label>
+                                <select class="form-control" id="Contact" name="Contact" required>
+                                    <option value="" disabled selected>Select a username</option>
+                                    {% for username in usernames %}
+                                    <option value="{{ username }}" {% if username==user['name'] %}selected{% endif %}>
+                                        {{ username }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="flex-item">
+                                <label for="number" class="form-label">Phone No</label>
+                                <input type="number" class="form-control" id="number" name="number">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="double-container">
+
+                        <label for="Delivery" class="form-label">Delivery <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Delivery" name="Delivery"
+                            value="{{  'Centroid Engineering Solutions Pte Ltd' }}" required>
+
+                        <label for="Address_Line1" class="form-label">Address Line1<span
+                                style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Address_Line1" name="Address_Line1"
+                            value="{{  '11, Woodlands close, #07-10' }}" required>
+
+                        <label for="Address_Line2" class="form-label">Address Line2<span
+                                style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Address_Line2" name="Address_Line2"
+                            value="{{ 'Singapore - 737853' }}" required>
+
+                    </div>
+
+                    <div class="double-container">
+
+                        <label for="comments" class="form-label">Comments</label>
+                        <textarea class="form-control" id="comments" name="comments" rows="2"></textarea>
+
+
+
+                        <style>
+                            .drop-zone {
+                                border: 2px dashed #007bff;
+                                border-radius: 10px;
+                                padding: 5px;
+                                text-align: center;
+                                cursor: pointer;
+                                transition: 0.3s;
+                                min-height: 75px;
+                                max-height: 75px;
+                            }
+
+                            .drop-zone:hover {
+                                background-color: #f8f9fa;
+                            }
+
+                            .drop-zone p {
+                                margin: 0;
+                                font-weight: bold;
+                                color: #007bff;
+                                font-size: 11px;
+
+                            }
+
+                            .drop-zone input {
+                                display: none;
+                            }
+
+                            .file-preview {
+                                color: #333;
+                            }
+                        </style>
+
+                        <div class="flex-item">
+                            <label for="attachment" class="form-label">Attach Quote<span
+                                    style="color: red;">*</span></label>
+                            <div class="drop-zone" onclick="document.getElementById('attachment').click()"
+                                ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                                <p>Drag & Drop here or click to select</p>
+                                <input type="file" class="form-control" id="attachment" name="attachment" accept="*/*"
+                                    required onchange="updateFileName(this)">
+                                <div class="file-preview" id="filePreview"></div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function handleDragOver(event) {
+                                event.preventDefault();
+                                event.dataTransfer.dropEffect = "copy";
+                            }
+
+                            function handleDrop(event) {
+                                event.preventDefault();
+                                const fileInput = document.getElementById('attachment');
+                                fileInput.files = event.dataTransfer.files;
+                                updateFileName(fileInput);
+                            }
+
+                            function updateFileName(input) {
+                                const filePreview = document.getElementById("filePreview");
+                                if (input.files.length > 0) {
+                                    filePreview.textContent = "" + input.files[0].name;
+                                } else {
+                                    filePreview.textContent = "";
+                                }
+                            }
+                        </script>
+
+                    </div>
+
+                </div>
+
+                <div class="records table-responsive">
+
+                    <div class="flex-item">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                            {% if category == 'pur_pr_genrated' %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                            </div>
+                            {% elif category == 'pur_pr_genrated1' %}
+                            <div class="alert alert-danger">
+                                {{ message }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            setTimeout(function () {
+                                let alerts = document.querySelectorAll(".alert");
+                                alerts.forEach(alert => {
+                                    alert.style.transition = "opacity 0.5s ease";
+                                    alert.style.opacity = "0";
+                                    setTimeout(() => alert.remove(), 500); // Remove after fade-out
+                                });
+                            }, 5000); // 10 seconds
+                        });
+                    </script>
+
+
+                    <div class="table-responsive1" style=" background-color: #e6f2ff;">
+
+                        <table class="overhead_table" width="100%" id="dynamicTable">
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Part No</th>
+                                    <th class="text-center">Description</th>
+                                    <th class="text-center">UOM</th>
+                                    <th class="text-center">Delivary Date</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit Price</th>
+                                    <th class="text-center" style="width: 7%;">Total</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in range(2) %}
+                                <tr>
+                                    <td class="text-center">{{ i + 1 }}</td>
+                                    <td><input class="form-control" type="text" name="part_no[]" class="form-item">
+                                    </td>
+                                    <td><input class="form-control" type="text" name="description[]" class="form-item"
+                                            required></td>
+                                    <td><input class="form-control" type="text" name="uom[]" class="form-item"
+                                            maxlength="5" required></td>
+                                    <td><input class="form-control" type="date" name="excepted_date[]"
+                                            class="form-item"></td>
+                                    <td><input class="form-control" type="number" name="quantity[]" class="form-item"
+                                            required oninput="calculateTotal(this)"></td>
+                                    <td><input class="form-control" type="number" step="any" name="unit_price[]"
+                                            class="form-item" required oninput="calculateTotal(this)"></td>
+                                    <td><input class="form-control" type="text" name="total[]" class="form-item"
+                                            readonly></td>
+                                    <td>
+                                        <button type="button" class="btn-delete" style="color: red;"
+                                            onclick="deleteRow(this)">
+                                            <ion-icon name="trash" class="fa-solid fa-trash"
+                                                style="font-size: 16px;"></ion-icon>
+
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <div class="row1">
+                            <button type="button" class="custom-btn btn-2" onclick="addRow()">+</button>
+                            <div class="text-center mt-3">
+                                <label> Total : <span id="sumTotal" style="color: #004B5D;">0.00</span></label>
+                            </div>
+
+                            <div class="form-check m-3" style="display: flex;">
+                                <input class="form-check-input" type="checkbox" id="gstCheckbox" name="gstCheckbox">
+                                <label class="form-check-label" for="gstCheckbox"
+                                    style="margin-top: 7px; margin-left: 5px;">GST</label>
+                            </div>
+
+                            <div class='flex-item' style="display: none;">
+                                <input type="text" class="form-control" name="action" value="generate_pr">
+                            </div>
+
+                            <div class="pr-actions">
+                                <button type="submit" class="custom-btn btn-2" id="generatePRButton"
+                                    onclick="validateForm(event)">Generate PR</button>
+                            </div>
+
+                            <script>
+
+                                function validateForm(event) {
+                                    // Prevent form submission for validation
+                                    event.preventDefault();
+
+                                    const projectId = document.querySelector('select[name="project_id"]');
+                                    if (!projectId || projectId.value === "") {
+                                        alert('Please select a Project Number before submitting the form.');
+                                        projectId.focus(); // Focus on the dropdown for user convenience
+                                        return; // Stop further execution if validation fails
+                                    }
+                                    const requiredFields = [
+                                        'project_id', 'PR_no', 'PR_Date', 'Attn', 'Quote_Ref', 'Expenses',
+                                        'Description', 'Supplier_Name', 'Payment_Terms', 'Currency', 'leat_time',
+                                        'Unit', 'Delivery', 'Address_Line1', 'Address_Line2'
+                                    ];
+
+                                    for (const fieldId of requiredFields) {
+                                        const field = document.getElementById(fieldId);
+
+
+                                        if (field && (!field.value.trim() || field.value === "")) {
+                                            alert(`The field "${fieldId}" is required. Please fill it in.`);
+                                            field.focus(); // Focus on the invalid field for user convenience
+                                            return;
+                                        }
+                                    }
+                                    // Get all rows in the table
+                                    const rows = document.querySelectorAll('#dynamicTable tbody tr');
+
+
+                                    // Loop through each row and validate fields
+                                    for (let row of rows) {
+                                        const quantity = row.querySelector('input[name="quantity[]"]');
+                                        const unitPrice = row.querySelector('input[name="unit_price[]"]');
+
+                                        // Check if quantity or unit price is empty or invalid
+                                        if (!quantity.value || !unitPrice.value) {
+                                            alert('Please fill out Quantity and Unit Price for all rows with valid values.');
+                                            return; // Stop further execution if validation fails
+                                        }
+                                    }
+
+
+
+
+                                    // If validation passes, proceed with GST check
+                                    checkGST();
+
+                                    // Optionally disable the button
+                                    disableButton();
+
+                                    // Submit the form after validation
+                                    setTimeout(() => {
+                                        event.target.closest('form').submit();
+                                    }, 100); // Delay for user feedback (optional)
+                                }
+
+                                function disableButton() {
+                                    const btn = document.getElementById('generatePRButton');
+                                    if (btn) {
+                                        btn.disabled = true;
+                                        btn.innerText = 'Processing...';
+                                    }
+                                }
+
+                            </script>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </form>
+
+
+
+
+        </div>
+
+    </div>
+
+    <style>
+        /* Basic styling for the table */
+        .overhead_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+        }
+
+        .overhead_table th,
+        .overhead_table td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+            /* XL-like size */
+            height: 30px;
+            /* Control the height of input fields */
+        }
+
+        /* Set specific column widths */
+        .overhead_table th:nth-child(1),
+        .overhead_table td:nth-child(1) {
+            width: 3%;
+            /* Category column width */
+        }
+
+        .overhead_table th:nth-child(2),
+        .overhead_table td:nth-child(2) {
+            width: 12%;
+            /* Category column width */
+        }
+
+        .overhead_table th:nth-child(3),
+        .overhead_table td:nth-child(3) {
+            width: 45%;
+            /* Sub Category column width */
+        }
+
+        .overhead_table th:nth-child(4),
+        .overhead_table td:nth-child(4) {
+            width: 5%;
+            /* Item Name column width */
+        }
+
+        .overhead_table th:nth-child(5),
+        .overhead_table td:nth-child(5) {
+            width: 5%;
+            /* Invoice Number column width */
+        }
+
+        .overhead_table th:nth-child(6),
+        .overhead_table td:nth-child(6) {
+            width: 5%;
+            /* Currency column width */
+        }
+
+        .overhead_table th:nth-child(7),
+        .overhead_table td:nth-child(7) {
+            width: 5%;
+            /* Rate column width */
+        }
+
+        .overhead_table th:nth-child(8),
+        .overhead_table td:nth-child(8) {
+            width: 3%;
+            /* Amount column width */
+        }
+
+        .overhead_table th:nth-child(9),
+        .overhead_table td:nth-child(9) {
+            width: 5%;
+            /* GST % column width */
+        }
+
+        .overhead_table th:nth-child(10),
+        .overhead_table td:nth-child(10) {
+            width: 8%;
+            /* GST Value column width */
+        }
+
+        .overhead_table th:nth-child(11),
+        .overhead_table td:nth-child(11) {
+            width: 11%;
+            /* Total column width */
+        }
+
+        .overhead_table th:nth-child(12),
+        .overhead_table td:nth-child(12) {
+            width: 16%;
+            /* Remarks column width */
+        }
+
+        .add-row-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-row-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            th {
+                position: absolute;
+                left: -9999px;
+                top: -9999px;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+            }
+
+            td:before {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+
+            td:nth-of-type(1):before {
+                content: "Category";
+            }
+
+            td:nth-of-type(2):before {
+                content: "Sub Category";
+            }
+
+            td:nth-of-type(3):before {
+                content: "Item Name";
+            }
+
+            td:nth-of-type(4):before {
+                content: "Invoice Number";
+            }
+
+            td:nth-of-type(5):before {
+                content: "Currency";
+            }
+
+            td:nth-of-type(6):before {
+                content: "Rate";
+            }
+
+            td:nth-of-type(7):before {
+                content: "Amount";
+            }
+
+            td:nth-of-type(8):before {
+                content: "GST %";
+            }
+
+            td:nth-of-type(9):before {
+                content: "GST Value";
+            }
+
+            td:nth-of-type(10):before {
+                content: "Total";
+            }
+
+            td:nth-of-type(11):before {
+                content: "Remarks";
+            }
+        }
+
+        /* Remove styling from table elements */
+        .overhead_table td {
+            margin: 0;
+            padding: 0;
+        }
+
+        .button-container1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+        }
+    </style>
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: space-around;
+            gap: 10px;
+            border-radius: 5px;
+            background-color: white;
+            padding: 5px;
+            width: 100%;
+        }
+
+        .double-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #e6f2ff;
+            /* Light blue */
+
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+            box-sizing: border-box;
+        }
+
+
+        .form-label {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+
+            .row1 {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flex-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .double-container {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+
+        const descriptionOptions = {
+            "2000": [
+                { value: "2001", text: "Mechanical" },
+                { value: "2002", text: "Electrical" },
+                { value: "2003", text: "Instrument" },
+                { value: "2004", text: "PLC Hardware" },
+                { value: "2005", text: "Panel Hardware" },
+                { value: "2006", text: "Consumables" },
+                { value: "2007", text: "Tools" },
+                { value: "2008", text: "Civil" },
+                { value: "2009", text: "Computer" },
+            ],
+            "3000": [
+                { value: "3001", text: "Scaffolding" },
+                { value: "3002", text: "Programming" },
+                { value: "3003", text: "E&I Fabrication" },
+                { value: "3004", text: "Mechanical Fabrication" },
+                { value: "3005", text: "Manpower Supply" },
+                { value: "3006", text: "LEW" },
+                { value: "3007", text: "Calibration" },
+                { value: "3008", text: "Equipment Rent" },
+                { value: "3009", text: "Servicing" },
+                { value: "3010", text: "Others" }
+            ],
+            "4000": [],
+            "500": [
+                { value: "504", text: "Vehicle" },
+                { value: "510", text: "Training" },
+                { value: "511", text: "Medical" },
+                { value: "512", text: "Utilities" },
+                { value: "513", text: "Travel" },
+                { value: "514", text: "Safety" },
+                { value: "515", text: "Office" },
+                { value: "517", text: "Calibration" },
+                { value: "519", text: "Entertainment" },
+                { value: "520", text: "Others" }
+            ]
+        };
+
+        function updateDescriptionOptions() {
+            const expensesSelect = document.getElementById('Expenses');
+            const descriptionSelect = document.getElementById('Description');
+            const selectedValue = expensesSelect.value;
+
+            // Clear existing options
+            descriptionSelect.innerHTML = '<option value="" disabled selected>Select Description</option>';
+
+            // Populate new options
+            if (descriptionOptions[selectedValue]) {
+                descriptionOptions[selectedValue].forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.value;
+                    newOption.text = option.text;
+                    descriptionSelect.appendChild(newOption);
+                });
+            }
+        }
+
+        function updateCode() {
+            const descriptionSelect = document.getElementById('Description');
+            const codeInput = document.getElementById('code_number');
+            const selectedOption = descriptionSelect.options[descriptionSelect.selectedIndex];
+
+            codeInput.value = selectedOption ? selectedOption.value : '';
+        }
+
+        // Initialize the description options if there's a preselected Expenses Type
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDescriptionOptions();
+            updateCode();
+
+            // Select-all functionality for checkboxes
+            const selectAllCheckbox = document.getElementById('select-all-checkbox2');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_assets[]"]');
+
+            selectAllCheckbox.addEventListener('change', function () {
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var select = document.getElementById('Expenses');
+            var options = select.getElementsByTagName('option');
+
+            for (var i = 1; i < options.length; i++) {
+                if (i % 2 == 0) {
+                    options[i].classList.add('option-color-even');
+                } else {
+                    options[i].classList.add('option-color-odd');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var select = document.getElementById('Supplier_Name');
+            var options = select.getElementsByTagName('option');
+
+            for (var i = 1; i < options.length; i++) {
+                if (i % 2 == 0) {
+                    options[i].classList.add('option-color-even');
+                } else {
+                    options[i].classList.add('option-color-odd');
+                }
+            }
+        });
+    </script>
+
+    <style>
+        /* alert message */
+        .alert-container {
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+
+    <style>
+        /* table */
+        .text-center {
+
+            align-items: center;
+            margin: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: center;
+            /* Ensure this is applied */
+            gap: 10px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .table thead th:nth-child(1),
+        .table tbody td:nth-child(1),
+        .table thead th:nth-child(2),
+        .table tbody td:nth-child(2),
+        .table thead th:nth-child(3),
+        .table tbody td:nth-child(3),
+        .table thead th:nth-child(4),
+        .table tbody td:nth-child(4),
+        .table thead th:nth-child(5),
+        .table tbody td:nth-child(5),
+        .table thead th:nth-child(6),
+        .table tbody td:nth-child(6),
+        .table thead th:nth-child(7),
+        .table tbody td:nth-child(7),
+        .table thead th:nth-child(10),
+        .table tbody td:nth-child(10) {
+            text-align: center;
+        }
+
+        .row1 {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .row2 {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-delete ion-icon {
+            font-size: 1.6em;
+        }
+
+        .fa-trash {
+            margin-left: 5px;
+        }
+    </style>
+
+    <script>
+
+
+        function deleteRow(button) {
+            var row = button.closest('tr');
+            row.remove();
+            updateRowIndices();
+            updateSumTotal(); // Recalculate totals after row deletion
+        }
+
+        function addRow() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+
+            // Create cells in the correct order
+            var indexCell = newRow.insertCell(0);
+            var partNoCell = newRow.insertCell(1);
+            var descriptionCell = newRow.insertCell(2);
+            var uomCell = newRow.insertCell(3);
+            var dateCell = newRow.insertCell(4);
+            var quantityCell = newRow.insertCell(5);
+            var unitPriceCell = newRow.insertCell(6);
+            var totalCell = newRow.insertCell(7);
+            var actionCell = newRow.insertCell(8);
+
+            // Populate each cell with appropriate input fields
+            indexCell.className = 'text-center';
+            indexCell.innerHTML = table.rows.length;
+
+            partNoCell.innerHTML = '<input class="form-control" type="text" name="part_no[]" class="form-item">';
+            descriptionCell.innerHTML = '<input class="form-control" type="text" name="description[]" class="form-item" required>';
+            uomCell.innerHTML = '<input class="form-control" type="text" name="uom[]" class="form-item" maxlength="5" required>';
+            dateCell.innerHTML = '<input class="form-control" type="date" name="excepted_date[]" class="form-item">';
+            quantityCell.innerHTML = '<input class="form-control" type="number" name="quantity[]" class="form-item" required oninput="calculateTotal(this)">';
+            unitPriceCell.innerHTML = '<input class="form-control" type="number" step="any" name="unit_price[]" class="form-item" required oninput="calculateTotal(this)">';
+            totalCell.innerHTML = '<input class="form-control" type="text" name="total[]" class="form-item" readonly>';
+            actionCell.innerHTML = `
+        <button type="button" class="btn-delete" style="color: red;" onclick="deleteRow(this)">
+            <ion-icon name="trash" class="fa-solid fa-trash" style="font-size: 16px;"></ion-icon>
+
+        </button>
+    `;
+
+            updateRowIndices();
+        }
+
+        function updateRowIndices() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            for (var i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerHTML = i + 1;
+            }
+        }
+
+        function calculateTotal(input) {
+            var row = input.closest('tr');
+            var quantity = parseFloat(row.querySelector('input[name="quantity[]"]').value);
+            var unitPrice = parseFloat(row.querySelector('input[name="unit_price[]"]').value);
+            var total = quantity * unitPrice;
+            row.querySelector('input[name="total[]"]').value = total.toFixed(2);
+
+            updateSumTotal(); // Update the sum of totals
+        }
+
+        function updateSumTotal() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            var sumTotal = 0.0;
+            for (var i = 0; i < table.rows.length; i++) {
+                var total = parseFloat(table.rows[i].querySelector('input[name="total[]"]').value);
+                sumTotal += total;
+            }
+            document.getElementById('sumTotal').innerText = sumTotal.toFixed(2); // Display sum of totals
+        }
+
+
+        function checkGST(event) {
+            var gstCheckbox = document.getElementById('gstCheckbox');
+            if (!gstCheckbox.checked) {
+                var confirmation = confirm("To generate the PR without GST, press Cancel. To cancel the form submission, press OK.");
+                if (confirmation === true) {
+                    event.preventDefault(); // Prevent form submission
+                }
+                // If confirmation is false, allow form submission to proceed
+            }
+        }
+
+    </script>
+
+    <style>
+        .item-cell {
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        .table thead th:nth-child(1),
+        .table tbody td:nth-child(1),
+
+        .table thead th:nth-child(2),
+        .table tbody td:nth-child(2),
+
+        .table thead th:nth-child(3),
+        .table tbody td:nth-child(3),
+
+        .table thead th:nth-child(8),
+        .table tbody td:nth-child(8),
+
+        .table thead th:nth-child(9),
+        .table tbody td:nth-child(9),
+
+        .table thead th:nth-child(10),
+        .table tbody td:nth-child(10),
+
+        .table thead th:nth-child(11),
+        .table tbody td:nth-child(11),
+
+        .table thead th:nth-child(7),
+        .table tbody td:nth-child(7) {
+            text-align: center;
+        }
+
+        .table thead th:nth-child(4),
+        .table tbody td:nth-child(4),
+        .table thead th:nth-child(6),
+        .table tbody td:nth-child(6),
+        .table thead th:nth-child(5),
+        .table tbody td:nth-child(5) {
+            text-align: left;
+        }
+
+
+        .subtableitems thead th:nth-child(3),
+        .subtableitems tbody td:nth-child(3) {
+            text-align: left;
+        }
+    </style>
+
+
+</body>
+
+</html>

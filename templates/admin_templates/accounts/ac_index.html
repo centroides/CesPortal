@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts" class="active">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            {% if user_access['toggleClient'] == 'On' %}
+            <li>
+              <a href="{{ url_for('client_details') }}" class="link">
+                <i class="fa-solid fa-handshake-simple" style="margin-right: 5px;"></i> Clients
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleSuppliers'] == 'On' %}
+            <li>
+              <a href="{{ url_for('vendor') }}" class="link">
+                <i class="fa-sharp fa-solid fa-store" style="margin-right: 5px;"></i> Suppliers
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleExpenses'] == 'On' %}
+            <li>
+              <a href="{{ url_for('ac_pay_req') }}" class="link">
+                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Expenses
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleInvoice'] == 'On' %}
+            <li>
+              <a href="{{ url_for('reports') }}" class="link">
+                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Reports
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleInvoice'] == 'On' %}
+            <li>
+              <a href="{{ url_for('invoice') }}" class="link">
+                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Invoice
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleOverHeadPayReq'] == 'On' %}
+            <li>
+              <a href="{{ url_for('add_expense') }}" class="link">
+                <i class="fa-solid fa-money-bill-wave" style="margin-right: 5px;"></i> Add Expenses
+              </a>
+            </li>
+            {% endif %}
+
+
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+
+
+      <div class="dashboardcontaier">
+
+        <style>
+          .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 350px;
+            border-radius: 10px;
+          }
+
+          .dashboard-container {
+            display: grid;
+            grid-template-columns: 19% 19% 19% 28% 12.5%;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0eafc, #9ebbe4);
+          }
+
+          .dashboard-card {
+            background: #f0f4f8;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px;
+            min-height: 250px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+          }
+
+          .dashboard-card h3 {
+            color: #918d8d;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+          }
+
+          .dashboard-card canvas {
+            width: 100%;
+            height: 200px;
+          }
+
+          .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          .card-1 {
+            background: white;
+            border: 1px solid #ff6f3c;
+          }
+
+          .card-2 {
+            background: white;
+            border: 1px solid #4d089a;
+          }
+
+          .card-3 {
+            background: white;
+            border: 1px solid #00bbf0;
+          }
+
+          .card-5 {
+            background: white;
+            border: 1px solid #7e29df;
+          }
+
+          .card-4 {
+            background: white;
+            border: 1px solid #eb2632;
+          }
+
+          /* --- New styles for second row --- */
+
+          .row-2-container {
+            display: contents;
+            /* Allow to share same parent grid */
+          }
+
+          .row-2-card-1,
+          .row-2-card-2 {
+            background: #fff;
+            grid-column: span 1;
+            min-height: 400px;
+            max-height: 400px;
+          }
+
+          .row-2-card-1 {
+            width: 100%;
+          }
+
+          .row-2-card-2 {
+            width: 100%;
+          }
+
+          .row-2-card-3 {
+            grid-column: span 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .nested-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Default for the first row */
+            gap: 10px;
+            width: 100%;
+          }
+
+          .nested-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-weight: 500;
+          }
+
+          /* Media query to change layout to 2 columns for the second and third rows */
+          @media (min-width: 600px) {
+            .nested-cards-grid {
+              grid-template-columns: repeat(2, 1fr);
+              /* Two cards per row from the second row onwards */
+            }
+          }
+
+          /* For the first card to span the whole row */
+          .nested-card:first-child {
+            grid-column: span 2;
+            /* Make the first card span the entire width of the grid */
+          }
+        </style>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+        <div class="dashboard-container">
+
+          <div class="dashboard-card card-1">
+
+            <canvas id="statusChart"></canvas>
+
+            <script>
+
+              const rawData = {{ payment_status_count | tojson }};
+              const statusLabels = rawData.map(item => item.status);
+              const statusData = rawData.map(item => item.count);
+              const total = statusData.reduce((a, b) => a + b, 0);
+
+              new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: {
+                  labels: statusLabels,
+                  datasets: [{
+                    data: statusData,
+                    backgroundColor: ['#442a9d', '#8293ff'],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutout: '75%',
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Payment Requests',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 0,
+                        bottom: 0
+                      }
+                    },
+                    legend: {
+                      position: 'right',
+                      align: 'center',
+                      labels: {
+                        boxWidth: 15,
+                        boxHeight: 15,
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        generateLabels: function (chart) {
+                          const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                          const labels = original.call(this, chart);
+                          labels.forEach(label => {
+                            label.text = label.text.split('  ')[0];
+                          });
+                          return labels;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      font: {
+                        weight: 'bold',
+                        size: 13
+                      },
+                      formatter: (value) => value
+                    }
+                  },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true
+                  }
+                },
+                plugins: [
+                  ChartDataLabels,
+                  {
+                    id: 'centerText',
+                    beforeDraw: function (chart) {
+                      const { width, height, ctx } = chart;
+                      ctx.save();
+                      ctx.font = 'bold 12px sans-serif';
+                      ctx.fillStyle = '#000';
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'middle';
+                      ctx.fillText('Total - ' + total, width / 3, height / 1.9);
+                      ctx.restore();
+                    }
+                  }
+                ]
+              });
+
+            </script>
+
+
+          </div>
+
+          <div class="dashboard-card card-2">
+
+            <canvas id="claimChart"></canvas>
+
+
+            <script>
+
+              const rawData2 = {{ claim_status_count | tojson }};
+              const statusLabels2 = rawData2.map(item => item.status);
+              const statusData2 = rawData2.map(item => item.count);
+              const total2 = statusData2.reduce((a, b) => a + b, 0);
+
+              new Chart(document.getElementById('claimChart'), {
+                type: 'doughnut',
+                data: {
+                  labels: statusLabels2,
+                  datasets: [{
+                    data: statusData2,
+                    backgroundColor: ['#007cb9', '#f95959'],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutout: '75%',
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Claims',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 0,
+                        bottom: 0
+                      }
+                    },
+                    legend: {
+                      position: 'right',
+                      align: 'center',
+                      labels: {
+                        boxWidth: 15,
+                        boxHeight: 15,
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        generateLabels: function (chart) {
+                          const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                          const labels = original.call(this, chart);
+                          labels.forEach(label => {
+                            label.text = label.text.split('  ')[0];
+                          });
+                          return labels;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      font: {
+                        weight: 'bold',
+                        size: 13
+                      },
+                      formatter: (value) => value
+                    }
+                  },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true
+                  }
+                },
+                plugins: [
+                  ChartDataLabels,
+                  {
+                    id: 'centerText',
+                    beforeDraw: function (chart) {
+                      const { width, height, ctx } = chart;
+                      ctx.save();
+                      ctx.font = 'bold 12px sans-serif';
+                      ctx.fillStyle = '#000';
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'middle';
+                      ctx.fillText('Total - ' + total2, width / 3, height / 1.9);
+                      ctx.restore();
+                    }
+                  }
+                ]
+              });
+
+            </script>
+
+
+          </div>
+
+          <div class="dashboard-card card-3">
+            <canvas id="invoiceChart"></canvas>
+
+
+            <script>
+
+              const rawData1 = {{ invoice_status_count | tojson }};
+              const statusLabels1 = rawData1.map(item => item.status);
+              const statusData1 = rawData1.map(item => item.count);
+              const total1 = statusData1.reduce((a, b) => a + b, 0);
+
+              new Chart(document.getElementById('invoiceChart'), {
+                type: 'doughnut',
+                data: {
+                  labels: statusLabels1,
+                  datasets: [{
+                    data: statusData1,
+                    backgroundColor: ['#ffc93c', '#155263'],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutout: '75%',
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Invoices',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 0,
+                        bottom: 0
+                      }
+                    },
+                    legend: {
+                      position: 'right',
+                      align: 'center',
+                      labels: {
+                        boxWidth: 15,
+                        boxHeight: 15,
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        generateLabels: function (chart) {
+                          const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                          const labels = original.call(this, chart);
+                          labels.forEach(label => {
+                            label.text = label.text.split('  ')[0];
+                          });
+                          return labels;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      font: {
+                        weight: 'bold',
+                        size: 13
+                      },
+                      formatter: (value) => value
+                    }
+                  },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true
+                  }
+                },
+                plugins: [
+                  ChartDataLabels,
+                  {
+                    id: 'centerText',
+                    beforeDraw: function (chart) {
+                      const { width, height, ctx } = chart;
+                      ctx.save();
+                      ctx.font = 'bold 12px sans-serif';
+                      ctx.fillStyle = '#000';
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'middle';
+                      ctx.fillText('Total - ' + total1, width / 2.7, height / 1.9);
+                      ctx.restore();
+                    }
+                  }
+                ]
+              });
+
+            </script>
+
+          </div>
+
+          <div class="dashboard-card card-5">
+
+
+
+
+
+
+          </div>
+
+          <div class="dashboard-card card-4">
+
+            <div class="table-responsive1">
+
+              <table class="table table-main" style="width: 100%;">
+
+                <thead style="background-color: transparent;">
+                  <tr>
+                    <th>Client</th>
+                    <th style="text-align: right;">Qty</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          <!-- Second Row -->
+          <div class="row-2-card-3" style="padding: 0px;">
+
+            <div class="nested-cards-grid">
+
+              <div class="nested-card">
+
+
+
+
+
+              </div>
+
+              <div class="nested-card">
+
+
+
+              </div>
+
+              <div class="nested-card">
+
+                <h3 style="color: #918d8d;"></h3>
+
+                <div class="table-responsive1">
+
+                  <table class="table table-main" style="width: 100%;">
+                    <thead style="background-color: transparent;">
+                      <tr>
+                        <th style="text-align: center;">Enq</th>
+                        <th>Client</th>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+
+              <div class="nested-card">Metric 4</div>
+              <div class="nested-card">Metric 5</div>
+            </div>
+
+          </div>
+
+          <div class="dashboard-card row-2-card-1">
+
+
+
+          </div>
+
+          <div class="dashboard-card row-2-card-2">
+
+            <div class="table-responsive1">
+
+              <table class="table table-main" style="width: 100%;">
+                <thead style="background-color: transparent;">
+                  <tr>
+                    <th style="text-align: left;"></th>
+                    <th style="text-align: right;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <tfoot>
+                  <tr style="font-weight: bold; border-top: 1px solid #ccc;">
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: right;">
+
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+
+
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+    </div>
+
+  </div>
+
+
+
+</body>
+
+</html>

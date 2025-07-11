@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings" class="active">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li>
+                            <a href="{{ url_for('controls') }}" class="link">
+                                <i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Controls
+                            </a>
+                        </li>
+
+                        <li class="active">
+                            <a href="{{ url_for('Archived') }}" class="link">
+                                <i class="fa-solid fa-archive" style="margin-right: 5px;"></i> Archived Records
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-cogs" style="margin-right: 5px;"></i> Option1
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-shield-alt" style="margin-right: 5px;"></i> Option2
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-user-cog" style="margin-right: 5px;"></i> Option3
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+                <div
+                    style="width: 100%; max-width: 600px; padding: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 12px; background-color: #f9f9f9;">
+                    <form id="updateProjectForm">
+                        <div class="flex-item" style="margin-bottom: 15px;">
+                            <label for="project_id" class="form-label">Select Project <span
+                                    style="color: red;">*</span></label>
+                            <select id="project_id" name="project_id" class="form-control" required
+                                style="background-color: whitesmoke;">
+                                <option value="" disabled selected>Select a project</option>
+                                {% for project in archived_projects %}
+                                <option value="{{ project.id }}">{{ project.id }} - {{ project.project_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="flex-item" style="margin-bottom: 15px;">
+                            <label for="status" class="form-label">Update Status <span
+                                    style="color: red;">*</span></label>
+                            <select id="status" name="status" class="form-control" required
+                                style="background-color: whitesmoke;">
+                                <option value="" disabled selected>Select status</option>
+                                <option value="Open">Open</option>
+                                <option value="Design">Design</option>
+                                <option value="Install">Install</option>
+                                <option value="Testing">Testing</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+
+
+                        <div class="flex-item" style="margin-bottom: 15px;">
+                            <button type="submit" class="form-control"
+                                style="background-color: #2563eb; color: white;">Update</button>
+                        </div>
+
+                        <p id="updateMessage" style="margin-top: 10px;"></p>
+                    </form>
+                </div>
+            </div>
+
+
+            <script>
+                document.getElementById('updateProjectForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const projectId = document.getElementById('project_id').value;
+                    const status = document.getElementById('status').value;
+
+                    fetch('/update_project_status_js', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            project_id: projectId,
+                            status: status
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const msgElem = document.getElementById('updateMessage');
+                            if (data.success) {
+                                msgElem.textContent = '✅ Project status updated successfully!';
+                                msgElem.style.color = 'green';
+                            } else {
+                                msgElem.textContent = '❌ Error: ' + data.error;
+                                msgElem.style.color = 'red';
+                            }
+                        })
+                        .catch(error => {
+                            const msgElem = document.getElementById('updateMessage');
+                            msgElem.textContent = '❌ Request failed!';
+                            msgElem.style.color = 'red';
+                            console.error('Error:', error);
+                        });
+                });
+            </script>
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: white;
+        }
+    </style>
+
+    <style>
+        .form-label {
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: chartreuse;
+            outline: 0;
+            box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+    </style>
+
+
+
+
+</body>
+
+</html>

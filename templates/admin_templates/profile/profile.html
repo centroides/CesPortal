@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile" class="active">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleAccountHub'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_act') }}" class="link">
+                                <i class="fa-solid fa-user" style="margin-right: 5px;"></i> Account Info
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_time') }}" class="link">
+                                <i class="fas fa-clock" style="margin-right: 5px;"></i> Time Sheet
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pr') }}" class="link">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i> Purchase Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_po') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> Purchase Order
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_prj') }}" class="link">
+                                <i class="fa-solid fa-project-diagram" style="margin-right: 5px;"></i> Project Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pay') }}" class="link">
+                                <i class="fa-solid fa-hand-holding-dollar" style="margin-right: 5px;"></i> Payment
+                                Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_claim') }}" class="link">
+                                <i class="fa-solid fa-file-alt" style="margin-right: 5px;"></i> Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_do') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Delivery Order
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_supplier') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div id="particles-js">
+                <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+                <script>
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { value: 80, density: { enable: true, value_area: 800 } },
+                            color: { value: '#A8A8A8' }, // Light black
+                            shape: { type: 'circle' },
+                            opacity: { value: 0.5, random: true },
+                            size: { value: 3, random: true },
+                            line_linked: { enable: true, distance: 150, color: '#A8A8A8', opacity: 0.4, width: 1 },
+                            move: { enable: true, speed: 3 }
+                        },
+                        interactivity: {
+                            events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                            modes: { repulse: { distance: 200 }, push: { particles_nb: 4 } }
+                        },
+                        retina_detect: true
+                    });
+                </script>
+            </div>
+
+            <style>
+                .parentcard {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    overflow-x: auto;
+                    gap: 16px;
+                    background-color: #71adec;
+                    /* Classic and formal background */
+                    padding: 10px;
+                    border-top-left-radius: 8px;
+                    border-top-right-radius: 8px;
+                }
+
+
+                .childcard {
+                    flex: 1 1 auto;
+
+                    min-height: 120px;
+                    /* Set your min height here */
+                    max-height: 120px;
+                    /* Set your max height here */
+                    background-color: white;
+                    color: black;
+                    border-radius: 10px;
+                    padding: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s;
+                }
+
+                .childcard:hover {
+                    transform: translateY(-5px);
+                }
+
+                .childcard h4 {
+                    margin-top: 0;
+                }
+
+                /* Optional: hide scrollbar */
+                .parentcard::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .parentcard {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+
+                .childcard h4 {
+                    text-align: center;
+                    color: #e27c1c;
+                    /* Decent formal blue-grey */
+                    font-weight: 600;
+                    transition: color 0.3s ease, transform 0.3s ease;
+                }
+
+                .childcard h4:hover {
+                    color: #1a73e8;
+                    /* Soft blue hover */
+                    transform: scale(1.05);
+                }
+
+                .parentcard a {
+                    display: block;
+                    width: 100%;
+                    text-decoration: none;
+                    /* already included inline, but good to have here */
+                    color: inherit;
+                    /* Inherit text color to prevent blue links */
+                }
+            </style>
+
+            <div class="parentcard">
+
+                <div class="childcard">
+                    {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                    <a href="{{ url_for('prof_time') }}" style="text-decoration: none; display: block; color: inherit;">
+                        {% endif %}
+                        <h4>Time Sheet</h4>
+                        <div class="table-responsive1">
+                            <table class="table table-main" style="width: 100%;">
+                                <tr>
+                                    <td>Standard</td>
+                                    <td>{{ '{:,.2f}'.format(card_data['timesheet']['total_hours']) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Over Time</td>
+                                    <td>{{ '{:,.2f}'.format(card_data['timesheet']['total_overtime']) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ '{:,.2f}'.format(card_data['timesheet']['total_cost']) }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="childcard">
+
+                    {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                    <a href="{{ url_for('prof_pr') }}" style="text-decoration: none;">
+                        {% endif %}
+
+                        <h4>PR's </h4>
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" style="width: 100%;">
+
+                                <tr>
+                                    <td>Pending</td>
+                                    <td>
+                                        {% if card_data['pr_data']['pending'] > 0 %}
+                                        <span
+                                            style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red;">
+                                            {{ card_data['pr_data']['pending'] }}
+                                        </span>
+                                        {% else %}
+                                        {{ card_data['pr_data']['pending'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Approved</td>
+                                    <td>{{ card_data['pr_data']['approved'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ card_data['pr_data']['total'] }}</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                    </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="childcard">
+
+                    {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                    <a href="{{ url_for('prof_po') }}" style="text-decoration: none;">
+                        {% endif %}
+
+                        <h4>PO's </h4>
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" style="width: 100%;">
+
+                                <tr>
+                                    <td>Open</td>
+                                    <td>
+                                        {% if card_data['po_counts']['pending'] > 0 %}
+                                        <span
+                                            style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red; color: red;">
+                                            {{ card_data['po_counts']['pending'] }}
+                                        </span>
+                                        {% else %}
+                                        {{ card_data['po_counts']['pending'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Closed</td>
+                                    <td>{{ card_data['po_counts']['approved'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ card_data['po_counts']['total'] }}</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                    </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="childcard">
+
+                    {% if user_access['togglePaymentRequest'] == 'On' %}
+                    <a href="{{ url_for('prof_pay') }}" style="text-decoration: none">
+                        {% endif %}
+
+                        <h4>Payment </h4>
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" style="width: 100%;">
+
+                                <tr>
+                                    <td>Pending</td>
+                                    <td>
+                                        {% if card_data['payment_request_counts']['pending'] > 0 %}
+                                        <span
+                                            style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red;">
+                                            {{ card_data['payment_request_counts']['pending'] }}
+                                        </span>
+                                        {% else %}
+                                        {{ card_data['payment_request_counts']['pending'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Paid</td>
+                                    <td>{{ card_data['payment_request_counts']['approved'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ card_data['payment_request_counts']['total'] }}</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                    </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="childcard">
+
+                    {% if user_access['toggle_prof_claims'] == 'On' %}
+                    <a href="{{ url_for('prof_claim') }}" style="text-decoration: none">
+                        {% endif %}
+
+                        <h4>Claims </h4>
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" style="width: 100%;">
+
+                                <tr>
+                                    <td>Pending</td>
+                                    <td>
+                                        {% if card_data['claims_counts']['pending'] > 0 %}
+                                        <span
+                                            style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red;">
+                                            {{ card_data['claims_counts']['pending'] }}
+                                        </span>
+                                        {% else %}
+                                        {{ card_data['claims_counts']['pending'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Approved</td>
+                                    <td>{{ card_data['claims_counts']['approved'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ card_data['claims_counts']['total'] }}</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                    </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="childcard">
+
+                    {% if user_access['toggleProjectRequest'] == 'On' %}
+                    <a href="{{ url_for('prof_prj') }}" style="text-decoration: none">
+                        {% endif %}
+
+                        <h4>Proj Request </h4>
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" style="width: 100%;">
+
+                                <tr>
+                                    <td>Pending</td>
+                                    <td>
+                                        {% if card_data['project_request_counts']['pending'] > 0 %}
+                                        <span
+                                            style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red;">
+                                            {{ card_data['project_request_counts']['pending'] }}
+                                        </span>
+                                        {% else %}
+                                        {{ card_data['project_request_counts']['pending'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Approved</td>
+                                    <td>{{ card_data['project_request_counts']['approved'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ card_data['project_request_counts']['total'] }}</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                    </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="childcard">
+
+                    <h4>Leaves </h4>
+
+                    <div class="table-responsive1">
+
+                        <table class="table table-main" style="width: 100%;">
+
+                            <tr>
+                                <td>Pending</td>
+                                <td>
+                                    {% if card_data['leaves_counts']['pending'] > 0 %}
+                                    <span
+                                        style="animation: blink 1s step-start 0s infinite; font-weight: bold; color: red;">
+                                        {{ card_data['leaves_counts']['pending'] }}
+                                    </span>
+                                    {% else %}
+                                    {{ card_data['leaves_counts']['pending'] }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Approved</td>
+                                <td>{{ card_data['leaves_counts']['approved'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>{{ card_data['leaves_counts']['total'] }}</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <style>
+                .plotparentcard {
+                    display: grid;
+                    grid-template-columns: 16% 16% 16% 50.6%;
+                    grid-template-rows: 1fr;
+                    gap: 8px;
+                    background: #71adec;
+                    padding: 0 10px 10px 10px;
+                    /* top right bottom left */
+
+                    color: #333;
+                }
+
+                .childplotcard {
+                    background-color: white;
+                    min-height: 260px;
+                    max-height: 260px;
+                    border-radius: 10px;
+                    padding: 12px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s ease;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-weight: 500;
+                }
+
+                .childplotcard:hover {
+                    transform: scale(1.03);
+                }
+
+                /* Hide scrollbar */
+                .plotparentcard::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .plotparentcard {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+
+                .childplotcard:hover {
+                    transform: translateY(-5px);
+                }
+
+                .childplotcard h4 {
+                    margin-top: 0;
+                    color: #e27c1c;
+                    font-weight: 600;
+                    transition: color 0.3s ease, transform 0.3s ease;
+                }
+
+                .childplotcard h4:hover {
+                    color: #1a73e8;
+                    transform: scale(1.05);
+                }
+
+                .table-responsive1 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 200px;
+                    border-radius: 10px;
+                }
+            </style>
+
+            <div class="plotparentcard">
+
+                <div class="childplotcard">
+                    <canvas id="timeSheetChart"></canvas>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+                    <script>
+                        const timeSheetCounts = {{ plot_time_sheet_counts | tojson | safe }};
+
+                        // Check if timeSheetCounts is properly initialized
+                        console.log(timeSheetCounts);
+
+                        new Chart(document.getElementById('timeSheetChart'), {
+                            type: 'pie',
+                            data: {
+                                labels: Object.keys(timeSheetCounts),
+                                datasets: [{
+                                    label: 'Time Sheet Summary',
+                                    data: Object.values(timeSheetCounts),
+                                    backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384'],
+                                    borderColor: '#fff', // Optional: Add border color to sectors
+                                    borderWidth: 1       // Optional: Add border width to sectors
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Man Hours',
+                                        font: {
+                                            size: 18,
+                                            weight: 'bold'
+                                        },
+                                        padding: {
+                                            top: 0,
+                                            bottom: 0
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'right',
+                                        labels: {
+                                            boxWidth: 12,
+                                            padding: 10
+                                        }
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (tooltipItem) {
+                                                let value = tooltipItem.raw;
+                                                let total = tooltipItem.dataset.data.reduce((acc, curr) => acc + curr, 0);
+                                                let percentage = (value / total * 100).toFixed(2);
+                                                return tooltipItem.label + ': ' + value + ' (' + percentage + '%)';
+                                            }
+                                        }
+                                    },
+                                    // Plugin for displaying count on the sector
+                                    datalabels: {
+                                        display: true, // Ensure the labels are enabled for the chart
+                                        formatter: function (value) {
+                                            return value;  // Show the count value on the sector
+                                        },
+                                        color: '#fff',  // Text color on the sector (white for contrast)
+                                        font: {
+                                            weight: 'bold',
+                                            size: 14
+                                        },
+                                        align: 'center', // Align the text at the center of the sector
+                                        anchor: 'center' // Position the text at the center
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+
+                </div>
+
+                <div class="childplotcard">
+
+                    <div class="chart-container">
+                        <canvas id="projectStatusChart"></canvas>
+                    </div>
+
+                    <style>
+                        .chart-container {
+                            width: 250px;
+                            height: 220px;
+                            margin: auto;
+                        }
+                    </style>
+
+
+                    <script>
+                        const projectStatusCounts = {{ plot_prj_status_counts | tojson }};
+                        const projectStatusData = Object.values(projectStatusCounts);
+                        const projectStatusLabels = Object.keys(projectStatusCounts);
+                        const totalProjectStatus = projectStatusData.reduce((a, b) => a + b, 0);
+
+                        new Chart(document.getElementById('projectStatusChart'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: projectStatusLabels,
+                                datasets: [{
+                                    data: projectStatusData,
+                                    backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                cutout: '75%',  // Smaller hole for the doughnut
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Projects',
+                                        font: {
+                                            size: 18,
+                                            weight: 'bold'
+                                        },
+                                        padding: {
+                                            top: 0,
+                                            bottom: 0
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'right',
+                                        align: 'center',
+                                        labels: {
+                                            boxWidth: 15,
+                                            boxHeight: 15,
+                                            padding: 15,
+                                            usePointStyle: true,
+                                            pointStyle: 'rect',
+                                            generateLabels: function (chart) {
+                                                const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                                                const labels = original.call(this, chart);
+                                                labels.forEach(label => {
+                                                    label.text = label.text.split('  ')[0];  // Remove extra spaces in labels
+                                                });
+                                                return labels;
+                                            }
+                                        }
+                                    },
+                                    datalabels: {
+                                        color: '#fff',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 13
+                                        },
+                                        formatter: (value) => value  // Show the count value
+                                    }
+                                },
+                                animation: {
+                                    animateRotate: true,
+                                    animateScale: true
+                                }
+                            },
+                            plugins: [
+                                ChartDataLabels,
+                                {
+                                    id: 'centerText',
+                                    beforeDraw: function (chart) {
+                                        const { width, height, ctx } = chart;
+                                        ctx.save();
+                                        ctx.font = 'bold 12px sans-serif';
+                                        ctx.fillStyle = '#000';  // Black color for the center text
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillText('Total - ' + totalProjectStatus, width / 3, height / 1.9);  // Display the total count at the center
+                                        ctx.restore();
+                                    }
+                                }
+                            ]
+                        });
+                    </script>
+
+                </div>
+
+                <div class="childplotcard">
+
+                    <canvas id="leadsStatusChart"></canvas>
+
+                    <script>
+                        const leadsStatusCounts = {{ plot_leads_status_counts | tojson }};
+                        const leadsStatusData = Object.values(leadsStatusCounts);
+                        const leadsStatusLabels = Object.keys(leadsStatusCounts);
+                        const totalLeads = leadsStatusData.reduce((a, b) => a + b, 0);
+
+                        new Chart(document.getElementById('leadsStatusChart'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: leadsStatusLabels,
+                                datasets: [{
+                                    data: leadsStatusData,
+                                    backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0', '#9966FF'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                cutout: '75%',  // Smaller hole for the doughnut
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Leads',
+                                        font: {
+                                            size: 18,
+                                            weight: 'bold'
+                                        },
+                                        padding: {
+                                            top: 0,
+                                            bottom: 0
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'right',
+                                        align: 'center',
+                                        labels: {
+                                            boxWidth: 15,
+                                            boxHeight: 15,
+                                            padding: 15,
+                                            usePointStyle: true,
+                                            pointStyle: 'rect',
+                                            generateLabels: function (chart) {
+                                                const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                                                const labels = original.call(this, chart);
+                                                labels.forEach(label => {
+                                                    label.text = label.text.split('  ')[0];  // Remove extra spaces in labels
+                                                });
+                                                return labels;
+                                            }
+                                        }
+                                    },
+                                    datalabels: {
+                                        color: '#fff',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 13
+                                        },
+                                        formatter: (value) => value  // Show the count value
+                                    }
+                                },
+                                animation: {
+                                    animateRotate: true,
+                                    animateScale: true
+                                }
+                            },
+                            plugins: [
+                                ChartDataLabels,
+                                {
+                                    id: 'centerText',
+                                    beforeDraw: function (chart) {
+                                        const { width, height, ctx } = chart;
+                                        ctx.save();
+                                        ctx.font = 'bold 12px sans-serif';
+                                        ctx.fillStyle = '#000';  // Black color for the center text
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillText('Total - ' + totalLeads, width / 3.9, height / 1.8);  // Display the total count at the center
+                                        ctx.restore();
+                                    }
+                                }
+                            ]
+                        });
+                    </script>
+
+                </div>
+
+                <div class="childplotcard">
+                    <canvas id="totalCostChart"></canvas>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const ctx = document.getElementById('totalCostChart').getContext('2d');
+
+                            const totalCostChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: {{ dates | tojson }},  // Dates for the x-axis
+                            datasets: [{
+                                label: 'Hours Worked',  // Label for the chart
+                                data: {{ total_costs | tojson }},  // Hours worked data for the y-axis
+                            borderColor: 'rgba(255, 165, 0, 1)',  // Light orange color
+                            backgroundColor: 'rgba(255, 165, 0, 0.2)',  // Light orange fill
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,  // Smooth curves
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',  // Point color
+                                    }]
+                                },
+                            options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: {
+                                duration: 1500,  // Smooth entry animation
+                                easing: 'easeInOutQuad'
+                            },
+                            scales: {
+                                x: {
+                                    type: 'category',  // This ensures x-axis shows dates
+                                    ticks: {
+                                        color: '#333',  // Color of the x-axis labels
+                                        font: {
+                                            family: 'sans-serif',  // Set the font to sans-serif
+                                            weight: 'bold',  // Make the x-axis labels bold
+                                            size: 12  // Adjust font size if necessary
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Date',  // Label for x-axis
+                                        color: '#333',
+                                        font: {
+                                            family: 'sans-serif',  // Set font to sans-serif
+                                            weight: 'bold',  // Make the x-axis title bold
+                                            size: 14  // Adjust title font size if needed
+                                        }
+                                    },
+                                    grid: {
+                                        display: false  // Disable grid lines on the x-axis
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        color: '#333',  // Color of the y-axis labels
+                                        font: {
+                                            family: 'sans-serif',  // Set the font to sans-serif
+                                            weight: 'bold',  // Make the y-axis labels bold
+                                            size: 12  // Adjust font size if necessary
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Hours Worked',  // Label for y-axis
+                                        font: {
+                                            family: 'sans-serif',  // Set font to sans-serif
+                                            weight: 'bold',  // Make the y-axis title bold
+                                            size: 14  // Adjust title font size if needed
+                                        }
+                                    },
+                                    grid: {
+                                        display: false  // Disable grid lines on the y-axis
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                    labels: {
+                                        color: '#333',  // Color of the legend text
+                                        font: {
+                                            family: 'sans-serif',  // Set font to sans-serif
+                                            weight: 'bold',  // Make the legend labels bold
+                                            size: 12  // Adjust font size if necessary
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    backgroundColor: 'rgba(0,0,0,0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'WorkFlow',  // Title of the chart
+                                    color: '#333',
+                                    font: {
+                                        family: 'sans-serif',  // Set font to sans-serif
+                                        weight: 'bold',  // Make the title bold
+                                        size: 16  // Adjust title font size if needed
+                                    },
+                                    padding: {
+                                        top: 10,
+                                        bottom: 10
+                                    }
+                                }
+                            }
+                        }
+                            });
+                        });
+                    </script>
+
+
+
+                </div>
+
+                <div class="childplotcard" style="display: none;">
+
+                    <canvas id="purchaseValueChart"></canvas>
+
+                    <script>
+                        const purchaseValues = {{ plot_purcahse_value | tojson }};
+
+                        new Chart(document.getElementById('purchaseValueChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(purchaseValues),
+                                datasets: [{
+                                    label: 'Purchase Counts',
+                                    data: Object.values(purchaseValues),
+                                    backgroundColor: '#4BC0C0',
+                                    borderWidth: 1,
+                                    barThickness: 15  // Set the bar width here
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: "Purchase",
+                                        font: {
+                                            size: 18,
+                                            weight: 'bold'
+                                        },
+                                        padding: {
+                                            top: 0,
+                                            bottom: 0
+                                        }
+                                    },
+                                    legend: {
+                                        display: false  // No legend for this chart
+                                    },
+                                    datalabels: {
+                                        color: '#fff',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 13
+                                        },
+                                        formatter: (value) => value  // Show the count value on each bar
+                                    }
+                                },
+                                indexAxis: 'y',  // This makes the bars horizontal
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+
+                                        ticks: {
+                                            font: {
+                                                size: 12,
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    y: {
+
+                                        ticks: {
+                                            beginAtZero: true,
+                                            stepSize: 50,  // Set the scale step size to 50
+                                            font: {
+                                                size: 12,
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    }
+                                },
+                                animation: {
+                                    animateScale: true,
+                                    animateRotate: true
+                                }
+                            },
+                            plugins: [
+                                ChartDataLabels
+                            ]
+                        });
+                    </script>
+
+                </div>
+
+            </div>
+
+            <style>
+                .deadlines {
+                    width: 100%;
+                    /* Ensure full width */
+                    height: 20px;
+                    /* Define the height of the container */
+                    background-color: #71adec;
+                    /* Background color */
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+                    position: relative;
+                }
+
+                .deadlines p {
+                    font-size: 16px;
+                    color: black;
+                    font-weight: bold;
+                    white-space: nowrap;
+                    /* Prevents text from wrapping */
+                    position: absolute;
+                    animation: slideIn 5s linear infinite;
+                }
+
+                @keyframes slideIn {
+                    0% {
+                        transform: translateX(-100%);
+                        /* Start off the screen */
+                    }
+
+                    50% {
+                        transform: translateX(0);
+                        /* Move to the center */
+                    }
+
+                    100% {
+                        transform: translateX(100%);
+                        /* Move off the screen to the right */
+                    }
+                }
+            </style>
+
+            <div class="deadlines">
+                <p>Deadlines</p>
+            </div>
+
+
+            <style>
+                .parentpendingcard {
+                    display: grid;
+                    grid-template-columns: 20% 20% 11% 15% 10%;
+                    grid-template-rows: 1fr;
+                    gap: 8px;
+                    background: #71adec;
+                    padding: 0 10px 10px 10px;
+                    /* top right bottom left */
+                    border-bottom-right-radius: 5px;
+                    border-bottom-left-radius: 5px;
+
+                    color: #333;
+                }
+
+                .childpendingcard {
+                    background-color: white;
+                    min-height: 250px;
+                    max-height: 250px;
+                    border-radius: 10px;
+                    padding: 12px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s ease;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-weight: 500;
+                }
+
+                .childpendingcard:hover {
+                    transform: scale(1.03);
+                }
+
+                /* Hide scrollbar */
+                .parentpendingcard::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .parentpendingcard {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+
+                .childpendingcard:hover {
+                    transform: translateY(-5px);
+                }
+
+                .childpendingcard h4 {
+                    margin-top: 0;
+                    color: #e27c1c;
+                    font-weight: 600;
+                    transition: color 0.3s ease, transform 0.3s ease;
+                }
+
+                .childpendingcard h4:hover {
+                    color: #1a73e8;
+                    transform: scale(1.05);
+                }
+
+                .table-responsive1 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 200px;
+                    border-radius: 10px;
+                }
+            </style>
+
+            <div class="parentpendingcard">
+
+                <div class="childpendingcard">
+                    <h4>Leads</h4>
+                    <div class="table-responsive1">
+                        <table class="table table-main" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Enq</th>
+                                    <th>Name</th>
+                                    <th style="text-align: center;">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enquiry in pending_enquiries %}
+                                <tr>
+                                    <td style="text-align: center;">{{ enquiry[0] }}</td>
+
+                                    <td style="text-align: left;"> {{ enquiry[1][:20] }}{% if enquiry[20]|length > 20
+                                        %}...{%
+                                        endif %}</td>
+                                    <td style="text-align: center;" class="start-time">{{ enquiry[2] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="childpendingcard">
+                    <h4>Material Delivery</h4>
+
+                    <div class="table-responsive1">
+
+                        <table class="table table-main" style="width: 100%;">
+
+                            <thead style="background-color: transparent;">
+                                <tr>
+                                    <th style="text-align: left;">PO NO</th>
+                                    <th style="text-align: left;">Supplier </th>
+                                    <th style="text-align: center;"> Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for po in po_list %}
+                                <tr>
+                                    <td style="text-align: left;">
+                                        {% if po.PO_no == 'overhead' %}
+                                        {{ po.PO_no }}
+                                        {% else %}
+                                        {{ po.PO_no.split('-')[0] }}-{{ po.PO_no.split('-')[-1] }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td style="text-align: left;"> {{ po.Supplier_Name[:12] }}{% if
+                                        po.Supplier_Name|length > 12 %}...{%
+                                        endif %}</td>
+
+
+                                    <td style="text-align: center;" class="start-time">{{ po.Estimated_Delivery_Date }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="childpendingcard">
+                    <h4>Time Sheet</h4>
+
+                    <div class="table-responsive1">
+
+                        <table class="table table-main" style="width: 100%;">
+
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Date</th>
+                                    <th style="text-align: center;">Bal Hrs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in timesheet_data %}
+                                <tr>
+                                    <td style="text-align: center;" class="start-time">{{ row.date }}</td>
+                                    <td style="text-align: center;">{{ row.balance_hrs }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="childpendingcard">
+                    <h4>Tasks</h4>
+
+                    <div class="table-responsive1">
+                        <table class="table table-main" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Prj. No</th>
+                                    <th>Task</th>
+                                    <th>DOC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <style>
+        .analytics_mian a {
+            position: relative;
+            z-index: 10;
+            /* Ensures links are above particles */
+            pointer-events: auto;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        html,
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            background: linear-gradient(135deg, white, #cedee6);
+            color: #fff;
+        }
+
+        .home_container {
+
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: fadeInScale 2s ease-in-out;
+        }
+
+        .welcome-message {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            animation: slideUpRotate 1.5s ease-out;
+        }
+
+        .profile-button {
+            background-color: #FFC107;
+            color: #333;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            animation: pulseColor 2.5s infinite;
+        }
+
+        .profile-button:hover {
+            background-color: #FFD740;
+        }
+
+        .profile-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Animations */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideUpRotate {
+            from {
+                transform: translateY(50px) rotate(-10deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseColor {
+            0% {
+                background-color: #FFC107;
+            }
+
+            50% {
+                background-color: #FFEB3B;
+            }
+
+            100% {
+                background-color: #FFC107;
+            }
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 0;
+            /* Keep behind your content but above -1 */
+            pointer-events: none;
+            /* ✅ Don't block scroll or clicks */
+        }
+
+
+        /* Background Wave */
+        body::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,56.5C240,56.5,240,18.3,480,18.3S720,114.7,960,114.7S1200,56.5,1200,56.5V120H0V56.5z" fill="rgba(255, 255, 255, 0.3)"/></svg>') repeat-x;
+            animation: wave 8s linear infinite;
+        }
+
+        @keyframes wave {
+            0% {
+                background-position: 0 bottom;
+            }
+
+            100% {
+                background-position: 1200px bottom;
+            }
+        }
+    </style>
+
+    <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Return an empty string for invalid dates
+                return "";
+            }
+
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = (date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0"); // Adding 1 because months are zero-based
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const start_time_elements =
+                document.querySelectorAll(".start-time");
+
+
+            start_time_elements.forEach(function (element) {
+                element.textContent = formatDate(element.textContent);
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>

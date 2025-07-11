@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9Oer+R4xpcV8Qyq46cDfL" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts" class="active">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+
+        </div>
+
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleClient'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('client_details') }}" class="link">
+                                <i class="fa-solid fa-handshake-simple" style="margin-right: 5px;"></i> Clients
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('vendor') }}" class="link">
+                                <i class="fa-sharp fa-solid fa-store" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleExpenses'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('ac_pay_req') }}" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('reports') }}" class="link">
+                                <i class="fa-solid fa-chart-bar" style="margin-right: 5px;"></i>Reports
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('invoice') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Invoice
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleOverHeadPayReq'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('add_expense') }}" class="link">
+                                <i class="fa-solid fa-money-bill-wave" style="margin-right: 5px;"></i> Add Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="parentamimecard">
+                <!-- Main Cards -->
+
+                <div class="animecard-container">
+
+                    <div class="animecard card-gst" onclick="openGSTDetails()">
+                        <div class="icon-container">
+                            <i class="fas fa-receipt icon-style icon-pulse"></i>
+                        </div>
+                        <h3 class="fancy-heading">GST</h3>
+                    </div>
+
+                    <div class="animecard card-soa" onclick="openSOADetails()">
+                        <div class="icon-container">
+                            <i class="fas fa-chart-line icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">SOA</h3>
+                    </div>
+
+                    <div class="animecard card-cashflow">
+                        <div class="icon-container">
+                            <i class="fas fa-wallet icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Cashflow</h3>
+                    </div>
+
+                    <div class="animecard card-pl">
+                        <div class="icon-container">
+                            <i class="fas fa-balance-scale icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">P/L</h3>
+                    </div>
+
+                    <div class="animecard card-reconciliation">
+                        <div class="icon-container">
+                            <i class="fas fa-file-invoice-dollar icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Reconciliation</h3>
+                    </div>
+
+                    <div class="animecard card-vehicle" onclick="openVehicleDetails()">
+                        <div class="icon-container">
+                            <i class="fas fa-car icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Vehicle</h3>
+                    </div>
+
+                    <div class="animecard card-utilities">
+                        <div class="icon-container">
+                            <i class="fas fa-bolt icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Utilities</h3>
+                    </div>
+
+                    <div class="animecard card-inventory">
+                        <div class="icon-container">
+                            <i class="fas fa-warehouse icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Inventory</h3>
+                    </div>
+
+                    <div class="animecard card-payroll">
+                        <div class="icon-container">
+                            <i class="fas fa-users-cog icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Payroll</h3>
+                    </div>
+
+                    <div class="animecard card-tax">
+                        <div class="icon-container">
+                            <i class="fas fa-file-invoice icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Tax Planning</h3>
+                    </div>
+
+                    <div class="animecard card-budget">
+                        <div class="icon-container">
+                            <i class="fas fa-piggy-bank icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Budget</h3>
+                    </div>
+
+                    <div class="animecard card-analytics">
+                        <div class="icon-container">
+                            <i class="fas fa-chart-line icon-style"></i>
+                        </div>
+                        <h3 class="fancy-heading">Analytics</h3>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- gst report -->
+            <div id="GstReportPopUp" class="modal1">
+
+                <div class="modal-content1">
+
+                    <div class="button-container1">
+
+                        <h2>GST Report</h2>
+                        <span class="close" onclick="closeGSTModal()">&times;</span>
+
+                    </div>
+
+                    <div class="container">
+
+                        <form id="reportForm">
+
+                            <div class="invoice-header1">
+
+                                <div class="flex-item">
+                                    <label for="quarter" class="form-label">Quarter<span
+                                            style="color: red;">*</span></label>
+                                    <select name="quarter" class="form-control">
+                                        <option value="">Select Quarter</option>
+                                        <option value="Q1">Q1</option>
+                                        <option value="Q2" selected>Q2</option>
+                                        <option value="Q3">Q3</option>
+                                        <option value="Q4">Q4</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input class="form-control" type="date" name="start_date">
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input class="form-control" type="date" name="end_date">
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="Format" class="form-label">Report Format<span
+                                            style="color: red;">*</span></label>
+                                    <select name="Format" class="form-control" required>
+                                        <option value="">Select Format</option>
+                                        <option value="pdf" selected>pdf</option>
+                                        <option value="xlsx">xlsx</option>
+                                    </select>
+                                </div>
+
+                                <div class="button-container">
+                                    <button type="button" id="submitReportBtn" class="new-enquiry-btn"
+                                        style="margin-bottom: 10px;">
+                                        Generate Report
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <script>
+                        let isSubmitting = false;
+
+                        document.getElementById("submitReportBtn").addEventListener("click", function () {
+                            if (isSubmitting) return;
+
+                            const form = document.getElementById("reportForm");
+
+                            if (!form.checkValidity()) {
+                                form.reportValidity();
+                                return;
+                            }
+
+                            // Disable button and flag
+                            isSubmitting = true;
+                            this.disabled = true;
+
+                            const quarter = form.querySelector('select[name="quarter"]').value;
+                            const start_date = form.querySelector('input[name="start_date"]').value;
+                            const end_date = form.querySelector('input[name="end_date"]').value;
+                            const format = form.querySelector('select[name="Format"]').value;
+
+                            fetch("/generate_GST_report", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    quarter: quarter,
+                                    start_date: start_date,
+                                    end_date: end_date,
+                                    format: format
+                                })
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error("Failed to generate report.");
+                                    }
+                                    return response.blob();
+                                })
+                                .then(blob => {
+                                    // Create a link to download the file
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `Report.${format.toLowerCase()}`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                })
+                                .catch(error => {
+                                    alert("Error: " + error.message);
+                                })
+                                .finally(() => {
+                                    isSubmitting = false;
+                                    this.disabled = false;
+                                });
+                        });
+                    </script>
+
+                </div>
+
+            </div>
+
+            <!-- SOA report -->
+            <div id="SoaReportPopUp" class="modal1">
+
+                <div class="modal-content1">
+
+                    <div class="button-container1">
+
+                        <h2>SOA Report</h2>
+                        <span class="close" onclick="closeSOAModal()">&times;</span>
+
+                    </div>
+
+                    <div class="container">
+
+                        <form id="SoaReportForm">
+
+                            <div class="invoice-header1">
+
+                                <div class="flex-item">
+                                    <label for="SOAClient" class="form-label">Client<span
+                                            style="color: red;">*</span></label>
+                                    <select class="form-control" id="SOAClient" name="SOAClient" required>
+                                        <option value="" disabled selected>Select Client</option>
+                                        {% for suggestion in Cilents %}
+                                        <option value="{{ suggestion }}">{{ suggestion }}</option>
+                                        <!-- Ensure 'value' matches 'suggestion' -->
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="SOAdate" class="form-label">Date</label>
+                                    <input class="form-control" type="date" name="SOAdate" id="SOAdate">
+                                </div>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const today = new Date().toISOString().split('T')[0];
+                                        document.getElementById('SOAdate').value = today;
+                                    });
+                                </script>
+
+                                <div class="button-container">
+                                    <button type="button" id="submitSoaReportBtn" class="new-enquiry-btn"
+                                        style="margin-bottom: 10px;">
+                                        Generate SOA
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <script>
+                        let isSoaSubmitting = false;
+
+                        document.getElementById("submitSoaReportBtn").addEventListener("click", function () {
+                            if (isSoaSubmitting) return;
+
+                            const form = document.getElementById("SoaReportForm");
+
+                            if (!form.checkValidity()) {
+                                form.reportValidity();
+                                return;
+                            }
+
+                            // Disable button and flag
+                            isSoaSubmitting = true;
+                            this.disabled = true;
+
+                            const SOAClient = form.querySelector('select[name="SOAClient"]').value;
+                            const SOAdate = form.querySelector('input[name="SOAdate"]').value;
+
+                            fetch("/generate_SOA_report", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    SOAClient: SOAClient,
+                                    SOAdate: SOAdate
+                                })
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error("Failed to generate report.");
+                                    }
+                                    return response.blob();
+                                })
+                                .then(blob => {
+                                    // Create a link to download the PDF with client name in filename
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `${SOAClient}_SOA_Report.pdf`;  // dynamic filename
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                })
+                                .catch(error => {
+                                    alert("Error: " + error.message);
+                                })
+                                .finally(() => {
+                                    isSoaSubmitting = false;
+                                    document.getElementById("submitSoaReportBtn").disabled = false;
+                                });
+                        });
+                    </script>
+
+                </div>
+
+            </div>
+
+
+            <script>
+                function switchTab(tabId) {
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+                    // Show the selected tab
+                    document.getElementById(tabId).style.display = 'block';
+                    event.target.classList.add('active');
+                }
+            </script>
+
+            <style>
+                .tab-nav {
+                    display: flex;
+                    margin-bottom: 10px;
+                }
+
+                .tab-btn {
+                    background: #f1f1f1;
+                    border: none;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    color: #333;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                }
+
+                .tab-btn.active {
+                    background: #ff6600;
+                    /* Dark orange background */
+                    border-bottom: 2px solid #ff6600;
+                    /* Dark orange border */
+                    color: white;
+                    /* Optional: make text white for contrast */
+                }
+
+
+                .tab-content {
+                    padding: 10px 0;
+                }
+            </style>
+
+
+            <!-- Vehicle report -->
+            <div id="VehicleReportPopUp" class="modal">
+
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="button-container1"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2>Vehicle Report</h2>
+                        <span class="close" onclick="closeVehicleModal()">&times;</span>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="tab-nav" style="margin-top: 10px; border-bottom: 1px solid #ccc;">
+                        <button class="tab-btn active" onclick="switchTab('table-view')">Table View</button>
+                        <button class="tab-btn" onclick="switchTab('graph-view')">Graph View</button>
+                    </div>
+
+                    <!-- Table View Tab -->
+                    <div id="table-view" class="tab-content" style="display: block;">
+                        <div id="vehicleCardsContainer" class="vehicle-cards-grid"
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)); gap: 10px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <!-- Graph View Tab -->
+                    <div id="graph-view" class="tab-content" style="display: none;">
+                        <div class="dashboard-container">
+
+
+                            <div class="metric-cards" id="metricCards">
+                                <div class="metric-card">
+                                    <div class="metric-label">Total Expense</div>
+                                    <div class="metric-value" id="totalExpenseValue">$0</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Vehicles</div>
+                                    <div class="metric-value" id="vehicleCountValue">0</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Monthly Average</div>
+                                    <div class="metric-value" id="monthlyAverageValue">$0</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Top Category</div>
+                                    <div class="metric-value" id="topCategoryValue">N/A</div>
+                                </div>
+                            </div>
+
+
+                            <div id="errorBox"></div>
+
+                            <div id="vehicleCardsContainer1" class="vehicle-cards-grid">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <style>
+                        .dashboard-container {
+                            max-width: 100%;
+                            margin: 0 auto;
+                        }
+
+                        .dashboard-header {
+                            background: white;
+                            border-radius: 15px;
+                            padding: 20px;
+                            margin-bottom: 20px;
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .dashboard-title {
+                            font-size: 2.5rem;
+                            font-weight: bold;
+                            color: #2d3748;
+                            margin: 0;
+                            text-align: center;
+                        }
+
+                        .vehicle-cards-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                            max-width: 100%;
+                            gap: 20px;
+                            margin-top: 20px;
+                        }
+
+
+                        .chart-card {
+                            background: white;
+                            border-radius: 15px;
+                            padding: 8px;
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                            transition: transform 0.3s ease, box-shadow 0.3s ease;
+                            max-height: 370px;
+                        }
+
+                        .chart-card:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+                        }
+
+                        .card-header {
+                            display: flex;
+                            justify-content: center;
+                            /* Center content horizontally */
+                            align-items: center;
+                            margin-bottom: 15px;
+                            border-bottom: 2px solid #e2e8f0;
+                        }
+
+                        .card-title {
+                            font-size: 1.4rem;
+                            font-weight: 600;
+                            color: #2d3748;
+                            margin: 0;
+                            text-align: center;
+                        }
+
+
+                        .chart-container {
+                            position: relative;
+                            height: 350px;
+                            margin-bottom: 15px;
+                        }
+
+                        .insights-container {
+                            background: #f7fafc;
+                            border-radius: 10px;
+                            padding: 5px;
+                        }
+
+                        .insight-item {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 4px 0;
+                            border-bottom: 1px solid #e2e8f0;
+                        }
+
+                        .insight-item:last-child {
+                            border-bottom: none;
+                        }
+
+                        .insight-label {
+                            font-weight: 500;
+                            color: #4a5568;
+                        }
+
+                        .insight-value {
+                            font-weight: 600;
+                            color: #2d3748;
+                        }
+
+                        .metric-cards {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                            gap: 15px;
+                            margin-bottom: 20px;
+                        }
+
+                        .metric-card {
+                            background: white;
+                            border-radius: 10px;
+                            padding: 20px;
+                            text-align: center;
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .metric-value {
+                            font-size: 2rem;
+                            font-weight: bold;
+                            color: #2d3748;
+                            margin: 10px 0;
+                        }
+
+                        .metric-label {
+                            color: #718096;
+                            font-size: 0.9rem;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+
+                        .loading {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 200px;
+                            font-size: 1.2rem;
+                            color: #718096;
+                        }
+
+                        .error {
+                            background: #fed7d7;
+                            color: #c53030;
+                            padding: 15px;
+                            border-radius: 10px;
+                            text-align: center;
+                            margin: 20px 0;
+                        }
+
+                        @media (max-width: 768px) {
+                            .vehicle-cards-grid {
+                                grid-template-columns: 1fr;
+                            }
+
+                            .metric-cards {
+                                grid-template-columns: repeat(2, 1fr);
+                            }
+                        }
+                    </style>
+
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+                    <script>
+                        // Global variables
+                        let chartData = {};
+                        let charts = {};
+
+                        // Color palette
+                        const colors = [
+                            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+                            '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+                        ];
+
+                        // Chart.js default settings
+                        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+                        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
+                        // Fetch and process data
+                        function fetchVehicleData(chartData) {
+
+                            console.log("Received chart data:", chartData);
+                            displayDashboard(chartData);  // You can pass it to another chart rendering function
+
+                        }
+
+
+                        function showError(message) {
+                            const errorBox = document.getElementById('errorBox');
+                            if (errorBox) {
+                                errorBox.innerHTML = message;
+                                errorBox.style.display = 'block';
+                            } else {
+                                console.error("❗ 'errorBox' not found. Falling back to alert.");
+                                alert(message);  // Fallback
+                            }
+                        }
+
+
+                        function displayDashboard(chartData) {
+                            if (!chartData || Object.keys(chartData).length === 0) {
+                                showError('No vehicle expense data available');
+                                return;
+                            }
+                            displayMetrics(chartData.metrics);
+                            createAllCharts(chartData);
+
+                        }
+
+                        function displayMetrics(metrics) {
+                            document.getElementById('totalExpenseValue').innerText = `$${metrics.total_expense.toLocaleString()}`;
+                            document.getElementById('vehicleCountValue').innerText = metrics.vehicle_count;
+                            document.getElementById('monthlyAverageValue').innerText = `$${metrics.monthly_average.toLocaleString()}`;
+                            document.getElementById('topCategoryValue').innerText = metrics.highest_category;
+
+                        }
+
+                        function createAllCharts(chartData) {
+                            const container = document.getElementById('vehicleCardsContainer1');
+                            console.log("....container.............", container);
+                            container.innerHTML = '';
+
+                            // 1. Total Cost by Vehicle
+                            createTotalCostChart(chartData, container);
+
+                            // 2. Category Breakdown
+                            createCategoryBreakdownChart(chartData, container);
+
+
+                            // 4. Cost Efficiency Analysis
+                            createCostEfficiencyChart(chartData, container);
+
+                            // 5. Vehicle Comparison Matrix
+                            createVehicleComparisonChart(chartData, container);
+
+                            // 3. Monthly Trends
+                            createMonthlyTrendsChart(chartData, container);
+
+
+
+                        }
+
+                        function createTotalCostChart(chartData, container) {
+                            const data = chartData.total_cost_chart;
+
+                            const cardHTML = `
+                                <div class="chart-card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">By Vehicle</h3>
+                                    </div>
+                                    <div class="chart-container" style="height: 230px;">
+                                        <canvas id="totalCostChart"></canvas>
+                                    </div>
+                                    <div class="insights-container">
+                                        <div class="insight-item">
+                                            <span class="insight-label">Most Expensive:</span>
+                                            <span class="insight-value">${data.insights.most_expensive.vehicle} ($${data.insights.most_expensive.amount.toLocaleString()})</span>
+                                        </div>
+                                        <div class="insight-item">
+                                            <span class="insight-label">Most Economical:</span>
+                                            <span class="insight-value">${data.insights.most_economical.vehicle} ($${data.insights.most_economical.amount.toLocaleString()})</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+
+                            const brightColors = [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                '#9966FF', '#FF9F40', '#00C49F', '#FF6B6B',
+                                '#845EC2', '#FFC75F', '#F9F871', '#2C73D2'
+                            ];
+
+                            const ctx = document.getElementById('totalCostChart').getContext('2d');
+                            charts.totalCost = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [{
+                                        label: 'Total Cost ($)',
+                                        data: data.data,
+                                        backgroundColor: brightColors.slice(0, data.labels.length),
+                                        borderColor: brightColors.slice(0, data.labels.length),
+                                        borderWidth: 1,
+                                        barThickness: 20,  // ✅ Narrow bars
+                                        borderRadius: {
+                                            topLeft: 8,
+                                            topRight: 8,
+                                            bottomLeft: 0,
+                                            bottomRight: 0
+                                        },
+                                        borderSkipped: false
+                                    }]
+
+
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => `$${context.parsed.y.toLocaleString()}`
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {
+                                                display: false // 🔥 Remove vertical gridlines
+                                            }
+                                        },
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: (value) => '$' + value.toLocaleString()
+                                            },
+                                            grid: {
+                                                display: false // 🔥 Remove horizontal gridlines
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+
+                        function createCategoryBreakdownChart(chartData, container) {
+                            const data = chartData.category_breakdown;
+
+                            const cardHTML = `
+                                    <div class="chart-card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">By Category</h3>
+                                        </div>
+                                        <div class="chart-container" style="height: 230px; display: flex; align-items: center;">
+                                            <canvas id="categoryChart" style="max-width: 60%;"></canvas> <!-- ✅ Narrow doughnut -->
+                                            <div id="categoryLegend" style="flex: 1; padding-left: 20px;"></div> <!-- ✅ Right-side labels -->
+                                        </div>
+                                        <div class="insights-container">
+                                            <div class="insight-item">
+                                                <span class="insight-label">Top Category:</span>
+                                                <span class="insight-value">${data.insights.top_category} (${data.insights.top_category_percentage.toFixed(1)}%)</span>
+                                            </div>
+                                            <div class="insight-item">
+                                                <span class="insight-label">Categories:</span>
+                                                <span class="insight-value">${data.insights.category_count} types</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+
+                            const brightColors = [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                '#9966FF', '#FF9F40', '#00C49F', '#FF6B6B',
+                                '#845EC2', '#FFC75F', '#F9F871', '#2C73D2'
+                            ];
+
+                            const ctx = document.getElementById('categoryChart').getContext('2d');
+                            charts.category = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [{
+                                        data: data.data,
+                                        backgroundColor: brightColors.slice(0, data.labels.length),
+                                        borderColor: '#fff',
+                                        borderWidth: 3,
+                                        hoverOffset: 10,
+                                        cutout: '80%' // ✅ Smaller center = thinner ring
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: false }, // 🔁 Disable default legend
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => {
+                                                    const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
+                                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                                    return `${context.label}: $${context.parsed.toLocaleString()} (${percentage}%)`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            // ✅ Manually generate right-side legend
+                            const total = data.data.reduce((sum, val) => sum + val, 0);
+                            const legendHTML = data.labels.map((label, i) => {
+                                const value = data.data[i];
+                                const percent = ((value / total) * 100).toFixed(1);
+                                return `
+                                        <div style="display: flex; align-items: center; margin-bottom: 6px;">
+                                            <span style="display:inline-block;width:12px;height:12px;background:${brightColors[i]};border-radius:2px;margin-right:8px;"></span>
+                                            <span style="font-size: 0.85rem;">${label}: ${percent}%</span>
+                                        </div>
+                                    `;
+                            }).join('');
+                            document.getElementById('categoryLegend').innerHTML = legendHTML;
+                        }
+
+                        function createCostEfficiencyChart(chartData, container) {
+                            const data = chartData.cost_efficiency;
+
+                            const cardHTML = `
+                                    <div class="chart-card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Performance vs Cost</h3>
+                                        </div>
+                                        <div class="chart-container" style="height: 230px;"> <!-- 🔽 Smaller chart height -->
+                                            <canvas id="efficiencyChart"></canvas>
+                                        </div>
+                                        <div class="insights-container">
+                                            <div class="insight-item">
+                                                <span class="insight-label">Most Efficient:</span>
+                                                <span class="insight-value">${data.insights.most_efficient.vehicle} ($${data.insights.most_efficient.amount.toFixed(0)}/month)</span>
+                                            </div>
+                                            <div class="insight-item">
+                                                <span class="insight-label">Least Efficient:</span>
+                                                <span class="insight-value">${data.insights.least_efficient.vehicle} ($${data.insights.least_efficient.amount.toFixed(0)}/month)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+
+                            const brightColors = [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                '#9966FF', '#FF9F40', '#00C49F', '#FF6B6B',
+                                '#845EC2', '#FFC75F', '#F9F871', '#2C73D2'
+                            ];
+
+                            const ctx = document.getElementById('efficiencyChart').getContext('2d');
+                            charts.efficiency = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [{
+                                        label: 'Avg Monthly Cost ($)',
+                                        data: data.data,
+                                        backgroundColor: data.labels.map((_, i) => brightColors[i % brightColors.length]),
+                                        borderColor: data.labels.map((_, i) => brightColors[i % brightColors.length]),
+                                        borderWidth: 2,
+                                        borderRadius: {
+                                            topLeft: 6,
+                                            topRight: 6,
+                                            bottomLeft: 0,
+                                            bottomRight: 0
+                                        },
+                                        barThickness: 14 // 🔽 Thinner bars
+                                    }]
+                                },
+                                options: {
+                                    indexAxis: 'y',
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => `$${context.parsed.x.toLocaleString()}/month`
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: (value) => '$' + value.toLocaleString()
+                                            },
+                                            grid: { display: false } // ❌ Remove X-axis gridlines
+                                        },
+                                        y: {
+                                            grid: { display: false } // ❌ Remove Y-axis gridlines
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        function createVehicleComparisonChart(chartData, container) {
+                            const data = chartData.vehicle_comparison;
+
+                            const cardHTML = `
+                                <div class="chart-card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Vehicle Comparison</h3>
+                                    </div>
+                                    <div class="chart-container" style="height: 310px;">
+                                        <canvas id="comparisonChart"></canvas>
+                                    </div>
+                                </div>
+                            `;
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+
+                            const brightColors = [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                '#9966FF', '#FF9F40', '#00C49F', '#FF6B6B',
+                                '#845EC2', '#FFC75F', '#F9F871', '#2C73D2'
+                            ];
+                            const datasets = data.datasets.map((dataset, index) => ({
+                                label: dataset.label,
+                                data: dataset.data,
+                                backgroundColor: brightColors[index % brightColors.length] + 'CC',
+                                borderColor: brightColors[index % brightColors.length],
+                                borderWidth: 1,
+                                barThickness: 18
+                            }));
+
+                            const ctx = document.getElementById('comparisonChart').getContext('2d');
+                            charts.comparison = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: datasets
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            position: 'bottom',
+                                            labels: {
+                                                usePointStyle: true,
+                                                pointStyle: 'rect' // 🔷 Square symbol
+                                            }
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => `${context.dataset.label}: $${context.parsed.y.toLocaleString()}`
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            stacked: true,
+                                            grid: { display: false }
+                                        },
+                                        y: {
+                                            stacked: true,
+                                            beginAtZero: true,
+                                            grid: { display: false },
+                                            ticks: {
+                                                callback: (value) => '$' + value.toLocaleString()
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        function createMonthlyTrendsChart(chartData, container) {
+                            const data = chartData.monthly_trends;
+
+                            const brightColors = [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                                '#9966FF', '#FF9F40', '#00C49F', '#FF6B6B',
+                                '#845EC2', '#FFC75F', '#F9F871', '#2C73D2'
+                            ];
+
+                            const cardHTML = `
+                                    <div class="chart-card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Expense Trends</h3>
+                                        </div>
+                                        <div class="chart-container" style="width: 100%; height: 230px;"> <!-- Full width, fixed height -->
+                                            <canvas id="monthlyTrendsChart"></canvas>
+                                        </div>
+                                    </div>
+                                `;
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+
+                            const datasets = data.datasets.map((dataset, index) => ({
+                                label: dataset.label,
+                                data: dataset.data,
+                                backgroundColor: brightColors[index % brightColors.length] + '40', // lighter fill
+                                borderColor: brightColors[index % brightColors.length],           // solid border
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4
+                            }));
+
+                            const ctx = document.getElementById('monthlyTrendsChart').getContext('2d');
+                            charts.monthlyTrends = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: datasets
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    interaction: {
+                                        mode: 'index',
+                                        intersect: false,
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            position: 'right',
+                                            labels: {
+                                                boxWidth: 12,
+                                                padding: 16
+                                            }
+                                        },
+                                        tooltip: {
+                                            mode: 'index',
+                                            intersect: false,
+                                            callbacks: {
+                                                label: (context) => `${context.dataset.label}: $${context.parsed.y.toLocaleString()}`
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: { display: false }
+                                        },
+                                        y: {
+                                            beginAtZero: true,
+                                            grid: { display: false },
+                                            ticks: {
+                                                callback: (value) => '$' + value.toLocaleString()
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        // Handle window resize
+                        window.addEventListener('resize', function () {
+                            Object.values(charts).forEach(chart => {
+                                if (chart) chart.resize();
+                            });
+                        });
+                    </script>
+
+                    <script>
+                        function createVehicleCards(data) {
+                            const container = document.getElementById('vehicleCardsContainer');
+                            container.innerHTML = '';
+
+                            // Use abbreviated month names
+                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                            const categories = ['Rent', 'Fuel', 'Parking', 'Cashcard', 'Ins', 'Tax', 'Maint'];
+                            const lightColors = [
+                                '#e0f7fa', '#e8f5e9', '#fce4ec', '#f3e5f5', '#fff8e1', '#e1f5fe',
+                                '#fbe9e7', '#ede7f6', '#f9fbe7', '#e8eaf6'
+                            ];
+
+                            const grouped = {};
+
+                            // Group data by vehicle → month → type
+                            data.forEach(entry => {
+                                const { vehicle_number, month_name, type, total_amount } = entry;
+                                if (!grouped[vehicle_number]) grouped[vehicle_number] = {};
+                                if (!grouped[vehicle_number][month_name]) grouped[vehicle_number][month_name] = {};
+                                grouped[vehicle_number][month_name][type] = total_amount;
+                            });
+
+                            Object.keys(grouped).forEach((vehicle, index) => {
+                                const bgColor = lightColors[index % lightColors.length];
+                                const card = document.createElement('div');
+                                card.className = 'vehicle-card fade-in';
+                                card.style.backgroundColor = bgColor;
+                                card.style.border = '1px solid #ccc';
+                                card.style.borderRadius = '8px';
+                                card.style.padding = '15px';
+                                card.style.marginBottom = '15px';
+                                card.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+                                card.style.transition = 'transform 0.3s ease';
+
+                                const title = document.createElement('h4');
+                                title.textContent = vehicle;
+                                title.className = 'vehicle-title';
+                                title.style.textAlign = 'center';
+                                title.style.color = '#2c3e50';
+                                title.style.fontSize = '12px';
+                                title.style.fontWeight = 'bold';
+                                title.style.marginBottom = '10px';
+                                title.style.transition = 'transform 0.3s';
+                                card.appendChild(title);
+
+                                const table = document.createElement('table');
+                                table.className = 'vehicle-table';
+                                table.style.width = '100%';
+                                table.style.borderCollapse = 'collapse';
+                                table.style.fontSize = '0.8em';
+                                table.style.textAlign = 'right';
+
+                                table.innerHTML = `
+                <thead style="background:#dfe6e9;">
+                    <tr>
+                        <th style="text-align:left;">Month</th>
+                        ${categories.map(cat => `<th>${cat}</th>`).join('')}
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${months.slice(0, new Date().getMonth() + 1).map(month => {
+                                    const rowData = grouped[vehicle][month] || {};
+                                    const rowTotals = categories.map(cat => rowData[cat] || 0);
+                                    const rowSum = rowTotals.reduce((a, b) => a + b, 0);
+                                    return `
+                            <tr>
+                                <td style="text-align:left;">${month}</td>
+                                ${rowTotals.map(val => `<td>${val.toFixed(2)}</td>`).join('')}
+                                <td class="row-total">${rowSum.toFixed(2)}</td>
+                            </tr>
+                        `;
+                                }).join('')}
+                </tbody>
+                <tfoot style="background:#f1f2f6; font-weight:bold;">
+                    <tr>
+                        <td style="text-align:left;">Total</td>
+                        ${categories.map((_, i) => {
+                                    const colSum = months.reduce((sum, m) => {
+                                        const val = grouped[vehicle][m]?.[categories[i]] || 0;
+                                        return sum + val;
+                                    }, 0);
+                                    return `<td>${colSum.toFixed(2)}</td>`;
+                                }).join('')}
+                        <td class="grand-total">0.00</td>
+                    </tr>
+                </tfoot>
+            `;
+
+                                card.appendChild(table);
+                                container.appendChild(card);
+                            });
+
+                            updateAllGrandTotals();
+                        }
+
+                        function updateAllGrandTotals() {
+                            document.querySelectorAll('.vehicle-card').forEach(card => {
+                                const rows = card.querySelectorAll('tbody tr');
+                                const colCount = rows[0].querySelectorAll('td').length - 2;
+
+                                let grandTotal = 0;
+                                rows.forEach(row => {
+                                    const lastCell = row.querySelector('.row-total');
+                                    grandTotal += parseFloat(lastCell.textContent) || 0;
+                                });
+
+                                const footer = card.querySelector('tfoot tr');
+                                footer.querySelector('.grand-total').textContent = grandTotal.toFixed(2);
+                            });
+                        }
+                    </script>
+
+
+
+                    <style>
+                        .vehicle-title {
+                            text-align: center;
+                            color: #2c3e50;
+                            font-size: 20px;
+                            font-weight: bold;
+                            letter-spacing: 1px;
+                            margin-bottom: 12px;
+                            animation: fadeInSlide 0.6s ease-out;
+                            background: linear-gradient(90deg, #e0f7fa, #f0f4c3);
+                            padding: 8px 12px;
+                            border-radius: 8px;
+                            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                        }
+
+                        @keyframes fadeInSlide {
+                            from {
+                                opacity: 0;
+                                transform: translateY(-10px);
+                            }
+
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+
+                        .vehicle-card {
+                            margin-bottom: 25px;
+                            padding: 20px;
+                            border-radius: 12px;
+                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                            transition: transform 0.3s ease, box-shadow 0.3s ease;
+                        }
+
+                        .vehicle-card:hover {
+                            transform: translateY(-3px);
+                            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .vehicle-title {
+                            font-size: 1.2em;
+                            font-weight: bold;
+                            margin-bottom: 12px;
+                            color: #333;
+                        }
+
+                        .vehicle-table {
+                            width: 100%;
+                            font-size: 0.9em;
+                            border-collapse: collapse;
+                            background-color: transparent;
+                        }
+
+                        .vehicle-table th,
+                        .vehicle-table td {
+                            padding: 6px 8px;
+                            text-align: right;
+                        }
+
+                        .vehicle-table td:first-child,
+                        .vehicle-table th:first-child {
+                            text-align: left;
+                        }
+
+                        .vehicle-table thead {
+                            background-color: rgba(0, 0, 0, 0.05);
+                            font-weight: bold;
+                        }
+
+                        .vehicle-table tfoot {
+                            font-weight: bold;
+                            background-color: rgba(0, 0, 0, 0.05);
+                        }
+
+                        .fade-in {
+                            animation: fadeIn 0.5s ease-in-out;
+                        }
+
+                        @keyframes fadeIn {
+                            from {
+                                opacity: 0;
+                                transform: translateY(10px);
+                            }
+
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                    </style>
+
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function openGSTDetails() {
+            // document.getElementById('inv_Print').value = inv_no;
+            document.getElementById('GstReportPopUp').style.display = 'block';
+        }
+
+        function closeGSTModal() {
+            document.getElementById('GstReportPopUp').style.display = 'none';
+        }
+
+        function openVehicleDetails() {
+            fetch('/get_vehicle_expense_summary')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        console.log("....result......", result)
+                        createVehicleCards(result.data);
+
+                        createVehicleCards(result.data);  // ✅ Corrected
+                        fetchVehicleData(result.chart_data);  // ✅ Pass chart_data here
+                        document.getElementById('VehicleReportPopUp').style.display = 'block';
+                    } else {
+                        alert("Error fetching vehicle data.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch error:", err);
+                    alert("Failed to load vehicle data.");
+                });
+        }
+
+        function closeVehicleModal() {
+            document.getElementById('VehicleReportPopUp').style.display = 'none';
+        }
+
+
+        function openSOADetails() {
+            // document.getElementById('inv_Print').value = inv_no;
+            document.getElementById('SoaReportPopUp').style.display = 'block';
+        }
+
+        function closeSOAModal() {
+            document.getElementById('SoaReportPopUp').style.display = 'none';
+        }
+
+        // Add hover sound effects (optional)
+        document.querySelectorAll('.animecard').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-6px)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add click animation
+        document.querySelectorAll('.animecard').forEach(card => {
+            card.addEventListener('click', function () {
+                this.style.transform = 'translateY(-4px)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-6px)';
+                }, 100);
+            });
+        });
+
+
+    </script>
+
+
+
+    <style>
+        .parentamimecard {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .animecard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .animecard {
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .animecard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .animecard:hover::before {
+            transform: scaleX(1);
+        }
+
+        .animecard:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .animecard:active {
+            transform: translateY(-8px) scale(1.01);
+        }
+
+        .icon-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .icon-style {
+            font-size: 2.5rem;
+            color: var(--icon-color);
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+        }
+
+        .animecard:hover .icon-style {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+        }
+
+        .fancy-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+        }
+
+        .animecard:hover .fancy-heading {
+            transform: translateY(-2px);
+            color: #1a252f;
+        }
+
+        /* Floating particles animation */
+        .animecard::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .animecard:hover::after {
+            opacity: 1;
+        }
+
+        /* Color schemes for different cards - Professional palette */
+        .card-gst {
+            --gradient-start: #27ae60;
+            --gradient-end: #2ecc71;
+            --icon-color: #27ae60;
+        }
+
+        .card-soa {
+            --gradient-start: #3498db;
+            --gradient-end: #2980b9;
+            --icon-color: #3498db;
+        }
+
+        .card-cashflow {
+            --gradient-start: #9b59b6;
+            --gradient-end: #8e44ad;
+            --icon-color: #9b59b6;
+        }
+
+        .card-pl {
+            --gradient-start: #e67e22;
+            --gradient-end: #d35400;
+            --icon-color: #e67e22;
+        }
+
+        .card-reconciliation {
+            --gradient-start: #34495e;
+            --gradient-end: #2c3e50;
+            --icon-color: #34495e;
+        }
+
+        .card-vehicle {
+            --gradient-start: #e74c3c;
+            --gradient-end: #c0392b;
+            --icon-color: #e74c3c;
+        }
+
+        .card-utilities {
+            --gradient-start: #f39c12;
+            --gradient-end: #e67e22;
+            --icon-color: #f39c12;
+        }
+
+        .card-inventory {
+            --gradient-start: #1abc9c;
+            --gradient-end: #16a085;
+            --icon-color: #1abc9c;
+        }
+
+        .card-payroll {
+            --gradient-start: #2c3e50;
+            --gradient-end: #34495e;
+            --icon-color: #2c3e50;
+        }
+
+        .card-tax {
+            --gradient-start: #8e44ad;
+            --gradient-end: #9b59b6;
+            --icon-color: #8e44ad;
+        }
+
+        .card-budget {
+            --gradient-start: #f1c40f;
+            --gradient-end: #f39c12;
+            --icon-color: #f1c40f;
+        }
+
+        .card-analytics {
+            --gradient-start: #e74c3c;
+            --gradient-end: #c0392b;
+            --icon-color: #e74c3c;
+        }
+
+        /* Pulse animation for icons */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .icon-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .animecard-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            .animecard {
+                padding: 30px 20px;
+                min-height: 180px;
+            }
+
+            .icon-style {
+                font-size: 3rem;
+            }
+
+            .fancy-heading {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Optional cards styling */
+        .optional-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .optional-cards {
+            opacity: 0.9;
+        }
+
+        .optional-cards .animecard {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .optional-cards .animecard:hover {
+            opacity: 1;
+        }
+    </style>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+
+        .button-container1 .button-container h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007AFF;
+            /* Apple Blue */
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #007AFF, #34AADC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        /* Smooth fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <style>
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .form-label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        /* Modal Background */
+        .modal1 {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content1 {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 13%;
+            animation: modalIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            animation: modalIn 0.3s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal1.show {
+            display: block;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content1 {
+                width: 80%;
+            }
+
+            .button-container1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

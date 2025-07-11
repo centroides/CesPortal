@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='ces_logo.png') }}">
+
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects" class="active">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="active">
+                            <a href="{{ url_for('projects') }}" class="link">
+                                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('prj_status') }}" class="link">
+                                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('hours_edit') }}" class="link">
+                                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                            </a>
+                        </li>
+
+                        {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                        <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i
+                                    class="fa-solid fa-industry"></i>
+                                Material Receipt</a></li>
+                        {% endif %}
+
+                        <li>
+                            <a href="{{ url_for('hrs_view') }}" class="link">
+                                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+                <h3 style="color: #004274;">Project ID (<span id="requestCount">{{single_pro['id']}}</span>) </h3>
+
+                <button class="new-enquiry-btn" type="button" id="addbudget" data-project-id="{{ single_pro['id'] }}">
+                    + Add Budget
+                </button>
+
+                <script>
+                    document.getElementById("addbudget").addEventListener("click", function () {
+                        const projectId = this.getAttribute("data-project-id");
+                        const remarkInputs = document.querySelectorAll('input[name^="remark_"]');
+                        const remarksData = {};
+
+                        // Collect all remark inputs
+                        remarkInputs.forEach(input => {
+                            const code = input.name.split("remark_")[1];
+                            const value = input.value.trim();
+                            if (value !== "") {
+                                remarksData[code] = parseFloat(value);  // Convert to float
+                            }
+                        });
+
+                        // Send data to backend
+                        fetch(`/allocate_hours/${projectId}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",  // Tell Flask it's JSON
+                                "X-Requested-With": "XMLHttpRequest"
+                            },
+                            body: JSON.stringify(remarksData)
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.location.reload();  // Refresh the page on success
+                                } else {
+                                    alert("Failed to save budget allocation.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Error occurred while saving.");
+                            });
+                    });
+                </script>
+
+
+            </div>
+
+            <style>
+                .span_tag {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #004b5d;
+                    padding: 5px 8px;
+                    border: 1px solid #004b5d;
+                    border-radius: 5px;
+                    background-color: #f1f8ff;
+                    color: #004b5d;
+                    text-align: center;
+                    margin-right: 10px;
+                }
+
+                #totalAmount {
+                    color: #28a745;
+                    /* Green for amount */
+                }
+
+                #totalGST {
+                    color: #0c8de2;
+                    /* Yellow for GST */
+                }
+
+                #overallTotal {
+                    color: #dc3545;
+                    /* Red for overall total */
+                }
+
+                .search_container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    padding: 10px;
+                }
+
+
+                #projectTable {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border-radius: 10px;
+                }
+
+
+                #searchInput {
+                    width: 40%;
+                    padding: 2px;
+                    margin: auto;
+                    display: block;
+                    border: 2px solid #ccc;
+                    border-radius: 5px;
+                    /* Rounded corners */
+                    outline: none;
+                    transition: all 0.3s ease-in-out;
+                    text-align: center;
+                    font-size: 16px;
+                }
+
+                #searchInput:hover {
+                    background-color: #f0f0f0;
+                }
+
+                #searchInput:focus {
+                    border-color: #004b5d;
+                    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                }
+            </style>
+
+            <style>
+                .flex-item-full-width {
+                    flex: 1;
+                }
+
+                .flex-row {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    gap: 15px;
+                    /* Optional: add spacing between flex items within .flex-row */
+                }
+
+                input[type=text],
+                input[type=date],
+                input[type=number],
+                select {
+                    width: 100%;
+                    padding: 10px 20px;
+                    margin: 2px 0;
+                    /* Reduce the top and bottom margin */
+                    display: block;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                }
+
+                /* Responsive styles */
+                @media (max-width: 768px) {
+                    .record-header7 {
+                        padding: 0.5rem;
+                        flex-direction: column;
+                        /* Stack the header content vertically */
+                    }
+
+                    .flex-row {
+                        flex-direction: column;
+                        /* Stack flex items vertically */
+                        gap: 10px;
+                        /* Adjust gap for smaller screens */
+                    }
+
+                    .main_box {
+                        padding: 5px;
+                        /* Reduce padding for smaller screens */
+                    }
+
+                    .content-table .fa-trash,
+                    .fa-edit {
+                        font-size: 1em;
+                        /* Adjust icon size for smaller screens */
+                    }
+
+                    input[type=text],
+                    input[type=date],
+                    input[type=number],
+                    select {
+                        padding: 8px 15px;
+                        /* Reduce padding for smaller screens */
+                    }
+
+                    /* Adjust table column widths for better readability */
+                    .table thead th,
+                    .table tbody td {
+                        padding: 5px;
+                        /* Reduce cell padding */
+                        font-size: 0.9em;
+                        /* Reduce font size */
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .record-header7 {
+                        padding: 0.25rem;
+                    }
+
+                    .flex-row {
+                        gap: 5px;
+                        /* Further reduce gap for very small screens */
+                    }
+
+                    .content-table .fa-trash,
+                    .fa-edit {
+                        font-size: 0.9em;
+                        /* Further adjust icon size */
+                    }
+
+                    input[type=text],
+                    input[type=date],
+                    input[type=number],
+                    select {
+                        padding: 6px 10px;
+                        /* Further reduce padding */
+                    }
+
+                    /* Further adjust table column widths */
+                    .table thead th,
+                    .table tbody td {
+                        padding: 3px;
+                        font-size: 0.8em;
+                        /* Further reduce font size */
+                    }
+                }
+            </style>
+
+            <div class="grandparent">
+
+                <div class="firstparent">
+
+                    <form class="formedit" method="POST" action="/updateproject">
+
+                        <div class="div1" style="min-height: 752px;">
+
+                            <div class="button-container1">
+                                <h3>Project Details</h3>
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="number" id="projectid" name="projectid"
+                                            value="{{single_pro['id']}}" required readonly />
+                                        <span>Project ID *</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="client" name="client"
+                                            value="{{ single_pro['client'] }}" required />
+                                        <span>Client *</span>
+                                    </label>
+                                </div>
+
+                                <!-- Project Manager -->
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="projectmanager" name="projectmanager"
+                                            required>
+                                            <option value="{{ single_pro['pm'] }}">{{ single_pro['pm'] }}</option>
+                                            {% for username in usernames %}
+                                            {% if username == single_pro['pm'] %}
+                                            <option value="{{ username }}" selected>{{ username }}</option>
+                                            {% else %}
+                                            <option value="{{ username }}">{{ username }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <span>Project Manager *</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="projectname"
+                                            name="projectname" value="{{ single_pro['project_name']}}" required />
+                                        <span>Project Name *</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="po_number" name="po_number"
+                                            value="{{ single_pro['po_number'] }}" />
+                                        <span>PO Number</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="date" id="start_time" name="start_time"
+                                            value="{{ single_pro['start_time'] }}" />
+                                        <span>Start Date</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="date" id="end_time" name="end_time"
+                                            value="{{ single_pro['end_time'] }}" />
+                                        <span>End Date</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="number" id="po_value" name="po_value"
+                                            step="any" value="{{ single_pro['po_value'] }}" />
+                                        <span>PO Value</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="status" name="status" required>
+                                            <option value="sairam" {% if single_pro['status']=='None' %}selected{% endif
+                                                %}>
+                                                Select</option>
+                                            <option value="Open" {% if single_pro['status']=='Open' %}selected{% endif
+                                                %}>
+                                                Open</option>
+                                            <option value="Design" {% if single_pro['status']=='Design' %}selected{%
+                                                endif %}>
+                                                Design</option>
+                                            <option value="Install" {% if single_pro['status']=='Install' %}selected{%
+                                                endif %}>
+                                                Install</option>
+                                            <option value="Testing" {% if single_pro['status']=='Testing' %}selected{%
+                                                endif %}>
+                                                Testing</option>
+                                            {% if prj_close_stat == "Can Close" %}
+                                            <option value="Closed" {% if single_pro['status']=='Closed' %}selected{%
+                                                endif %}>Closed</option>
+                                            {% endif %}
+                                        </select>
+                                        <span>Status *</span>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="type" name="type" required>
+                                            <option value="None" {% if single_pro['type']=='None' %}selected{% endif %}>
+                                                Select</option>
+                                            <option value="All" {% if single_pro['type']=='All' %}selected{% endif %}>
+                                                All</option>
+                                            <option value="Civil" {% if single_pro['type']=='Civil' %}selected{% endif
+                                                %}>
+                                                Civil</option>
+                                            <option value="Controls" {% if single_pro['type']=='Controls' %}selected{%
+                                                endif %}>
+                                                Controls</option>
+                                            <option value="IT" {% if single_pro['type']=='IT' %}selected{% endif %}>
+                                                IT</option>
+                                            <option value="M & E" {% if single_pro['type']=='M & E' %}selected{% endif
+                                                %}>M
+                                                & E</option>
+                                        </select>
+                                        <span>Type *</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <div class="multiselect-dropdown" id="multiselect-dropdown">
+                                        <input type="hidden" id="selected-members" name="selected_members" value="">
+                                        <div class="select-box" onclick="toggleDropdown()">
+                                            <div class="selected-items" id="selected-items">Team</div>
+                                            <div class="dropdown-arrow">&#9662;</div>
+                                        </div>
+                                        <div class="dropdown-list" id="dropdown-list">
+                                            <input type="text" class="dropdown-search form-control"
+                                                placeholder="Search..." oninput="filterOptions()" />
+                                            <div class="dropdown-options">
+                                                {% for username in usernames %}
+                                                {% if username != "None" %}
+                                                <label>
+                                                    <input type="checkbox" value="{{ username }}" {% if
+                                                        single_pro['project_members'] and username in
+                                                        single_pro['project_members'] %}checked{% endif %}
+                                                        onchange="updateSelection()"> {{ username }}
+                                                </label>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </label>
+                            </div>
+
+                            <style>
+                                .multiselect-dropdown {
+                                    position: relative;
+                                    width: 100%;
+                                    /* Adjust width as needed */
+                                }
+
+                                .select-box {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    background-color: white;
+                                    padding: 10px;
+                                    border: 1px solid #ccc;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                }
+
+                                .selected-items {
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+
+                                .dropdown-arrow {
+                                    font-size: 12px;
+                                }
+
+                                .dropdown-list {
+                                    display: none;
+                                    position: absolute;
+                                    width: 100%;
+                                    background-color: #fff;
+                                    border: 1px solid #ccc;
+                                    border-radius: 4px;
+                                    margin-top: 5px;
+                                    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+                                    z-index: 1;
+                                    max-height: 200px;
+                                    /* Adjust height as needed */
+                                    overflow-y: auto;
+                                    /* Adds a vertical scroll bar if content exceeds max height */
+
+                                }
+
+                                .dropdown-search {
+                                    width: calc(100% - 20px);
+                                    margin: 10px;
+                                    padding: 5px;
+                                    border: 1px solid #ccc;
+                                    border-radius: 4px;
+                                }
+
+                                .dropdown-options label {
+                                    display: block;
+                                    padding: 8px;
+                                    cursor: pointer;
+                                }
+
+                                .dropdown-options label:hover {
+                                    background-color: #f0f0f0;
+                                }
+
+                                .dropdown-options input[type="checkbox"] {
+                                    margin-right: 10px;
+                                }
+                            </style>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    // Toggle dropdown visibility
+                                    function toggleDropdown() {
+                                        const dropdownList = document.getElementById('dropdown-list');
+                                        dropdownList.style.display = dropdownList.style.display === 'block' ? 'none' : 'block';
+                                    }
+
+                                    // Update the selected items display and hidden input field
+                                    function updateSelection() {
+                                        const checkboxes = document.querySelectorAll('.dropdown-options input[type="checkbox"]');
+                                        const selectedItems = document.getElementById('selected-items');
+                                        const hiddenInput = document.getElementById('selected-members');
+                                        let selected = [];
+
+                                        checkboxes.forEach(checkbox => {
+                                            if (checkbox.checked) {
+                                                selected.push(checkbox.value);
+                                            }
+                                        });
+
+                                        // Update the display of selected items
+                                        selectedItems.textContent = selected.length > 0 ? selected.join(', ') : 'Select Employees';
+
+                                        // Update the hidden input field with selected values
+                                        hiddenInput.value = selected.join(',');
+                                    }
+
+                                    // Filter dropdown options based on search input
+                                    function filterOptions() {
+                                        const searchInput = document.querySelector('.dropdown-search').value.toLowerCase();
+                                        const options = document.querySelectorAll('.dropdown-options label');
+
+                                        options.forEach(option => {
+                                            const text = option.textContent.toLowerCase();
+                                            if (text.includes(searchInput)) {
+                                                option.style.display = '';
+                                            } else {
+                                                option.style.display = 'none';
+                                            }
+                                        });
+                                    }
+
+                                    // Close the dropdown if clicking outside of it
+                                    document.addEventListener('click', function (event) {
+                                        const multiselect = document.querySelector('.multiselect-dropdown');
+                                        if (!multiselect.contains(event.target)) {
+                                            document.getElementById('dropdown-list').style.display = 'none';
+                                        }
+                                    });
+
+                                    // Attach event listeners
+                                    document.getElementById('multiselect-dropdown').addEventListener('click', function (event) {
+                                        // Prevent click events from bubbling up to the document
+                                        event.stopPropagation();
+                                    });
+
+                                    document.querySelectorAll('.dropdown-options input[type="checkbox"]').forEach(checkbox => {
+                                        checkbox.addEventListener('change', updateSelection);
+                                    });
+
+                                    document.querySelector('.dropdown-search').addEventListener('input', filterOptions);
+
+                                    // Ensure the dropdown is hidden initially
+                                    document.getElementById('dropdown-list').style.display = 'none';
+
+                                    // Attach click event to the select-box to toggle dropdown
+                                    document.querySelector('.select-box').addEventListener('click', toggleDropdown);
+
+                                    // Initialize the display of selected items based on pre-checked boxes
+                                    updateSelection();
+                                });
+                            </script>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address"
+                                        name="billing_address1" value="{{ single_pro['billing_address'] }}" />
+                                    <span>Billing Address Line 1</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address2"
+                                        name="billing_address2" value="{{ single_pro['billing_address2'] }}" />
+                                    <span>Billing Address Line 2</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address3"
+                                        name="billing_address3" value="{{ single_pro['billing_address3'] }}" />
+                                    <span>Billing Address Line 3</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address"
+                                        name="delivery_address1" value="{{ single_pro['billing_address'] }}" />
+                                    <span>Delivery Address Line 1</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address2"
+                                        name="delivery_address2" value="{{ single_pro['billing_address2'] }}" />
+                                    <span>Delivery Address Line 2</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address3"
+                                        name="delivery_address3" value="{{ single_pro['billing_address3'] }}" />
+                                    <span>Delivery Address Line 3</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item"
+                                style=" display: flex; justify-content: center; align-items: center;">
+                                <button type="submit" name="action" class="new-enquiry-btn">Update
+                                    Project</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="secondparent">
+
+                    <div class="child">
+
+                        <div class="div1" style="padding: 10px;">
+
+                            <div class="button-container1">
+                                <h3>Resourses (Hours)</h3>
+                            </div>
+
+                            <div class="table-responsive" style="background-color: white;">
+
+                                <table class="table table-main" width="100%" id="projectTable">
+
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Code </th>
+                                            <th class="text-center">Allocated </th>
+                                            <th class="text-center">Added </th>
+                                            <th class="text-center">Total </th>
+                                            <th class="text-center">Actual </th>
+                                            <th class="text-center">Balence </th>
+                                            <th class="text-center">Remarks</th> <!-- New column -->
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for department_id, values in pmtable_rows|dictsort if (10 <=
+                                            department_id|int <=100) or (1000 <=department_id|int <=1999) %} <tr>
+                                            <td class="text-center">{{ department_id }}</td>
+                                            <td class="text-center">{{ '{:,.2f}'.format(values[0]) }} </td>
+                                            <td class="text-center">{{ '{:,.2f}'.format(values[1]) }} </td>
+                                            <td class="text-center">{{ '{:,.2f}'.format(values[2]) }} </td>
+                                            <td class="text-center">{{ '{:,.2f}'.format(values[3]) }} </td>
+                                            <td class="text-center">{{ '{:,.2f}'.format(values[4]) }} </td>
+                                            <td class="text-center" style="width: 100px;">
+                                                <input type="number" step="any" name="remark_{{ department_id }}"
+                                                    style="height: 25px; padding: 2px;">
+                                            </td>
+                                            </tr>
+                                            {% endfor %}
+                                    </tbody>
+
+
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center"><strong>Total</strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['1000-1999'][0])
+                                                    }} </strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['1000-1999'][1]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['1000-1999'][2]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['1000-1999'][3]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['1000-1999'][4]) }}
+                                                </strong></td>
+
+                                            <td class="text-center"><strong> </strong></td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="child">
+
+                        <div class="div1" style="padding: 10px;">
+
+                            <div class="button-container1">
+                                <h3>Materials ( $ )</h3>
+                            </div>
+
+                            <div class="table-responsive" style="background-color: white;">
+
+                                <table class="table table-main" width="100%" id="projectTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Code</th>
+                                            <th class="text-center">Allocated</th>
+                                            <th class="text-center">Added</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Actual</th>
+                                            <th class="text-center">Balance</th>
+                                            <th class="text-center">Remarks</th> <!-- New column -->
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for department_id, values in pmtable_rows.items() %}
+                                        {% if not ((10 <= department_id|int <=100) or (1000 <=department_id|int <=1999))
+                                            %} <tr>
+                                            <td class="text-center">{{ department_id }}</td>
+                                            <td class="text-center"> {{ '{:,.2f}'.format(values[0]) }} </td>
+                                            <td class="text-center"> {{ '{:,.2f}'.format(values[1]) }} </td>
+                                            <td class="text-center"> {{ '{:,.2f}'.format(values[2]) }} </td>
+                                            <td class="text-center"> {{ '{:,.2f}'.format(values[3]) }} </td>
+                                            <td class="text-center"> {{ '{:,.2f}'.format(values[4]) }} </td>
+                                            <td class="text-center" style="width: 100px;">
+                                                <input type="number" step="any" name="remark_{{ department_id }}"
+                                                    style="height: 25px; padding: 2px;">
+                                            </td>
+
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center"><strong>Total</strong></td>
+                                            <td class="text-center"><strong> {{
+                                                    '{:,.2f}'.format(range_totals['2000-4999 & 500-599'][0])
+                                                    }} </strong></td>
+                                            <td class="text-center"><strong>{{
+                                                    '{:,.2f}'.format(range_totals['2000-4999 & 500-599'][1]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong> {{
+                                                    '{:,.2f}'.format(range_totals['2000-4999 & 500-599'][2]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong> {{
+                                                    '{:,.2f}'.format(range_totals['2000-4999 & 500-599'][3]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong> {{
+                                                    '{:,.2f}'.format(range_totals['2000-4999 & 500-599'][4]) }}
+                                                </strong></td>
+                                            <td class="text-center"><strong> </strong></td>
+
+                                        </tr>
+                                    </tfoot>
+
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <style>
+        .formedit label .input[readonly]+span {
+            top: 30px;
+            font-size: 0.7em;
+            font-weight: 600;
+            color: rgb(87, 79, 8);
+        }
+
+        .formedit {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: white;
+            padding: 5px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+
+
+        .message {
+            color: #355891;
+            font-size: 14px;
+        }
+
+        .flex {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .formedit label {
+            position: relative;
+        }
+
+        .formedit label .input {
+            width: 100%;
+            padding: 9px 9px 18px 9px;
+            outline: 0;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        .formedit label .input+span {
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            color: #355891;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .formedit label .input:placeholder-shown+span {
+            top: 15px;
+            font-size: 0.9em;
+        }
+
+        .formedit label .input:focus+span,
+        .formedit label .input:valid+span {
+            top: 30px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .formedit label .input:valid+span {
+            color: rgb(87, 79, 8);
+            /* bottom color */
+        }
+
+        .input01 {
+            width: 100%;
+            padding: 10px 10px 20px 10px;
+            outline: 0;
+            border: 1px solid #355891;
+            border-radius: 5px;
+        }
+
+        .formedit label .input01+span {
+            position: absolute;
+            left: 10px;
+            top: 50px;
+            color: #355891;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .formedit label .input01:placeholder-shown+span {
+            top: 40px;
+            font-size: 0.9em;
+        }
+
+        .formedit label .input01:focus+span,
+        .formedit label .input01:valid+span {
+            top: 50px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .formedit label .input01:valid+span {
+            color: green;
+        }
+
+        .fancy {
+            background-color: white;
+            border: 2px solid #355891;
+            border-radius: 0px;
+            box-sizing: border-box;
+            color: #355891;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 390;
+            letter-spacing: 2px;
+            margin: 0;
+            outline: none;
+            overflow: visible;
+            padding: 8px 30px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            text-transform: none;
+            transition: all 0.3s ease-in-out;
+            user-select: none;
+            font-size: 13px;
+        }
+
+        .fancy::before {
+            content: " ";
+            width: 1.7rem;
+            height: 2px;
+            background: #355891;
+            top: 50%;
+            left: 1.5em;
+            position: absolute;
+            transform: translateY(-50%);
+            transform: translateX(230%);
+            transform-origin: center;
+            transition: background 0.3s linear, width 0.3s linear;
+        }
+
+        .fancy .text {
+            font-size: 1.125em;
+            line-height: 1.33333em;
+            padding-left: 2em;
+            display: block;
+            text-align: left;
+            transition: all 0.3s ease-in-out;
+            text-transform: lowercase;
+            text-decoration: none;
+            color: #355891;
+            transform: translateX(30%);
+        }
+
+        .fancy .top-key {
+            height: 2px;
+            width: 1.5625rem;
+            top: -2px;
+            left: 0.625rem;
+            position: absolute;
+            background: #355891;
+            transition: width 0.5s ease-out, left 0.3s ease-out;
+        }
+
+        .fancy .bottom-key-1 {
+            height: 2px;
+            width: 1.5625rem;
+            right: 1.875rem;
+            bottom: -2px;
+            position: absolute;
+            background: #355891;
+            transition: width 0.5s ease-out, right 0.3s ease-out;
+        }
+
+        .fancy .bottom-key-2 {
+            height: 2px;
+            width: 0.625rem;
+            right: 0.625rem;
+            bottom: -2px;
+            position: absolute;
+            background: #355891;
+            transition: width 0.5s ease-out, right 0.3s ease-out;
+        }
+
+        .fancy:hover {
+            color: #355891;
+            background: #5f82a9;
+        }
+
+        .fancy:hover::before {
+            width: 1.5rem;
+            background: #355891;
+        }
+
+        .fancy:hover .text {
+            color: white;
+            padding-left: 1.5em;
+        }
+
+        .fancy:hover .top-key {
+            left: -2px;
+            width: 0px;
+        }
+
+        .fancy:hover .bottom-key-1,
+        .fancy:hover .bottom-key-2 {
+            right: 0;
+            width: 0;
+        }
+    </style>
+
+    <style>
+        .grandparent {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .firstparent {
+            width: 30%;
+            background-color: #f8bbd0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .secondparent {
+            width: 70%;
+            display: flex;
+            flex-direction: row;
+            background-color: #c8e6c9;
+            border-radius: 8px;
+
+
+        }
+
+        .secondparent .child {
+            flex: 1;
+            /* Take 50% each in column layout */
+            padding: 10px;
+        }
+
+
+
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 630px;
+            border-radius: 10px;
+        }
+
+
+        .div1 {
+            display: flex;
+            /* Keep this */
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 10px;
+            position: relative;
+            background: white;
+            padding: 5px;
+            width: 100%;
+        }
+
+
+        #allocateFormbudget {
+            flex-direction: column;
+            display: flex;
+            gap: 20px;
+            /* Optional spacing between the divs */
+        }
+    </style>
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: #d8eaf3;
+        }
+    </style>
+
+    <style>
+        .button-container1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            background: linear-gradient(135deg, #dbeafe, #c7d2fe, #a5b4fc);
+            /* Light blue gradient */
+            color: rgb(54, 52, 52);
+            border-radius: 5px;
+        }
+
+
+        .button-container1:hover {
+            background-color: rgba(7, 89, 240, 0.594);
+            color: white;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .multiselect-dropdown {
+            position: relative;
+            width: 100%;
+            /* Adjust width as needed */
+        }
+
+        .select-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .selected-items {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+        }
+
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            /* box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); */
+            z-index: 1;
+            max-height: 200px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+            /* Adds a vertical scroll bar if content exceeds max height */
+        }
+
+        .dropdown-search {
+            width: calc(100% - 20px);
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .dropdown-options label {
+            display: block;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        .dropdown-options label:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+
+    <style>
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            /* Ensure it appears above the table body */
+        }
+
+        thead th {
+            background-color: white;
+            box-shadow: 0 2px 2px -2px gray;
+            /* Optional: Add shadow for better visibility */
+        }
+
+        .table-main th,
+        .table-main td {
+            border: 0.5px solid #f3f1f1;
+            text-align: left;
+        }
+
+        .table-main thead th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
+    <style>
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 2;
+        }
+
+        tfoot {
+            position: sticky;
+            bottom: 0;
+            background-color: #f8f9fa;
+            /* Light gray background */
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        tfoot tr {
+            border-top: 2px solid #dee2e6;
+            /* Slightly darker top border for emphasis */
+        }
+
+        tfoot td {
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+        }
+    </style>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+    </style>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts" class="active">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleClient'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('client_details') }}" class="link">
+                                <i class="fa-solid fa-handshake-simple" style="margin-right: 5px;"></i> Clients
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('vendor') }}" class="link">
+                                <i class="fa-sharp fa-solid fa-store" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleExpenses'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('ac_pay_req') }}" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('reports') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Reports
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('invoice') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Invoice
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleOverHeadPayReq'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('add_expense') }}" class="link">
+                                <i class="fa-solid fa-money-bill-wave" style="margin-right: 5px;"></i> Add Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <h3 style="color: #004274;">Expenses (<span id="requestCount">0</span>) </h3>
+
+
+                <input type="text" id="searchInput" placeholder="Search......" onkeyup="filterTable()">
+                <span class="span_tag">Amount : <span id="totalAmount">$ 0.00</span></span>
+                <span class="span_tag">GST : <span id="totalGST">$ 0.00</span></span>
+                <span class="span_tag">Total : <span id="overallTotal">$ 0.00</span></span>
+
+
+                {% if user_access['toggle_ac_overhead_pay_NewRequest'] == 'On' %}
+                <div class="title-item cssanimation open">
+
+                    <button type="button" id="openModalButton" data-project-id="#" class="new-enquiry-btn">
+                        + New Expense
+                    </button>
+
+                </div>
+                {% endif %}
+
+                <script>
+                    function filterTable() {
+                        let input = document.getElementById("searchInput").value.toLowerCase().trim();
+                        let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+
+                        let rows = document.querySelectorAll(".mainRow");
+
+                        rows.forEach(row => {
+                            // Combine all searchable fields into a single string
+                            let searchableText = [
+                                row.querySelector(".claim_id"),
+                                row.querySelector(".claim_type"),
+                                row.querySelector(".claim_by"),
+                                row.querySelector(".claim_date"),
+                                row.querySelector(".status")
+                            ].map(el => el ? el.textContent.trim().toLowerCase() : "").join(" ");
+
+                            // Show the row only if all keywords are present
+                            let shouldShow = keywords.every(keyword => searchableText.includes(keyword));
+                            row.style.display = shouldShow ? "" : "none";
+                        });
+
+                        updateTotals();        // Call your function to update totals
+                    }
+
+                    function updateTotals() {
+                        let requestCount = 0;
+                        let totalAmount = 0;
+                        let totalGST = 0;
+                        let totalSum = 0;
+                        const rows = document.querySelectorAll("#projectTable tbody tr.mainRow");
+                        rows.forEach(row => {
+                            if (row.style.display !== "none") {
+                                requestCount++;
+                                let amount = parseFloat(row.querySelector(".amount-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                                let gstValue = parseFloat(row.querySelector(".gst-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                                let total = parseFloat(row.querySelector(".total-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                                totalAmount += amount;
+                                totalGST += gstValue;
+                                totalSum += total;
+                            }
+                        });
+
+                        let formattedAmount = totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        let formattedGST = totalGST.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                        document.getElementById("requestCount").textContent = requestCount;
+                        document.getElementById("totalAmount").textContent = "S$ " + formattedAmount;
+                        document.getElementById("totalGST").textContent = "S$ " + formattedGST;
+                        document.getElementById("overallTotal").textContent = "S$ " + formattedTotal;
+                    }
+
+
+                    document.addEventListener("DOMContentLoaded", () => {
+                        updateTotals();
+
+                    });
+
+                </script>
+
+                <style>
+                    .span_tag {
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: #004b5d;
+                        padding: 5px 8px;
+                        border: 1px solid #004b5d;
+                        border-radius: 5px;
+                        background-color: #f1f8ff;
+                        color: #004b5d;
+                        text-align: center;
+                        margin-right: 10px;
+                    }
+
+                    #totalAmount {
+                        color: #28a745;
+                        /* Green for amount */
+                    }
+
+                    #totalGST {
+                        color: #0c8de2;
+                        /* Yellow for GST */
+                    }
+
+                    #overallTotal {
+                        color: #dc3545;
+                        /* Red for overall total */
+                    }
+
+                    .search_container {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+
+                    #projectTable {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        border-radius: 10px;
+                    }
+
+
+                    #searchInput {
+                        width: 30%;
+                        padding: 2px;
+                        margin: auto;
+                        display: block;
+                        border: 2px solid #ccc;
+                        border-radius: 5px;
+                        /* Rounded corners */
+                        outline: none;
+                        transition: all 0.3s ease-in-out;
+                        text-align: center;
+                        font-size: 16px;
+                    }
+
+                    #searchInput:hover {
+                        background-color: #f0f0f0;
+                    }
+
+                    #searchInput:focus {
+                        border-color: #004b5d;
+                        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                    }
+                </style>
+
+            </div>
+
+            <div class="table-responsive" style="background-color: white;">
+
+                <table class="table table-main" width="100%" id="projectTable">
+
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">View</th>
+                            <th style="text-align: left;">Expenses ID</th>
+                            <th style="text-align: center;">Date</th>
+                            <th style="text-align: left;">Comments</th>
+                            <th style="text-align: right;">Amount (S$)</th>
+                            <th style="text-align: right;">GST (S$)</th>
+                            <th style="text-align: right;">Total (S$)</th>
+                            <th style="text-align: center;">Status</th>
+                            <th style="text-align: center;">Del</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for claim in claims_data %}
+                        <tr class="mainRow">
+
+                            <td style="text-align: center;" class=" view-col">
+                                <span class="icon" onclick="openPaymentDetails('{{ claim.claim_id }}')"
+                                    style="cursor: pointer;">
+                                    <span class="fa-solid fa-eye" style="font-size: 1.25em; color: orangered;"></span>
+                                </span>
+                            </td>
+
+                            <td style="text-align: left; padding-left: 10px;" class="claim_id">
+
+                                <span style="color: blueviolet; font-weight: bold;">{{ claim.claim_id }}</span>
+
+                            </td>
+
+                            <td style="text-align: center;" class="start-time claim_date">{{ claim.claim_date }}
+                            </td>
+
+                            <td style="text-align: left; padding-left: 10px;">
+                                {{ claim.comments[:20] + '...' if claim.comments and claim.comments|length > 20 else
+                                claim.comments or '' }}
+                            </td>
+
+                            <td class="amount-col" style="text-align: right; padding-right: 10px;">
+                                {{ "{:,.2f}".format(claim.amount|replace(',', '')|float) if claim.amount else "0.00"
+                                }}
+                            </td>
+
+                            <td class="gst-col" style="text-align: right; padding-right: 10px;">
+                                {{ "{:,.2f}".format(claim.gst_value|replace(',', '')|float) if claim.gst_value else
+                                "0.00" }}
+                            </td>
+
+                            <td class="total-col" style="text-align: right; padding-right: 10px;">
+                                {{ "{:,.2f}".format(claim.claim_Total|replace(',', '')|float) if claim.claim_Total
+                                else "0.00" }}
+                            </td>
+
+                            <td class="status" style="font-weight: bold; text-align: center;">
+                                <span style="color: 
+                                     {% if claim.status == 'Pending' %}
+                                         brown;
+                                     {% elif claim.status == 'Partial' %}
+                                         blue;
+                                     {% elif claim.status == 'Paid' %}
+                                         green;
+                                     {% elif claim.status == 'Canceled' %}
+                                         red;
+                                     {% endif %};
+                                     background-color: 
+                                     {% if claim.status == 'Pending' %}
+                                         #f2e1d7; /* Light brown background */
+                                     {% elif claim.status == 'Partial' %}
+                                         #a4acee; /* Light orange background */
+                                     {% elif claim.status == 'Paid' %}
+                                         #d0f8e3; /* Light green background */
+                                     {% elif claim.status == 'Canceled' %}
+                                         #f8d7da; /* Light red background */
+                                     {% endif %};
+                                     padding: 2px 8px; 
+                                     border-radius: 8px; 
+                                     display: inline-block; /* Ensures the span takes up only as much space as needed */
+                                 ">
+                                    {{ claim.status }}
+                                </span>
+                            </td>
+
+                            <form method="POST" action="/delete_claim" onsubmit="return confirmAndDisable(this);">
+                                <td style="text-align: center;">
+                                    <input type="hidden" name="claim_id" value="{{ claim.claim_id }}">
+                                    <input type="hidden" name="from_where" value="accounts">
+                                    <button type="submit" style="background: none; border: none;" class="delete-btn">
+                                        <span class="icon">
+                                            <span class="fa-solid fa-trash"
+                                                style="color: red; font-size: 1.2em; cursor: pointer;"></span>
+                                        </span>
+                                    </button>
+                                </td>
+                            </form>
+
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+                <script>
+                    let isDeleting = false;
+
+                    function confirmAndDisable(form) {
+                        if (isDeleting) return false;           // guard against double submit
+                        if (!confirm("Are you sure you want to delete this Expenses?")) {
+                            return false;                         // user cancelled
+                        }
+                        isDeleting = true;                      // prevent any further submits
+                        // disable all submit buttons in this form
+                        form.querySelectorAll('button[type="submit"]').forEach(btn => btn.disabled = true);
+                        return true;                            // allow form submission
+                    }
+                </script>
+
+
+                <script>
+
+                    function formatNumber(number) {
+                        return new Intl.NumberFormat('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(number);
+                    }
+
+                    function formatDate(dateString) {
+                        const date = new Date(dateString);
+                        const day = String(date.getDate()).padStart(2, '0');  // Pad with zero if single digit
+                        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed, so add 1
+                        const year = String(date.getFullYear()).slice(-2);  // Get last two digits of the year
+                        return `${day}/${month}/${year}`;
+                    }
+
+                    function openPaymentDetails(PO_no) {
+                        fetch(`/fetch_claim_details/${PO_no}`)
+                            .then(response => response.json())
+                            .then(data => {
+
+                                if (data.success) {
+                                    console.log()
+
+                                    document.getElementById('Claim_ID_to_view').textContent = data.claim_details.claim_id;
+                                    document.getElementById('Claim_By').textContent = data.claim_details.claim_by;
+
+
+                                    if (data.claim_details.claim_date) {
+                                        document.getElementById('Claim_Date').textContent = formatDate(data.claim_details.claim_date);
+                                    } else {
+                                        document.getElementById('Claim_Date').textContent = '';
+                                    }
+
+
+                                    document.getElementById('calim_Status').textContent = data.claim_details.status;
+                                    document.getElementById('view_total').textContent = `S$ ${formatNumber((data.claim_details.claim_Total ?? 0).toFixed(2))}`;
+                                    document.getElementById('view_amount').textContent = `S$ ${formatNumber((data.claim_details.amount ?? 0).toFixed(2))}`;
+                                    document.getElementById('view_gst').textContent = `S$ ${formatNumber((data.claim_details.gst_value ?? 0).toFixed(2))}`;
+                                    document.getElementById('Comments').textContent = data.claim_details.comments;
+                                    // Populate items list
+                                    let itemsTable = document.getElementById('modalItemsTable');
+                                    itemsTable.innerHTML = "";
+
+                                    data.items.forEach((item, index) => {
+                                        let projectID = item.projectid || '';  // Project ID
+                                        let category = item.Category || '';  // Category
+                                        let subCategory = item.Sub_Category || '';  // Sub Category
+                                        let itemName = item.itemname || '';  // Item name
+                                        let amount = parseFloat(item.amount) || 0;  // Amount
+                                        let gst = parseFloat(item.gst_value) || 0;  // GST
+                                        let total = parseFloat(item.total) || 0;  // Total
+
+                                        // Format total as currency if necessary
+                                        let formattedAmount = formatNumber(amount.toFixed(2));
+                                        let formattedGST = formatNumber(gst.toFixed(2));
+                                        let formattedTotal = formatNumber(total.toFixed(2));
+
+                                        let row = `<tr>
+                                        <td style="width: 2%; text-align: center;">${index + 1}</td>
+                                        <td style="width: 10%; text-align: left;">${category}</td>
+                                        <td style="width: 50%; text-align: left;">${subCategory}</td>
+                                        <td style="width: 50%; text-align: left;">${itemName}</td>
+                                        <td style="width: 7%; text-align: right;"> ${formattedAmount}</td>
+                                        <td style="width: 7%; text-align: right; "> ${formattedGST}</td>
+                                        <td style="width: 7%; text-align: right; "> ${formattedTotal}</td>
+                                    </tr>`;
+
+                                        document.getElementById('modalItemsTable').innerHTML += row;
+                                    });
+
+                                    document.getElementById('paymentModal').style.display = 'block';
+                                } else {
+                                    alert('Payment details not found!');
+                                }
+                            })
+                            .catch(error => console.error('Error fetching payment details:', error));
+                    }
+
+                    function closeModal() {
+                        document.getElementById('paymentModal').style.display = 'none';
+                    }
+
+                </script>
+
+                <div id="paymentModal" class="modal">
+
+                    <div class="modal-content">
+
+                        <div class="button-container1">
+
+                            <h2>Expenses Details </h2>
+                            <span class="close" onclick="closeModal()">&times;</span>
+
+                        </div>
+
+                        <div class="container" style="background-color: #f5f5f7;">
+
+                            <div class="invoice-header">
+                                <div class="invoice-row">
+                                    <p><strong>Expenses ID</strong></p>
+                                    <span id="Claim_ID_to_view"></span>
+                                </div>
+                                <div class="invoice-row">
+                                    <p><strong>Expense By</strong></p>
+                                    <span id="Claim_By"></span>
+                                </div>
+                                <div class="invoice-row">
+                                    <p><strong> Date</strong></p>
+                                    <span id="Claim_Date"></span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="invoice-header">
+
+                                <div class="invoice-row">
+                                    <p><strong>Amount</strong></p>
+                                    <span id="view_amount"></span>
+                                </div>
+
+                                <div class="invoice-row">
+                                    <p><strong>GST</strong></p>
+                                    <span id="view_gst"></span>
+                                </div>
+
+                                <div class="invoice-row">
+                                    <p><strong>Total</strong></p>
+                                    <span id="view_total"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="invoice-header">
+
+                                <div class="invoice-row">
+                                    <p><strong>Status</strong></p>
+                                    <span id="calim_Status"></span>
+                                </div>
+                                <div class="invoice-row">
+                                    <p><strong>Comments</strong></p>
+                                    <span id="Comments"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="container">
+
+                            <div class="table-responsive1">
+
+                                <table class="table table-main" width="100%">
+
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center; width: 2%;">S/N</th>
+                                            <th style="text-align: left; width: 10%;">Category</th>
+                                            <th style="text-align: left; width: 20%;">Item</th>
+                                            <th style="text-align: left; width: 30%;">Description</th>
+                                            <th style="text-align: right; width: 7%;">Amount(S$)</th>
+                                            <th style="text-align: right; width: 7%;">GST(S$)</th>
+                                            <th style="text-align: right; width: 7%;">Total(S$)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="modalItemsTable">
+                                        <!-- Items will be inserted here -->
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <style>
+                    .table-responsive1 {
+                        width: 100%;
+                        overflow: auto;
+                        max-height: 450px;
+                        border-radius: 10px;
+                        border: 1px solid #ddd;
+                    }
+
+
+                    .table-main {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .table-main thead {
+                        position: sticky;
+                        top: 0;
+                        background: white;
+                        z-index: 10;
+                    }
+
+                    .container {
+                        background-color: white;
+                        /* Light Gray - Similar to Apple's typical background */
+                        padding: 10px;
+                        border-radius: 10px;
+                        display: flex;
+                        flex: 1;
+                        gap: 20px;
+                        border: 2px solid #d3d3d3;
+                        /* Slightly darker light gray for border */
+                        margin-bottom: 15px;
+                    }
+
+                    .invoice-header {
+                        flex: 1;
+                        background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                        padding: 20px;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        color: #004d40;
+                        transition: transform 0.2s ease-in-out;
+                    }
+
+                    .invoice-header:hover {
+                        transform: scale(1.02);
+                    }
+
+                    .invoice-row {
+                        display: grid;
+                        grid-template-columns: 140px auto;
+                        /* First column for labels, second for values */
+                        gap: 10px;
+                        align-items: center;
+                        padding: 5px 0;
+                    }
+
+                    .invoice-row p {
+                        margin: 0;
+                        font-weight: bold;
+                        text-align: left;
+                    }
+
+                    .invoice-row span {
+                        text-align: left;
+                    }
+
+
+                    .invice_header {
+                        width: 100%;
+                        padding: 10px;
+
+                    }
+
+                    .button-container1 {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                    }
+
+                    .button-container1 h2 {
+                        margin: 0;
+                        font-size: 1.5em;
+                        color: #333;
+                    }
+
+
+
+                    .title-box {
+                        display: flex;
+                        padding: 5px;
+                        background-color: white;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        margin-bottom: 10px;
+                        justify-content: space-between;
+
+                    }
+
+                    .title-item {
+                        display: flex;
+                        align-items: center;
+
+                        /* Align title and value on the same row */
+                    }
+
+                    .title-item span {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #004b5d;
+                    }
+
+
+                    @keyframes open {
+                        from {
+                            width: 20px;
+                            /* Start with 0 width */
+                        }
+
+                        to {
+                            width: 573px;
+                            /* Animate to 473px width */
+                        }
+                    }
+
+                    /* Responsive styling for smaller screens */
+                    @media (max-width: 768px) {
+                        .title-box {
+                            flex-direction: column;
+                            /* Stack items vertically on smaller screens */
+                            align-items: flex-start;
+                        }
+
+                        .title-item {
+                            margin-bottom: 15px;
+                            /* Space between stacked items */
+                        }
+                    }
+                </style>
+
+            </div>
+
+            <div id="modal" class="modal">
+
+                <div class="modal-content">
+
+                    <div class="button-container1">
+
+                        <h3>New Expense</h3>
+
+                        <span class="close-button">&times;</span>
+
+                    </div>
+
+                    <div class="nested-tab-container">
+
+                        <div id="master-tabs" class="main-tabs"></div>
+                        <div id="sub-tabs" class="sub-tabs"></div>
+                        <div id="intermediate-tabs" class="intermediate-tabs"></div>
+
+                        <div id="table-output-area" class="table-output">
+
+                            <div class="sub-tab-table table-responsive1">
+
+                                <table class="input-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 2%;">S/N</th>
+                                            <th style="width: 5%;">Expenses</th>
+                                            <th style="width: 8%;">Category</th>
+                                            <th style="width: 2%;">Date</th>
+                                            <th style="width: 7%;">Inv No</th>
+                                            <th style="width: 10%;">Vendor</th>
+                                            <th style="width: 15%;">Description</th>
+                                            <th style="width: 5%;">Amount</th>
+                                            <th style="width: 4%;">GST</th>
+                                            <th style="width: 5%;">Total</th>
+                                            <th style="width: 2%;">Del</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="expense-table-body">
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" style="text-align:left; font-weight:bold;"></td>
+                                            <td style="text-align:right; font-weight:bold;">Totals:</td>
+                                            <td id="extotalAmount" style="text-align: right;">0.00</td>
+                                            <td id="extotalgst" style="text-align: right;">0.00</td>
+                                            <td id="exgrabdTotal" style="text-align: right;">0.00</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <script>
+                        const expenseData = {{ expense_types | tojson }};
+                        // Ensure defaultGlobalGst is treated as a number. If it's a percentage like 7, it will be 0.07 in calculation.
+                        const defaultGlobalGst = parseFloat({{ gst | tojson }}) || 0; // Use parseFloat and default to 0 if not a number
+
+                        const masterTabsContainer = document.getElementById('master-tabs');
+                        const subTabsContainer = document.getElementById('sub-tabs');
+                        const intermediateTabsContainer = document.getElementById('intermediate-tabs');
+                        const expenseTableBody = document.getElementById('expense-table-body');
+
+                        // Get references to the footer elements
+                        const totalAmountFooter = document.getElementById('extotalAmount');
+                        const totalGstFooter = document.getElementById('extotalgst');
+                        const grandTotalFooter = document.getElementById('exgrabdTotal');
+
+
+                        // Helper to toggle active button within a group
+                        function setActiveButton(target, selector) {
+                            document.querySelectorAll(selector).forEach(btn => btn.classList.remove('active'));
+                            target.classList.add('active');
+                        }
+
+                        // Level 1: Master Tabs
+                        expenseData.forEach(item => {
+                            const btn = document.createElement('button');
+                            btn.className = 'main-tab';
+                            btn.textContent = item.type;
+                            btn.onclick = () => showParentTabs(item, btn);
+                            masterTabsContainer.appendChild(btn);
+                        });
+
+                        // Level 2: Parent Tabs
+                        function showParentTabs(masterItem, masterBtn) {
+                            setActiveButton(masterBtn, '.main-tab');
+                            subTabsContainer.innerHTML = '';
+                            intermediateTabsContainer.innerHTML = '';
+
+                            if (masterItem.parents.length > 0) {
+                                masterItem.parents.forEach(parent => {
+                                    const btn = document.createElement('button');
+                                    btn.className = 'sub-tab';
+                                    btn.textContent = parent;
+                                    btn.onclick = () => showChildTabs(masterItem, parent, btn);
+                                    subTabsContainer.appendChild(btn);
+                                });
+                            } else {
+                                showChildTabs(masterItem, null);
+                            }
+                        }
+
+                        // Level 3: Child Tabs
+                        function showChildTabs(masterItem, parent = null, parentBtn = null) {
+                            if (parentBtn) setActiveButton(parentBtn, '.sub-tab');
+
+                            intermediateTabsContainer.innerHTML = '';
+
+                            masterItem.children.forEach(child => {
+                                const btn = document.createElement('button');
+                                btn.className = 'sub-tab level2-btn';
+                                btn.textContent = child;
+                                btn.onclick = () => {
+                                    setActiveButton(btn, '.level2-btn');
+                                    const title = parent ? `${masterItem.type} - ${parent} - ${child}` : `${masterItem.type} - ${child}`;
+                                    renderInputTable(title, masterItem.type, parent, child, defaultGlobalGst);
+                                };
+                                intermediateTabsContainer.appendChild(btn);
+                            });
+                        }
+
+                        // Render the input table with Expenses and Category columns
+                        function renderInputTable(title, expensesValue, parent = null, child = null, defaultGst = '') {
+                            const categoryValue = parent ? `${parent} - ${child}` : `${child}`;
+                            const newRowHTML = `<tr>${generateRowInputs(expensesValue, categoryValue, defaultGst)}</tr>`;
+                            expenseTableBody.insertAdjacentHTML('beforeend', newRowHTML);
+
+                            const newRow = expenseTableBody.lastElementChild; // Get the newly added row
+                            attachRowEventListeners(newRow); // Attach listeners to the new row
+
+                            updateRowIndices(); // Update indices after adding a new row
+                            updateOverallTotals(); // Update overall totals
+                        }
+
+                        // Updated to include index column and apply inline styles
+                        function generateRowInputs(expensesValue, categoryValue, defaultGst) {
+                            return `
+                            <td><span class="row-index"></span></td>
+                            <td><input type="text" name="ov_expenses" class="ov-expenses form-control" value="${expensesValue}" readonly></td>
+                            <td><input type="text" name="ov_category" class="ov-category form-control" value="${categoryValue}" readonly></td>
+                            <td><input type="date" name="ov_purchase_date" class="form-control" required></td>
+                            <td><input type="text" name="ov_invoice_number" class="form-control"></td>
+                            <td><input type="text" name="ov_Supplier_name" class="supplier-input form-control" required></td>
+                            <td><input type="text" name="ov_item_name" class="item-name-input form-control" required></td>
+                            <td><input type="number" step="any" name="ov_amount" class="ov-amount form-control" style="text-align: center;" required></td>
+                            <td><input type="number" step="any" name="ov_gst_value" class="ov-gst-value form-control" value="${defaultGst}" style="text-align: center;" required></td>
+                            <td><input type="number" step="any" name="ov_total" class="ov-total form-control" style="text-align: center;" required></td>
+                            <td><button type="button" onclick="deleteRow(this)" class="delete-row-btn">🗑️</button></td>
+                        `;
+                        }
+
+                        function deleteRow(button) {
+                            button.closest("tr").remove();
+                            updateRowIndices();
+                            updateOverallTotals(); // Update overall totals after deletion
+                        }
+
+                        function updateRowIndices() {
+                            const rows = expenseTableBody.querySelectorAll('tr');
+                            rows.forEach((row, index) => {
+                                const indexSpan = row.querySelector('.row-index');
+                                if (indexSpan) {
+                                    indexSpan.textContent = index + 1;
+                                }
+                            });
+                        }
+
+                        // --- New Calculation Logic ---
+
+                        // Function to attach event listeners to a newly created row
+                        function attachRowEventListeners(row) {
+                            const amountInput = row.querySelector('.ov-amount');
+                            const gstInput = row.querySelector('.ov-gst-value');
+                            const totalInput = row.querySelector('.ov-total');
+
+                            // Listen for input changes in Amount, GST, or Total
+                            amountInput.addEventListener('input', () => calculateRowTotals(row, 'amount'));
+                            gstInput.addEventListener('input', () => calculateRowTotals(row, 'gst'));
+                            totalInput.addEventListener('input', () => calculateRowTotals(row, 'total'));
+                        }
+
+                        // Main function to calculate row totals based on user input
+                        function calculateRowTotals(row, changedField) {
+                            const amountInput = row.querySelector('.ov-amount');
+                            const gstInput = row.querySelector('.ov-gst-value'); // This is the GST percentage input
+                            const totalInput = row.querySelector('.ov-total');
+
+                            let amount = parseFloat(amountInput.value);
+                            let gstPercentage = parseFloat(gstInput.value); // Get raw percentage (e.g., 7 for 7%)
+                            let total = parseFloat(totalInput.value);
+
+                            // Treat GST as 0 if not a valid number or empty
+                            if (isNaN(gstPercentage) || gstPercentage === 0) {
+                                gstPercentage = 0;
+                                gstInput.value = 0; // Ensure the input displays 0 if user clears it or types invalid
+                            }
+
+                            // Convert GST percentage to decimal for calculation (e.g., 7 becomes 0.07)
+                            const gstFactor = 1 + (gstPercentage / 100);
+
+                            // Rounding helper
+                            const roundToTwoDecimalPlaces = (num) => Math.round(num * 100) / 100;
+
+                            if (changedField === 'amount') {
+                                // If Amount is changed (and is valid), calculate Total
+                                if (!isNaN(amount)) {
+                                    total = roundToTwoDecimalPlaces(amount * gstFactor);
+                                    totalInput.value = total.toFixed(2);
+                                } else {
+                                    totalInput.value = ''; // Clear total if amount is cleared
+                                }
+                            } else if (changedField === 'gst') {
+                                // If GST is changed, and Amount has a value, recalculate Total
+                                if (!isNaN(amount)) {
+                                    total = roundToTwoDecimalPlaces(amount * gstFactor);
+                                    totalInput.value = total.toFixed(2);
+                                } else if (!isNaN(total)) {
+                                    // If GST is changed and Total has a value, recalculate Amount
+                                    if (gstFactor !== 0) {
+                                        amount = roundToTwoDecimalPlaces(total / gstFactor);
+                                        amountInput.value = amount.toFixed(2);
+                                    }
+                                }
+                            } else if (changedField === 'total') {
+                                // If Total is changed (and is valid), calculate Amount
+                                if (!isNaN(total)) {
+                                    if (gstFactor !== 0) { // Avoid division by zero
+                                        amount = roundToTwoDecimalPlaces(total / gstFactor);
+                                        amountInput.value = amount.toFixed(2);
+                                    }
+                                } else {
+                                    amountInput.value = ''; // Clear amount if total is cleared
+                                }
+                            }
+
+                            // Always update overall totals after any row calculation
+                            updateOverallTotals();
+                        }
+
+                        // Function to update the overall totals in the footer
+                        function updateOverallTotals() {
+                            let overallAmount = 0;
+                            let overallGstAmount = 0; // This will be the actual GST value, not percentage
+                            let overallTotal = 0;
+
+                            const rows = expenseTableBody.querySelectorAll('tr');
+                            rows.forEach(row => {
+                                const amountInput = row.querySelector('.ov-amount');
+                                const gstPercentInput = row.querySelector('.ov-gst-value');
+                                const totalInput = row.querySelector('.ov-total');
+
+                                let amount = parseFloat(amountInput.value) || 0;
+                                let gstPercentage = parseFloat(gstPercentInput.value) || 0;
+                                let total = parseFloat(totalInput.value) || 0;
+
+                                // Calculate the actual GST amount for this row
+                                // Only add to overallGstAmount if amount and gstPercentage are valid
+                                let currentGstAmount = 0;
+                                if (!isNaN(amount) && !isNaN(gstPercentage)) {
+                                    currentGstAmount = amount * (gstPercentage / 100);
+                                }
+
+                                overallAmount += amount;
+                                overallGstAmount += currentGstAmount;
+                                overallTotal += total;
+                            });
+
+                            // Update footer cells, rounding to 2 decimal places
+                            totalAmountFooter.textContent = overallAmount.toFixed(2);
+                            totalGstFooter.textContent = overallGstAmount.toFixed(2);
+                            grandTotalFooter.textContent = overallTotal.toFixed(2);
+                        }
+
+                        // Initial call to update totals when the page loads (important if there are pre-existing rows or for initial display of 0.00)
+                        updateOverallTotals();
+                    </script>
+
+                    <div class="button-container1">
+
+
+                        <div class='flex-item' style="width: 50%;">
+                            <input type="text" class="form-control" name="ov_comments"
+                                placeholder="Enter your comments here.............." />
+                        </div>
+
+                        <div class='flex-item' style="margin-top: 15px;">
+
+                            <button type="submit" class="new-enquiry-btn" id="generateClaimButtonover">
+                                Add Expense
+                            </button>
+
+                        </div>
+
+                        <script>
+                            document.getElementById('generateClaimButtonover').addEventListener('click', async function (e) {
+                                e.preventDefault();
+
+                                const button = this;
+                                if (button.disabled) return;
+                                button.disabled = true;
+                                button.textContent = 'Submitting...';
+
+                                try {
+                                    const rows = document.querySelectorAll('#expense-table-body tr');
+                                    const expenseItems = [];
+
+                                    if (rows.length === 0) {
+                                        alert('Please add at least one expense entry before submitting.');
+                                        button.disabled = false;
+                                        button.textContent = 'Add Expense';
+                                        return;
+                                    }
+
+                                    let allValid = true;
+
+                                    rows.forEach((row, index) => {
+                                        const date = row.querySelector('input[name="ov_purchase_date"]');
+                                        const vendor = row.querySelector('input[name="ov_Supplier_name"]');
+                                        const description = row.querySelector('input[name="ov_item_name"]');
+                                        const amount = row.querySelector('.ov-amount');
+                                        const gst = row.querySelector('.ov-gst-value');
+                                        const total = row.querySelector('.ov-total');
+
+                                        // Reset border styles
+                                        [date, vendor, description, amount, gst, total].forEach(input => {
+                                            if (input) input.style.border = '';
+                                        });
+
+                                        // Validate required fields
+                                        if (!date.value || !vendor.value || !description.value || !amount.value || !gst.value || !total.value) {
+                                            allValid = false;
+
+                                            // Highlight missing fields
+                                            [date, vendor, description, amount, gst, total].forEach(input => {
+                                                if (!input.value) input.style.border = '2px solid red';
+                                            });
+
+                                            if (index === 0) {
+                                                alert(`Please fill all required fields in row ${index + 1}.`);
+                                            }
+                                        } else {
+                                            const rowData = {
+                                                expenses: row.querySelector('.ov-expenses')?.value || '',
+                                                category: row.querySelector('.ov-category')?.value || '',
+                                                date: date.value,
+                                                invoice: row.querySelector('input[name="ov_invoice_number"]')?.value || '',
+                                                vendor: vendor.value,
+                                                description: description.value,
+                                                amount: amount.value,
+                                                gst: gst.value,
+                                                total: total.value
+                                            };
+                                            expenseItems.push(rowData);
+                                        }
+                                    });
+
+                                    if (!allValid) {
+                                        button.disabled = false;
+                                        button.textContent = 'Add Expense';
+                                        return;
+                                    }
+
+                                    const comments = document.querySelector('input[name="ov_comments"]').value;
+
+                                    // ✅ Extract totals from footer
+                                    const totalAmount = document.getElementById('extotalAmount')?.textContent || '0.00';
+                                    const totalGst = document.getElementById('extotalgst')?.textContent || '0.00';
+                                    const grandTotal = document.getElementById('exgrabdTotal')?.textContent || '0.00';
+
+                                    // ✅ Prepare final payload
+                                    const payload = {
+                                        expenses: expenseItems,
+                                        comments: comments,
+                                        totals: {
+                                            amount: totalAmount,
+                                            gst: totalGst,
+                                            grand: grandTotal
+                                        }
+                                    };
+
+                                    // ✅ Send POST request
+                                    const response = await fetch('/ac_submit_expenses', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(payload)
+                                    });
+
+                                    const result = await response.json();
+
+                                    if (response.ok && result.status === 'success') {
+                                        alert('Expenses submitted successfully!');
+                                        document.getElementById('expense-table-body').innerHTML = '';
+                                        document.querySelector('input[name="ov_comments"]').value = '';
+                                        updateOverallTotals();
+                                    } else {
+                                        throw new Error(result.message || 'Submission failed. Please try again.');
+                                    }
+                                } catch (error) {
+                                    alert(`Error: ${error.message}`);
+                                } finally {
+                                    button.disabled = false;
+                                    button.textContent = 'Add Expense';
+                                }
+                            });
+                        </script>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+
+    <style>
+        /* Main Tabs (Level 1 - Expense Types) */
+        .main-tabs {
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .main-tab {
+            background-color: #cce9ff;
+            border: 2px solid #66aaff;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #003b73;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .main-tab:hover {
+            background-color: #99d4ff;
+        }
+
+        .main-tab.active {
+            background-color: #007fff;
+            color: white;
+            border-color: #005fcc;
+        }
+
+        /* Sub Tabs (Level 2 - Parents like Juniper or SLB5515X) */
+        .sub-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            width: 100%;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .sub-tab {
+            flex: 1 1 calc(10% - 6px);
+            background-color: #e0ffe0;
+            border: 1px solid #66cc66;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            color: #075e07;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .sub-tab:hover {
+            background-color: #b3ffb3;
+        }
+
+        .sub-tab.active {
+            background-color: #00c46f;
+            color: white;
+            border-color: #00a85f;
+        }
+
+        /* Intermediate Tabs (Level 3 - Children like Rent, Fuel) */
+        .intermediate-tabs {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-start;
+        }
+
+        .intermediate-tabs .level2-btn {
+            background-color: #ffe0f7;
+            border: 1px solid #ff66cc;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #a2006d;
+            font-weight: 600;
+        }
+
+        .intermediate-tabs .level2-btn:hover {
+            background-color: #ffb3e6;
+        }
+
+        .intermediate-tabs .level2-btn.active {
+            background-color: #e60073;
+            color: white;
+            border-color: #cc005c;
+        }
+
+        .input-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .input-table th,
+        .input-table td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+        }
+
+        /* Apply the cool styles to inputs with the class 'form-control' */
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: chartreuse;
+            outline: 0;
+            box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+            text-align: center;
+            /* Added from your example */
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        /* Override the default input styling for the table if it was specifically targeting .input-table input */
+        /* This specific rule isn't strictly needed if all inputs use .form-control, but good for clarity */
+        .input-table input {
+            /* No specific styling here, as .form-control will handle it */
+        }
+
+        /* Adjustments for the radio button to prevent it from inheriting .form-control styles */
+        input[type="radio"] {
+            width: auto;
+            /* Reset width for radio buttons */
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            border: none;
+            background-color: transparent;
+        }
+    </style>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // For Supplier Name autocomplete
+            $(document).on('focus', '.supplier-input', function () {
+                if (!$(this).data("autocomplete")) {
+                    $(this).autocomplete({
+                        source: function (request, response) {
+                            $.getJSON('/get_vendor_suggestions', { term: request.term }, function (data) {
+                                response(data);
+
+                            });
+                        },
+                        appendTo: "#modal" // ensures dropdown stays within modal
+
+                    });
+                }
+            });
+
+            // For Item Name autocomplete
+            $(document).on('focus', '.item-name-input', function () {
+                if (!$(this).data("autocomplete")) {
+                    $(this).autocomplete({
+                        source: function (request, response) {
+                            $.getJSON('/get_itemname_suggestions', { term: request.term }, function (data) {
+                                response(data);
+
+                            });
+                        },
+                        appendTo: "#modal" // ensures dropdown stays within modal
+
+                    });
+                }
+            });
+        });
+
+
+        document.getElementById('openModalButton').onclick = function () {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex'; // Show the modal
+        };
+
+        function toggleSelectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('#itemsTableBody input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        document.querySelector('.close-button').onclick = function () {
+            document.getElementById('modal').style.display = 'none';
+            window.location.reload();
+        };
+
+    </script>
+
+    <style>
+        tfoot {
+            position: sticky;
+            bottom: 0;
+            background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+            color: #333;
+            z-index: 1;
+        }
+
+        /* Styling for the delete button */
+        .delete-row-btn {
+            background: none;
+            /* No background color */
+            border: none;
+            /* No border */
+            color: #dc3545;
+            /* Bootstrap's red color for danger, or choose your own */
+            cursor: pointer;
+            /* Changes cursor to a pointer on hover */
+            font-size: 1.2em;
+            /* Slightly larger icon */
+            padding: 0;
+            /* Remove default padding */
+            display: inline-flex;
+            /* Allows icon to center easily if needed */
+            align-items: center;
+            /* Vertically center icon */
+            justify-content: center;
+            /* Horizontally center icon */
+            width: 24px;
+            /* Give it a fixed width */
+            height: 24px;
+            /* Give it a fixed height */
+            transition: color 0.2s ease-in-out;
+            /* Smooth color transition on hover */
+        }
+
+        .delete-row-btn:hover {
+            color: #c82333;
+            /* Darker red on hover */
+        }
+
+        .delete-row-btn:active {
+            color: #bd2130;
+            /* Even darker red when clicked */
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .button-container12 {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+
+        .button-container1 h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007AFF;
+            /* Apple Blue */
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #007AFF, #34AADC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <style>
+        .ui-autocomplete {
+            z-index: 2000 !important;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.5s ease-in-out forwards;
+
+        }
+
+
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+
+            /* Add these lines */
+            min-height: 730px;
+            max-height: 730px;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+
+    <style>
+        #openModalButton:hover {
+            background-color: #04a389;
+            color: #ffffff;
+            border-color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+    </style>
+
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
+
+
+
+
+    <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Return an empty string for invalid dates
+                return "";
+            }
+
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = (date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0"); // Adding 1 because months are zero-based
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const start_time_elements =
+                document.querySelectorAll(".start-time");
+            start_time_elements.forEach(function (element) {
+                element.textContent = formatDate(element.textContent);
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>

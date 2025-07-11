@@ -1,0 +1,3274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry" class="active">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <div class="main-content">
+
+    <div id="pageLoader">
+      <div class="loader"></div>
+    </div>
+
+    <script>
+      window.addEventListener("load", function () {
+        document.getElementById("pageLoader").style.display = "none";
+      });
+    </script>
+
+    <style>
+      #pageLoader {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background: white;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loader {
+        border: 8px solid #f3f3f3;
+        /* Light grey */
+        border-top: 8px solid #3498db;
+        /* Blue */
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="search_container">
+
+        <nav class="timenav">
+
+          <ul id="menuList1" class="timebar">
+
+            {% if user_access['toggleCreateEnquiry'] == 'On' %}
+            <li>
+              <button class="new-enquiry-btn" id="openModalButton" onclick="createNewEnquiry()">
+                <i class="fa-solid fa-plus" style="margin-right: 5px;"></i> New Enquiry
+              </button>
+            </li>
+            {% endif %}
+
+            <li>
+              <input type="radio" id="DashboardRadio" name="sectionRadio" onclick="showSection('Dashboard')"
+                style="display: none;">
+              <label for="DashboardRadio" class="link1">
+                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="AllRadio" name="sectionRadio" onclick="showSection('All')" style="display: none;"
+                checked>
+              <label for="AllRadio" class="link1">
+                <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i> All
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="UnQualifiedRadio" name="sectionRadio" onclick="showSection('UnQualified')"
+                style="display: none;">
+              <label for="UnQualifiedRadio" class="link1">
+                <i class="fa-solid fa-user-xmark" style="margin-right: 5px;"></i>Qualified
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="PendingRadio" name="sectionRadio" onclick="showSection('Pending')"
+                style="display: none;">
+              <label for="PendingRadio" class="link1">
+                <i class="fa-solid fa-hourglass-half" style="margin-right: 5px;"></i> Pending
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="SubmittedRadio" name="sectionRadio" onclick="showSection('Submitted')"
+                style="display: none;">
+              <label for="SubmittedRadio" class="link1">
+                <i class="fa-solid fa-paper-plane" style="margin-right: 5px;"></i> Submitted
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="WonRadio" name="sectionRadio" onclick="showSection('Won')" style="display: none;">
+              <label for="WonRadio" class="link1">
+                <i class="fa-solid fa-trophy" style="margin-right: 5px;"></i> Won
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="LostRadio" name="sectionRadio" onclick="showSection('Lost')"
+                style="display: none;">
+              <label for="LostRadio" class="link1">
+                <i class="fa-solid fa-times-circle" style="margin-right: 5px;"></i> Lost
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="withdrawRadio" name="sectionRadio" onclick="showSection('Withdrawn')"
+                style="display: none;">
+              <label for="withdrawRadio" class="link1">
+                <i class="fa-solid fa-arrow-circle-left" style="margin-right: 5px;"></i> Withdrawn
+              </label>
+            </li>
+
+            <li>
+              <input type="radio" id="CancelledRadio" name="sectionRadio" onclick="showSection('Cancelled')"
+                style="display: none;">
+              <label for="CancelledRadio" class="link1">
+                <i class="fa-solid fa-ban" style="margin-right: 5px;"></i> Cancelled
+              </label>
+            </li>
+
+
+          </ul>
+
+          <script>
+            function showSection(sectionId) {
+              // Hide all sections
+              var sections = document.querySelectorAll(".All, .UnQualified, .Dashboard, .Pending, .Submitted, .Won, .Lost, .Withdrawn, .Cancelled");
+              sections.forEach(function (section) {
+                section.style.display = "none";
+              });
+
+              // Show the selected section
+              var selectedSection = document.getElementById(sectionId);
+              if (selectedSection) {
+                selectedSection.style.display = "block";
+              }
+
+              // Select the corresponding radio button
+              var selectedRadio = document.getElementById(sectionId + "Radio");
+              if (selectedRadio) {
+                selectedRadio.checked = true;
+              }
+            }
+
+            function createNewEnquiry() {
+              alert("New Enquiry Clicked! Implement form/modal here.");
+            }
+
+            window.onload = function () {
+              var show = "{{ show }}"; // Value from the backend
+
+              if (show) {
+                showSection(show);
+              } else {
+                showSection("Dashboard"); // Default to "Dashboard"
+              }
+            };
+          </script>
+
+          <style>
+            .search_container {
+
+              width: 100%;
+            }
+          </style>
+
+          <style>
+            .new-enquiry-btn {
+              background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+              background-size: 200% 200%;
+              color: white;
+              font-weight: bold;
+              border: none;
+              padding: 8px 12px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 14px;
+              display: flex;
+              align-items: center;
+              transition: all 0.4s ease-in-out;
+              box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+              /* Soft shadow */
+            }
+
+            /* Hover effect: Darker Gradient + Glow */
+            .new-enquiry-btn:hover {
+              background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+              background-size: 200% 200%;
+              box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+              /* Stronger shadow on hover */
+              transform: scale(1.05);
+            }
+          </style>
+
+        </nav>
+
+      </div>
+
+      <div id="modal" class="modal">
+
+        <div class="modal-content">
+
+          <div class="button-container1">
+
+            <h3>New / Edit Enquiry</h3>
+
+            <span class="close-button">&times;</span>
+
+          </div>
+
+          <style>
+            .button-container1 h3 {
+              font-size: 22px;
+              font-weight: bold;
+              color: #007AFF;
+              /* Apple Blue */
+              letter-spacing: 1px;
+              background: linear-gradient(45deg, #007AFF, #34AADC);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+              animation: fadeIn 0.6s ease-in-out;
+            }
+
+            /* Smooth fade-in animation */
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(-10px);
+              }
+
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          </style>
+
+          <form method="POST" action="/admin_enquiry">
+
+            <div class="container">
+
+              <div class="invice_header">
+
+                <div class="flex-item" style="display: none;">
+                  <label for="Existing_Enquary" class="form-label">Existing Enquary<span
+                      style="color: red;">*</span></label>
+                  <input type="text" class="form-control" id="Existing_Enquary" name="Existing_Enquary"
+                    style="background-color: rgb(235, 223, 209);" value="{{ new_vendor_code }}" readonly required>
+                </div>
+
+                <div class="flex-row">
+
+                  <div class="flex-item">
+
+                    <label for="reference_number" class="form-label">Enquiry No:<span
+                        style="color: red;">*</span></label>
+                    <input type="number" class="form-control" id="reference_number" name="reference_number" readonly
+                      placeholder="Auto Generated">
+
+                  </div>
+
+                  <div class="flex-item">
+
+                    <label for="Revision_number" class="form-label">Rev. No:</label>
+                    <input type="text" class="form-control" id="Revision_number" name="Revision_number">
+
+                  </div>
+
+                </div>
+
+                <div class="flex-item">
+                  <label for="industry" class="form-label">Industry:<span style="color: red;">*</span></label>
+                  <select class="form-control" id="industry" name="industry" required>
+                    <option value="" disabled selected>Select</option>
+                    {% for ind in industry %}
+                    <option value="{{ ind }}">{{ ind }}</option> <!-- Ensure 'value' matches 'ind' -->
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="client" class="form-label">Client Name:<span style="color: red;">*</span></label>
+
+                  <select class="form-control" id="client" name="client" required>
+                    <option value="" disabled selected>Select a client</option>
+                    {% for suggestion in Cilent_suggestions %}
+                    <option value="{{ suggestion }}">{{ suggestion }}</option>
+                    <!-- Ensure 'value' matches 'suggestion' -->
+                    {% endfor %}
+                  </select>
+
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="name" class="form-label">Project Name: <span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="site" class="form-label">Site</label>
+                  <input type="text" class="form-control" id="site" name="site">
+
+                </div>
+
+              </div>
+
+              <div class="invice_header">
+
+                <div class="flex-item">
+                  <label for="received_date" class="form-label">Received </label>
+                  <input type="date" class="form-control" id="received_date" name="received_date"
+                    value="{{ current_date }}">
+                </div>
+
+                <div class="flex-item">
+                  <label for="submission_date" class="form-label">Submit Before</label>
+                  <input type="date" class="form-control" id="submission_date" name="submission_date">
+                </div>
+
+                <div class="flex-item">
+                  <label for="Date_Submission" class="form-label">Submission Date</label>
+                  <input type="date" class="form-control" id="Date_Submission" name="Date_Submission">
+                </div>
+
+                <div class="flex-item">
+                  <label for="Estimated_value" class="form-label">Value</label>
+                  <input type="number" class="form-control" id="Estimated_value" name="Estimated_value" step="any">
+                </div>
+
+                <div class="flex-item">
+                  <label for="currency" class="form-label">Currency</label>
+                  <input type="text" class="form-control" id="currency" name="currency">
+                </div>
+
+              </div>
+
+              <div class="invice_header">
+
+                <div class="flex-item">
+                  <label for="contact" class="form-label">Contact</label>
+                  <input type="text" class="form-control" id="contact" name="contact">
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="phone" class="form-label">Phone No</label>
+                  <input type="number" class="form-control" id="phone" name="phone">
+
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="email" class="form-label">Email</label>
+                  <input type="text" class="form-control" id="email" name="email">
+
+                </div>
+                <div class="flex-item">
+
+                  <label for="assigned_to" class="form-label">Assigned To</label>
+                  <select class="form-control" class="form-select" id="assigned_to" name="assigned_to">
+                    <option value="" disabled selected>Select</option>
+                    {% for username in assigend_to_names %}
+                    <option value="{{ username }}" {% if username==user['name'] %}selected{% endif %}>{{ username }}
+                    </option>
+                    {% endfor %}
+                  </select>
+
+                </div>
+
+                <div class="flex-item">
+
+                  <label for="status" class="form-label">Status <span style="color: red;">*</span></label>
+                  <select class="form-control" class="form-select" id="status" name="status" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Lost">Lost</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Qualified">Qualified</option>
+                    <option value="Submitted">Submitted</option>
+                    <option value="Won">Won</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="button-container2">
+              <button type="submit" class="custom-btn btn-2">Add /
+                Save
+              </button>
+
+            </div>
+
+
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <script>
+
+        document.getElementById('openModalButton').onclick = function () {
+          const modal = document.getElementById('modal');
+          modal.style.display = 'flex'; // Show the modal
+        };
+
+        function toggleSelectAll(checkbox) {
+          const checkboxes = document.querySelectorAll('#itemsTableBody input[type="checkbox"]');
+          checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        document.querySelector('.close-button').onclick = function () {
+          document.getElementById('modal').style.display = 'none';
+          window.location.reload();
+        };
+
+
+
+      </script>
+
+      <style>
+        .container {
+          background: linear-gradient(135deg, #f5f5f5, #eaeaea);
+          /* Soft gradient */
+          padding: 15px;
+          border-radius: 12px;
+          display: flex;
+          flex: 1;
+          gap: 12px;
+          box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+          /* Subtle shadow */
+          border: 1px solid #ddd;
+          /* Light border for structure */
+          transition: all 0.3s ease-in-out;
+        }
+
+        /* Smooth hover effect */
+        .container:hover {
+          transform: translateY(-2px);
+          box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+
+        .invice_header {
+          width: 100%;
+          padding: 10px;
+
+        }
+
+        .button-container1 {
+          display: flex;
+          flex: 1;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          margin-top: 10px;
+          gap: 10px;
+        }
+
+        .button-container2 {
+          display: flex;
+          flex: 1;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          margin-top: 10px;
+          gap: 10px;
+        }
+
+
+        .title-box {
+          display: flex;
+          padding: 5px;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 10px;
+          justify-content: space-between;
+
+        }
+
+        .title-item {
+          display: flex;
+          align-items: center;
+
+          /* Align title and value on the same row */
+        }
+
+        .title-item span {
+          font-size: 18px;
+          font-weight: bold;
+          color: #004b5d;
+        }
+
+
+        @keyframes open {
+          from {
+            width: 20px;
+            /* Start with 0 width */
+          }
+
+          to {
+            width: 573px;
+            /* Animate to 473px width */
+          }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+          .title-box {
+            flex-direction: column;
+            /* Stack items vertically on smaller screens */
+            align-items: flex-start;
+          }
+
+          .title-item {
+            margin-bottom: 15px;
+            /* Space between stacked items */
+          }
+        }
+      </style>
+
+      <!-- CSS for Modal -->
+      <style>
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1000;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          justify-content: center;
+        }
+
+
+        .modal-content {
+          background-color: white;
+          margin: auto;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          width: 80%;
+        }
+
+        .close-button {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      </style>
+
+      <style>
+        .main_box {
+          background-color: #e2e4e6;
+          border-radius: 5px;
+          min-height: 270px;
+          padding: 10px;
+          flex: 1;
+          /* Make each child element take up equal space within the parent */
+          box-sizing: border-box;
+          /* Ensure padding is included in the element's width */
+        }
+
+        .flex-item-full-width {
+          flex: 1;
+        }
+
+        .flex-row {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          gap: 15px;
+          /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        input[type=text],
+        input[type=date],
+        input[type=number],
+        select {
+          width: 100%;
+          padding: 10px 20px;
+          margin: 2px 0;
+          /* Reduce the top and bottom margin */
+          display: block;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+          .record-header7 {
+            padding: 0.5rem;
+            flex-direction: column;
+            /* Stack the header content vertically */
+          }
+
+          .flex-row {
+            flex-direction: column;
+            /* Stack flex items vertically */
+            gap: 10px;
+            /* Adjust gap for smaller screens */
+          }
+
+          .main_box {
+            padding: 5px;
+            /* Reduce padding for smaller screens */
+          }
+
+          .content-table .fa-trash,
+          .fa-edit {
+            font-size: 1em;
+            /* Adjust icon size for smaller screens */
+          }
+
+          input[type=text],
+          input[type=date],
+          input[type=number],
+          select {
+            padding: 8px 15px;
+            /* Reduce padding for smaller screens */
+          }
+
+          /* Adjust table column widths for better readability */
+          .table thead th,
+          .table tbody td {
+            padding: 5px;
+            /* Reduce cell padding */
+            font-size: 0.9em;
+            /* Reduce font size */
+          }
+        }
+
+        @media (max-width: 480px) {
+          .record-header7 {
+            padding: 0.25rem;
+          }
+
+          .flex-row {
+            gap: 5px;
+            /* Further reduce gap for very small screens */
+          }
+
+          .content-table .fa-trash,
+          .fa-edit {
+            font-size: 0.9em;
+            /* Further adjust icon size */
+          }
+
+          input[type=text],
+          input[type=date],
+          input[type=number],
+          select {
+            padding: 6px 10px;
+            /* Further reduce padding */
+          }
+
+          /* Further adjust table column widths */
+          .table thead th,
+          .table tbody td {
+            padding: 3px;
+            font-size: 0.8em;
+            /* Further reduce font size */
+          }
+        }
+      </style>
+
+      <div class="Dashboard" id="Dashboard" style="display: none">
+
+        <style>
+          .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 350px;
+            border-radius: 10px;
+          }
+
+          .dashboard-container {
+            display: grid;
+            grid-template-columns: 23% 23% 40% 12.2%;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            min-height: 300px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0eafc, #9ebbe4);
+          }
+
+          .dashboard-card {
+            background: #f0f4f8;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+          }
+
+          .dashboard-card h3 {
+            color: #918d8d;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+          }
+
+          .dashboard-card canvas {
+            width: 100%;
+            height: 200px;
+          }
+
+          .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          .card-1 {
+            background: white;
+            border: 1px solid #ff6f3c;
+          }
+
+          .card-2 {
+            background: white;
+            border: 1px solid #4d089a;
+          }
+
+          .card-3 {
+            background: white;
+            border: 1px solid #00bbf0;
+          }
+
+          .card-4 {
+            background: white;
+            border: 1px solid #eb2632;
+          }
+
+          /* --- New styles for second row --- */
+
+          .row-2-container {
+            display: contents;
+            /* Allow to share same parent grid */
+          }
+
+          .row-2-card-1,
+          .row-2-card-2 {
+            background: #fff;
+            grid-column: span 1;
+            min-height: 400px;
+            max-height: 400px;
+          }
+
+          .row-2-card-1 {
+            width: 100%;
+          }
+
+          .row-2-card-2 {
+            width: 100%;
+          }
+
+          .row-2-card-3 {
+            grid-column: span 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .nested-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Default for the first row */
+            gap: 10px;
+            width: 100%;
+          }
+
+          .nested-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-weight: 500;
+          }
+
+          /* Media query to change layout to 2 columns for the second and third rows */
+          @media (min-width: 600px) {
+            .nested-cards-grid {
+              grid-template-columns: repeat(2, 1fr);
+              /* Two cards per row from the second row onwards */
+            }
+          }
+
+          /* For the first card to span the whole row */
+          .nested-card:first-child {
+            grid-column: span 2;
+            /* Make the first card span the entire width of the grid */
+          }
+        </style>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+        <div class="dashboard-container">
+
+          <div class="dashboard-card card-1">
+
+            <canvas id="statusChart"></canvas>
+
+            <script>
+              // Doughnut Chart - Status with smaller hole & labels
+              const statusData = {{ status_counts.values() | list | tojson }};
+              const statusLabels = {{ status_counts.keys() | list | tojson }};
+              const total = statusData.reduce((a, b) => a + b, 0);
+
+              new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: {
+                  labels: statusLabels,
+                  datasets: [{
+                    data: statusData,
+                    backgroundColor: ['#dc2ade', '#4d089a', '#ff6f3c', '#eb2632', '#347474', '#402a23', '#424874'],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  cutout: '75%',
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'By Status',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 0,
+                        bottom: 0
+                      }
+                    },
+                    legend: {
+                      position: 'right',
+                      align: 'center',
+                      labels: {
+                        boxWidth: 15,
+                        boxHeight: 15,
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        generateLabels: function (chart) {
+                          const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                          const labels = original.call(this, chart);
+                          labels.forEach(label => {
+                            label.text = label.text.split('  ')[0];
+                          });
+                          return labels;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: '#fff',
+                      font: {
+                        weight: 'bold',
+                        size: 13
+                      },
+                      formatter: (value) => value
+                    }
+                  },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true
+                  }
+                },
+                plugins: [
+                  ChartDataLabels,
+                  {
+                    id: 'centerText',
+                    beforeDraw: function (chart) {
+                      const { width, height, ctx } = chart;
+                      ctx.save();
+                      ctx.font = 'bold 12px sans-serif';
+                      ctx.fillStyle = '#000';
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'middle';
+                      ctx.fillText('Total - ' + total, width / 3, height / 1.9);
+                      ctx.restore();
+                    }
+                  }
+                ]
+              });
+            </script>
+
+          </div>
+
+          <div class="dashboard-card card-2">
+
+            <canvas id="poValueChart"></canvas>
+
+            <script>
+              const poValueRaw = {{ po_value_counts | tojson }};
+              const chartLabels = poValueRaw.map(item => item.status);
+              const chartData = poValueRaw.map(item => item.TotalPOValue);
+              const chartTotal = chartData.reduce((sum, val) => sum + val, 0);
+
+              new Chart(document.getElementById('poValueChart'), {
+                type: 'pie',
+                data: {
+                  labels: chartLabels,
+                  datasets: [{
+                    data: chartData,
+                    backgroundColor: ['#dc2ade', '#4d089a', '#ff6f3c', '#eb2632', '#347474', '#402a23', '#424874'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Value By Status',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 10,
+                        bottom: 20
+                      }
+                    },
+                    legend: {
+                      position: 'right',
+                      labels: {
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 15,
+                        padding: 10
+                      }
+                    },
+                    datalabels: {
+                      display: true,
+                      color: '#fff',
+                      font: {
+                        weight: 'bold',
+                        size: 14
+                      },
+                      formatter: function (value, context) {
+                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        const percentage = (value / total) * 100;
+                        return percentage < 1 ? '<1%' : percentage.toFixed(1) + '%';
+                      }
+                    }
+                  },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            </script>
+
+
+          </div>
+
+          <div class="dashboard-card card-3">
+            <canvas id="industryChart"></canvas>
+
+            <script>
+              const industryLabels = {{ industry_counts.keys() | list | tojson }};
+              const industryData = {{ industry_counts.values() | list | tojson }};
+
+              // Generate a color for each bar
+              const barColors = [
+                '#b71c1c', // Deep Red
+                '#1a237e', // Indigo
+                '#004d40', // Teal
+                '#4a148c', // Deep Purple
+                '#e65100', // Burnt Orange
+                '#2e7d32', // Forest Green
+                '#37474f', // Charcoal Grey
+                '#6d4c41', // Brown
+                '#263238', // Blue Grey
+                '#880e4f'  // Dark Magenta
+              ].slice(0, industryData.length);
+
+
+
+              new Chart(document.getElementById('industryChart'), {
+                type: 'bar',
+                data: {
+                  labels: industryLabels,
+                  datasets: [{
+                    label: 'Count',
+                    data: industryData,
+                    backgroundColor: barColors,
+                    barThickness: 15 // Adjust bar width here (try 20-60)
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  animation: {
+                    duration: 1000
+                  },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'By Industry',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 10,
+                        bottom: 20
+                      }
+                    },
+                    legend: {
+                      display: false
+                    }
+                  },
+                  scales: {
+                    x: {
+                      grid: {
+                        display: false
+                      }
+                    },
+                    y: {
+                      beginAtZero: true,
+                      grid: {
+                        display: false
+                      }
+                    }
+                  }
+                }
+              });
+            </script>
+
+          </div>
+
+          <div class="dashboard-card card-4">
+
+            <div class="table-responsive1">
+
+              <table class="table table-main" style="width: 100%;">
+
+                <thead style="background-color: transparent;">
+                  <tr>
+                    <th>Client</th>
+                    <th style="text-align: right;">Qty</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for k, v in client_counts.items() %}
+                  <tr>
+
+                    <td> {{ k[:10] }}{% if k|length > 10 %}...{%
+                      endif %}</td>
+                    <td style="text-align: right;">{{ v }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          <!-- Second Row -->
+          <div class="row-2-card-3" style="padding: 0px;">
+
+            <div class="nested-cards-grid">
+
+              <div class="nested-card">
+
+                <canvas id="submissionLineChart" style="max-height: 150px;"></canvas>
+
+                <script>
+                  // Line Chart – Submissions Over Time
+                  const submissionsOverTime = {{ full_submission_data | tojson }};
+                  const dates = submissionsOverTime.map(d => {
+                    // Format the date as short month name (e.g., Jan, Feb, Mar)
+                    const date = new Date(d.date);
+                    const options = { month: 'short' };
+                    return new Intl.DateTimeFormat('en-US', options).format(date);
+                  });
+
+                  const counts = submissionsOverTime.map(d => d.count);
+
+                  new Chart(document.getElementById("submissionLineChart"), {
+                    type: "line",
+                    data: {
+                      labels: dates,
+                      datasets: [{
+                        label: "Number of Submissions",
+                        data: counts,
+                        borderColor: "blue",
+                        backgroundColor: "rgba(0, 123, 255, 0.1)",
+                        fill: true,
+                        pointBackgroundColor: "blue", // Color of the points
+                        pointRadius: 5               // Size of the points
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      aspectRatio: 1,
+                      plugins: {
+                        datalabels: {
+                          align: 'top',
+                          anchor: 'end',
+                          font: {
+                            weight: 'bold',
+                            size: 12
+                          },
+                          color: 'black',
+                          formatter: function (value) {
+                            return value;
+                          }
+                        }
+                      },
+                      scales: {
+                        x: {
+                          ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 12
+                          },
+                          grid: {
+                            display: false
+                          }
+                        },
+                        y: {
+                          beginAtZero: true,
+                          grid: {
+                            display: false
+                          }
+                        }
+                      }
+                    },
+                    plugins: [ChartDataLabels]
+                  });
+                </script>
+
+
+              </div>
+
+              <div class="nested-card">
+
+                <canvas id="submissionTimingChart" style="height: 165px;"></canvas>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                    // Wait for a short time to ensure the layout has settled
+                    setTimeout(() => {
+                      const submissionTimeliness = {{ submission_timeliness | tojson
+                    }};
+
+                  const ctx = document.getElementById("submissionTimingChart").getContext("2d");
+
+                  new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                      labels: ["On Time", "Late"],
+                      datasets: [{
+                        data: [submissionTimeliness.on_time, submissionTimeliness.late],
+                        backgroundColor: ["green", "red"],
+                        barThickness: 15 // Set width of the bars in pixels
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      indexAxis: 'y', // Horizontal bar
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: 'Timeline',
+                          font: { size: 18 }
+                        },
+                        legend: {
+                          display: false
+                        }
+                      },
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                          grid: {
+                            display: false // remove x-axis grid
+                          }
+                        },
+                        y: {
+                          grid: {
+                            display: false // remove y-axis grid
+                          }
+                        }
+                      }
+                    }
+                  });
+                  }, 200); // Delay to allow layout/canvas to fully settle
+                });
+                </script>
+
+              </div>
+
+              <div class="nested-card">
+
+                <h3 style="color: #918d8d;">Deadlines</h3>
+
+                <div class="table-responsive1">
+
+                  <table class="table table-main" style="width: 100%;">
+                    <thead style="background-color: transparent;">
+                      <tr>
+                        <th style="text-align: center;">Enq</th>
+                        <th>Client</th>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in upcoming_submissions %}
+                      <tr>
+                        <td>{{ item.EnquiryNumber }}</td>
+                        <td style="text-align: left;">{{ item.Client[:10] }}{% if item.Client|length > 10 %}...{%
+                          endif %}</td>
+
+
+                        <td class="start-time">{{ item.SubmitBeforeDate }}</td>
+                        <td>{{ item.status }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+
+              <!-- <div class="nested-card">Metric 4</div> -->
+              <!-- <div class="nested-card">Metric 5</div> -->
+            </div>
+
+          </div>
+
+          <div class="dashboard-card row-2-card-1">
+
+            <canvas id="assignedChart" style="min-height: 330px;"></canvas>
+
+            <script>
+              const assignedData = {{ assigned_to_data | tojson }};
+              const labels = Object.keys(assignedData);
+              const statusSet = new Set();
+              labels.forEach(person => {
+                Object.keys(assignedData[person]).forEach(status => statusSet.add(status));
+              });
+              const statusList = Array.from(statusSet);
+              const customColors = ['#4d089a', '#ff6f3c', '#347474', '#dc2ade', '#eb2632', '#402a23', '#424874'];
+              const datasets = statusList.map((status, index) => ({
+                label: status,
+                data: labels.map(person => assignedData[person][status] || 0),
+                backgroundColor: customColors[index % customColors.length],
+                borderWidth: 1,
+                barThickness: 20
+              }));
+
+              new Chart(document.getElementById('assignedChart'), {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: datasets
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'By Assigned Person',
+                      font: {
+                        size: 18,
+                        weight: 'bold'
+                      },
+                      padding: {
+                        top: 10,
+                        bottom: 20
+                      }
+                    },
+                    legend: {
+                      position: 'bottom',
+                      labels: {
+                        usePointStyle: true,
+                        pointStyle: 'rectRounded', // ✅ Square-style legend marker with rounded corners
+                        boxWidth: 12,
+                        boxHeight: 12,
+                        padding: 15
+                      }
+                    },
+                    tooltip: {
+                      mode: 'index',
+                      intersect: false
+                    }
+                  },
+                  scales: {
+                    x: {
+                      stacked: true,
+                      grid: {
+                        display: false
+                      },
+                      ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 20
+                      }
+                    },
+                    y: {
+                      stacked: true,
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'No. of Enquiries'
+                      },
+                      grid: {
+                        display: false
+                      }
+                    }
+                  }
+                }
+              });
+            </script>
+
+          </div>
+
+          <div class="dashboard-card row-2-card-2">
+
+            <div class="table-responsive1">
+
+              {% set total_list = [] %}
+              <table class="table table-main" style="width: 100%;">
+                <thead style="background-color: transparent;">
+                  <tr>
+                    <th style="text-align: left;">Industry</th>
+                    <th style="text-align: right;">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in industry_po_value %}
+                  {% set _ = total_list.append(row.TotalPoValue) %}
+                  <tr>
+                    <td style="text-align: left;">
+                      {{ row.Industry[:8] }}{% if row.Industry|length > 8 %}...{% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                      $ {{ "{:,.0f}".format(row.TotalPoValue) }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr style="font-weight: bold; border-top: 1px solid #ccc;">
+                    <td style="text-align: left;">Total</td>
+                    <td style="text-align: right;">
+                      $ {{ "{:,.0f}".format(total_list | sum) }}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+
+
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="All" id="All" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">All Enquiries (<span id="allTotal">0</span>) </h3>
+          <input type="text" id="searchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..." onkeyup="allfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="allpoTotal">$ 0.00</span></span>
+
+          <!-- Search Table -->
+          <script>
+
+            function allfilterTable() {
+              let input = document.getElementById("searchInput").value.toLowerCase().trim();
+              let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+              let rows = document.querySelectorAll(".allmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+                // Combine all searchable text into a single string
+                let combinedText = [enqid, industry, client, assigned_to, site, status].join(" ");
+
+                // Check if ALL keywords are present in the combined string
+                let isMatch = keywords.every(keyword => combinedText.includes(keyword));
+
+                row.style.display = isMatch ? "" : "none";
+              });
+
+              updateTotals();  // Optional: update totals after filtering
+            }
+
+
+            function updateTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#allTable tbody tr.allmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("allTotal").textContent = requestCount;
+              document.getElementById("allpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              updateTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="allTable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col"> PO Value
+                </th>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+              {% for enquiry in enquiries %}
+
+              <tr class="allmainRow">
+
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser[:15] }}{% if
+                  enquiry.SiteOrEndUser|length > 15 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+          <script>
+            function deleteEnquiry(enquiryNumber, element) {
+              if (confirm('Are you sure you want to delete this Enquiry Permanently?')) {
+                fetch(`/delete_enquiry?enquiry_number=${enquiryNumber}`, {
+                  method: 'DELETE',
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.success) {
+                      alert('Enquiry deleted successfully');
+                      // Remove the row from the table
+                      const row = element.closest('tr');
+                      row.remove();
+                    } else {
+                      alert('Failed to delete enquiry: ' + data.error);
+                    }
+                  })
+                  .catch(error => {
+                    alert('An error occurred: ' + error.message);
+                  });
+              }
+            }
+          </script>
+
+          <script>
+            function editEnquiry(enquiryNumber) {
+              fetch(`/get_enquiry_details_to_edit/${enquiryNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                  // Populate modal fields
+
+                  document.getElementById('reference_number').value = data.EnquiryNumber;
+                  document.getElementById('Revision_number').value = data.RevisionNumber;
+                  document.getElementById('industry').value = data.Industry;
+                  document.getElementById('client').value = data.Client;
+                  document.getElementById('name').value = data.Name;
+                  document.getElementById('site').value = data.SiteOrEndUser;
+                  document.getElementById('received_date').value = data.EnquiryReceived;
+                  document.getElementById('submission_date').value = data.SubmitBeforeDate;
+                  document.getElementById('Date_Submission').value = data.DateOfSubmission;
+                  document.getElementById('Estimated_value').value = data.EstimateValue;
+                  document.getElementById('currency').value = data.currency;
+                  document.getElementById('contact').value = data.contact;
+                  document.getElementById('phone').value = data.PhoneNumber;
+                  document.getElementById('email').value = data.Email;
+                  document.getElementById('assigned_to').value = data.assigned_to;
+                  document.getElementById('status').value = data.status;
+
+                  // Show modal
+                  document.getElementById('modal').style.display = 'flex';
+                })
+                .catch(error => console.error('Error fetching enquiry details:', error));
+            }
+
+            document.querySelector('.close-button').onclick = function () {
+              document.getElementById('modal').style.display = 'none';
+            };
+          </script>
+
+          <style>
+            .edit-icon .fa-edit {
+              background: linear-gradient(45deg, #af5a04, #ffae00);
+              /* Orange Gradient */
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              font-size: 18px;
+              /* Adjust size as needed */
+              cursor: pointer;
+              transition: transform 0.3s ease-in-out;
+            }
+
+            .edit-icon:hover .fa-edit {
+              transform: scale(1.2);
+              /* Slight zoom effect on hover */
+            }
+          </style>
+
+        </div>
+
+      </div>
+
+      <div class="UnQualified" id="UnQualified" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Qualified Enquiries (<span id="UnQualifiedrequestCount">0</span>) </h3>
+          <input type="text" id="UnQualifiedsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..."
+            onkeyup="unqualifiedfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="UnQualifiedpoTotal">$ 0.00</span></span>
+
+          <!-- Search Table -->
+          <script>
+
+            function unqualifiedfilterTable() {
+              let input = document.getElementById("UnQualifiedsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".unqlifiedmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              updateunqlifiedTotals();
+            }
+
+            function updateunqlifiedTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#unqlifiedTable tbody tr.unqlifiedmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("UnQualifiedrequestCount").textContent = requestCount;
+              document.getElementById("UnQualifiedpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              updateunqlifiedTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="unqlifiedTable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">Po Value
+                </th>
+
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+
+              {% if enquiry.status == 'Qualified' %}
+
+              <tr class="unqlifiedmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+                <td class="text-center"> $ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+          <script>
+            function deleteEnquiry(enquiryNumber, element) {
+              if (confirm('Are you sure you want to delete this Enquiry Permanently?')) {
+                fetch(`/delete_enquiry?enquiry_number=${enquiryNumber}`, {
+                  method: 'DELETE',
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.success) {
+                      alert('Enquiry deleted successfully');
+                      // Remove the row from the table
+                      const row = element.closest('tr');
+                      row.remove();
+                    } else {
+                      alert('Failed to delete enquiry: ' + data.error);
+                    }
+                  })
+                  .catch(error => {
+                    alert('An error occurred: ' + error.message);
+                  });
+              }
+            }
+          </script>
+
+        </div>
+
+      </div>
+
+      <div class="Pending" id="Pending" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Pending Enquiries (<span id="pendingrequestCount">0</span>) </h3>
+          <input type="text" id="PendingsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..."
+            onkeyup="PendingfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="pendingpoTotal">$ 0.00</span></span>
+
+          <!-- Search Table -->
+          <script>
+
+            function PendingfilterTable() {
+              let input = document.getElementById("PendingsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".pendingmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              pendingTotals();
+            }
+
+            function pendingTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#pendingtable tbody tr.pendingmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("pendingrequestCount").textContent = requestCount;
+              document.getElementById("pendingpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              pendingTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="pendingtable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+                </th>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Pending' %}
+
+              <tr class="pendingmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="Submitted" id="Submitted" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Submitted Enquiries (<span id="SubmittedrequestCount">0</span>) </h3>
+          <input type="text" id="SubmittedsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..."
+            onkeyup="SubmittedfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="SubmittedpoTotal">$ 0.00</span></span>
+
+          <!-- Search Table -->
+          <script>
+
+            function SubmittedfilterTable() {
+              let input = document.getElementById("SubmittedsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".SubmittedmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              SubmittedTotals();
+            }
+
+            function SubmittedTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#Submittedtable tbody tr.SubmittedmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("SubmittedrequestCount").textContent = requestCount;
+              document.getElementById("SubmittedpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              SubmittedTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="Submittedtable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+
+                </th>
+
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Submitted' %}
+
+              <tr class="SubmittedmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+
+                {% endif %}
+
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="Won" id="Won" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Won Enquiries (<span id="WonrequestCount">0</span>) </h3>
+          <input type="text" id="WonsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..." onkeyup="WonfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="WonpoTotal">$ 0.00</span></span>
+
+          <!-- Search Table -->
+          <script>
+
+            function WonfilterTable() {
+              let input = document.getElementById("WonsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".WonmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              WonTotals();
+            }
+
+            function WonTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#Wontable tbody tr.WonmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("WonrequestCount").textContent = requestCount;
+              document.getElementById("WonpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              WonTotals();
+            });
+
+          </script>
+
+        </div>
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="Wontable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+                </th>
+
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Won' %}
+
+              <tr class="WonmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+
+      <div class="Lost" id="Lost" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Lost Enquiries (<span id="LostrequestCount">0</span>) </h3>
+          <input type="text" id="LostsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..." onkeyup="LostfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="LostpoTotal">$ 0.00</span></span>
+
+
+          <!-- Search Table -->
+          <script>
+
+            function LostfilterTable() {
+              let input = document.getElementById("LostsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".LostmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              LostTotals();
+            }
+
+            function LostTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#Losttable tbody tr.LostmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("LostrequestCount").textContent = requestCount;
+              document.getElementById("LostpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              LostTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="Losttable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+                </th>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Lost' %}
+
+              <tr class="LostmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="Withdrawn" id="Withdrawn" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Withdrawn Enquiries (<span id="withdrawnrequestCount">0</span>) </h3>
+          <input type="text" id="WithdrawnsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..."
+            onkeyup="withdrawfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="withdrawnpoTotal">$ 0.00</span></span>
+
+
+          <!-- Search Table -->
+          <script>
+
+            function withdrawfilterTable() {
+              let input = document.getElementById("WithdrawnsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".WithdrawnmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              withdrawTotals();
+            }
+
+            function withdrawTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#withdrawntable tbody tr.WithdrawnmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("withdrawnrequestCount").textContent = requestCount;
+              document.getElementById("withdrawnpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              withdrawTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="withdrawntable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+                </th>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Withdrawn' %}
+
+              <tr class="WithdrawnmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="Cancelled" id="Cancelled" style="display: none">
+
+        <div class="search_container1">
+
+          <h3 style="color: #004274;">Cancelled Enquiries (<span id="CancelledrequestCount">0</span>) </h3>
+          <input type="text" id="CancelledsearchInput"
+            placeholder="Search Enquiry ID, Client, Site, Assigned To, Industry, Status..."
+            onkeyup="withdrawfilterTable()">
+          <span class="span_tag">PO Vlaue : <span id="CancelledpoTotal">$ 0.00</span></span>
+
+
+          <!-- Search Table -->
+          <script>
+
+            function withdrawfilterTable() {
+              let input = document.getElementById("CancelledsearchInput").value.toLowerCase().trim(); // Get search input
+              let rows = document.querySelectorAll(".CancelledmainRow");
+
+              rows.forEach(row => {
+                let enqid = row.querySelector(".enqid") ? row.querySelector(".enqid").textContent.trim().toLowerCase() : '';
+                let industry = row.querySelector(".industry") ? row.querySelector(".industry").textContent.trim().toLowerCase() : '';
+                let client = row.querySelector(".client") ? row.querySelector(".client").textContent.trim().toLowerCase() : '';
+                let assigned_to = row.querySelector(".assigned_to") ? row.querySelector(".assigned_to").textContent.trim().toLowerCase() : '';
+                let site = row.querySelector(".site") ? row.querySelector(".site").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+
+                if (enqid.includes(input) || industry.includes(input) || client.includes(input) || assigned_to.includes(input) || site.includes(input) || status.includes(input)) {
+                  row.style.display = "";
+                } else {
+                  row.style.display = "none";
+                }
+
+              });
+
+              withdrawTotals();
+            }
+
+            function withdrawTotals() {
+              let requestCount = 0;
+              let totalSum = 0;
+              const rows = document.querySelectorAll("#Cancelledtable tbody tr.CancelledmainRow");
+              rows.forEach(row => {
+                if (row.style.display !== "none") {
+                  requestCount++;
+                  let total = parseFloat(row.querySelector("td:nth-child(14)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                  totalSum += total;
+                }
+              });
+
+              let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              document.getElementById("CancelledrequestCount").textContent = requestCount;
+              document.getElementById("CancelledpoTotal").textContent = "$ " + formattedTotal;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              withdrawTotals();
+            });
+
+          </script>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table" width="100%" style="background-color: white;" id="Cancelledtable">
+
+            <thead>
+
+              <tr>
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Edit</th>
+                {% endif %}
+                <th class="text-center" scope="col" id="id-header" onclick="sortAndHighlight('id')">Enq. No</th>
+                <th class="text-center" scope="col">Rev</th>
+                <th class="text-center" scope="col">Industry</th>
+                <th class="text-center" scope="col" id="client-header">Client</th>
+                <th class="text-center" scope="col">Site</th>
+                <th class="text-center" scope="col" style="width: 15%;">Project Name</th>
+                <th class="text-center" scope="col">Contact</th>
+                <th class="text-center" scope="col">Received</th>
+                <th class="text-center" scope="col">Due</th>
+                <th class="text-center" scope="col">Submit</th>
+                <th class="text-center" scope="col">Assigned To</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">PO Value
+                </th>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <th class="text-center" scope="col">Del</th>
+                {% endif %}
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for enquiry in enquiries %}
+              {% if enquiry.status == 'Cancelled' %}
+
+              <tr class="CancelledmainRow">
+                {% if user_access['toggleEditEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <span class="icon edit-icon" onclick="editEnquiry({{ enquiry.EnquiryNumber }})">
+                    <span class="fa-solid fa-edit"></span>
+                  </span>
+                </td>
+                {% endif %}
+                <td class="text-center enqid">{{ enquiry.EnquiryNumber }}</td>
+                <td class="text-center">{{ enquiry.RevisionNumber }}</td>
+                <td class="text-center industry">{{ enquiry.Industry }}</td>
+                <td class="text-center client">{{ enquiry.Client }}</td>
+                <td class="text-center site">{{ enquiry.SiteOrEndUser }}</td>
+                <td class="text-center">{{ enquiry.Name[:20] }}{% if
+                  enquiry.Name|length > 20 %}...{% endif %}</td>
+                <td class="text-center">{{ enquiry.contact }}</td>
+                <td class="text-center start-time">{{ enquiry.EnquiryReceived }}</td>
+                <td class="text-center start-time">{{ enquiry.SubmitBeforeDate }}</td>
+                <td class="text-center start-time">{{ enquiry.DateOfSubmission }}</td>
+                <td class="text-center assigned_to">{{ enquiry.assigned_to }}</td>
+
+                <td class="text-center status">
+                  <span style="font-weight: bold;
+      color: 
+      {% if enquiry.status == 'Submitted' %}
+          darkblue;
+      {% elif enquiry.status == 'Pending' %}
+          orange;
+      {% elif enquiry.status == 'Won' %}
+          green;
+      {% elif enquiry.status == 'Lost' %}
+          red;
+      {% elif enquiry.status == 'Withdrawn' %}
+          #6c757d;  /* Dark gray for Withdrawn */
+      {% elif enquiry.status == 'Cancelled' %}
+          #8a2be2;  /* BlueViolet for Cancelled */
+      {% else %}
+          purple;
+      {% endif %};
+      background-color: 
+      {% if enquiry.status == 'Submitted' %}
+          #dceffd; /* Light blue */
+      {% elif enquiry.status == 'Pending' %}
+          #ffecb3; /* Light orange */
+      {% elif enquiry.status == 'Won' %}
+          #d4edda; /* Light green */
+      {% elif enquiry.status == 'Lost' %}
+          #f8d7da; /* Light red */
+      {% elif enquiry.status == 'Withdrawn' %}
+          #e2e3e5; /* Light gray */
+      {% elif enquiry.status == 'Cancelled' %}
+          #e6e0f8; /* Light violet */
+      {% else %}
+          #f3e5f5; /* Default light purple */
+      {% endif %};
+      padding: 2px 8px; 
+      border-radius: 8px; 
+      display: inline-block;">
+                    {{ enquiry.status }}
+                  </span>
+                </td>
+
+
+
+
+                <td class="text-center">$ {{"{:,.2f}".format(enquiry.EstimateValue)}}</td>
+                {% if user_access['toggleDeleteEnquiry'] == 'On' %}
+                <td class="text-center">
+                  <a href="#" onclick="deleteEnquiry({{ enquiry.EnquiryNumber }}, this); return false;">
+                    <span class="icon">
+                      <span class="fa-solid fa-trash" style="color: red;"></span>
+                    </span>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% endif %}
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+      </div>
+
+      <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          if (isNaN(date.getTime())) {
+            // Return an empty string for invalid dates
+            return "";
+          }
+
+          const day = date.getDate().toString().padStart(2, "0");
+          const month = (date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0"); // Adding 1 because months are zero-based
+          const year = date.getFullYear().toString().slice(-2);
+
+          return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+          const start_time_elements =
+            document.querySelectorAll(".start-time");
+
+
+          start_time_elements.forEach(function (element) {
+            element.textContent = formatDate(element.textContent);
+          });
+
+
+        });
+      </script>
+
+      <style>
+        .span_tag {
+          font-size: 14px;
+          font-weight: bold;
+          color: #004b5d;
+          padding: 5px 8px;
+          border: 1px solid #004b5d;
+          border-radius: 5px;
+          background-color: #f1f8ff;
+          color: #004b5d;
+          text-align: center;
+          margin-right: 10px;
+        }
+
+        #totalAmount {
+          color: #28a745;
+          /* Green for amount */
+        }
+
+        #totalGST {
+          color: #0c8de2;
+          /* Yellow for GST */
+        }
+
+        #overallTotal {
+          color: #dc3545;
+          /* Red for overall total */
+        }
+
+        .search_container1 {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          padding: 10px;
+        }
+
+
+        #projectTable {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          border-radius: 10px;
+        }
+
+
+        #CancelledsearchInput,
+        #LostsearchInput,
+        #WonsearchInput,
+        #SubmittedsearchInput,
+        #PendingsearchInput,
+        #searchInput,
+        #UnQualifiedsearchInput,
+        #WithdrawnsearchInput,
+        #QualifiedsearchInput {
+          width: 40%;
+          padding: 2px;
+          margin: auto;
+          display: block;
+          border: 2px solid #ccc;
+          border-radius: 5px;
+          /* Rounded corners */
+          outline: none;
+          transition: all 0.3s ease-in-out;
+          text-align: center;
+          font-size: 16px;
+        }
+
+        #CancelledsearchInput:hover,
+        #LostsearchInput:hover,
+        #WithdrawnsearchInput:hover,
+        #WonsearchInput:hover,
+        #SubmittedsearchInput:hover,
+        #PendingsearchInput:hover,
+        #searchInput:hover,
+        #UnQualifiedsearchInput:hover,
+        #QualifiedsearchInput:hover {
+          background-color: #f0f0f0;
+        }
+
+        #CancelledsearchInput:focus,
+        #LostsearchInput:focus,
+        #WithdrawnsearchInput:focus,
+        #WonsearchInput:focus,
+        #SubmittedsearchInput:focus,
+        #PendingsearchInput:focus,
+        #searchInput:focus,
+        #UnQualifiedsearchInput:focus,
+        #QualifiedsearchInput:focus {
+          border-color: #004b5d;
+          box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+      </style>
+
+    </div>
+
+
+
+  </div>
+
+  </div>
+
+
+</body>
+
+</html>

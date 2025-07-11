@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+        </div>
+
+        <script>
+            window.addEventListener("load", function () {
+                document.getElementById("pageLoader").style.display = "none";
+            });
+        </script>
+
+        <style>
+            #pageLoader {
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: white;
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .loader {
+                border: 8px solid #f3f3f3;
+                /* Light grey */
+                border-top: 8px solid #3498db;
+                /* Blue */
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}" class="active"><i
+                                            class="fas fa-file-invoice-dollar" style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <input type="text" id="searchInput" placeholder="Search .....🔍" onkeyup="filterTable()">
+
+                <script>
+                    function filterTable() {
+                        const input = document.getElementById("searchInput");
+                        const filter = input.value.toUpperCase();
+                        const table = document.getElementById("projectTable");
+                        const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+                        // Initialize totals
+                        let total_po_value = 0;
+                        let total_budget = 0;
+                        let total_actuals = 0;
+                        let total_balance = 0;
+                        let total_inv_total = 0;
+                        let total_received = 0;
+                        let total_inv_balance = 0;
+
+                        for (let i = 0; i < rows.length; i++) {
+                            const row = rows[i];
+                            let shouldShow = false;
+
+                            // Check if any searchable td matches the filter
+                            const tds = row.getElementsByTagName("td");
+                            for (let j = 0; j < tds.length; j++) {
+                                const td = tds[j];
+                                if (td && td.textContent.toUpperCase().includes(filter)) {
+                                    shouldShow = true;
+                                    break;
+                                }
+                            }
+
+                            row.style.display = shouldShow ? "" : "none";
+
+                            if (shouldShow) {
+                                total_po_value += parseFloat(getValueFromClass(row, 'po_value'));
+                                total_budget += parseFloat(getValueFromClass(row, 'budget'));
+                                total_actuals += parseFloat(getValueFromClass(row, 'actuals'));
+                                total_balance += parseFloat(getValueFromClass(row, 'balance'));
+                                total_inv_total += parseFloat(getValueFromClass(row, 'inv_total'));
+                                total_received += parseFloat(getValueFromClass(row, 'received'));
+                                total_inv_balance += parseFloat(getValueFromClass(row, 'inv_balance'));
+                            }
+                        }
+
+                        function getValueFromClass(row, className) {
+                            const cell = row.querySelector(`td.${className}`);
+                            if (cell) {
+                                const val = cell.textContent.replace(/,/g, '').trim();
+                                return isNaN(val) ? 0 : parseFloat(val);
+                            }
+                            return 0;
+                        }
+
+                        document.getElementById("total_po_value").textContent = total_po_value.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_budget").textContent = total_budget.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_actuals").textContent = total_actuals.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_balance").textContent = total_balance.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_inv_totals").textContent = total_inv_total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_received").textContent = total_received.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                        document.getElementById("total_inv_balance").textContent = total_inv_balance.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                    }
+
+                    // Automatically run on page load
+                    window.onload = function () {
+                        filterTable();
+                    };
+                </script>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table" style="width: 100%; background-color: white;" id="projectTable">
+
+                    <thead>
+
+                        <tr>
+                            <th><i class="fa fa-bell"></i></th>
+                            <th style="text-align: center;">ID</th>
+                            <th style="text-align: left;">Client</th>
+                            <th style="text-align: left;">Description</th>
+                            <th style="text-align: right;">PO Value ($) </th>
+                            <th style="text-align: right;">Budget ($) </th>
+                            <th style="text-align: right;">Actual ($) </th>
+                            <th style="text-align: right;">Balance ($) </th>
+                            <th style="text-align: right;">Invoiced ($) </th>
+                            <th style="text-align: right;">Rec'd ($) </th>
+                            <th style="text-align: right;">Inv Balance ($) </th>
+                            <th style="text-align: center;">DOC</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        {% for row in project_list %}
+                        {% set balance = (row.budget or 0) - (row.actuals or 0) %}
+                        <tr id="row_{{ row.id }}" {% if balance < 0 %}
+                            style="background-color: rgb(245, 213, 213); color: black;" {% endif %}
+                            onclick="openModal('{{ row.id }}', '{{ row.client }}', '{{ row.project_name }}')">
+                            <td>
+                                <a href="#" class="notification">
+                                    <i class="fa fa-bell"></i>
+                                </a>
+                            </td>
+                            <td style="text-align: center;">{{ row.id }}</td>
+                            <td style="text-align: left;">{{ row.client }}</td>
+                            <td style="text-align: left;" class="text-center supplierName">{{ row.project_name[:20] }}{%
+                                if
+                                row.project_name|length > 20 %}...{% endif %}</td>
+                            <td class="po_value" style="text-align: right;">{{ "{:,.2f}".format(row.po_value | float) }}
+                            </td>
+                            <td class="budget" style="text-align: right;">{{ "{:,.2f}".format(row.budget) }}</td>
+                            <td class="actuals" style="text-align: right;">{{ "{:,.2f}".format(row.actuals) }}</td>
+                            <td class="balance" style="text-align: right;">{{ "{:,.2f}".format(balance) }}</td>
+                            <td class="inv_total" style="text-align: right;">{{ "{:,.2f}".format(row.Inv_total) }}</td>
+                            <td class="received" style="text-align: right;">{{ "{:,.2f}".format(row.Inv_received) }}
+                            </td>
+                            <td class="inv_balance" style="text-align: right;">{{ "{:,.2f}".format(row.Inv_balance) }}
+                            </td>
+
+                            <td style="text-align: center;" class="start-time">{{ row.end_time }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align:left; font-weight:bold;"></td>
+                            <td style="text-align:left; font-weight:bold;">Totals:</td>
+                            <td id="total_po_value" style="text-align: right;"></td>
+                            <td id="total_budget" style="text-align: right;"></td>
+                            <td id="total_actuals" style="text-align: right;"></td>
+                            <td id="total_balance" style="text-align: right;"></td>
+                            <td id="total_inv_totals" style="text-align: right;"></td>
+                            <td id="total_received" style="text-align: right;"></td>
+                            <td id="total_inv_balance" style="text-align: right;"></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+
+
+                </table>
+
+            </div>
+
+
+            <!-- Custom Modal -->
+            <div id="projectModal" class="modal">
+                <div class="modal-content">
+                    <div class="flexrow">
+                        <h5>Quick Links</h5>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                    </div>
+                    <hr style="border: 1.5px solid rgb(221, 86, 86); width: 100%;">
+
+
+                    <div class="flexrow">
+                        <p>Project ID: <strong id="selectedProjectId"></strong></p>
+
+                        <p>CLient : <strong id="selectedClinet"></strong></p>
+                        <p>Project Name : <strong id="selectedProjectName"></strong></p>
+                    </div>
+
+                    <ul class="quick_links">
+                        <li><a id="gen_pr" href="#" target="_blank">Generate PR</a></li>
+                        <li><a id="pr_list" href="#" target="_blank">PR List</a></li>
+                        <li><a id="po_list" href="#" target="_blank">PO List</a></li>
+                        <li><a id="hrs_view" href="#" target="_blank">Project Hours View</a></li>
+                        <li><a id="overview" href="#" target="_blank">Project Overview</a></li>
+                        <li><a id="Payment" href="#" target="_blank">Payment Request</a></li>
+                        <li><a id="gen_do" href="#" target="_blank">Generate DO</a></li>
+                        <li><a id="claim" href="#" target="_blank">View Claims</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <style>
+                .flexrow {
+                    padding: 1pxpx;
+                    display: flex;
+                    flex: 1;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0, 0, 0, 0.8);
+                }
+
+                .modal-content {
+                    background-color: #ffffff;
+                    margin: 10% auto;
+                    padding: 30px;
+                    border: 1px solid #ccc;
+                    width: 90%;
+                    max-width: 800px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                    justify-content: center;
+                    text-align: center;
+                }
+
+                .close {
+                    color: #555;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: #000;
+                    text-decoration: none;
+                }
+
+                h5 {
+                    font-size: 20px;
+                    color: #333;
+                }
+
+                p {
+                    font-size: 16px;
+                    margin: 10px 0;
+                    color: #666;
+                }
+
+                .quick_links {
+                    list-style-type: none;
+                    padding: 0;
+                }
+
+                .quick_links li {
+
+                    background-color: #aac9eb;
+                    padding: 10px;
+                    margin: 10px 0;
+                }
+
+                .quick_links li {
+                    padding: 10px;
+                    transition: background-color 0.3s ease;
+                }
+
+                .quick_links li:hover {
+                    background-color: #0a3866;
+                }
+
+                .quick_links li:hover a {
+                    color: white;
+                    text-decoration: none;
+                    /* Optional: Removes underline on hover */
+                }
+
+                .quick_links a {
+                    color: black;
+                    /* Default text color */
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
+
+                .quick_links a {
+                    text-decoration: none;
+                    color: black;
+
+                    font-weight: 600;
+                }
+
+                .quick_links li:hover {
+                    background-color: #0a3866;
+
+                }
+
+                a:hover {
+                    color: #0056b3;
+                }
+            </style>
+
+            <!-- JavaScript -->
+            <script>
+                function openModal(projectId, client, project_name) {
+                    document.getElementById("selectedProjectId").textContent = projectId;
+                    document.getElementById("selectedClinet").textContent = client;
+                    document.getElementById("selectedProjectName").textContent =
+                        project_name.length > 20 ? project_name.substring(0, 20) + "..." : project_name;
+
+                    document.getElementById("overview").href = "{{ url_for('project_details_page', id=0) }}".replace('0', projectId);
+                    document.getElementById("hrs_view").href = "/prj_hrs_view?project_id=" + projectId;
+                    document.getElementById("gen_pr").href = "/project_pr?project_id=" + projectId;
+                    document.getElementById("pr_list").href = "{{ url_for('pr_view', project_id=0) }}".replace('0', projectId);
+                    document.getElementById("po_list").href = "{{ url_for('project_po', project_id=0) }}".replace('0', projectId);
+                    document.getElementById("Payment").href = "{{ url_for('prj_pay_req', project_id=0) }}".replace('0', projectId);
+                    document.getElementById("gen_do").href = "{{ url_for('project_do', project_id=0) }}".replace('0', projectId);
+                    document.getElementById("claim").href = "{{ url_for('claiminfo', project_id=0) }}".replace('0', projectId);
+
+                    document.getElementById("projectModal").style.display = "block";
+                }
+
+                function closeModal() {
+                    document.getElementById("projectModal").style.display = "none";
+                }
+
+                // Format Date Function
+                document.addEventListener("DOMContentLoaded", function () {
+                    const start_time_elements = document.querySelectorAll(".start-time");
+                    start_time_elements.forEach(function (element) {
+                        element.textContent = formatDate(element.textContent);
+                    });
+                });
+
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    if (isNaN(date.getTime())) {
+                        return "";
+                    }
+                    const day = date.getDate().toString().padStart(2, "0");
+                    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                    const year = date.getFullYear().toString().slice(-2);
+                    return `${day}/${month}/${year}`;
+                }
+
+                // Close the modal when clicking outside of it
+                window.onclick = function (event) {
+                    const modal = document.getElementById("projectModal");
+                    if (event.target === modal) {
+                        closeModal();
+                    }
+                }
+            </script>
+
+
+
+        </div>
+
+    </div>
+
+    <style>
+        .search_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+
+        #projectTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+
+
+        #searchInput {
+            width: 20%;
+            padding: 2px;
+            margin: auto;
+            display: block;
+            border: 2px solid rgb(100, 113, 233);
+            border-radius: 5px;
+            /* Rounded corners */
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #searchInput:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchInput:focus {
+            border-color: #004b5d;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        tfoot {
+            position: sticky;
+            bottom: 0;
+            background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+            color: #333;
+            z-index: 1;
+        }
+    </style>
+
+    <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Return an empty string for invalid dates
+                return "";
+            }
+
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = (date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0"); // Adding 1 because months are zero-based
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const start_time_elements =
+                document.querySelectorAll(".start-time");
+
+
+            start_time_elements.forEach(function (element) {
+                element.textContent = formatDate(element.textContent);
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>

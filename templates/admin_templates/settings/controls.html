@@ -1,0 +1,2976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings" class="active">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="active">
+                            <a href="{{ url_for('controls') }}" class="link">
+                                <i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Controls
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('Archived') }}" class="link">
+                                <i class="fa-solid fa-archive" style="margin-right: 5px;"></i> Archived Records
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-cogs" style="margin-right: 5px;"></i> Option1
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-shield-alt" style="margin-right: 5px;"></i> Option2
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="link">
+                                <i class="fa-solid fa-user-cog" style="margin-right: 5px;"></i> Option3
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="form-container">
+
+                <select name="employee" id="employeeSelect" required>
+                    <option value="">Select Employee</option>
+                    {% for username in usernames %}
+                    <option value="{{ username }}" {% if employee_details['Employee_ID'] %} {% if
+                        username==employee_details['Employee_ID'] %}selected{% endif %} {% endif %}>
+                        {{ username }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Get Controls</button>
+
+                <style>
+                    /* Center the container */
+                    .form-container {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        max-width: 250px;
+                        margin: 0 auto;
+                        padding: 5px;
+                        background-color: white;
+                        border-radius: 5px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    }
+
+                    /* Styling for the select element */
+                    select {
+                        padding: 5px;
+                        font-size: 12px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        outline: none;
+                        background-color: #fff;
+                        transition: border-color 0.3s ease;
+                        margin-right: 15px;
+                        /* Space between select and button */
+                    }
+
+                    /* Focus styling for select */
+                    select:focus {
+                        border-color: #4CAF50;
+                    }
+
+                    /* Styling for the button */
+                    button {
+                        padding: 5px;
+                        font-size: 16px;
+                        background-color: #4CAF50;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+
+                    /* Button hover effect */
+                    button:hover {
+                        background-color: #45a049;
+                    }
+
+                    /* Optional: Add a cool effect to the container */
+                    .form-container {
+                        transition: transform 0.3s ease-in-out;
+                    }
+
+                    .form-container:hover {
+                        transform: scale(1.02);
+                    }
+                </style>
+
+                <script>
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Get the employee select element and add a change event listener
+                        const employeeSelect = document.getElementById('employeeSelect');
+
+                        employeeSelect.addEventListener('change', function () {
+                            const employeeID = employeeSelect.value;
+
+                            if (employeeID) {
+                                // Make AJAX request to fetch employee control data
+                                fetch(`/get_controls/${employeeID}`)
+                                    .then(response => response.json())
+                                    .then(data => updateControls(data))
+                                    .catch(error => console.error('Error fetching data:', error));
+                            }
+                        });
+
+                        // Function to update the toggle controls based on the data
+                        function updateControls(data) {
+                            // Ensure the data contains emp_controls
+                            const empControls = data.emp_controls;
+
+                            if (empControls) {
+                                let hasActiveControls = false;
+                                // Loop through all the keys in emp_controls and update the corresponding toggle inputs
+                                for (const [key, value] of Object.entries(empControls)) {
+                                    // Check if an element with the ID matching the key exists
+                                    const toggleElement = document.getElementById(key);
+                                    console.log("Key:", key, "toggleElement:", toggleElement, "Value:", value); // Logging keys and values
+
+
+                                    if (toggleElement) {
+                                        // If the value is "On", check the checkbox, otherwise uncheck it
+                                        toggleElement.checked = value === 'On';
+
+                                        // Optionally, you can also trigger the onclick event for specific toggle actions
+                                        if (key.startsWith('toggle') && toggleElement.checked) {
+                                            // Use the key directly as the sub-heading class name
+                                            const subHeading = document.querySelector(`.${key}`);
+
+                                            if (subHeading) {
+                                                subHeading.style.display = 'block'; // Show the related sub-heading
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                // Hide the graph container if any section is active
+                                var graphContainer = document.querySelector('.graph-container');
+                                if (graphContainer) {
+                                    graphContainer.style.display = "none";
+                                }
+
+                                showSection('Accountsbar');
+                                document.getElementById("AccountsRadio").checked = true;
+
+
+                            }
+
+
+                        }
+                    });
+
+                </script>
+
+
+            </div>
+
+            <div class="search_container">
+
+                <div class="timenav">
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+
+                    <ul id="menuList1" class="timebar">
+
+                        <li>
+                            <input type="radio" id="AccountsRadio" name="sectionRadio"
+                                onclick="showSection('Accountsbar')" style="display: none;">
+                            <label for="AccountsRadio" class="link1"><i class="fa-solid fa-layer-group"
+                                    style="margin-right: 5px;"></i> Accounts</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="HrRadio" name="sectionRadio" onclick="showSection('Hr')"
+                                style="display: none;">
+                            <label for="HrRadio" class="link1"><i class="fa-solid fa-user-tie"
+                                    style="margin-right: 5px;"></i> HR</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="LeadsRadio" name="sectionRadio" onclick="showSection('Leads')"
+                                style="display: none;">
+                            <label for="LeadsRadio" class="link1"><i class="fa-solid fa-comments"
+                                    style="margin-right: 5px;"></i> Enquiry</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="ProfileRadio" name="sectionRadio" onclick="showSection('Profile')"
+                                style="display: none;">
+                            <label for="ProfileRadio" class="link1"><i class="fa-solid fa-user-circle"
+                                    style="margin-right: 5px;"></i> Profile</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="ProjectsRadio" name="sectionRadio" onclick="showSection('Projects')"
+                                style="display: none;">
+                            <label for="ProjectsRadio" class="link1"><i class="fa-solid fa-briefcase"
+                                    style="margin-right: 5px;"></i> Projects</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="PurchaseRadio" name="sectionRadio" onclick="showSection('Purchase')"
+                                style="display: none;">
+                            <label for="PurchaseRadio" class="link1"><i class="fa-sharp fa-solid fa-cart-shopping"
+                                    style="margin-right: 5px;"></i> Purchase</label>
+                        </li>
+
+                        <!-- Added Planner Section -->
+                        <li>
+                            <input type="radio" id="PlannerRadio" name="sectionRadio" onclick="showSection('Planner')"
+                                style="display: none;">
+                            <label for="PlannerRadio" class="link1"><i class="fa-solid fa-calendar-alt"
+                                    style="margin-right: 5px;"></i> Planner</label>
+                        </li>
+
+                        <!-- Added Resources Section with Recycle Icon -->
+                        <li>
+                            <input type="radio" id="ResourcesRadio" name="sectionRadio"
+                                onclick="showSection('Resources')" style="display: none;">
+                            <label for="ResourcesRadio" class="link1"><i class="fa-solid fa-recycle"
+                                    style="margin-right: 5px;"></i> Resources</label>
+                        </li>
+
+                    </ul>
+
+                    <script>
+
+                        function toggleSubHeadings(groupClass) {
+                            const mainToggle = document.querySelector(`#toggle${groupClass}`);
+                            const subHeadings = document.querySelectorAll(`.${groupClass}`);
+                            subHeadings.forEach(subHeading => {
+                                subHeading.querySelector('input').checked = mainToggle.checked;
+                            });
+                        }
+
+                        function showSection(sectionId) {
+                            // Hide all sections
+                            var sections = document.querySelectorAll(
+                                ".Accountsbar, .Hr, .Leads, .Profile, .Projects, .Purchase, .Planner, .Resources"
+                            );
+                            sections.forEach(function (section) {
+                                section.style.display = "none";
+                            });
+
+                            // Show the selected section
+                            var selectedSection = document.getElementById(sectionId);
+                            if (selectedSection) {
+                                selectedSection.style.display = "block";
+                            }
+
+                            // Hide the graph container if any section is active
+                            var graphContainer = document.querySelector('.graph-container');
+                            if (graphContainer) {
+                                graphContainer.style.display = "none";
+                            }
+
+                            // Ensure the correct radio button is checked
+                            const radio = document.querySelector(`input[name="sectionRadio"][id="${sectionId}Radio"]`);
+                            if (radio) {
+                                radio.checked = true; // Set the radio input to checked
+                            }
+                        }
+
+                        // Window onload: Set the section to show based on the backend value of "show"
+                        window.onload = function () {
+                            var show = "{{ show }}"; // Value from the backend
+                            if (show) {
+                                showSection(show);
+                            }
+                        };
+
+                    </script>
+
+                    <div class="menu-icon1">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+                    </div>
+
+                </div>
+
+                <style>
+                    .search_container {
+
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+
+                    #projectTable {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        border-radius: 10px;
+                    }
+                </style>
+
+            </div>
+
+            <!-- Accounts Sections -->
+            <div class="Accountsbar" id="Accountsbar" style="display: none">
+
+                <form action="#" method="POST" id="accounts_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="Accounts">Accounts</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="Accounts"
+                                                onclick="toggleSubHeadings('accountsSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Accounts Section -->
+                                <div class="modgroup">
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            document.querySelectorAll('.modgroup').forEach(modgroup => {
+                                                const mainToggle = modgroup.querySelector('.main-heading input[type="checkbox"]');
+                                                const subToggles = modgroup.querySelectorAll('.sub-heading input[type="checkbox"]');
+
+                                                subToggles.forEach(subToggle => {
+                                                    subToggle.addEventListener('change', function () {
+                                                        // Check if any sub-toggle is ON
+                                                        const anyChecked = Array.from(subToggles).some(toggle => toggle.checked);
+
+                                                        // Set main toggle based on sub-toggles' state
+                                                        mainToggle.checked = anyChecked;
+                                                    });
+                                                });
+
+                                                mainToggle.addEventListener('change', function () {
+                                                    // If main toggle is manually turned OFF, turn off all sub-toggles
+                                                    if (!mainToggle.checked) {
+                                                        subToggles.forEach(subToggle => subToggle.checked = false);
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleClient">Client</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleClient"
+                                                    onclick="toggleSubHeadings('accountsSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="toggle-row sub-heading accountsSubHeadings">
+                                        <label for="toggleAddClient">Add Client</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddClient">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading accountsSubHeadings">
+                                        <label for="toggleEditClient">Edit Client</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditClient">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading accountsSubHeadings">
+                                        <label for="toggleDeleteClient">Delete Client</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteClient">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <!-- Suppliers Section -->
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleSuppliers">Suppliers</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleSuppliers"
+                                                    onclick="toggleSubHeadings('suppliersSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleAddSupplier">Add Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleEditSupplier">Edit Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleDeleteSupplier">Delete Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Expenses Section -->
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleExpenses">Expenses</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleExpenses"
+                                                onclick="toggleSubHeadings('expensesSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <!-- Invoice Section -->
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleInvoice">Invoice</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleInvoice"
+                                                    onclick="toggleSubHeadings('invoiceSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading invoiceSubHeadings">
+                                        <label for="toggleNewInvoice">New Invoice</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleNewInvoice">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading invoiceSubHeadings">
+                                        <label for="toggleEditInvoice">Edit Invoice</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditInvoice">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading invoiceSubHeadings">
+                                        <label for="toggleDeleteInvoice">Delete Invoice</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteInvoice">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading invoiceSubHeadings">
+                                        <label for="toggleViewInvoice">View Invoice</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewInvoice">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- OverHead pay Req Section -->
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleOverHeadPayReq">Overhead Payment Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleOverHeadPayReq"
+                                                    onclick="toggleSubHeadings('overHeadSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading overHeadSubHeadings">
+                                        <label for="toggle_ac_overhead_pay_NewRequest">New Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_ac_overhead_pay_NewRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">Column 3</div>
+                        <div class="column">Column 4</div>
+
+                    </div>
+
+                    <!-- Add the button here -->
+                    <div class="button-container">
+                        <button type="submit" id="accountsControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                    <style>
+                        .btn {
+                            background: linear-gradient(135deg, #3498db, #8e44ad);
+                            /* Gradient colors */
+                            color: white;
+                            border: none;
+                            padding: 10px 15px;
+                            font-size: 16px;
+                            cursor: pointer;
+                            border-radius: 5px;
+                            transition: background-color 0.3s ease, transform 0.2s ease;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            /* Adding subtle shadow */
+                        }
+
+                        .btn:hover {
+                            background: linear-gradient(135deg, #2980b9, #9b59b6);
+                            /* Darker gradient on hover */
+                            transform: scale(1.1);
+                            /* Slight zoom effect */
+                        }
+
+                        .btn:active {
+                            transform: scale(1);
+                            /* Return to original size on click */
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+                            /* Stronger shadow on click */
+                        }
+
+                        @keyframes buttonPulse {
+                            0% {
+                                transform: scale(1);
+                            }
+
+                            50% {
+                                transform: scale(1.05);
+                            }
+
+                            100% {
+                                transform: scale(1);
+                            }
+                        }
+
+                        .btn:focus {
+                            animation: buttonPulse 1s infinite;
+                            /* Pulse animation when focused */
+                        }
+                    </style>
+
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('accountsControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#accounts_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_accounts_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+
+            </div>
+
+            <!-- Hr Sections -->
+            <div class="Hr" id="Hr" style="display: none">
+
+                <form action="#" method="POST" id="hr_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleHR">HR</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleHR"
+                                                onclick="toggleSubHeadings('addSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleADD">ADD</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleADD"
+                                                onclick="toggleSubHeadings('addSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+
+
+
+                                    <div class="toggle-row main-heading">
+
+                                        <label for="toggleAddCourse">Add Course</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddCourse">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleEditCourse">Edit Course</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditCourse">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleDeleteCourse">Delete Course</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteCourse">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleAddLeave">Add Leave</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddLeave">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleEditLeave">Edit Leave</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditLeave">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleDeleteLeave">Delete Leave</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteLeave">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleAddAsset">Add Asset</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddAsset">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleEditAsset">Edit Asset</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditAsset">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleDeleteAsset">Delete Asset</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteAsset">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleAddHoliday">Add Public Holiday</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddHoliday">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleEditHoliday">Edit Public Holiday</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditHoliday">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading addSubHeadings">
+                                        <label for="toggleDeleteHoliday">Delete Public Holiday</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteHoliday">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+                            <div class="toggle-group">
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleHRLeaves">Leaves</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleHRLeaves"
+                                                onclick="toggleSubHeadings('leavesSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleLeaveOverview">Overview</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleLeaveOverview">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglePendingApprovals">Pending Approvals</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePendingApprovals"
+                                                    onclick="toggleSubHeadings('pendingApprovalsSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading pendingApprovalsSubHeadings">
+                                        <label for="toggleApproveRejectLeave">Approve or Reject Leave</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleApproveRejectLeave">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading pendingApprovalsSubHeadings">
+                                        <label for="toggleDeleteLeavePending">Delete Leave</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteLeavePending">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleLeaveStats">Leave Stats</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleLeaveStats">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleLeaveAllocation">Leave Allocation</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleLeaveAllocation"
+                                                    onclick="toggleSubHeadings('leaveAllocationSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading leaveAllocationSubHeadings">
+                                        <label for="toggleAddLeaveAllocation">Add Allocation</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddLeaveAllocation">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading leaveAllocationSubHeadings">
+                                        <label for="toggleEditLeaveAllocation">Edit Allocation</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditLeaveAllocation">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading leaveAllocationSubHeadings">
+                                        <label for="toggleDeleteLeaveAllocation">Delete Allocation</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteLeaveAllocation">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleHRProfile">Profile</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleHRProfile"
+                                                    onclick="toggleSubHeadings('profileSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading profileSubHeadings">
+                                        <label for="toggleUpdateBio">Update Bio</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleUpdateBio">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading profileSubHeadings">
+                                        <label for="toggleUpdateCourse">Update Course</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleUpdateCourse">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading profileSubHeadings">
+                                        <label for="toggleUpdateAssets">Update Assets</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleUpdateAssets">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="toggle-group"></div>
+                        </div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="hrControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('hrControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#hr_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_hr_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Enquiry Sections -->
+            <div class="Leads" id="Leads" style="display: none">
+
+                <form action="#" method="POST" id="Leads_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleEnquiry">Enquiry</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEnquiry">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleCreateEnquiry">Create Enquiry</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleCreateEnquiry">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleEditEnquiry">Edit Enquiry</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditEnquiry">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleDeleteEnquiry">Delete Enquiry</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeleteEnquiry">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="button-container">
+                        <button type="button" id="LeadsControls" class="btn btn-primary">Update</button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('LeadsControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Leads_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_leads_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Profile Sections -->
+            <div class="Profile" id="Profile" style="display: none">
+
+                <form action="#" method="POST" id="Profile_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <!-- Profile Section -->
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleProfile">Profile</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleProfile">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Account Hub -->
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleAccountHub">Account Hub</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAccountHub">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="togglePersonalDetails">Personal Details</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePersonalDetails">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleprof_Leaves">Leaves</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprof_Leaves">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Courses">Courses</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Courses">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Payslip">Payslip</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Payslip">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Assets">Assets</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Assets">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Time Sheet -->
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggle_prof_TimeSheet">Time Sheet</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_TimeSheet">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Project">Project</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Project">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Estimation">Estimation</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Estimation">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Overhead">Overhead</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Overhead">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Service">Service</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Service">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_Warranty">Warranty</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_Warranty">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleProfPurchaseRequest">Purchase Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleProfPurchaseRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglecreate_PR_All">All</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglecreate_PR_All">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="togglec_PR_all_create">Create</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglec_PR_all_create">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_PR_all_view">View</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_PR_all_view">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_PR_all_approve">Approve</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_PR_all_approve">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglecreate_PR_Involved">Involved</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglecreate_PR_Involved">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="togglec_PR_Involved_create">Create</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglec_PR_Involved_create">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_PR_Involved_view">View</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_PR_Involved_view">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_PR_Involved_approve">Approve</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_PR_Involved_approve">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleProjectRequest">Project Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleProjectRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleprf_prj_NewRequest">New Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprf_prj_NewRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-row sub-heading">
+                                        <label for="togglePendingRequest">Pending Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePendingRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleRequestedList">Requested List</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleRequestedList">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggle_prof_approveprj">Approve Project</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggle_prof_approveprj">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="modgroup">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleProfPurchaseOrder">Purchase Order</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleProfPurchaseOrder">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleProf_po_View_All">View All</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleProf_po_View_All">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleProf_po_View_Involved">View Involved</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleProf_po_View_Involved">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="modgroup">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="togglePaymentRequest">Payment Request</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="togglePaymentRequest">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleView_pro_Request_view_all">View All</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleView_pro_Request_view_all">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleView_pro_Request_view_involved">View Involved</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleView_pro_Request_view_involved">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleView_pro_Request_Create_all">Create All</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleView_pro_Request_Create_all">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggleView_pro_Request_Create_involved">Create Involved</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleView_pro_Request_Create_involved">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modgroup">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggle_prof_claims">Claims </label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggle_prof_claims">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggle_prof_view_involved_Claims">View Involved</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggle_prof_view_involved_Claims">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggle_prof_view_all_Claims">View All</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggle_prof_view_all_Claims">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading">
+                                    <label for="toggle_prof_view_create_Claims">Create Claim</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggle_prof_view_create_Claims">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleDeliveryOrders">Delivery Orders</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeliveryOrders">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleViewallDO">View All DOs</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewallDO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleViewinvolvedDO">View Involved DOs</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewinvolvedDO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleprofSuppliers">Suppliers</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprofSuppliers">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleprofAddpurSupplier">Create</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprofAddpurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleprofEditpurSupplier">Edit</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprofEditpurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading">
+                                        <label for="toggleprofDeletepurSupplier">Delete</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprofDeletepurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="ProfileControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('ProfileControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Profile_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_profile_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Projects Sections -->
+            <div class="Projects" id="Projects" style="display: none">
+
+                <form action="#" method="POST" id="Projects_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleProjects">Projects</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleProjects"
+                                                onclick="toggleSubHeadings('projectsSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleDashboard">Dashboard</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDashboard">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectsSubHeadings">
+                                        <label for="toggleAllProjects">All Projects</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAllProjects">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectsSubHeadings">
+                                        <label for="toggleInvolvedProjects">Involved Projects</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleInvolvedProjects">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="toggle-row sub-heading projectsSubHeadings">
+                                        <label for="toggleEditPM">Edit (Only PM)</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditPM">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectsSubHeadings">
+                                        <label for="toggleEditAllProjects">Edit All Projects</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditAllProjects">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modgroup">
+                                    <div class="toggle-group">
+                                        <div class="toggle-row main-heading">
+                                            <label for="toggleProjectStatus">Project Status</label>
+                                            <div class="toggle-container">
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="toggleProjectStatus"
+                                                        onclick="toggleSubHeadings('projectStatusSubHeadings')">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="toggle-row sub-heading projectStatusSubHeadings">
+                                            <label for="toggleAllstatusProjects">All Projects</label>
+                                            <div class="toggle-container">
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="toggleAllstatusProjects">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="toggle-row sub-heading projectStatusSubHeadings">
+                                            <label for="toggleOnlyPMProjects">Only PM Projects</label>
+                                            <div class="toggle-container">
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" id="toggleOnlyPMProjects">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleHoursEdit">Hours Edit</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleHoursEdit">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleHoursView">Hours View</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleHoursView">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="toggleProjectDetails">Project Details (From Project ID)</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleProjectDetails"
+                                                    onclick="toggleSubHeadings('projectDetailsSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleOverview">Overview</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleOverview">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleHrsView">Hrs View</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleHrsView">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleGeneratePR">Generate PR</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleGeneratePR">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="togglePRJViewPR">View PR</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePRJViewPR">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleprjViewPO">View PO</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleprjViewPO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleViewClaims">View Claims</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewClaims">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="togglePrjViewDO">View DO</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePrjViewDO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleCreateDO">Create DO</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleCreateDO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="togglePaymentRequests">Payment Requests</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePaymentRequests">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading projectDetailsSubHeadings">
+                                        <label for="toggleCreatePaymentRequest">Create Payment Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleCreatePaymentRequest">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">Column 3
+                            <!-- Material Receipt -->
+                            <div class="modgroup">
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleMaterialReceipt">Material Receipt</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleMaterialReceipt"
+                                                onclick="toggleSubHeadings('materialReceiptSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading materialReceiptSubHeadings">
+                                    <label for="toggleReceive">Receive</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleReceive">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="toggle-row sub-heading materialReceiptSubHeadings">
+                                    <label for="toggleReceiptRecords">Receipt Records</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleReceiptRecords">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">Column 4
+                            <div class="toggle-group"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="ProjectsControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('ProjectsControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Projects_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_Projects_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Purchase Sections -->
+            <div class="Purchase" id="Purchase" style="display: none">
+
+                <form action="#" method="POST" id="Purchase_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="togglePurchase">Purchase</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="togglePurchase"
+                                                onclick="toggleSubHeadings('purchaseSubHeadings')">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Purchase Request -->
+                                <div class="modgroup">
+
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglePurchaseRequest">Purchase Request</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePurchaseRequest"
+                                                    onclick="toggleSubHeadings('purchaseRequestSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="toggle-row sub-heading purchaseRequestSubHeadings">
+                                        <label for="toggleViewPRDetails">View PR Details</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewPRDetails">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseRequestSubHeadings">
+                                        <label for="toggleApproveAnyPR">Approve Any PR</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleApproveAnyPR">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseRequestSubHeadings">
+                                        <label for="toggleIssueAnyPO">Issue Any PO</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleIssueAnyPO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseRequestSubHeadings">
+                                        <label for="toggleEditPR">Edit PR (If Not Approved)</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditPR">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseRequestSubHeadings">
+                                        <label for="toggleDeletePR">Delete PR</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeletePR">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Purchase Order -->
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglePurchaseOrder">Purchase Order</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePurchaseOrder"
+                                                    onclick="toggleSubHeadings('purchaseOrderSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseOrderSubHeadings">
+                                        <label for="toggleViewPODetails">View PO Details</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleViewPODetails">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseOrderSubHeadings">
+                                        <label for="toggleEditPO">Edit PO (If Not Closed)</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditPO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading purchaseOrderSubHeadings">
+                                        <label for="togglePrintPO">Print PO</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglePrintPO">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleCreatePRAllProjects">Create PR For All Projects</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleCreatePRAllProjects">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="toggle-row main-heading">
+                                    <label for="togglePOUpdate">PO Update</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="togglePOUpdate">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Suppliers -->
+                                <div class="modgroup">
+                                    <div class="toggle-row main-heading">
+                                        <label for="togglepurSuppliers">Suppliers</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="togglepurSuppliers"
+                                                    onclick="toggleSubHeadings('suppliersSubHeadings')">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleAddpurSupplier">Add Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleAddpurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleEditpurSupplier">Edit Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleEditpurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-row sub-heading suppliersSubHeadings">
+                                        <label for="toggleDeletepurSupplier">Delete Supplier</label>
+                                        <div class="toggle-container">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="toggleDeletepurSupplier">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="column">Column 3
+                            <div class="toggle-group"></div>
+                        </div>
+
+                        <div class="column">Column 4
+                            <div class="toggle-group"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="PurchaseControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('PurchaseControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Purchase_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_Purchase_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Planner Sections -->
+            <div class="Planner" id="Planner" style="display: none">
+
+                <form action="#" method="POST" id="Planner_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="togglePlanner">Planner</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="togglePlanner">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">Column 2
+                            <div class="toggle-group"></div>
+                        </div>
+
+                        <div class="column">Column 3
+                            <div class="toggle-group"></div>
+                        </div>
+
+                        <div class="column">Column 4
+                            <div class="toggle-group"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="PlannerControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('PlannerControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Planner_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_Planner_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <!-- Resources Sections -->
+            <div class="Resources" id="Resources" style="display: none">
+
+                <form action="#" method="POST" id="Resources_settings">
+
+                    <div class="parent">
+
+                        <div class="column">
+
+                            <div class="toggle-group">
+
+                                <div class="toggle-row main-heading">
+                                    <label for="toggleResources">Resources</label>
+                                    <div class="toggle-container">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="toggleResources">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="column">Column 2
+                            <div class="toggle-group"></div>
+                        </div>
+
+                        <div class="column">Column 3
+                            <div class="toggle-group"></div>
+                        </div>
+
+                        <div class="column">Column 4
+                            <div class="toggle-group"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" id="ResourcesControls" class="btn btn-primary">Update
+                        </button>
+                    </div>
+
+                </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('ResourcesControls').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent form submission (if necessary)
+
+                            const employeeID = document.getElementById('employeeSelect').value;
+                            if (!employeeID) {
+                                alert("Please select an employee.");
+                                return;
+                            }
+
+                            let formData = { "Employee_ID": employeeID };
+
+                            // Select only checkboxes within the Leads_settings form
+                            document.querySelectorAll("#Resources_settings input[type='checkbox']").forEach(checkbox => {
+                                formData[checkbox.id] = checkbox.checked ? "On" : "Off";
+                            });
+
+                            // Send AJAX request to update access control
+                            fetch('/update_Resources_access_control', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showSuccessMessage();
+                                    } else {
+                                        alert("Failed to update access control.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error updating access control:", error);
+                                });
+                        });
+                    });
+                </script>
+
+            </div>
+
+            <div class="graph-container">
+                <h4>⚡ Select an Employee to Update the Controls 🚀</h4>
+
+            </div>
+
+            <!-- Success message -->
+            <!-- Success Message -->
+            <div id="successMessage">
+                Access controls updated successfully!
+            </div>
+
+            <style>
+                /* Center the success message */
+                #successMessage {
+                    display: none;
+                    color: rgb(0, 66, 128);
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 255, 0, 0.1);
+                    padding: 50px 100px;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                }
+            </style>
+
+            <script>
+                function showSuccessMessage() {
+                    let message = document.getElementById("successMessage");
+                    message.style.display = "block";
+                    setTimeout(() => {
+                        message.style.opacity = "1";
+                    }, 50);
+
+                    // Hide the message after 3 seconds with fade-out effect
+                    setTimeout(() => {
+                        message.style.opacity = "0";
+                        setTimeout(() => {
+                            message.style.display = "none";
+                        }, 100); // Matches the transition time
+                    }, 2000);
+                }
+
+                // Example: Call this function when the access control update is successful
+                // showSuccessMessage();
+            </script>
+
+        </div>
+
+    </div>
+
+    <style>
+        .parent {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            /* Optional, adds space between the columns */
+        }
+
+        .column {
+            flex: 1;
+            /* This ensures that each column takes equal space */
+            background-color: white;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid whitesmoke;
+            border-radius: 5px;
+            /* Optional, for column borders */
+        }
+
+        /* Container styling */
+        .graph-container {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(to right, #c3a8e0, #c478b7);
+            border-radius: 15px;
+            color: white;
+            margin: 50px auto;
+            width: 30%;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Heading animation */
+        .graph-container h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: slideIn 1.2s ease-in-out forwards;
+        }
+
+        /* Paragraph animation */
+        .graph-container p {
+            font-size: 18px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideIn 1.5s ease-in-out forwards 0.5s;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <style>
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+            color: black;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .main-heading {
+            background: #f4f4f4;
+            font-weight: bold;
+            font-size: large;
+            border-left: 10px solid #11589e;
+            cursor: pointer;
+            color: #26619c;
+
+        }
+
+        /* General styling for all sub-headings */
+        .sub-heading {
+            margin-top: 1px;
+            padding-left: 50px;
+            background: #f9f9f9;
+            border-left: 6px solid #a13c02;
+            /* Purple indicator */
+            background: linear-gradient(285deg, #a13c02, #f58e52, #a13c02);
+            /* Golden gradient shades */
+
+            /* Gradient for text */
+            -webkit-background-clip: text;
+            /* Clip the background to text */
+            color: transparent;
+            /* Make text color transparent so the gradient shows */
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+
+        /* Hover Effect for all sub-headings */
+        .sub-heading:hover {
+            background: #e8f5e9;
+            transform: scale(1.02);
+            color: rgb(83, 82, 82);
+            border-left: 6px solid white;
+        }
+
+        /* Glow Effect when toggled */
+        .toggle-switch input:checked+.slider {
+            box-shadow: 0 0 10px #4caf50;
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #cf0b0b;
+            transition: 0.3s;
+            border-radius: 20px;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+        }
+
+        input:checked+.slider {
+            background: #4caf50;
+        }
+
+        input:checked+.slider::before {
+            transform: translateX(20px);
+            background: #e0ffe0;
+        }
+    </style>
+
+    <script>
+        // Hide flash messages after 3 seconds
+        setTimeout(function () {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }, 5000); // 3000 milliseconds = 3 seconds
+    </script>
+
+</body>
+
+</html>

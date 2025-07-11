@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #2980B9, #6DD5FA);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .home_container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      font-size: 3em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: fadeInScale 2s ease-in-out;
+    }
+
+    .welcome-message {
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      animation: slideUpRotate 1.5s ease-out;
+    }
+
+    /* Basic button styles */
+    .login-button {
+      background-color: #FFC107;
+      color: #333;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      animation: pulseColor 2.5s infinite;
+      position: relative;
+    }
+
+    /* Hover effect with pop-up animation */
+    .login-button:hover {
+      background-color: #FFD740;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      animation: popup 0.5s ease-out;
+    }
+
+    /* Active state with slight scale down */
+    .login-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Animation for the pop-up effect */
+    @keyframes popup {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Pulse animation (unchanged) */
+    @keyframes pulseColor {
+      0% {
+        background-color: #FFC107;
+      }
+
+      50% {
+        background-color: #FFD740;
+      }
+
+      100% {
+        background-color: #FFC107;
+      }
+    }
+
+
+
+
+    /* Placeholder for walking animation - replace with actual animation */
+    .walking-man {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      /* Placeholder color */
+      border-radius: 50%;
+      /* Placeholder shape */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      color: #333;
+      animation: walk 2s linear infinite;
+      /* Example animation */
+    }
+
+    @keyframes walk {
+      0% {
+        transform: translateX(-10px);
+      }
+
+      50% {
+        transform: translateX(10px);
+      }
+
+      100% {
+        transform: translateX(-10px);
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideUpRotate {
+      from {
+        transform: translateY(50px) rotate(-10deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulseColor {
+      0% {
+        background-color: #FFC107;
+      }
+
+      50% {
+        background-color: #FFEB3B;
+      }
+
+      100% {
+        background-color: #FFC107;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Particles Background */
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Background Wave */
+    body::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,56.5C240,56.5,240,18.3,480,18.3S720,114.7,960,114.7S1200,56.5,1200,56.5V120H0V56.5z" fill="rgba(255, 255, 255, 0.3)"/></svg>') repeat-x;
+      animation: wave 8s linear infinite;
+    }
+
+    @keyframes wave {
+      0% {
+        background-position: 0 bottom;
+      }
+
+      100% {
+        background-position: 1200px bottom;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="particles-js"></div>
+
+  <div class="home_container">
+    <div class="logo">Centroid Engineering Solutions</div>
+    <div class="welcome-message">Welcome to our company portal!</div>
+    <button class="login-button" onclick="location.href='/login';">Get Started</button>
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: '#ffffff' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 3 }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+        modes: { repulse: { distance: 200 }, push: { particles_nb: 4 } }
+      },
+      retina_detect: true
+    });
+  </script>
+</body>
+
+</html>

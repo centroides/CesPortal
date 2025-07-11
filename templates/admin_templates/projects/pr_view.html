@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png" />
+  <link rel="stylesheet" href="../static/res_style.css" />
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects" class="active">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            {% if user_access['toggleDashboard'] == 'On' %}
+            <li class="active">
+              <a href="{{ url_for('projects') }}" class="link">
+                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleProjectStatus'] == 'On' %}
+            <li>
+              <a href="{{ url_for('prj_status') }}" class="link">
+                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleHoursEdit'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hours_edit') }}" class="link">
+                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleMaterialReceipt'] == 'On' %}
+            <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i class="fa-solid fa-industry"></i>
+                Material Receipt</a></li>
+            {% endif %}
+
+            {% if user_access['toggleHoursView'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hrs_view') }}" class="link">
+                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+              </a>
+            </li>
+            {% endif %}
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+      <div class="search_container">
+
+        <div class="timenav">
+          <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+          <ul id="menuList1" class="timebar">
+            {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+            department_code in [10, 11, 16, 1000]) %}
+            <li>
+              <a href="{{ url_for('project_details_page', id=project_id) }}">
+                <i class="fa-solid fa-chart-bar"></i> Overview
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+            department_code in [10, 11, 16, 1000]) %}
+            <li>
+              <a href="/prj_hrs_view?project_id={{ project_id }}">
+                <i class="fa-regular fa-clock"></i> Hrs View
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleGeneratePR'] == 'On' %}
+            <li>
+              <a href="/project_pr?project_id={{ project_id }}">
+                <i class="fa-solid fa-file-invoice"></i> Generate PR
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['togglePRJViewPR'] == 'On' %}
+            <li>
+              <a href="{{ url_for('pr_view', project_id=project_id) }}" class="active">
+                <i class="fa-solid fa-list"></i> View PR's
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleprjViewPO'] == 'On' %}
+            <li>
+              <a href="/project_po?project_id={{ project_id }}">
+                <i class="fa-solid fa-file-contract"></i> View PO's
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['toggleViewClaims'] == 'On' %}
+            <li>
+              <a href="/claiminfo?project_id={{ project_id }}">
+                <i class="fa-solid fa-receipt"></i> View Claims
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['togglePrjViewDO'] == 'On' %}
+            <li>
+              <a href="{{ url_for('project_do', project_id=project_id) }}">
+                <i class="fa-solid fa-truck-moving"></i> DO's
+              </a>
+            </li>
+            {% endif %}
+            {% if user_access['togglePaymentRequests'] == 'On' %}
+            <li>
+              <a href="{{ url_for('prj_pay_req', project_id=project_id) }}">
+                <i class="fa-solid fa-money-bill-wave"></i> Payment Request
+              </a>
+            </li>
+            {% endif %}
+
+            <li>
+              <a href="{{ url_for('prj_planner', project_id=project_id) }}">
+                <i class="fa-solid fa-calendar-check"></i> Planner
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="menu-icon1">
+            <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+          </div>
+        </div>
+
+        <div class="line1"></div>
+
+        <style>
+          .timenav .active i {
+            color: white !important;
+            /* Ensures icon turns white */
+          }
+
+          .search_container {
+
+            width: 100%;
+            padding: 10px;
+          }
+
+          .line1 {
+            margin: 3px auto;
+            /* Centers horizontally */
+            height: 2px;
+            background-color: rgb(82, 79, 79);
+            width: 97%;
+            display: block;
+            /* Ensures it behaves as a block element */
+          }
+
+
+          /* Style for headings and icons */
+          .timenav a,
+          .timenav i {
+            color: #8d7f5c !important;
+            font-weight: bold;
+          }
+
+          /* Active link style */
+          .timenav .active {
+            background-color: #FF6347 !important;
+            color: white !important;
+            padding: 10px;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+
+          .timebar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+          }
+
+          .timebar li {
+            flex: 1 1 20%;
+            margin: 5px;
+            text-align: center;
+          }
+
+          .link1 {
+            color: #8d7f5c;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            cursor: pointer;
+          }
+        </style>
+
+      </div>
+
+      <div class="title-box">
+        <div class="title-item cssanimation open">
+          <span>Project ID : {{project_details.id}} </span>
+        </div>
+
+        <div class="title-item cssanimation open">
+          <span>Project Name : {{project_details.project_name}}</span>
+        </div>
+
+        <div class="title-item cssanimation open">
+          <span>Project Manager : {{project_details.pm}}</span>
+        </div>
+
+        <div class="title-item cssanimation open">
+          <span style="color: red;">Total : $ {{total_sum}}</span>
+        </div>
+
+
+        <style>
+          .title-box {
+            display: flex;
+            /* Arrange items in a row */
+            justify-content: space-between;
+            /* Distribute items with space between them */
+            align-items: center;
+            /* Vertically align items */
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+          }
+
+          .title-item {
+            display: flex;
+            align-items: center;
+            /* Align title and value on the same row */
+          }
+
+          .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+          }
+
+          .open {
+            justify-content: space-between;
+            /* Distribute items with space between them */
+            animation-name: open;
+            animation-duration: 1s;
+            /* Add duration */
+            animation-timing-function: ease-out;
+            /* Smooth animation */
+            animation-fill-mode: forwards;
+            /* Retain the final state of the animation */
+          }
+
+          @keyframes open {
+            from {
+              width: 20px;
+              /* Start with 0 width */
+            }
+
+            to {
+              width: 573px;
+              /* Animate to 473px width */
+            }
+          }
+
+          /* Responsive styling for smaller screens */
+          @media (max-width: 768px) {
+            .title-box {
+              flex-direction: column;
+              /* Stack items vertically on smaller screens */
+              align-items: flex-start;
+            }
+
+            .title-item {
+              margin-bottom: 15px;
+              /* Space between stacked items */
+            }
+          }
+        </style>
+
+      </div>
+
+      <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+      <div class="records table-responsive">
+
+        <div class="table-responsive">
+
+          <table class="table table-main" width="100%">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 3%">
+                  <i class="fa-solid fa-caret-down"></i>
+
+                </th>
+                <th class="text-center" style="width: 8%">PR Date</th>
+                <th class="text-center" style="width: 10%">PR NO</th>
+                <th class="text-center" style="width: 20%">Supplier</th>
+                <th class="text-center" style="width: 10%">Total</th>
+                <th class="text-center" style="width: 12%">CreatedBy</th>
+                <th class="text-center" style="width: 12%">ApprovedBy</th>
+                <th class="text-center" style="width: 8%">Status</th>
+                <th class="text-center" style="width: 5%">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if not grouped_df.empty %} {% for index, row in
+              grouped_df.iterrows() %}
+              <tr>
+                <td class="text-center view-col">
+                  <button onclick="toggleSubTable('subTable{{ index }}', 'toggleButton{{ index }}')"
+                    id="toggleButton{{ index }}">
+                    <i class="fa-solid fa-caret-down"></i>
+
+                  </button>
+                </td>
+                <td class="text-center">{{ row['PR_Date'] }}</td>
+
+                <td class="text-center ">
+                  {% if row['PR_no'] %}
+                  <a href="{{ url_for('view_pr_qoute_file', filename=row['PR_no']) }}" target="_blank">
+                    {{ row['PR_no'] }}
+                  </a>
+                  {% else %}
+                  <span>{{ row['PR_no']}}</span>
+                  {% endif %}
+
+                </td>
+
+                <td class="text-center supplierName">{{ row['Supplier'][:15] }}{% if
+                  row['Supplier']|length > 15 %}...{% endif %}</td>
+                <td class="text-center">$ {{ row['PR_Total'] }}</td>
+                <td class="text-center">{{ row['Created_By'] }}</td>
+                <td class="text-center">{{ row['Approved_by'] }}</td>
+
+
+
+
+                <td class="text-center status" style="font-weight: bold;">
+                  <span style="color: 
+                      {% if row['Status'] == 'Created' %}
+                          brown;
+                      {% elif row['Status'] == 'Approved' %}
+                          blue;
+                      {% elif row['Status'] == 'Processed' %}
+                          green;
+                      {% elif row['Status'] == 'Canceled' %}
+                          red;
+                      {% endif %};
+                      background-color: 
+                      {% if row['Status'] == 'Created' %}
+                          #f2e1d7;
+                      {% elif row['Status'] == 'Approved' %}
+                          #a4acee;
+                      {% elif row['Status'] == 'Processed' %}
+                          #d0f8e3;
+                      {% elif row['Status'] == 'Canceled' %}
+                          #f8d7da;
+                      {% endif %};
+                      padding: 2px 8px; 
+                      border-radius: 8px; 
+                      display: inline-block;
+                  ">
+                    {{ row['Status'] if 'Status' in row else 'N/A' }}
+                  </span>
+                </td>
+
+
+                {% if (department_code == 1000 or
+                user_access['pur_purchaser'] == 'On') and row['Status'] !=
+                'Processed' %}
+
+                <td class="text-center">
+                  <a href="{{ url_for('pr_edit', id=row['ID']) }}">
+                    <span class="fa-solid fa-edit" style="font-size: 1.25em"></span>
+                  </a>
+                </td>
+                {% elif row['Status'] == 'Created' %}
+                <td class="text-center">
+                  <a href="{{ url_for('pr_edit', id=row['ID']) }}">
+                    <span class="fa-solid fa-edit" style="font-size: 1.25em"></span>
+                  </a>
+                </td>
+                {% else %}
+                <td class="text-center">
+                  &nbsp;
+                  <!-- This will show an empty space in the cell -->
+                </td>
+                {% endif %}
+              </tr>
+
+              <tr id="subTable{{ index }}" style="display: none">
+                <td colspan="100%">
+                  <form method="POST">
+                    <input type="hidden" name="Update" value="1" />
+                    <input type="hidden" name="PR_ID" value="{{ row['ID'] }}" />
+                    <input type="hidden" name="PR_No" value="{{ row['PR_no'] }}" />
+                    <table class="table table-bordered sub-table" style="width: 100%">
+                      <thead>
+                        <tr>
+                          <th class="text-center" style="display: none">
+                            ID
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 5%;
+                              ">
+                            S/N
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 50%;
+                              ">
+                            Item
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            QTY
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            UOM
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            Date
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            Unit Price
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            Total
+                          </th>
+                          <th class="text-center" style="
+                                background-color: #1c869e;
+                                color: white;
+                                width: 10%;
+                              ">
+                            Status
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for sub_index, sub_row in
+                        row['Sub_DF'].iterrows() %}
+                        <tr>
+                          <td>{{ sub_index + 1 }}</td>
+                          <input type="hidden" name="ID_{{ sub_index }}" value="{{ sub_row['ID'] }}" />
+                          <!-- Hidden input for ID -->
+                          <td class="text-center item-cell">
+                            {{ sub_row['Description'] }}
+                          </td>
+                          <td class="text-center">{{ sub_row['QTY'] }}</td>
+                          <td class="text-center">{{ sub_row['UOM'] }}</td>
+                          <td class="text-center start-time">
+                            {{ sub_row['excepted_date'] }}
+                          </td>
+                          <td class="text-center">
+                            {{ sub_row['Unit_Price'] }}
+                          </td>
+                          <td class="text-center">
+                            {{ sub_row['Total_Price'] }}
+                          </td>
+                          <td class="text-center">
+                            {{ sub_row['status'] }}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %} {% else %}
+              <tr>
+                <td colspan="15" class="text-center">No items available</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+  <style>
+    .records {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .record-header {
+      width: 100%;
+      padding: 10px;
+      background-color: #d8eaf3;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-content: space-around;
+      gap: 15px;
+      border-radius: 5px;
+      background-color: #f1ecec;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .double-container {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(235, 230, 230);
+      flex: 1;
+      /* This allows .double-container to grow and take up available space */
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+      box-sizing: border-box;
+      /* Ensure padding and border are included in width */
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 0px;
+      box-sizing: border-box;
+    }
+
+    .flex-item-full-width {
+      flex: 1;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      /* Optional: add spacing between flex items within .flex-row */
+    }
+
+    .flex-item {
+      flex: 1;
+      /* Ensure flex items grow equally */
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .custom-btn {
+      height: 40px;
+      color: #fff;
+      border-radius: 5px;
+      padding: 10px 25px;
+      font-family: "Lato", sans-serif;
+      font-weight: 500;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+        7px 7px 20px 0px rgba(0, 0, 0, 0.1),
+        4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+      outline: none;
+      font-size: 15px;
+    }
+
+    .btn-2 {
+      background: #004b5d;
+      background: linear-gradient(0deg, #004b5d 0%, #004b5d 100%);
+      border: none;
+    }
+
+    .btn-2:before {
+      height: 0%;
+      width: 2px;
+    }
+
+    .btn-2:hover {
+      box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5),
+        -4px -4px 6px 0 rgba(116, 125, 136, 0.5),
+        inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2),
+        inset 4px 4px 6px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .btn4 {
+        font-size: 14px;
+        padding: 8px 12px;
+        /* Adjusted padding for smaller screens */
+      }
+
+      .row1 {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .btn4 {
+        font-size: 12px;
+        padding: 6px 10px;
+        /* Further adjusted padding */
+      }
+    }
+
+    @media (max-width: 768px) {
+      .flex-item {
+        flex: 1 1 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .double-container {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <style>
+    /* alert message */
+    .alert-container {
+      margin-top: 10px;
+    }
+
+    .alert {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+
+  <style>
+    /* table */
+    .text-center {
+      align-items: center;
+      margin: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: center;
+      /* Ensure this is applied */
+      gap: 10px;
+    }
+
+    /* Optional: Reset styles for the sub-table if needed */
+    .table-sub tbody tr:nth-child(odd),
+    .table-sub tbody tr:nth-child(even) {
+      background-color: transparent;
+      /* Or any other desired style */
+    }
+
+    .table thead th:nth-child(1),
+    .table tbody td:nth-child(1),
+    .table thead th:nth-child(2),
+    .table tbody td:nth-child(2),
+
+
+    .table thead th:nth-child(8),
+    .table tbody td:nth-child(8),
+    .table thead th:nth-child(9),
+    .table tbody td:nth-child(9),
+    .table thead th:nth-child(10),
+    .table tbody td:nth-child(10) {
+      text-align: center;
+    }
+
+    .table thead th:nth-child(5),
+    .table tbody td:nth-child(5),
+    .table thead th:nth-child(6),
+    .table tbody td:nth-child(6),
+    .table thead th:nth-child(7),
+    .table tbody td:nth-child(7),
+    .table thead th:nth-child(3),
+    .table tbody td:nth-child(3),
+    .table thead th:nth-child(4),
+    .table tbody td:nth-child(4) {
+      text-align: left;
+    }
+
+    .row1 {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-delete ion-icon {
+      font-size: 1.6em;
+    }
+
+    .fa-trash {
+      margin-left: 5px;
+    }
+  </style>
+
+  <script>
+    function toggleSubTable(subTableId, toggleButtonId) {
+      var subTable = document.getElementById(subTableId);
+      var toggleButton = document.getElementById(toggleButtonId);
+      if (subTable.style.display === "none") {
+        subTable.style.display = "table-row";
+        toggleButton.innerHTML =
+          '<ion-icon name="chevron-up-outline"></ion-icon>';
+      } else {
+        subTable.style.display = "none";
+        toggleButton.innerHTML =
+          '<ion-icon name="chevron-down-outline"></ion-icon>';
+      }
+    }
+  </script>
+
+  <script>
+    // Function to format a date string as 'day/month/year' with digits only
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        // Return an empty string for invalid dates
+        return "";
+      }
+
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 because months are zero-based
+      const year = date.getFullYear().toString().slice(-2);
+
+      return `${day}/${month}/${year}`;
+    }
+
+    // Call the formatDate function for each date element when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+      const start_time_elements = document.querySelectorAll(".start-time");
+
+      start_time_elements.forEach(function (element) {
+        element.textContent = formatDate(element.textContent);
+      });
+    });
+  </script>
+
+
+
+</body>
+
+</html>

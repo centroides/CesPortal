@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div id="pageLoader">
+                <div class="loader"></div>
+            </div>
+
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}" class="active"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+                <h3 style="color: #004274;">Payment Request's (<span id="requestCount">0</span>) </h3>
+                <span class="span_tag" style="margin-left: 10px;">Pending :
+                    <span id="Pendingpay" style="color: brown;">0</span>
+                </span>
+
+                <span class="span_tag">Partial :
+                    <span id="Partialpay" style="color: #007bff;">0</span>
+                </span>
+
+                <span class="span_tag">Paid :
+                    <span id="Paidpay" style="color: green;">0</span>
+                </span>
+
+
+                <input type="text" id="searchInput" placeholder="Search......." onkeyup="filterTable()">
+                <span class="span_tag">Amount : <span id="totalAmount">$ 0.00</span></span>
+                <span class="span_tag">GST : <span id="totalGST">$ 0.00</span></span>
+                <span class="span_tag">Total : <span id="overallTotal">$ 0.00</span></span>
+
+                <span class="span_tag">Balance :
+                    <span id="BalanceAmount" style="color: purple;">0</span> </span>
+            </div>
+
+            <style>
+                .span_tag {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #004b5d;
+                    padding: 5px 8px;
+                    border: 1px solid #004b5d;
+                    border-radius: 5px;
+                    background-color: #f1f8ff;
+                    color: #004b5d;
+                    text-align: center;
+                    margin-right: 10px;
+                }
+
+                #totalAmount {
+                    color: #28a745;
+                    /* Green for amount */
+                }
+
+                #totalGST {
+                    color: #0c8de2;
+                    /* Yellow for GST */
+                }
+
+                #overallTotal {
+                    color: #dc3545;
+                    /* Red for overall total */
+                }
+            </style>
+
+            <div class="table-responsive" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);">
+
+                <table class="table table-main" width="100%" id="projectTable">
+
+                    <thead>
+                        <tr>
+
+                            <th class="text-center">Del</th>
+                            <th class="text-center">
+                                <span class="fa-solid fa-eye" style="font-size: 1.25em; color: black;"></span>
+                            </th>
+
+                            <th class="text-center">PO NO</th>
+                            <th class="text-center">Request ID</th>
+                            <th class="text-center">Supplier</th>
+                            <th class="text-center" style="text-align: right;">Amount (S$)</th>
+                            <th class="text-center" style="text-align: right;">GST (S$)</th>
+                            <th class="text-center" style="text-align: right;">Total (S$)</th>
+                            <th class="text-center">Req Date</th>
+                            <th class="text-center">Inv Date</th>
+                            <th class="text-center">Due Date</th>
+                            <th class="text-center">Paid On</th>
+                            <th class="text-center" style="text-align: right;">Paid Amt (S$)</th>
+                            <th class="text-center" style="text-align: right;">Balance (S$) </th>
+                            <th class="text-center">DueDays</th>
+                            <th class="text-center">Req By</th>
+                            <th class="text-center">Material</th>
+
+                            <th class="text-center" style="text-align: center;">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if not grouped_df.empty %}
+                        {% for index, row in grouped_df.iterrows() %}
+
+                        <tr class="mainRow">
+
+                            <script>
+                                function confirmCancel() {
+                                    return confirm("Are you sure you want to cancel this item?");
+                                }
+                            </script>
+
+                            <td class="text-center" id="row-{{ row['id'] }}" style="text-align: center;">
+                                {% if row['status'] == 'Pending' %}
+                                <form method="POST" onsubmit="return confirmCancel();">
+                                    <input type="hidden" name="Canceled" value="{{ row['id'] }}">
+                                    <button type="submit" class="btn"
+                                        style="background-color: transparent; border: none; cursor: pointer;">
+                                        <span class="fa-sharp fa-solid fa-rectangle-xmark"
+                                            style="color: rgb(221, 37, 37); font-size: 1.6em;"></span>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span></span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center view-col">
+                                <span class="icon" onclick="openPaymentDetails('{{ row['id'] }}')"
+                                    style="cursor: pointer;">
+                                    <span class="fa-solid fa-eye"
+                                        style="font-size: 1.25em; color: rgb(22, 154, 206);"></span>
+                                </span>
+                            </td>
+
+                            <td class="text-center po_number1">
+                                {% if row['po_number'] == 'overhead' %}
+                                {{ row['po_number'] }}
+                                {% else %}
+                                {{ row['po_number'].split('-')[0] }}-{{ row['po_number'].split('-')[-1] }}
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center pay_number1">
+                                {% if row['invoice_file_name'] %}
+                                <a href="{{ url_for('view_pay_req_invoice_file', filename=row['invoice_file_name']) }}"
+                                    target="_blank">
+                                    {{ row['pay_number'] }}
+                                </a>
+                                {% else %}
+                                <span>{{ row['pay_number'] }}</span>
+                                {% endif %}
+
+                            </td>
+
+                            <td class="text-center supplier_name1">
+                                {{ row['supplier_name'][:12] }}{% if row['supplier_name']|length > 15
+                                %}...{%
+                                endif %}
+                            </td>
+
+                            <td style="text-align: right;" class="text-center amount-col">{{
+                                "{:,.2f}".format(row['amount']) }}</td>
+                            <td style="text-align: right;" class="text-center gst-col">{{
+                                "{:,.2f}".format(row['gst_value']) }}</td>
+                            <td style="text-align: right;" class="text-center total-col">{{
+                                "{:,.2f}".format(row['amount'] + row['gst_value']) }}
+                            </td>
+
+                            <td class="text-center start-time">{{ row['pay_date'] }}</td>
+                            <td class="text-center start-time">{{ row['Invoice_date'] }}</td>
+                            <td class="text-center start-time">{{ row['due_date'] }}</td>
+
+                            {% if row['paid_date'] %}
+                            <td class="text-center start-time paid_date">{{ row['paid_date'] }}</td>
+                            {% else %}
+                            <td class="text-center start-time"></td>
+                            {% endif %}
+
+                            <td class="text-center" style="text-align: right;">
+                                {% set calculated_value = (row['amount'] + row['gst_value']) - row['balence'] %}
+                                {% if calculated_value | round(2) == 0.00 %}
+                                {{ "{:,.2f}".format(0.00) }}
+                                {% else %}
+                                {{ "{:,.2f}".format(calculated_value) }}
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center balence" style="text-align: right;">{{
+                                "{:,.2f}".format(row['balence']) }} </td>
+
+                            <td class="text-center">
+                                {{ row['due_days']|int }} {{ 'Day' if row['due_days']|int == 1 else 'Days' }}
+                            </td>
+
+                            <td class="text-center created_by">{{ row['created_by'] }}</td>
+
+                            <td class="text-center" style="font-weight: 550;">
+                                <span onclick="openMaterialReceiptModal('{{ row['po_number'] }}')" style="cursor: pointer;
+                                    color:
+                                        {% if row['do_status'] == 'Open' %}brown;
+                                        {% elif row['do_status'] == 'Partial' %}blue;
+                                        {% elif row['do_status'] == 'Closed' %}green;
+                                        {% elif row['do_status'] == 'None' %}red;
+                                        {% endif %};
+                                    background-color:
+                                        {% if row['do_status'] == 'Open' %}#f2e1d7;
+                                        {% elif row['do_status'] == 'Partial' %}#a4acee;
+                                        {% elif row['do_status'] == 'Closed' %}#d0f8e3;
+                                        {% elif row['do_status'] == 'None' %}#f8d7da;
+                                        {% endif %};
+                                    padding: 2px 8px;
+                                    border-radius: 7px;
+                                    display: inline-block;
+                                    min-width: 65px;
+                                    text-align: center;"> {{ row['do_status'] }}
+                                </span>
+                            </td>
+
+                            <td class="text-center status status1" style="font-weight: 550;">
+                                <span style="color: 
+                                        {% if row['status'] == 'Pending' %}
+                                            brown;
+                                        {% elif row['status'] == 'Partial' %}
+                                            blue;
+                                        {% elif row['status'] == 'Paid' %}
+                                            green;
+                                        {% elif row['status'] == 'Canceled' %}
+                                            red;
+                                        {% endif %};
+                                        background-color: 
+                                        {% if row['status'] == 'Pending' %}
+                                            #f2e1d7; /* Light brown background */
+                                        {% elif row['status'] == 'Partial' %}
+                                            #a4acee; /* Light orange background */
+                                        {% elif row['status'] == 'Paid' %}
+                                            #d0f8e3; /* Light green background */
+                                        {% elif row['status'] == 'Canceled' %}
+                                            #f8d7da; /* Light red background */
+                                        {% endif %};
+                                    padding: 2px 8px;
+                                    border-radius: 7px;
+                                    display: inline-block;
+                                    min-width: 77px;
+                                    text-align: center;">
+                                    {{ row['status'] }}
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan=" 15" class="text-center">No Requests available
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+
+                </table>
+
+
+
+            </div>
+
+            <script>
+
+                function formatNumber(number) {
+                    return new Intl.NumberFormat('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(number);
+                }
+
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const day = String(date.getDate()).padStart(2, '0');  // Pad with zero if single digit
+                    const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed, so add 1
+                    const year = String(date.getFullYear()).slice(-2);  // Get last two digits of the year
+                    return `${day}/${month}/${year}`;
+                }
+
+                function openPaymentDetails(payNumber) {
+                    fetch(`/get_payment_details?pay_number=${payNumber}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log(".............data............", data);
+                                document.getElementById('modalPayNumber').textContent = data.payment.pay_number;
+                                let projectName = data.payment.project_name;
+                                document.getElementById('modalProject').textContent = projectName.length > 10 ? projectName.slice(0, 20) + '...' : projectName;
+                                document.getElementById('modalSupplier').textContent = data.payment.supplier_name;
+                                document.getElementById('modalCurrency').textContent = data.payment.Currency;
+                                document.getElementById('modalExchange_rate').textContent = data.payment.Exchange_rate;
+                                document.getElementById('poNumber').textContent = data.created_po.PO_no;
+                                document.getElementById('postatus').textContent = data.created_po.status;
+                                document.getElementById('model_do_status').textContent = data.created_po.do_staus;
+
+                                const currencySymbols = {
+                                    SGD: 'S$ ',
+                                    USD: '$ ',
+                                    EUR: '€ ',
+                                    GBP: '£ ',
+                                    JPY: '¥ ',
+                                    CNY: '¥ ',
+                                    AUD: 'A$ ',
+                                    CAD: 'C$ ',
+                                    INR: '₹ ',
+                                    MYR: 'RM '
+                                };
+
+
+                                const currency = data.payment.Currency || 'SGD';
+                                const symbol = currencySymbols[currency] || 'S$ ';
+
+                                document.getElementById('modalAmount').textContent = `${symbol} ${formatNumber((data.payment.amount ?? 0).toFixed(2))}`;
+                                document.getElementById('modalGST').textContent = `${symbol} ${formatNumber((data.payment.gst_value ?? 0).toFixed(2))}`;
+                                document.getElementById('modalTotal').textContent = `${symbol} ${formatNumber((data.payment.overall_total_amount ?? 0).toFixed(2))}`;
+                                document.getElementById('poValue').textContent = `${symbol} ${formatNumber((data.po_total ?? 0).toFixed(2))}`;
+
+                                document.getElementById('modalInvoiceDate').textContent = formatDate(data.payment.Invoice_date);
+                                document.getElementById('modalStatus').textContent = data.payment.status;
+                                document.getElementById('modalComments').textContent = data.payment.comments;
+                                document.getElementById('actul_status').value = data.payment.status;
+                                document.getElementById('modalpay_date').textContent = formatDate(data.payment.pay_date) || '';
+                                document.getElementById('modalproj_no').textContent = data.payment.proj_no || '';
+                                document.getElementById('modalproj_Inv_no').textContent = data.payment.invoice_no || '';
+                                document.getElementById('modalcreated_by').textContent = data.payment.created_by || '';
+                                let termsText = (data.payment.Terms && data.payment.Terms !== 'none') ? data.payment.Terms : '';
+                                let timePeriodText = data.payment.time_period || '';
+                                document.getElementById('actul_req_amt').value = (data.payment.balence ?? 0).toFixed(2);
+                                document.getElementById('excurrency').value = data.payment.Currency;
+                                document.getElementById('exchangerate').value = data.payment.Exchange_rate;
+
+                                const exchangeRate = data.payment.Exchange_rate ?? 1;
+                                const balance = data.payment.balence ?? 0;
+                                const bcurrency = data.payment.Currency ?? 'SGD';
+
+                                let balanceInSGD = 0;
+
+                                // Define currency-specific logic
+                                switch (bcurrency) {
+                                    case 'USD':
+                                    case 'EUR':
+                                    case 'GBP':
+                                        // Multiply for these currencies
+                                        balanceInSGD = balance * exchangeRate;
+                                        break;
+
+                                    case 'JPY':
+                                    case 'CNY':
+                                    case 'AUD':
+                                    case 'CAD':
+                                    case 'INR':
+                                    case 'MYR':
+                                        // Divide for these currencies
+                                        balanceInSGD = balance / exchangeRate;
+                                        break;
+
+                                    default:
+                                        // Fallback logic
+                                        balanceInSGD = balance;
+                                        break;
+                                }
+
+                                // Update the DOM
+                                document.getElementById('paid_amount').value = balance.toFixed(2);
+
+                                document.getElementById('modalExchange_rate').textContent = exchangeRate;
+                                document.getElementById('modalrequestedamount').textContent = `${symbol}${formatNumber(balance.toFixed(2))}`;
+
+
+                                document.getElementById('pay_req_id').value = data.payment.id;
+                                document.getElementById('modalTerms').textContent = `${termsText}  ${timePeriodText}`;
+
+
+                                let itemsTable = document.getElementById('modalItemsTable');
+                                itemsTable.innerHTML = "";
+                                data.items.forEach(item => {
+                                    let row = `<tr>
+                                        <td style="width: 15%; text-align: left; " >${item.Part_No}</td>
+                                        <td style="width: 55%; text-align: left; " >${item.item}</td>
+                                        <td style="width: 10%; text-align: right; " > ${symbol} ${formatNumber(item.req_quantity.toFixed(2))}</td>
+                                        <td style="width: 10%; text-align: right; " > ${symbol} ${formatNumber(item.Unit_Price.toFixed(2))}</td>
+                                        <td style="width: 10%; text-align: right; " > ${symbol} ${formatNumber(item.req_total.toFixed(2))}</td>
+                                    </tr>`;
+                                    itemsTable.innerHTML += row;
+                                });
+
+                                // Populate history items list
+                                // Populate history items list
+                                let historyitemsTable = document.getElementById('modalHostoryItemsTable1');
+                                historyitemsTable.innerHTML = ""; // Clear existing table content
+
+                                let totalAmount = 0; // Initialize total amount
+
+                                data.history_items.forEach(history_item => {
+                                    let amount = history_item.amount ? parseFloat(history_item.amount) : 0;
+                                    totalAmount += amount; // Accumulate total
+
+                                    let row = `<tr>
+                                            <td style="width: 15%; text-align: left;">${history_item.pay_number}</td>
+                                            <td style="width: 15%; text-align: left;">${formatDate(history_item.pay_date)}</td>
+                                            <td style="width: 55%; text-align: left;">${history_item.paid_by}</td>
+                                            <td style="width: 10%; text-align: right;">S$ ${formatNumber(amount.toFixed(2))}</td>
+                                        </tr>`;
+
+                                    historyitemsTable.innerHTML += row;
+                                });
+
+
+                                let historyHeading = document.getElementById('paymentHistoryHeading');
+                                if (historyHeading) {
+                                    let formattedAmount = formatNumber(totalAmount.toFixed(2)); // totalAmount should be the numeric sum of past payments
+                                    historyHeading.innerHTML = `Payment History <span style="font-weight: normal; font-size: 14px;">(Total Paid: S$ ${formattedAmount})</span>`;
+
+                                    let pastPaidCell = document.getElementById('pastPaid');
+                                    if (pastPaidCell) {
+                                        pastPaidCell.textContent = `${symbol} ${formattedAmount}`; // Display past paid amount
+                                    }
+                                }
+                                let poTotal = parseFloat(data.po_total) || 0;
+                                let pastPaidNumeric = totalAmount || 0; // Use the numeric value of totalAmount directly for calculation
+                                let currentPayment = parseFloat(data.payment.overall_total_amount) || 0;
+                                let postBalance = poTotal - (pastPaidNumeric + currentPayment);
+                                document.getElementById('post_balance').textContent = `${symbol} ${formatNumber(postBalance.toFixed(2))}`;
+                                document.getElementById('paymentModal').style.display = 'block';
+                                checkPaymentStatus();
+                            } else {
+                                alert('Payment details not found!');
+                            }
+                        })
+                        .catch(error => console.error('Error fetching payment details:', error));
+                }
+
+                function closeModal() {
+                    document.getElementById('paymentModal').style.display = 'none';
+                }
+
+            </script>
+
+            <div id="paymentModal" class="modal">
+
+                <div class="modal-content">
+
+                    <div class="button-container1">
+
+                        <h2>Payment Details (<span id="modalPayNumber"></span>)
+                        </h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Inv No</strong></p> <span id="modalproj_Inv_no"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Project</strong></p> <span id="modalproj_no"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Proj Name</strong></p> <span id="modalProject"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Supplier</strong></p> <span id="modalSupplier"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Req Date</strong></p> <span id="modalpay_date"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Inv Date</strong></p> <span id="modalInvoiceDate"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Rqd. By</strong></p> <span id="modalcreated_by"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Terms</strong></p> <span id="modalTerms"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Pay Status</strong></p> <span id="modalStatus"></span>
+                                <input type="text" class="form-control" id="actul_status" name="actul_status"
+                                    style="display: none;">
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>PO Status</strong></p> <span id="postatus"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>DO Status</strong></p> <span id="model_do_status"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Comments</strong></p> <span id="modalComments"></span>
+                            </div>
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <table style="width: 99%; border-collapse: collapse; margin: 3px;">
+
+                                <tbody>
+                                    <!-- PO Number -->
+                                    <tr>
+                                        <td style="padding: 5px; border: 1px solid white;">PO NO</td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="poNumber"></td>
+                                    </tr>
+
+                                    <!-- PO Value -->
+                                    <tr>
+                                        <td style="padding: 5px; border: 1px solid white;">PO Value</td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="poValue"></td>
+                                    </tr>
+
+                                    <!-- Past Paid -->
+                                    <tr>
+                                        <td style="padding: 5px; border: 1px solid white;">Past Paid</td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="pastPaid"></td>
+                                    </tr>
+
+                                    <!-- Current Amount -->
+                                    <tr>
+                                        <td style="padding: 5px; border: 1px solid white;">Current Pay</td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="modalAmount"></td>
+                                    </tr>
+
+                                    <!-- GST -->
+                                    <tr>
+                                        <td style="padding: 5px; border: 1px solid white;">GST</td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="modalGST"></td>
+                                    </tr>
+
+                                    <!-- Total This Payment -->
+                                    <tr style="background-color: #fafafa;">
+                                        <td style="padding: 5px; border: 1px solid white;"><strong>Payable Amt
+                                            </strong>
+                                        </td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="modalTotal"><strong></strong></td>
+                                    </tr>
+
+                                    <!-- Balance -->
+                                    <tr style="background-color: #e6f7ff;">
+                                        <td style="padding: 5px; border: 1px solid white;"><strong>Post Balance
+                                            </strong>
+                                        </td>
+                                        <td style="padding: 5px; border: 1px solid white; text-align: right;"
+                                            id="post_balance"><strong></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <form id="paymentForm" action="{{ url_for('pay_req') }}" method="POST">
+
+                                <input type="text" class="form-control" id="actul_req_amt" name="actul_req_amt"
+                                    style="display: none;">
+
+                                <div class="invoice-row">
+                                    <p><strong>Currency</strong></p> <span id="modalCurrency"></span>
+                                </div>
+
+                                <div class="invoice-row">
+                                    <p><strong>Exch. Rate</strong></p> <span id="modalExchange_rate"></span>
+                                </div>
+
+                                <div class="invoice-row">
+                                    <p><strong>Req Amt</strong></p> <span id="modalrequestedamount"></span>
+                                </div>
+
+                                <input type="number" class="form-control" step="any" id="exchangerate"
+                                    name="exchangerate" style="display: none;">
+
+                                <input type="text" class="form-control" id="excurrency" name="excurrency"
+                                    style="display: none;">
+
+                                <div class="flex-row">
+
+                                    <div class="flex-item">
+                                        <label for="paid_date" class="form-label">
+                                            <strong>Paid On</strong>
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="paid_date" name="paid_date"
+                                            required>
+                                    </div>
+
+                                    <div class="flex-item">
+                                        <label for="paid_amount" class="form-label"> <strong>Payable Amount (S$)
+                                            </strong>
+                                        </label>
+                                        <input type="number" class="form-control" id="paid_amount" name="paid_amount"
+                                            required min="0" step="0.01" onchange="validateAmountPaid()">
+                                    </div>
+
+
+                                </div>
+
+                                <script>
+                                    // Set today's date as default
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+                                        document.getElementById('paid_date').value = today;
+                                    });
+                                </script>
+
+                                <script>
+                                    let previousValidAmount = 0; // Variable to store the previous valid amount
+
+                                    function validateAmountPaid() {
+                                        const actualAmount = parseFloat(document.getElementById('actul_req_amt').value); // Get the actual requested amount
+                                        const paidAmount = parseFloat(document.getElementById('paid_amount').value);
+
+                                        if (paidAmount > actualAmount) {
+                                            alert("Amount paid cannot exceed the requested amount.");
+                                            document.getElementById('paid_amount').value = actualAmount; // Reset to the actual requested amount
+                                        } else {
+                                            previousValidAmount = paidAmount; // Update the previous valid value if it's within the limit
+                                        }
+                                    }
+                                </script>
+
+                                <div class="flex-row" id="paymentFormContainer">
+
+                                    <input type="text" class="form-control" id="pay_req_id" style="display: none;"
+                                        name="pay_req_id" required>
+                                    <button type="submit" class="new-enquiry-btn">
+                                        Approve
+                                    </button>
+
+
+                                </div>
+
+
+                                <script>
+                                    // Function to check the status and show the form accordingly
+                                    function checkPaymentStatus() {
+                                        const statusElement = document.getElementById('actul_status');
+                                        console.log(statusElement); // Check the entire element
+
+                                        const paymentFormContainer = document.getElementById('paymentFormContainer');
+
+                                        // Check if the status is "Paid"
+                                        if (statusElement.value.trim() !== "Paid") {
+                                            paymentFormContainer.style.display = "block"; // Show the form if status is not "Paid"
+                                        } else {
+                                            paymentFormContainer.style.display = "none"; // Hide the form if status is "Paid"
+                                        }
+                                    }
+
+                                    // Call the function when the page loads or when you dynamically update the status
+                                    window.onload = checkPaymentStatus;
+                                </script>
+
+                            </form>
+
+                            <script>
+                                document.getElementById("paymentForm").addEventListener("submit", function (event) {
+                                    let payReqId = document.getElementById("pay_req_id").value.trim();
+                                    const submitButton = this.querySelector("button[type='submit']");
+
+                                    if (!payReqId) {
+                                        alert("Pay Request ID is required!");
+                                        event.preventDefault(); // Stops form submission if empty
+                                        return;
+                                    }
+
+                                    // Disable the submit button to prevent multiple submissions
+                                    submitButton.disabled = true;
+                                    submitButton.innerText = "Submitting...";
+                                });
+                            </script>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" width="100%">
+
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; width: 15%;">Part No</th>
+                                        <th style="text-align: left; width: 55%;">Item</th>
+                                        <th style="text-align: right; width: 10%;">Quantity</th>
+                                        <th style="text-align: right; width: 10%;">Unit Price</th>
+                                        <th style="text-align: right; width: 10%;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalItemsTable">
+                                    <!-- Items will be inserted here -->
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="button-container1">
+
+                        <h2 id="paymentHistoryHeading">Payment History</h2>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive2">
+
+                            <table class="table table-main" width="50%">
+
+                                <thead>
+
+                                    <tr>
+                                        <th style="text-align: left;">Request ID</th>
+                                        <th style="text-align: left;">Paid On</th>
+                                        <th style="text-align: left;">Paid By</th>
+                                        <th style="text-align: right;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalHostoryItemsTable1">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Modal HTML -->
+            <div id="materialReceiptModal" class="modal">
+                <div class="modal-content">
+
+                    <div class="button-container1">
+                        <h2>Material Receipt Details (<span id="modalPONumber"></span>)</h2>
+                        <span class="close" onclick="closeMaterialReceiptModal()">&times;</span>
+                    </div>
+
+                    <div class="container">
+                        <div class="table-responsive1">
+                            <table class="table table-main" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; width: 15%;">Item</th>
+                                        <th style="text-align: center; width: 5%;">UOM</th>
+                                        <th style="text-align: center; width: 8%;">Ordered Qty</th>
+                                        <th style="text-align: center; width: 8%;">Recv. Qty</th>
+                                        <th style="text-align: center; width: 8%;">Bal. Qty</th>
+                                        <th style="text-align: center; width: 10%;">Recv. By</th>
+                                        <th style="text-align: center; width: 10%;">Recv. Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <!-- Rows will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <script>
+                        function openMaterialReceiptModal(poNumber) {
+                            const modal = document.getElementById('materialReceiptModal');
+                            const table = modal.querySelector('table.table-main');
+                            const tbody = table.querySelector('tbody');
+
+                            // Clear old rows
+                            tbody.innerHTML = '';
+
+                            modal.style.display = 'block';
+
+                            function formatDate1(dateStr) {
+                                if (!dateStr) return '';
+                                const date = new Date(dateStr);
+                                if (isNaN(date)) return '';
+                                const day = String(date.getDate()).padStart(2, '0');
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const year = String(date.getFullYear()).slice(-2);
+                                return `${day}-${month}-${year}`;
+                            }
+
+                            fetch(`/get_material_receipt?po_number=${encodeURIComponent(poNumber)}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length === 0) {
+                                        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center;">No material receipts found.</td></tr>`;
+                                    } else {
+                                        // console.log("..............data..........", data);
+                                        data.forEach(item => {
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td style="text-align: left;">${item.item_name || ''}</td>
+                                                <td style="text-align: center;">${item.uom || ''}</td>
+                                                <td style="text-align: center;">${item.ordered_qty ?? ''}</td> <!-- Display ordered quantity -->
+                                                <td style="text-align: center;">${item.total_received_qty ?? ''}</td> <!-- ⭐ total received qty -->
+                                                <td style="text-align: center;">${item.balance_qty ?? ''}</td> <!-- ⭐ balance quantity -->
+                                                <td style="text-align: center;">${item.last_received_by || ''}</td>
+                                                <td style="text-align: center;">${formatDate1(item.last_received_date)}</td>
+                                            `;
+                                            tbody.appendChild(row);
+                                        });
+                                    }
+
+                                    document.getElementById('modalPONumber').textContent = poNumber;
+                                })
+                                .catch(error => {
+                                    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: red;">Error loading data.</td></tr>`;
+                                    console.error('Error fetching material receipt:', error);
+                                });
+
+                        }
+
+                        function closeMaterialReceiptModal() {
+                            document.getElementById('materialReceiptModal').style.display = 'none';
+                        }
+                    </script>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <style>
+        .search_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+
+        #projectTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+
+
+        #searchInput {
+            width: 20%;
+            padding: 2px;
+            margin: auto;
+            display: block;
+            border: 2px solid rgb(230, 200, 200);
+            border-radius: 5px;
+            /* Rounded corners */
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #searchInput:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchInput:focus {
+            border-color: #004b5d;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to format a date as DD/MM/YY
+            function formatDateAsDDMMYY(dateString) {
+                const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) {
+                    console.error('Invalid date string:', dateString);
+                    return dateString; // Return original if date is invalid
+                }
+                return date.toLocaleDateString('en-GB', options);
+            }
+
+            // Format date elements
+            const start_time_elements = document.querySelectorAll(".start-time");
+            start_time_elements.forEach(function (element) {
+                if (element.textContent.trim()) {
+                    element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+                }
+            });
+
+            const end_time_elements = document.querySelectorAll(".end-time");
+            end_time_elements.forEach(function (element) {
+                if (element.textContent.trim()) {
+                    element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function toggleSubTable(subTableId, toggleButtonId) {
+            var subTable = document.getElementById(subTableId);
+            var toggleButton = document.getElementById(toggleButtonId);
+            if (subTable.style.display === "none") {
+                subTable.style.display = "table-row";
+                toggleButton.innerHTML =
+                    '<ion-icon name="chevron-up-outline"></ion-icon>';
+            } else {
+                subTable.style.display = "none";
+                toggleButton.innerHTML =
+                    '<ion-icon name="chevron-down-outline"></ion-icon>';
+            }
+        }
+    </script>
+
+    <style>
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 450px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table-responsive2 {
+            width: 100%;
+            overflow: auto;
+            max-height: 120px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table-main {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-main thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .container {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            border: 2px solid white;
+            /* Adding border with 2px width and light gray color */
+
+        }
+
+        .invoice-header {
+            flex: 1;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #004d40;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .invoice-header:hover {
+            transform: scale(1.02);
+        }
+
+
+        .invoice-row {
+            display: grid;
+            grid-template-columns: 130px auto;
+            /* First column for labels, second for values */
+            gap: 10px;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .invoice-row p {
+            margin: 0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .invoice-row span {
+            text-align: left;
+        }
+
+
+        .invice_header {
+            width: 100%;
+            padding: 10px;
+
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #004b5d;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <style>
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: chartreuse;
+            outline: 0;
+            box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Optional animation for smoother appearance */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        .modal-content {
+            background-color: white;
+            margin: 1% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            border: 2px solid white;
+            /* Adding border with 2px width and light gray color */
+
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase().trim();
+            let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+
+            let rows = document.querySelectorAll(".mainRow");
+
+            rows.forEach(row => {
+                let pay_number = row.querySelector(".pay_number1")?.textContent.trim().toLowerCase() || '';
+                let supplier_name = row.querySelector(".supplier_name1")?.textContent.trim().toLowerCase() || '';
+                let po_number = row.querySelector(".po_number1")?.textContent.trim().toLowerCase() || '';
+                let project_name = row.querySelector(".project_name1")?.textContent.trim().toLowerCase() || '';
+                let status = row.querySelector(".status1")?.textContent.trim().toLowerCase() || '';
+                let paid_date = row.querySelector(".paid_date")?.textContent.trim().toLowerCase() || '';
+                let created_by = row.querySelector(".created_by")?.textContent.trim().toLowerCase() || '';
+
+                // Combine all searchable text fields
+                let combinedText = `${pay_number} ${supplier_name} ${po_number} ${project_name} ${status} ${paid_date} ${created_by}`;
+
+                // Check if all keywords are present in combinedText
+                let shouldShow = keywords.every(keyword => combinedText.includes(keyword));
+
+                row.style.display = shouldShow ? "" : "none";
+            });
+
+            updateTotals(); // Update the totals after filtering
+            updateStatusCounts(); // Update the status counts after filtering
+        }
+
+
+
+        function updateTotals() {
+            let requestCount = 0;
+            let totalAmount = 0;
+            let totalGST = 0;
+            let totalSum = 0;
+            let totalbalence = 0;
+
+            // Get all table rows (excluding the header row)
+            const rows = document.querySelectorAll("#projectTable tbody tr.mainRow");
+
+            rows.forEach(row => {
+                if (row.style.display !== "none") { // Only include rows that are not hidden
+                    requestCount++;
+
+                    // Extract amount, GST value, and total from each row
+                    let amount = parseFloat(row.querySelector(".amount-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                    let gstValue = parseFloat(row.querySelector(".gst-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                    let total = parseFloat(row.querySelector(".total-col")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+                    let balence = parseFloat(row.querySelector(".balence")?.textContent.replace(/[^0-9.-]+/g, '') || 0);
+
+
+                    totalAmount += amount;
+                    totalGST += gstValue;
+                    totalSum += total;
+                    totalbalence += balence;
+                }
+            });
+
+            // Format the totals with international numbering format
+            let formattedAmount = totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedGST = totalGST.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedbalence = totalbalence.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Update the spans with formatted values
+            document.getElementById("requestCount").textContent = requestCount;
+            document.getElementById("totalAmount").textContent = "S$ " + formattedAmount;
+            document.getElementById("totalGST").textContent = "S$ " + formattedGST;
+            document.getElementById("overallTotal").textContent = "S$ " + formattedTotal;
+            document.getElementById("BalanceAmount").textContent = "S$ " + formattedbalence;
+        }
+
+
+        function updateStatusCounts() {
+            let pendingCount = 0;
+            let partialCount = 0;
+            let paidCount = 0;
+
+            const rows = document.querySelectorAll("#projectTable tbody tr.mainRow");
+
+            rows.forEach(row => {
+                if (row.style.display !== "none") {
+                    let status = row.querySelector(".status1")?.textContent.trim().toLowerCase();
+
+                    if (status === "pending") {
+                        pendingCount++;
+                    } else if (status === "partial") {
+                        partialCount++;
+                    } else if (status === "paid") {
+                        paidCount++;
+                    }
+                }
+            });
+
+            // Format the totals without decimals
+            let formattedPending = pendingCount.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            let formattedPartial = partialCount.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            let formattedPaid = paidCount.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+            // Update the correct spans
+            document.getElementById("Pendingpay").textContent = formattedPending;
+            document.getElementById("Partialpay").textContent = formattedPartial;
+            document.getElementById("Paidpay").textContent = formattedPaid;
+        }
+
+
+
+        // Call the function when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            updateTotals();
+            updateStatusCounts();
+        });
+
+
+    </script>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+    </style>
+
+
+</body>
+
+</html>

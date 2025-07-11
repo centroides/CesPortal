@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+        
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+        
+                  {% if department_code == 1000 %}
+                  <li>
+                    <a href="/admin" class="active">
+                      <span class="fa-solid fa-user-tie"></span>
+                      <small>Admin</small>
+                    </a>
+                  </li>
+                  {% endif %}
+        
+                  {% if user_access['Accounts'] == 'On' %}
+                  <li>
+                    <a href="/accounts" >
+                      <span class="fa-solid fa-file-invoice-dollar"></span>
+                      <small>Accounts</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleEnquiry'] == 'On' %}
+                  <li>
+                    <a href="/admin_enquiry">
+                      <span class="fa-solid fa-handshake"></span>
+                      <small>Leads</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleHR'] == 'On' %}
+                  <li>
+                    <a href="/hr">
+                      <span class="fa-solid fa-user-plus"></span>
+                      <small>HR</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['togglePlanner'] == 'On' %}
+                  <li>
+                    <a href="/planner">
+                      <span class="fa-solid fa-calendar-check"></span>
+                      <small>Planner</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleProfile'] == 'On' %}
+                  <li>
+                    <a href="/profile">
+                      <span class="fa-solid fa-user"></span>
+                      <small>Profile</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['toggleProjects'] == 'On' %}
+                  <li>
+                    <a href="/projects">
+                      <span class="fa-solid fa-chart-simple"></span>
+                      <small>Project</small>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if user_access['togglePurchase'] == 'On' %}
+                  <li>
+                    <a href="/purchase">
+                      <span class="fa-solid fa-cart-shopping"></span>
+                      <small>Purchase</small>
+                    </a>
+                  </li>
+                  {% endif %}
+        
+                  {% if user_access['toggleResources'] == 'On' %}
+                  <li>
+                    <a href="/resources">
+                      <span class="fa-solid fa-recycle"></span>
+                      <small>Resources</small>
+                    </a>
+                  </li>
+                  {% endif %}
+        
+                  {% if department_code == 1000 %}
+                  <li>
+                    <a href="/settings">
+                      <span class="fa-solid fa-gears"></span>
+                      <small>Settings</small>
+                    </a>
+                  </li>
+                  {% endif %}
+        
+                  <li>
+                    <a href="{{ url_for('logout') }}">
+                      <span class="fa-solid fa-right-from-bracket"></span>
+                      <small>Log Out</small>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+        </div>
+
+    </div>
+    
+    <div class="main-content">
+        
+        <header>
+
+            <div class="header-content">
+
+                <label for="menu-toggle">
+                    <span class="las la-bars"></span>
+                </label>
+                
+                <div class="header-menu">
+
+                    <label for="">
+                        <span class="las la-search"></span>
+                    </label>
+                    
+                    <div class="notify-icon">
+                        <span class="las la-envelope"></span>
+                        <span class="notify">4</span>
+                    </div>
+                    
+                    <div class="notify-icon">
+                        <span class="las la-bell"></span>
+                        <span class="notify">3</span>
+                    </div>
+                    
+                    <div class="user">
+
+                        <div class="bg-img" style="background-image: url(img/1.jpeg)"></div>
+                        <span class="las la-power-off"></span>
+                        <span>Logout</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+        
+        <main>
+            
+            <div class="page-header">
+
+                <nav class="navbar">
+
+                    <ul id="menuList" class="navitems">
+
+                        <li><a href="/admin_add_project" ><i class="fas fa-plus-circle"></i> Add</a></li>
+                        <li><a href="/employees_view"><i class="fa-solid fa-users"></i> Employees</a></li>
+                        <li><a href="/admin_leaves" class="active"><i class="fas fa-house-user"></i> Leaves</a></li>
+                        <li><a href="/admin_claims"><i class="fas fa-hand-holding-usd"></i> Claims</a></li>
+                        <li><a href="/admin_expenses"><i class="fas fa-file-invoice-dollar"></i> Expenses</a></li>
+                        <li><a href="/client_details"><i class="fa-solid fa-handshake-simple"></i> Clients</a></li>
+                        <li><a href="/vendor"><i class="fa-sharp fa-solid fa-store"></i>Suppliers</a></li>
+                        <li>
+                            <a href="/pay_req">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Payment Approvals
+                            </a>
+                        </li>
+                      
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                </nav>
+
+                <nav class="navbar1">
+
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                    
+                    <ul id="menuList1" class="navitems1">
+  
+                        <li>
+                          <input type="radio" id="addprojectRadio" name="sectionRadio" onclick="showSection('addproject'); toggleContainer('addproject')"  style="display: none;">
+                          <label for="addprojectRadio" class="link"><i class="fa-solid fa-pen-nib fa-beat-fade" style="margin-right: 5px;"></i>Leave Update</label>
+                        </li>
+
+                        <li>
+                            <input type="radio" id="subContractRadio" name="sectionRadio" onclick="showSection('Sub_contract'); toggleContainer('Sub_contract')" style="display: none;">
+                            <label for="subContractRadio" class="link"><i class="fa-regular fa-hourglass-half"  style="margin-right: 5px;"></i>Leave History </label>
+                        </li>
+                       
+                        <li>
+                          <input type="radio" id="adduserRadio" name="sectionRadio" onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none;">
+                          <label for="adduserRadio" class="link"> <i class="fa-solid fa-circle-dollar-to-slot" style="margin-right: 5px;"> </i>Option</label>
+                        </li>
+
+
+  
+                    </ul>
+  
+                    <div class="menu-icon1">
+                       <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+                    </div>
+  
+                </nav>
+
+                <script>
+                    let menuList = document.getElementById("menuList")
+                    menuList.style.maxHeight = "0px";
+            
+                    function toggleMenu(){
+                        if(menuList.style.maxHeight == "0px")
+                        {
+                            menuList.style.maxHeight = "300px";
+                        }
+                        else{
+                            menuList.style.maxHeight = "0px";
+                        }
+                    }
+                    
+                </script>
+    
+                <style>
+    
+                    .navbar {
+                        padding: 10px 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between; /* Changed from space-around to space-between */
+                        background: #004B5D;
+                        position: relative;
+                        height: 50px;
+                    }
+                    .navitems{
+                        margin-top: 20px;
+                        display: flex;
+                        align-items: center;
+    
+                    }
+                    .navbar ul li a:hover {
+                        padding: 10px;
+                        background: #f0f0f0; /* Darker background on hover */
+                        color: #111010; /* Light text color on hover */
+                        border-radius: 4px; /* Slight rounding of corners */
+                        font-weight: bold;
+                    }
+    
+                    .navbar ul li a.active {
+                        padding: 10px;
+                        background: #f0f0f0; /* Background for the active state */
+                        border-radius: 5px;
+                        color: #111010; /* Text color for the active state */
+                        font-weight: bold; /* Bold text for the active state */
+                    }
+                    .navbar ul {
+                        display: flex;
+                        gap: 0; /* Remove gap between list items */
+                        margin: 0; /* Remove default margin */
+                        padding: 0; /* Remove default padding */
+                        width: 100%; /* Make sure ul takes the full width */
+                        justify-content: space-between; /* Distribute list items evenly */
+                    }
+    
+                    .navbar ul li {
+                        list-style-type: none;
+                    }
+    
+                    .navbar ul li a {
+                        text-decoration: none;
+                        color: #fff;
+                    }
+    
+                    .menu-icon {
+                        display: none;
+                    }
+    
+                    .menu-icon i {
+                        color: #fff;
+                        font-size: 20px;
+                    }
+    
+                    @media (max-width: 600px) {
+                        .navbar ul {
+                            position: absolute;
+                            top: 70px;
+                            left: 0;
+                            right: 0;
+                            flex-direction: column;
+                            text-align: center;
+                            background: #004274;
+                            gap: 0;
+                            overflow: hidden;
+                            width: 100%; /* Ensure full width in mobile view */
+                        }
+                        .navbar ul li {
+                            padding: 20px;
+                            padding-top: 0;
+                        }
+                        .menu-icon {
+                            display: block;
+                        }
+                        #menuList {
+                            transition: all 0.5s;
+                        }
+                    }
+    
+                </style>
+
+                <script>
+                    let menuList1 = document.getElementById("menuList1")
+                    menuList1.style.maxHeight = "0px";
+  
+                    function toggleMenu1(){
+                       if(menuList1.style.maxHeight == "0px")
+                       {
+                          menuList1.style.maxHeight = "300px";
+                       }
+                       else{
+                          menuList1.style.maxHeight = "0px";
+                       }
+                    }
+                    
+                </script>
+
+                <style>
+                /* Base styles for links */
+                .link {
+                    display: inline-block;
+                    padding: 7px;
+                    color: whitesmoke; /* Text color */
+                    text-decoration: none;
+                    font-size: 16px;
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                    cursor: pointer;
+                }
+
+                /* Hover effect */
+                .link:hover {
+                    background-color: whitesmoke; /* Background color on hover */
+                    color: black; /* Text color on hover */
+                    border-radius: 5px;
+                    font-weight: bold;
+                }
+
+                /* Active effect - when radio is checked */
+                input[type="radio"]:checked + .link {
+                    background-color: rgb(179, 171, 171);; /* Background color when active */
+                    color: black; /* Text color when active */
+                    border-radius: 5px;
+                    font-weight: bold;
+                }
+
+                /* Additional styles for icons */
+                .link i {
+                    margin-right: 8px;
+                    transition: color 0.3s ease;
+                }
+
+                /* Hover effect for icons */
+                .link:hover i {
+                    color: black; /* Icon color on hover */
+                }
+
+                /* Adjustments for active icons */
+                input[type="radio"]:checked + .link i {
+                    color: black; /* Icon color when active */
+                }
+                .navbar1 {
+                    margin-top: 5px;
+                    padding: 10px 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between; /* Changed from space-around to space-between */
+                    background: #026178;
+                    position: relative;
+                    height: 40px;
+                }
+                .navitems1{
+                    margin-top: 20px;
+                    display: flex;
+                    align-items: center;
+
+                }
+                .navbar1 ul li a:hover {
+                    padding: 10px;
+                    background: #f0f0f0; /* Darker background on hover */
+                    color: #111010; /* Light text color on hover */
+                    border-radius: 4px; /* Slight rounding of corners */
+                    font-weight: bold;
+                }
+
+                .navbar1 ul li a.active {
+                    padding: 10px;
+                    background: #f0f0f0; /* Background for the active state */
+                    border-radius: 5px;
+                    color: #111010; /* Text color for the active state */
+                    font-weight: bold; /* Bold text for the active state */
+                }
+                .navbar1 ul {
+                    display: flex;
+                    gap: 0; /* Remove gap between list items */
+                    margin: 0; /* Remove default margin */
+                    padding: 0; /* Remove default padding */
+                    width: 100%; /* Make sure ul takes the full width */
+                    justify-content: space-between; /* Distribute list items evenly */
+                }
+
+                .navbar1 ul li {
+                    list-style-type: none;
+                }
+
+                .navbar1 ul li a {
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                .menu-icon1 {
+                    display: none;
+                }
+
+                .menu-icon1 i {
+                    color: #fff;
+                    font-size: 20px;
+                }
+
+                @media (max-width: 600px) {
+                    .navbar1 ul {
+                        position: absolute;
+                        top: 70px;
+                        left: 0;
+                        right: 0;
+                        flex-direction: column;
+                        text-align: center;
+                        background: #004274;
+                        gap: 0;
+                        overflow: hidden;
+                        width: 100%; /* Ensure full width in mobile view */
+                    }
+                    .navbar1 ul li {
+                        padding: 20px;
+                        padding-top: 0;
+                    }
+                    .menu-icon1 {
+                        display: block;
+                    }
+                    #menuList1 {
+                        transition: all 0.5s;
+                    }
+                }
+
+                </style>
+
+            </div>
+            
+            <div class="addproject" id="addproject" style="display: none;">
+
+                <div class="page-content">
+             
+                   <div class="records table-responsive">
+
+                        <div class="container">
+
+                            <div class="container_hours">
+        
+                                <form class="p-3" action="/admin_leaves" method="POST" enctype="multipart/form-data" id="editEnquiryForm">
+
+                                    <div class="form-row">
+                                        <select class="form-control" id="update_employee_id" name="employee_id" onchange="updateDepartmentCode(this)" required>
+                                            <option value="" {% if not employee_id %}selected{% endif %}>Select Employee</option>
+                                            {% for username in usernames %}
+                                            <option value="{{ username }}"  {% if username == employee_id %}selected{% endif %}  required>{{ username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                
+                                    <div class="form-row" >
+                                        <label for="Annual" class="form-label">Annual</label>
+                                        <input type="number" class="form-control" id="Annual" name="Annual">
+                                    </div>
+                
+                                    <div class="form-row" >
+                                        <label for="Medical" class="form-label">Medical</label>
+                                        <input type="number" class="form-control" id="Medical" name="Medical">
+                                    </div>
+                
+                                    <div class="form-row" style="display: none;" >
+                                        <label for="Casual" class="form-label">Casual</label>
+                                        <input type="number" class="form-control" id="Casual" name="Casual"  >
+                                    </div>
+                
+                                    <div class="form-row" >
+                                        <label for="Maternity" class="form-label">Maternity </label>
+                                        <input type="number" class="form-control" id="Maternity" name="Maternity"  >
+                                    </div>
+                
+                                    <div class="form-row" >
+                                        <label for="Paternity" class="form-label">Paternity </label>
+                                        <input type="number" class="form-control" id="Paternity" name="Paternity">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <label for="Year" class="form-label">Year </label>
+                                        <input type="number" class="form-control" id="Year" name="Year">
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <label for="Start_Date" class="form-label">Start Date </label>
+                                        <input type="date" class="form-control" id="Start_Date" name="Start_Date">
+                                    </div>
+                                    
+                                    <script>
+                                        // Set current year
+                                        const currentYear = new Date().getFullYear();
+                                        document.getElementById("Year").value = currentYear;
+                                    
+                                        // Set current date in yyyy-mm-dd format
+                                        const currentDate = new Date().toISOString().slice(0, 10);
+                                        document.getElementById("Start_Date").value = currentDate;
+                                    </script>
+                                    
+                                    <div class="button-container">
+                                        <button type="submit"  name="add_or_save" class="custom-btn btn-2">Add / Save </button>
+                                    </div>
+
+                                </form> 
+
+                                <div style="margin-top: 20px;">
+                                    {% with messages = get_flashed_messages(with_categories=true) %}
+                                        {% if messages %}
+                                            <div class="alert-container">
+                                                {% for category, message in messages %}
+                                                    {% if category == 'update_leaves' %}
+                                                        <div class="alert alert-success">
+                                                            {{ message }}
+                                                        </div>
+                                                    {% elif category == 'update_leaves1' %}
+                                                        <div class="alert alert-danger">
+                                                            {{ message }} 
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+
+                                <script>
+                                    function updateDepartmentCode(selectElement) {
+                                        const employeeId = selectElement.value;
+                                        
+                                        if (employeeId) {
+                                            // Send a request to fetch data for the selected employee
+                                            fetch(`/get_employee_leave_data?employee_id=${employeeId}`)
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data && data.exists) {
+                                                        // Populate the form fields with the fetched data
+                                                        document.getElementById("Annual").value = data.Annual || '';
+                                                        document.getElementById("Medical").value = data.Medical || '';
+                                                        document.getElementById("Casual").value = data.Casual || '';
+                                                        document.getElementById("Maternity").value = data.Maternity || '';
+                                                        document.getElementById("Paternity").value = data.Paternity || '';
+                                                        document.getElementById("Year").value = data.Year || currentYear; // use the current year if Year is not provided
+                                                        document.getElementById("Start_Date").value = data.Start_Date || currentDate; // use the current date if Start_Date is not provided
+                                                    } else {
+                                                        // Clear the form fields if no data exists
+                                                        document.getElementById("Annual").value = '';
+                                                        document.getElementById("Medical").value = '';
+                                                        document.getElementById("Casual").value = '';
+                                                        document.getElementById("Maternity").value = '';
+                                                        document.getElementById("Paternity").value = '';
+                                                        document.getElementById("Year").value = currentYear;
+                                                        document.getElementById("Start_Date").value = currentDate;
+                                                    }
+                                                })
+                                                .catch(error => console.error("Error fetching employee data:", error));
+                                        }
+                                    }
+                                </script>
+                                
+                            </div>
+        
+                            <div class="double-container"> 
+        
+                                <table class="content-table" >
+                
+                                    <thead>
+        
+                                        <th class="text-center" scope="col" style="display: none;">ID</th>
+                                        <th class="text-center" scope="col">Employee</th>
+                                        <th class="text-center" scope="col">Medical</th>
+                                        <th class="text-center" scope="col">Annual</th>
+                                        <th class="text-center" scope="col">Maternity</th>
+                                        <th class="text-center" scope="col">Paternity </th>
+                                        <th class="text-center" scope="col">Public Holiday</th>
+                                        <th class="text-center" scope="col">Year</th>
+                                        <th class="text-center" scope="col">Start Date</th>
+                                        <th class="text-center" scope="col">Edit</th>
+                                        <th class="text-center" scope="col">Delete</th>
+        
+                                    </thead>
+                
+                                    <tbody>
+        
+                                        {% for leaves in leaves_data %}
+
+                                            <tr>
+                                            <td class="text-center" style="display: none;">{{ leaves.id}}</td>
+                                            <td class="text-center">{{ leaves.EmployeeID}}</td>
+                                            <td class="text-center">{{ leaves.Medical}}</td>
+                                            <td class="text-center">{{ leaves.Annual}}</td>
+                                            <td class="text-center">{{ leaves.Maternity}}</td>
+                                            <td class="text-center">{{ leaves.Paternity}}</td>
+                                            <td class="text-center">{{ leaves.Public}}</td>
+                                            <td class="text-center">{{ leaves.Year}}</td>
+                                            <td class="text-center start-time">{{ leaves.Start_Date }}</td>
+
+                                            <td class="text-center">
+                                                <a href="#" onclick="populateForm('{{ leaves.EmployeeID }}', '{{ leaves.Medical }}', '{{ leaves.Annual }}', '{{ leaves.Maternity }}', '{{ leaves.Paternity }}','{{ leaves.Year }}','{{ leaves.Start_Date }}')">
+                                                    <span class="icon">
+                                                        <span class="fa-solid fa-edit"></span>
+                                                    </span>
+                                                </a>
+                                            </td>
+                                            
+                                            <td class="text-center">
+                    
+                                                <a href="{{ url_for('delete_employee_leave_data', id=leaves.id) }}" onclick="return confirm('Are you certain you want to permanently delete this date?');">
+                                                    <span class="icon">
+                                                        <span class="fa-solid fa-trash" style="color: red;"></span>
+                                                    </span>
+                                                </a>
+                                            </td>
+                                            </tr>
+
+                                        {% endfor %}
+        
+                                    </tbody>
+                
+                                </table>
+        
+                            </div>
+
+                        </div>
+        
+                        <div class="flex-item">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                    <div class="alert-container">
+                                    {% for category, message in messages %}
+                                        {% if category == 'mat_receive_success' %}
+                                                <div class="alert alert-success">
+                                                {{ message }}
+                                                </div>
+                                        {% elif category == 'mat_receive_error' %}
+                                                <div class="alert alert-danger">
+                                                {{ message }} 
+                                                </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                            {% endif %}
+                        {% endwith %}
+                        </div>
+
+                   </div>
+ 
+                </div>
+ 
+            </div>
+
+            <div class="adduser" id="adduser" style="display: none;">
+
+                <div class="page-content">
+
+                    <div class="records table-responsive">
+
+                        <form class="p-3" action="#" method="POST" enctype="multipart/form-data" onsubmit="return validateCheckboxSelection()">
+
+                            <div class="container">
+
+                                <div class="double-container"> 
+
+                                    <table class="content-table" id="dynamicTable">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">Employee</th>
+                                                <th style="width: 5%;">Medical</th>
+                                                <th style="width: 5%;">Annual</th>
+                                                <th style="width: 5%;">Maternity</th>
+                                                <th style="width: 5%;">Paternity</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            {% for employee_id, leave_info in leave_data.items() %}
+                                            <tr>
+                                                <td>{{ employee_id }}</td>
+                                                {% for leave_type in ["Medical", "Annual", "Maternity", "Paternity"] %}
+                                                    <td>{{leave_info[leave_type]["days used"]}}/{{ leave_info[leave_type]["days eligible"] }}</td>
+                                                    <!-- <td>{{ leave_info[leave_type]["pro_rate"] }}</td> -->
+                                                {% endfor %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    
+                                </div>
+
+                                <div class="container_hours">
+                                    <h2>sairam</h2>
+                                    <canvas id="pieChart" width="300" height="300"></canvas>
+                                </div>
+                                
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        // Data for Pie Chart
+                                        const totalLeaves = {
+                                            'Medical': 0,
+                                            'Annual': 0,
+                                            'Maternity': 0,
+                                            'Paternity': 0
+                                        };
+                                
+                                        {% for employee_id, leave_info in leave_data.items() %}
+                                            totalLeaves['Medical'] += {{ leave_info['Medical']['days used'] }};
+                                            totalLeaves['Annual'] += {{ leave_info['Annual']['days used'] }};
+                                            totalLeaves['Maternity'] += {{ leave_info['Maternity']['days used'] }};
+                                            totalLeaves['Paternity'] += {{ leave_info['Paternity']['days used'] }};
+                                        {% endfor %}
+                                
+                                
+                                        // Pie Chart
+                                        const ctxPie = document.getElementById('pieChart').getContext('2d');
+                                        const pieChart = new Chart(ctxPie, {
+                                            type: 'pie',
+                                            data: {
+                                                labels: Object.keys(totalLeaves),
+                                                datasets: [{
+                                                    label: 'Total Leaves',
+                                                    data: Object.values(totalLeaves),
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.6)',
+                                                        'rgba(54, 162, 235, 0.6)',
+                                                        'rgba(255, 206, 86, 0.6)',
+                                                        'rgba(75, 192, 192, 0.6)'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                plugins: {
+                                                    legend: {
+                                                        position: 'top',
+                                                    },
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Total Leave Types'
+                                                    }
+                                                }
+                                            }
+                                        });
+                                
+
+                                
+           
+                                    });
+                                </script>
+                                
+                                
+                            </div>
+
+
+
+                        </form>
+
+
+                        
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="Sub_contract" id="Sub_contract" style="display: none;">
+
+                <div class="page-content">
+
+                    <div class="records">
+
+                        <div class="record-header1">
+
+                            <div class="add">
+                                <select class="form-select" id="Received_by" name="Received_by" required onchange="fectch_data()">
+                                    <!-- Placeholder option for Select Employee -->
+                                    <option value="" disabled selected>Select Employee</option>
+                                    
+                                    <!-- Loop through the usernames dynamically -->
+                                    {% for username in usernames %}
+                                        <option value="{{ username }}">{{ username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="mainbox" >
+
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+                            
+                            <div class="column first-column">
+
+                                <div class="row">
+    
+                                    <div class="chart-container">
+                                        <canvas id="leaveTypePieChart" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                            <div class="column first-column">
+    
+                                <div class="table-responsive2" >
+    
+                                    <table class="content-table-leave">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 3%;">Type</th>
+                                                <th style="width: 3%;">StartDate</th>
+                                                <th style="width: 3%;">EndDate</th>
+                                                <th style="width: 2%;">Days</th>
+                                                <th style="width: 3%;">Status</th>
+                                                <th style="width: 12%;">ApprovedBy</th>
+                                                <!-- <th style="width: 8%;">Approved Date</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="approvedLeaveTableBody">
+                                            <!-- Approved leave data will be dynamically inserted here -->
+                                        </tbody>
+                                    </table>
+    
+                                </div>
+    
+                                <div class="row" >
+    
+                                    <div class="chart-container">
+                                        <canvas id="monthlyLeaveChart" width="450" height="350"></canvas>
+                                    </div>
+    
+                                </div>
+    
+                            </div>
+                    
+                            <div class="column third-column">
+                                <div class="table-responsive2">
+                                    <table class="content-table-leave" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 25%;">Leave Type</th>
+                                                <th style="width: 25%;">Days Eligible</th>
+                                                <th style="width: 25%;">Days Used</th>
+                                                <th style="width: 25%;">Days Left</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leaveTableBody">
+                                            <!-- Leave data will be dynamically inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="chart-container">
+                                        <canvas id="leaveChart" width="450" height="350"></canvas>
+                                    </div>
+                                </div>
+    
+                            </div>
+
+                            <div style="position: absolute; bottom: 10px; right: 10px; z-index: 1001;">
+                                <i class="fa-solid fa-lightbulb" id="insightsIcon" style="cursor: pointer; font-size: 24px;"></i>
+                            </div>
+                            
+                            <!-- Modal for insights -->
+                            <div id="insightsModal" class="modal" style="display:none;">
+                                <div class="modal-content">
+                                    <span class="close-button" id="closeModal">&times;</span>
+                                    <h2>Insights</h2>
+                                    <div id="insightsMessage">
+                                        <!-- Insights will be inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+                                                      
+                        </div>
+
+
+                        <script>
+
+                            let leaveChartInstance, monthlyLeaveChartInstance, leaveTypePieChartInstance;
+
+                            function plotChart(chartData) {
+                                console.log("plotChart called with data:", chartData);
+                                const ctx = document.getElementById('leaveChart').getContext('2d');
+                                if (leaveChartInstance) leaveChartInstance.destroy(); // Clear existing chart
+                                leaveChartInstance = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: chartData.leave_types || [],
+                                        datasets: [
+                                            {
+                                                label: 'Eligible Days',
+                                                data: chartData.eligible_days || [],
+                                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                            },
+                                            {
+                                                label: 'Days Used',
+                                                data: chartData.days_used || [],
+                                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: 'Employee Leave Usage'
+                                            },
+                                            datalabels: {
+                                                anchor: 'center',
+                                                align: 'center',
+                                                formatter: (value) => value,
+                                                color: '#444',
+                                                font: {
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    },
+                                    plugins: [ChartDataLabels]
+                                });
+                            }
+
+                            function plotMonthlyChart(chartData) {
+                                console.log("plotMonthlyChart called with data:", chartData);
+                                const ctx = document.getElementById('monthlyLeaveChart').getContext('2d');
+                                if (monthlyLeaveChartInstance) monthlyLeaveChartInstance.destroy();
+
+                                const shadowPlugin = {
+                                    id: 'shadowPlugin',
+                                    beforeDatasetDraw: (chart, args, options) => {
+                                        const { ctx, chartArea: { top, bottom } } = chart;
+                                        const datasetMeta = chart.getDatasetMeta(args.index);
+                                        const bars = datasetMeta.data;
+
+                                        // Apply shadow only to bar elements
+                                        ctx.save();
+                                        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)'; // Shadow color
+                                        ctx.shadowBlur = 10; // Shadow blur level
+                                        ctx.shadowOffsetX = 5; // Horizontal shadow offset
+                                        ctx.shadowOffsetY = 5; // Vertical shadow offset
+
+                                        bars.forEach(bar => bar.draw(ctx)); // Apply shadow to each bar
+                                        ctx.restore();
+                                    }
+                                };
+
+                                monthlyLeaveChartInstance = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: chartData.months || [],
+                                        datasets: [
+                                            {
+                                                label: 'Leaves per Month',
+                                                data: chartData.monthly_leave_counts || [],
+                                                backgroundColor: [
+                                                    '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600',
+                                                    '#ff7c43', '#f95d6a', '#d45087', '#a05195', '#665191',
+                                                    '#2f4b7c', '#c80064'
+                                                ],
+                                                borderColor: [
+                                                    'rgba(33, 37, 41, 1)', 'rgba(0, 51, 102, 1)', 'rgba(0, 102, 102, 1)',
+                                                    'rgba(51, 51, 153, 1)', 'rgba(102, 51, 153, 1)', 'rgba(0, 51, 153, 1)',
+                                                    'rgba(102, 0, 51, 1)', 'rgba(51, 51, 102, 1)', 'rgba(77, 0, 77, 1)',
+                                                    'rgba(25, 25, 112, 1)', 'rgba(47, 79, 79, 1)', 'rgba(0, 51, 51, 1)'
+                                                ],
+                                                borderWidth: 1,
+                                                borderRadius: 2, // Rounded corners
+                                                hoverBackgroundColor: '#fff' // Highlight on hover
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: 'Monthly Leave Count'
+                                            },
+                                            datalabels: {
+                                                anchor: 'center',
+                                                align: 'center',
+                                                formatter: (value) => value,
+                                                color: '#fff',
+                                                font: {
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            x: {
+                                                grid: {
+                                                    display: false // Hide grid lines on x-axis for a cleaner look
+                                                }
+                                            },
+                                            y: {
+                                                beginAtZero: true,
+                                                grid: {
+                                                    color: 'rgba(0, 0, 0, 0.1)' // Light gray grid lines for y-axis
+                                                }
+                                            }
+                                        },
+                                        animation: {
+                                            duration: 1000, // Smooth animation duration
+                                            easing: 'easeOutBounce' // Bounce effect on load
+                                        }
+                                    },
+                                    plugins: [ChartDataLabels, shadowPlugin] // Combine plugins in a single array
+                                });
+                            }
+
+                            function plotPieChart(chartData) {
+                                console.log("plotPieChart called with data:", chartData);
+                                const ctx = document.getElementById('leaveTypePieChart').getContext('2d');
+                                if (leaveTypePieChartInstance) leaveTypePieChartInstance.destroy();
+
+                                leaveTypePieChartInstance = new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: chartData.leave_types || [],
+                                        datasets: [
+                                            {
+                                                label: 'Leave Type Count',
+                                                data: chartData.days_used || [],  // Use `days_used` instead of `leave_counts`
+                                                backgroundColor: [
+                                                    '#0095A8',  // Darker color for 3D effect
+                                                    '#112E51',
+                                                    '#FF7043',
+                                                    '#78909C',
+                                                    '#384860'
+                                                ],
+                                                hoverBackgroundColor: [
+                                                    'rgba(265, 99, 132, 0.8)',  // Darker color for 3D effect
+                                                    'rgba(64, 162, 235, 0.8)',
+                                                    'rgba(265, 206, 86, 0.8)',
+                                                    'rgba(65, 192, 192, 0.8)',
+                                                    'rgba(163, 102, 255, 0.8)'
+                                                ],
+                                                borderWidth: 1,
+                                                borderColor: '#fff',
+                                                hoverOffset: 12 // Creates a more pronounced hover effect for 3D feel
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: 'Leave Type Distribution',
+                                                color: '#444'
+                                            },
+                                            datalabels: {
+                                                formatter: (value) => value,
+                                                color: '#fff',
+                                                font: {
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        },
+                                        layout: {
+                                            padding: {
+                                                top: 10,
+                                                bottom: 10
+                                            }
+                                        },
+                                        animation: {
+                                            animateRotate: true,
+                                            animateScale: true
+                                        }
+                                    },
+                                    plugins: [ChartDataLabels]
+                                });
+                            }
+
+                            function plotCharts(chartData) {
+                                console.log("Plotting charts with data:", chartData);
+                                if (chartData) {
+                                    console.log(Array.isArray(chartData.days_used)); // Should log true
+                                    console.log(Array.isArray(chartData.eligible_days)); // Should log true
+                                    console.log(Array.isArray(chartData.leave_counts)); // Should log true
+
+                                    plotChart(chartData);
+                                    plotMonthlyChart(chartData);
+                                    plotPieChart(chartData);
+                                } else {
+                                    console.error("No chart data available");
+                                }
+                            }
+
+                            function fectch_data() {
+                                const employeeID = document.getElementById('Received_by').value;
+                                console.log("Received employeeID:", employeeID);
+                                fetch(`/fetch_employee_leaves_data?employeeID=${employeeID}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log("Received data:", data);
+
+                                        // Populate the first table with leave type summary data
+                                        const leaveTableBody = document.getElementById('leaveTableBody');
+                                        leaveTableBody.innerHTML = ''; // Clear any existing rows
+
+                                        // Initialize totals
+                                        let totalEligibleDays = 0;
+                                        let totalDaysUsed = 0;
+                                        let totalDaysLeft = 0;
+
+                                        // Loop through each leave type and populate table rows
+                                        data.chart_data.leave_types.forEach((leaveType, index) => {
+                                            const eligibleDays = data.chart_data.eligible_days[index];
+                                            const daysUsed = data.chart_data.days_used[index];
+                                            const daysLeft = eligibleDays - daysUsed;
+
+                                            // Calculate totals
+                                            totalEligibleDays += eligibleDays;
+                                            totalDaysUsed += daysUsed;
+                                            totalDaysLeft += daysLeft;
+
+                                            // Create a new row for each leave type
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${leaveType}</td>
+                                                <td>${eligibleDays}</td>
+                                                <td>${daysUsed}</td>
+                                                <td>${daysLeft}</td>
+                                            `;
+                                            leaveTableBody.appendChild(row);
+                                        });
+
+                                        // Add a final row for the totals
+                                        const totalRow = document.createElement('tr');
+                                        totalRow.style.backgroundColor = '#f5f5f5';
+                                        totalRow.style.fontWeight = 'bold';
+                                        totalRow.innerHTML = `
+                                            <td>Total</td>
+                                            <td>${totalEligibleDays}</td>
+                                            <td>${totalDaysUsed}</td>
+                                            <td>${totalDaysLeft}</td>
+                                        `;
+                                        leaveTableBody.appendChild(totalRow);
+
+                                        // Populate the second table with approved_leaves_data
+                                        const approvedTableBody = document.getElementById('approvedLeaveTableBody');
+                                        approvedTableBody.innerHTML = ''; // Clear any existing rows
+
+                                        data.approved_leaves_data.forEach(leave => {
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${leave.leave_type}</td>
+                                                <td>${leave.start_date}</td>
+                                                <td>${leave.end_date}</td>
+                                                <td>${leave.number_of_days}</td>
+                                                <td>${leave.status}</td>
+                                                <td>${leave.approved_by}</td>
+                                            `;
+                                            approvedTableBody.appendChild(row);
+                                        });
+
+                                        // Plot all charts using the consolidated plotCharts function
+                                        plotCharts(data.chart_data);
+
+                                        // Populate insights
+                                        const insightsMessage = document.getElementById('insightsMessage');
+                                        insightsMessage.innerHTML = ''; // Clear any existing content
+                                        
+                                        // Create a list for the insights
+                                        const insightsList = Object.values(data.insights).map(insight => `<li><i class="fa-solid fa-star"></i> ${insight}</li>`).join('');
+                                        insightsMessage.innerHTML = `<ul>${insightsList}</ul>`;
+                                    })
+                                    .catch(error => console.error('Error fetching leaves:', error));
+                            }
+
+                            
+                            // Event listeners for the insights modal
+                            document.getElementById('insightsIcon').addEventListener('click', function() {
+                                document.getElementById('insightsModal').style.display = 'block';
+                            });
+
+                            document.getElementById('closeModal').addEventListener('click', function() {
+                                document.getElementById('insightsModal').style.display = 'none';
+                            });
+                                    
+
+                        </script>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+        </main>
+        
+    </div>
+
+<style>
+#insightsMessage ul {
+list-style-type: disc; /* Change bullet type here if needed */
+padding-left: 20px;    /* Space to the left of the bullets */
+}
+#insightsMessage li {
+padding: 5px 0;        /* Vertical padding between list items */
+}
+
+.modal {
+position: fixed;
+bottom: 20px; /* Position above the bottom */
+right: 20px; /* Align to the right */
+width: 300px; /* Width of the modal */
+/* max-height: 300px;  */
+background-color: #ebcaca; /* Background color */
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
+border-radius: 15px; /* Rounded corners */
+z-index: 1000; /* Ensure it's above other content */
+transition: all 0.3s ease; /* Smooth transition */
+/* overflow-y: auto;  */
+}
+.modal-content {
+padding: 15px; /* Inner padding */
+}
+
+.close-button {
+cursor: pointer;
+float: right; /* Position close button on the right */
+font-size: 20px; /* Size of the close button */
+color: #aaa; /* Color of the close button */
+}
+
+.close-button:hover {
+color: #000; /* Change color on hover */
+}
+
+h2 {
+margin: 0; /* Remove default margin */
+font-size: 18px; /* Font size for title */
+}
+
+
+
+
+</style>
+
+<style>/* leave*/
+
+/* Style for the table */
+.content-table {
+width: 100%;
+border-collapse: collapse; /* Ensure borders are combined */
+}
+
+/* Style for the table head */
+.content-table-leave thead th {
+position: sticky;
+top: 0;
+background-color: whitesmoke; /* Background color of the header */
+color: black; /* Text color of the header */
+text-align: left;
+font-weight: bold;
+z-index: 1; /* Ensure the header is above the table rows */
+border-bottom: 2px solid; /* Border to separate header from table body */
+}
+
+/* Style for table cells */
+.content-table-leave th,
+.content-table-leave td {
+padding: 6px 7px;
+}
+
+/* Style for table rows */
+.content-table-leave tbody tr {
+border-bottom: 1px solid white;
+}
+
+.content-table-leave tbody tr:nth-of-type(even) {
+background-color: whitesmoke;
+}
+
+.content-table-leave tbody tr:last-of-type {
+border-bottom: 2px solid black;
+}
+
+.content-table-leave tbody tr.active-row {
+font-weight: bold;
+color: black;
+}
+
+
+.content-table-leave thead th:nth-child(2),
+.content-table-leave tbody td:nth-child(2),
+.content-table-leave thead th:nth-child(0),
+.content-table-leave tbody td:nth-child(0),
+
+
+.content-table-leave thead th:nth-child(9),
+.content-table-leave tbody td:nth-child(9),
+.content-table-leave thead th:nth-child(3),
+.content-table-leave tbody td:nth-child(3),
+.content-table-leave thead th:nth-child(4),
+.content-table-leave tbody td:nth-child(4),
+.content-table-leave thead th:nth-child(5),
+.content-table-leave tbody td:nth-child(5),
+.content-table-leave thead th:nth-child(6),
+.content-table-leave tbody td:nth-child(6),
+.content-table-leave thead th:nth-child(8),
+.content-table-leave tbody td:nth-child(8),
+.content-table-leave thead th:nth-child(7),
+.content-table-leave tbody td:nth-child(7){
+text-align: center;
+}
+.content-table-leave .fa-trash, .fa-edit {
+font-size: 1.2em; 
+}
+
+
+
+.table-responsive2 {
+width: 100%;
+overflow: auto;
+min-height: 270px;
+max-height: 270px;
+}
+/* Main container to set up the two columns */
+.mainbox {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+padding: 20px;
+}
+
+/* Column boxes */
+.column {
+flex: 1; /* Each column takes equal width */
+min-width: 300px; /* Minimum width for responsiveness */
+/* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+border-radius: 8px;
+padding: 20px;
+box-sizing: border-box;
+}
+.first-column{
+
+gap: 20px;
+
+}
+/* Second column with two rows */
+.second-column {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+/* Each row in the second column */
+.row {
+/* background-color: #f5f5f5; */
+padding: 20px;
+border-radius: 8px;
+}
+
+
+
+.row label {
+    flex: 1; /* Allow labels to expand and fill available space */
+}
+
+.row {
+display: flex;
+flex-wrap: wrap;
+}
+
+.col-6 {
+flex: 0 0 50%;
+padding: 5px;
+}
+
+/* Media query for mobile */
+@media (max-width: 768px) {
+.mainbox {
+flex-direction: column;
+}
+}
+</style>
+
+<style>
+.record-header1 {
+display: flex;
+justify-content: space-evenly;
+align-items: center;
+width: 100%; /* Ensure the header takes full width */
+margin-top: 0px;
+}
+
+.add1 {
+display: flex;
+justify-content: space-around;
+align-items: center;
+width: 100%; /* Ensure the header takes full width */
+margin-top: 0px;
+}
+
+
+.mat_rec_table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 0px;
+}
+
+.mat_rec_table th, .mat_rec_table td {
+    padding: 5px;
+    text-align: center;
+    }
+
+.mat_rec_table td {
+    margin: 0;
+    padding: 0;
+}
+
+
+</style>
+    
+<style>
+
+
+
+.double-container {
+width: 100%; /* Ensure the container occupies full width */
+box-sizing: border-box; /* Include padding and border in element's total width and height */
+overflow-x: auto; /* Allow horizontal scrolling if the table is too wide */
+border: 1px solid #ddd; /* Optional: Add a border for visual separation */
+}
+
+.container_hours{
+width: 45%;
+box-sizing: border-box;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+.btn4 {
+font-size: 14px;
+padding: 8px 12px; /* Adjusted padding for smaller screens */
+}
+}
+
+@media (max-width: 480px) {
+.btn4 {
+font-size: 12px;
+padding: 6px 10px; /* Further adjusted padding */
+}
+}
+
+.row {
+display: flex;
+flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+gap: 5px; /* Add some gap between buttons */
+}
+
+.row label {
+flex: 1; /* Allow labels to expand and fill available space */
+margin: 2px 0; /* Vertical margin to separate rows of buttons */
+}
+
+
+input[type=text], input[type=date], input[type=number], select {
+width: 100%;
+padding: 10px 20px;
+margin: 2px 0; /* Reduce the top and bottom margin */
+display: block;
+border: 1px solid #ccc;
+border-radius: 4px;
+box-sizing: border-box;
+}
+
+input[type=submit] {
+width: 100%;
+background-color: #04AA6D;
+color: white;
+padding: 14px 20px;
+margin: 8px 0;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+input[type=submit]:hover {
+background-color: #45a049;
+}
+
+.container {
+border-radius: 5px;
+background-color: #f1ecec;
+padding: 10px;
+display: flex;
+gap: 50px;
+width: 100%;
+}
+/* Style for the container of the table */
+.double-container {
+max-height: 600px; /* Adjust the height as needed */
+overflow-y: auto;  /* Enable vertical scrolling */
+border: 1px solid whitesmoke; /* Optional: Add a border for better visual separation */
+position: relative; /* Ensure the container is positioned for sticky headers */
+}
+
+/* Style for the table */
+.content-table {
+width: 100%;
+border-collapse: collapse; /* Ensure borders are combined */
+}
+
+/* Style for the table head */
+.content-table thead th {
+position: sticky;
+top: 0;
+background-color: #004B5D; /* Background color of the header */
+color: whitesmoke; /* Text color of the header */
+text-align: left;
+font-weight: bold;
+z-index: 1; /* Ensure the header is above the table rows */
+border-bottom: 2px solid #004B5D; /* Border to separate header from table body */
+}
+
+/* Style for table cells */
+.content-table th,
+.content-table td {
+padding: 6px 7px;
+}
+
+/* Style for table rows */
+.content-table tbody tr {
+border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+border-bottom: 2px solid #004B5D;
+}
+
+.content-table tbody tr.active-row {
+font-weight: bold;
+color: #004B5D;
+}
+
+.content-table thead th:nth-child(9),
+.content-table tbody td:nth-child(9),
+.content-table thead th:nth-child(3),
+.content-table tbody td:nth-child(3),
+.content-table thead th:nth-child(4),
+.content-table tbody td:nth-child(4),
+.content-table thead th:nth-child(5),
+.content-table tbody td:nth-child(5),
+.content-table thead th:nth-child(6),
+.content-table tbody td:nth-child(6),
+.content-table thead th:nth-child(8),
+.content-table tbody td:nth-child(8),
+.content-table thead th:nth-child(7),
+.content-table tbody td:nth-child(7){
+text-align: center;
+}
+.content-table .fa-trash, .fa-edit {
+font-size: 1.2em; 
+}
+
+
+</style>
+      
+<script>
+   function populateForm(employeeId, Medical, annual, maternity, paternity,Year, Start_Date) {
+      // Get form elements by their IDs
+      var form = document.getElementById("editEnquiryForm");
+      var employeeIdInput = form.elements["employee_id"];
+      var MedicalInput = form.elements["Medical"];
+      var annualInput = form.elements["Annual"];
+      var maternityInput = form.elements["Maternity"];
+      var paternityInput = form.elements["Paternity"];
+      var yearInput = form.elements["Year"];
+      var startdateInput = form.elements["Start_Date"];
+
+      // Set values in the form fields
+      employeeIdInput.value = employeeId;
+      MedicalInput.value = Medical;
+      annualInput.value = annual;
+      maternityInput.value = maternity;
+      paternityInput.value = paternity;
+      yearInput.value = Year;
+      startdateInput.value = Start_Date;
+   }
+</script>
+
+<script>//date formating
+    // Function to format a date string as 'day/month/year' with digits only
+    function formatDate(dateString) {
+        // Check if the dateString is valid and not empty
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        
+        // If date is invalid, return an empty string
+        if (isNaN(date.getTime())) {
+            return '';
+        }
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+        const year = date.getFullYear().toString().slice(-2);
+
+        return `${day}/${month}/${year}`;
+    }
+
+    // Call the formatDate function for each date element when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        const start_time_elements = document.querySelectorAll(".start-time");
+        
+        start_time_elements.forEach(function (element) {
+            const originalDate = element.textContent.trim();
+            element.textContent = formatDate(originalDate);
+        });
+    });
+</script>
+
+
+<script> // sub navvv
+function showSection(sectionId) {
+// Hide all sections
+var sections = document.querySelectorAll('.addproject, .adduser, .Sub_contract, .Others');
+sections.forEach(function (section) {
+    section.style.display = 'none';
+});
+
+// Show the selected section
+var selectedSection = document.getElementById(sectionId);
+    if (selectedSection) {
+        selectedSection.style.display = 'block';
+    }
+}
+
+function toggleContainer(containerId) {
+// You can add custom logic here if needed
+console.log('Toggling container: ' + containerId);
+}
+
+window.onload = function() {
+// Check visibility value from server-side
+var show = '{{ show }}'; // The value of 'show' from the backend
+if (show === 'do_list') {
+    showSection('adduser');
+    document.getElementById('adduserRadio').checked = true;
+} else if (show === 'add_leave') {
+    showSection('addproject');
+    document.getElementById('addprojectRadio').checked = true;
+} else if (show === 'gen_pr') {
+    showSection('Sub_contract');
+    document.getElementById('subContractRadio').checked = true;
+}else if (show === 'Mat_Receipt') {
+    showSection('Others');
+    document.getElementById('othersRadio').checked = true;
+}
+};
+</script>
+
+</body>
+</html>

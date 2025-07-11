@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources" class="active">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            <li>
+              <a href="#" class="link">
+                <i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Option 1
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="link">
+                <i class="fa-solid fa-user-shield" style="margin-right: 5px;"></i> Option 2
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="link">
+                <i class="fa-solid fa-cogs" style="margin-right: 5px;"></i> Option 3
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="link">
+                <i class="fa-solid fa-shield-alt" style="margin-right: 5px;"></i> Option 4
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="link">
+                <i class="fa-solid fa-user-cog" style="margin-right: 5px;"></i> Option 5
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+
+      <style>
+        .excel-table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        .excel-table th,
+        .excel-table td {
+          border: 1px solid #ccc;
+          padding: 8px;
+          text-align: center;
+        }
+
+        .excel-table th {
+          background-color: #f4f4f4;
+        }
+
+        .excel-table input,
+        .excel-table select {
+          width: 100%;
+          border: none;
+          background: transparent;
+          text-align: center;
+          padding: 4px;
+        }
+
+        .excel-table input:focus,
+        .excel-table select:focus {
+          background-color: #e9f3ff;
+          outline: none;
+        }
+
+        .add-row-btn {
+          margin-top: 10px;
+          padding: 6px 12px;
+          font-size: 14px;
+          cursor: pointer;
+        }
+      </style>
+
+
+      <h2>Excel-Style Input Grid</h2>
+
+      <table class="excel-table" id="excelGrid">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Category</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Date</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" name="item[]"></td>
+            <td>
+              <select name="category[]">
+                <option value="">Select</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+              </select>
+            </td>
+            <td><input type="number" name="qty[]" min="1"></td>
+            <td><input type="number" name="rate[]" step="0.01"></td>
+            <td><input type="date" name="date[]"></td>
+            <td><input type="text" name="remarks[]"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="add-row-btn" onclick="addRow()">➕ Add Row</button>
+
+      <script>
+        function addRow() {
+          const table = document.getElementById("excelGrid").getElementsByTagName('tbody')[0];
+          const newRow = table.rows[0].cloneNode(true);
+          newRow.querySelectorAll("input, select").forEach(input => {
+            input.value = "";
+          });
+          table.appendChild(newRow);
+        }
+      </script>
+
+
+      <div class="graph-container">
+        <h2>🚧 This module is currently under development. Stay tuned! 🚀</h2>
+        <p> Please check back later for updates.</p>
+        <div class="loading-animation">
+          <span class="loading-dot"></span>
+          <span class="loading-dot"></span>
+          <span class="loading-dot"></span>
+        </div>
+      </div>
+
+
+      <style>
+        /* Container styling */
+        .graph-container {
+          text-align: center;
+          padding: 50px;
+          background: linear-gradient(to right, #a4c2e0, #41a7da);
+          border-radius: 15px;
+          color: white;
+          margin: 50px auto;
+          width: 50%;
+          box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+          animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Heading Animation */
+        .graph-container h1 {
+          font-size: 28px;
+          font-weight: bold;
+          margin-bottom: 15px;
+          opacity: 0;
+          transform: translateY(-20px);
+          animation: slideIn 1s ease-in-out forwards;
+        }
+
+        /* Paragraph animation */
+        .graph-container p {
+          font-size: 18px;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideIn 1.2s ease-in-out forwards 0.5s;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* Pulsating dot animation */
+        .loading-dot {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin: 0 5px;
+          background-color: white;
+          border-radius: 50%;
+          animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.5;
+          }
+
+          50% {
+            transform: scale(1.5);
+            opacity: 1;
+          }
+        }
+      </style>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

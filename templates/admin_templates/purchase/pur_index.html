@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase" class="active">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+        </div>
+
+        <script>
+            window.addEventListener("load", function () {
+                document.getElementById("pageLoader").style.display = "none";
+            });
+        </script>
+
+        <style>
+            #pageLoader {
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: white;
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .loader {
+                border: 8px solid #f3f3f3;
+                /* Light grey */
+                border-top: 8px solid #3498db;
+                /* Blue */
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['togglePurchaseRequest'] == 'On' %}
+                        <li><a href="{{ url_for('pur_purchase') }}" class="link"><i class="fas fa-cart-plus"></i>
+                                PR's</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglePurchaseOrder'] == 'On' %}
+                        <li><a href="{{ url_for('pur_po') }}" class="link"><i class="fa-solid fa-folder-open"></i>
+                                PO's</a>
+                        </li>
+                        {% endif %}
+
+
+
+
+
+                        {% if user_access['togglePOUpdate'] == 'On' %}
+                        <li><a href="{{ url_for('pur_poupdate') }}" class="link"><i class="fa-solid fa-pen-nib"></i> PO
+                                Update</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglepurSuppliers'] == 'On' %}
+                        <li><a href="{{ url_for('pur_suppliers') }}" class="link"><i class="fa-solid fa-file-alt"></i>
+                                Suppliers</a></li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@1.0.0/dist/chartjs-chart-treemap.min.js"></script>
+
+            <div class="dashboardcontaier">
+
+                <div class="dashboard-container">
+
+                    <!-- First Row -->
+                    <div class="dashboard-card card-1">
+
+                        <div class="section pr-section">
+                            <h3>Purchase Requests</h3>
+                            <p class="item">
+                                <strong class="label">Pending </strong>
+                                <span class="count {% if pr_counts.unprocessed_pr_count > 0 %}highlight{% endif %}">
+                                    {{ pr_counts.unprocessed_pr_count or 0 }}
+                                </span>
+                            </p>
+                            <p class="item">
+                                <strong class="label">Created Today</strong>
+                                <span class="count">{{ pr_counts.today_pr_count or 0 }}</span>
+                            </p>
+                        </div>
+
+                        <div class="section po-section">
+                            <h3>Purchase Orders</h3>
+                            <p class="item">
+                                <strong class="label">Open </strong>
+                                <span class="count {% if po_counts.unprocessed_po_count > 0 %}highlight{% endif %}">
+                                    {{ po_counts.unprocessed_po_count or 0 }}
+                                </span>
+                            </p>
+                            <p class="item">
+                                <strong class="label"> Issued Today</strong>
+                                <span class="count">{{ po_counts.today_po_count or 0 }}</span>
+                            </p>
+                        </div>
+
+                        <style>
+                            .dashboard-card .item {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 4px 0;
+                                font-size: 16px;
+                            }
+
+                            .label {
+                                color: #634343;
+                                font-weight: 600;
+                                font-size: 15px;
+                            }
+
+                            .section {
+                                padding: 5px;
+                                border-radius: 8px;
+                            }
+
+                            .pr-section {
+                                background-color: #f9f9fb;
+                                width: 100%;
+                            }
+
+                            .po-section {
+                                background-color: #f5fafa;
+                                width: 100%;
+
+                            }
+
+                            .count {
+                                font-size: 18px;
+                                font-weight: bold;
+                                color: #2c3e50;
+                            }
+
+                            .highlight {
+                                color: #e74c3c;
+                                animation: pulse 1s ease-in-out infinite;
+                            }
+
+                            @keyframes pulse {
+                                0% {
+                                    transform: scale(1);
+                                    opacity: 1;
+                                }
+
+                                50% {
+                                    transform: scale(1.1);
+                                    opacity: 0.8;
+                                }
+
+                                100% {
+                                    transform: scale(1);
+                                    opacity: 1;
+                                }
+                            }
+                        </style>
+
+                    </div>
+
+                    <div class="dashboard-card card-2" style="height: 240px;">
+
+                        <canvas id="prStatusChart"></canvas>
+
+                        <script>
+                            const prRawData = {{ pr_stat_counts | tojson }};
+                            const prStatusLabels = prRawData.map(item => item.status);
+                            const prStatusCounts = prRawData.map(item => item.count);
+                            const prTotal = prStatusCounts.reduce((a, b) => a + b, 0);
+
+                            // Map each status to a specific dark contrast color
+                            const statusColors = {
+                                'Created': '#4CAF50',    // Dark Blue
+                                'Approved': '#FF9800',   // Deep Violet (Brinjal-like)
+                                'Processed': '#2196F3'   // Dark Green
+                            };
+
+
+                            const backgroundColors = prStatusLabels.map(status => statusColors[status] || '#ccc');
+
+                            new Chart(document.getElementById('prStatusChart'), {
+                                type: 'doughnut',
+                                data: {
+                                    labels: prStatusLabels,
+                                    datasets: [{
+                                        data: prStatusCounts,
+                                        backgroundColor: backgroundColors,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '75%',
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'PR Status',
+                                            font: {
+                                                size: 16,
+                                                weight: 'bold'
+                                            },
+                                            padding: { top: 0, bottom: 0 }
+                                        },
+                                        legend: {
+                                            position: 'right',
+                                            align: 'center',
+                                            labels: {
+                                                boxWidth: 12,
+                                                boxHeight: 12,
+                                                padding: 10,
+                                                usePointStyle: true,
+                                                pointStyle: 'rect',
+                                                generateLabels: function (chart) {
+                                                    const original = Chart.overrides.doughnut.plugins.legend.labels.generateLabels;
+                                                    const labels = original.call(this, chart);
+                                                    labels.forEach(label => {
+                                                        label.text = label.text.split('  ')[0];
+                                                    });
+                                                    return labels;
+                                                }
+                                            }
+                                        },
+                                        datalabels: {
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold',
+                                                size: 11
+                                            },
+                                            formatter: (value) => value
+                                        }
+                                    },
+                                    animation: {
+                                        animateRotate: true,
+                                        animateScale: true
+                                    }
+                                },
+                                plugins: [
+                                    ChartDataLabels,
+                                    {
+                                        id: 'centerText',
+                                        beforeDraw: function (chart) {
+                                            const { width, height, ctx } = chart;
+                                            ctx.save();
+                                            ctx.font = 'bold 12px sans-serif';
+                                            ctx.fillStyle = '#000';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'middle';
+                                            ctx.fillText('Total - ' + prTotal, width / 2.9, height / 1.9);
+                                            ctx.restore();
+                                        }
+                                    }
+                                ]
+                            });
+                        </script>
+
+                    </div>
+
+                    <div class="dashboard-card card-3" style="height: 240px;">
+
+                        <canvas id="poStatusChart"></canvas>
+
+                        <script>
+                            const poRawData = {{ po_stat_counts | tojson }};
+                            const poStatusLabels = poRawData.map(item => item.status);
+                            const poStatusCounts = poRawData.map(item => item.count);
+                            const poTotal = poStatusCounts.reduce((a, b) => a + b, 0);
+
+                            // Updated custom dark mode contrast colors for each PO status
+                            const poStatusColors = {
+                                'Approved': '#2196F3',   // Deep Violet
+                                'Canceled': '#4CAF50',   // Rich Maroon
+                                'Closed': '#FF9800',     // Charcoal Blue
+                                'Issued': '#1F618D',     // Deep Blue
+                                'Reissued': '#AF601A'    // Dark Amber
+                            };
+
+
+
+
+                            const poBackgroundColors = poStatusLabels.map(status => poStatusColors[status] || '#ccc');
+
+                            new Chart(document.getElementById('poStatusChart'), {
+                                type: 'doughnut',
+                                data: {
+                                    labels: poStatusLabels,
+                                    datasets: [{
+                                        data: poStatusCounts,
+                                        backgroundColor: poBackgroundColors,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '75%',
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'PO Status',
+                                            font: {
+                                                size: 16,
+                                                weight: 'bold'
+                                            },
+                                            padding: { top: 0, bottom: 0 }
+                                        },
+                                        legend: {
+                                            position: 'right',
+                                            align: 'center',
+                                            labels: {
+                                                boxWidth: 12,
+                                                boxHeight: 12,
+                                                padding: 10,
+                                                usePointStyle: true,
+                                                pointStyle: 'rect'
+                                            }
+                                        },
+                                        datalabels: {
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold',
+                                                size: 11
+                                            },
+                                            formatter: (value) => value
+                                        }
+                                    },
+                                    animation: {
+                                        animateRotate: true,
+                                        animateScale: true
+                                    }
+                                },
+                                plugins: [
+                                    ChartDataLabels,
+                                    {
+                                        id: 'centerText',
+                                        beforeDraw: function (chart) {
+                                            const { width, height, ctx } = chart;
+                                            ctx.save();
+                                            ctx.font = 'bold 12px sans-serif';
+                                            ctx.fillStyle = '#000';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'middle';
+                                            ctx.fillText('Total - ' + poTotal, width / 2.8, height / 1.9);
+                                            ctx.restore();
+                                        }
+                                    }
+                                ]
+                            });
+                        </script>
+
+                    </div>
+
+                    <div class="dashboard-card card-5">
+
+                        <canvas id="categoryPieChart" height="200"></canvas>
+
+                        <script>
+                            const categoryRawData = {{ category_list | tojson }};
+                            const categoryLabels = categoryRawData.map(item => item.category_name);
+                            const categoryAmounts = categoryRawData.map(item => item.total_amount);
+                            const categoryTotal = categoryAmounts.reduce((a, b) => a + b, 0);
+
+                            const categoryColors = {
+                                "Material": "#1e3a8a",       // Dark Blue
+                                "Sub Contract": "#0f766e",   // Dark Teal
+                                "Others": "#b45309",         // Dark Amber/Brown
+                                "Site": "#991b1b"            // Dark Red
+                            };
+
+                            const backgroundColorsforcat = categoryRawData.map(item => categoryColors[item.category_name] || '#ccc');
+
+                            new Chart(document.getElementById('categoryPieChart'), {
+                                type: 'pie',
+                                data: {
+                                    labels: categoryLabels,
+                                    datasets: [{
+                                        data: categoryAmounts,
+                                        backgroundColor: backgroundColorsforcat,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'By Category',
+                                            font: {
+                                                size: 16,
+                                                weight: 'bold'
+                                            },
+                                            padding: { top: 0, bottom: 0 }
+                                        },
+                                        legend: {
+                                            position: 'right',
+                                            align: 'center',
+                                            labels: {
+                                                boxWidth: 12,
+                                                boxHeight: 12,
+                                                padding: 10,
+                                                usePointStyle: true,
+                                                pointStyle: 'rect'
+                                            }
+                                        },
+                                        datalabels: {
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold',
+                                                size: 11
+                                            },
+                                            formatter: (value) => ''
+                                        }
+                                    },
+                                    animation: {
+                                        animateRotate: true,
+                                        animateScale: true
+                                    }
+                                },
+                                plugins: [
+                                    ChartDataLabels,
+                                    {
+                                        id: 'centerText',
+                                        beforeDraw: function (chart) {
+                                            const { width, height, ctx } = chart;
+                                            ctx.save();
+                                            ctx.font = 'bold 12px sans-serif';
+                                            ctx.fillStyle = '#000';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'middle';
+                                            ctx.fillText('Total - ' + categoryTotal.toFixed(2), width / 2.8, height / 1.9);
+                                            ctx.restore();
+                                        }
+                                    }
+                                ]
+                            });
+                        </script>
+
+                    </div>
+
+                    <div class="dashboard-card card-4">
+
+                        <canvas id="prPoTrendChart" style="height: 250px;"></canvas>
+
+                        <script>
+                            // Data from Flask backend
+                            const prLabels = {{ pr_monthly_labels | tojson }};
+                            const prValues = {{ pr_monthly_values | tojson }};
+                            const poValues = {{ po_monthly_values | tojson }};
+
+                            const ctx = document.getElementById('prPoTrendChart').getContext('2d');
+
+                            new Chart(ctx, {
+                                type: 'line', // still 'line' type, but with fill to look like area chart
+                                data: {
+                                    labels: prLabels,
+                                    datasets: [
+                                        {
+                                            label: 'PR',
+                                            data: prValues,
+                                            borderColor: '#1e3a8a',
+                                            backgroundColor: 'rgba(30, 58, 138, 0.4)', // more opaque for area feel
+                                            tension: 0.4,
+                                            fill: true,
+                                            pointRadius: 2,
+                                            pointBackgroundColor: '#1e3a8a'
+                                        },
+                                        {
+                                            label: 'PO',
+                                            data: poValues,
+                                            borderColor: '#b45309',
+                                            backgroundColor: 'rgba(180, 83, 9, 0.4)',
+                                            tension: 0.4,
+                                            fill: true,
+                                            pointRadius: 2,
+                                            pointBackgroundColor: '#b45309'
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                            labels: {
+                                                boxWidth: 12
+                                            }
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Purchase Trend',
+                                            font: {
+                                                size: 16,
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            title: {
+                                                display: false
+                                            },
+                                            grid: {
+                                                display: false
+                                            }
+                                        },
+                                        x: {
+                                            title: {
+                                                display: false
+                                            },
+                                            grid: {
+                                                display: false
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+
+                    </div>
+
+                    <!-- ✅ New Middle Full-Width Row -->
+
+                    <div class="grid-row3-container">
+
+                        <div class="middle-row-card">
+
+                            <div class="first">
+
+                                <canvas id="deptTotalPareto" style="height: 300px;"></canvas>
+
+                                <script>
+                                    const departTotalsRaw = {{ depart_totals | tojson }};
+
+                                    // Use labels as received (or sort if you want)
+                                    const labels = departTotalsRaw.map(item => item.department_name);
+
+                                    // Scatter data points for total amounts
+                                    const scatterData = [];
+                                    departTotalsRaw.forEach((item, index) => {
+                                        const y = item.total_amount || 0;
+                                        scatterData.push({ x: index, y: y });
+                                    });
+
+                                    // Create one line dataset per stem (from 0 to y)
+                                    const lineDatasets = departTotalsRaw.map((item, index) => {
+                                        const y = item.total_amount || 0;
+                                        return {
+                                            label: 'Line Stem ' + index,
+                                            data: [
+                                                { x: index, y: 0 },
+                                                { x: index, y: y }
+                                            ],
+                                            parsing: false,
+                                            backgroundColor: 'transparent',
+                                            borderColor: '#f44336',
+                                            borderWidth: 2,
+                                            showLine: true,
+                                            pointRadius: 0,
+                                            pointHoverRadius: 0,
+                                            fill: false
+                                        };
+                                    });
+
+                                    const ctx12 = document.getElementById('deptTotalPareto').getContext('2d');
+
+                                    new Chart(ctx12, {
+                                        type: 'scatter',
+                                        data: {
+                                            labels: labels,
+                                            datasets: [
+                                                ...lineDatasets,
+                                                {
+                                                    type: 'scatter',
+                                                    label: 'Total Amount',
+                                                    data: scatterData,
+                                                    parsing: false,
+                                                    backgroundColor: '#f44336',
+                                                    borderColor: '#f44336',
+                                                    pointRadius: 6,
+                                                    pointHoverRadius: 7
+                                                }
+                                            ]
+                                        },
+                                        options: {
+                                            maintainAspectRatio: false,
+                                            plugins: {
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: (ctx) => {
+                                                            const index = ctx.dataIndex;
+                                                            const value = ctx.raw.y;
+                                                            const label = labels[index];
+                                                            return label + ': ' + value.toLocaleString(undefined, {
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2
+                                                            });
+                                                        }
+                                                    }
+                                                },
+                                                legend: { display: false }
+                                            },
+
+                                            scales: {
+                                                x: {
+                                                    type: 'linear',
+                                                    position: 'bottom',
+                                                    min: -1,
+                                                    max: labels.length,
+                                                    ticks: {
+                                                        stepSize: 1,
+                                                        callback: (value) => labels[value] || '',
+                                                        font: { weight: 'bold', size: 14 },
+                                                        autoSkip: false,
+                                                        maxRotation: 45,
+                                                        minRotation: 45
+                                                    },
+                                                    grid: {
+                                                        display: false  // Turn off x-axis grid lines
+                                                    }
+                                                },
+                                                y: {
+                                                    beginAtZero: true,
+                                                    grid: {
+                                                        display: false  // Turn off y-axis grid lines
+                                                    },
+                                                    ticks: {
+                                                        color: '#666',
+                                                        font: { size: 12 },
+                                                        callback: value => value.toLocaleString()
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    });
+                                </script>
+
+                            </div>
+
+                            <div class="second">
+
+                                <div class="child-one">
+
+                                    <div class="table-responsive1">
+
+                                        <table class="table table-main"
+                                            style="width: 100%;  border-radius: 12px;  box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+
+                                            <thead style="background-color: transparent;">
+                                                <tr>
+                                                    <th style="text-align: left;">Top Suppliers</th>
+                                                    <th style="text-align: right;">Count</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                {% for supplier, (company_name, count) in
+                                                supplier_counts.items() %}
+                                                <tr
+                                                    style="background-color: {% if loop.index0 % 2 == 0 %}#f8f9fa{% else %}#ffffff{% endif %}; transition: background-color 0.3s;">
+                                                    <td style="text-align: left;">
+                                                        {{ company_name[:35] + ('...' if company_name|length > 35 else
+                                                        '') if company_name else 'N/A' }}
+                                                    </td>
+
+                                                    <td style="text-align: right;">{{ "{:,}".format(count) }}</td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="child-two">
+
+                                    <div class="table-responsive1">
+
+                                        <table class="table table-main"
+                                            style="width: 100%;  border-radius: 12px;  box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+
+                                            <thead style="background-color: transparent;">
+                                                <tr>
+                                                    <th style="text-align: left;">Top PO Projects</th>
+                                                    <th style="text-align: right;">Count</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                {% for entry in project_pr_counts %}
+                                                <tr
+                                                    style="background-color: {% if loop.index0 % 2 == 0 %}#f8f9fa{% else %}#ffffff{% endif %}; transition: background-color 0.3s;">
+                                                    <td style="text-align: left;"> {{ entry.project_id }} - {{
+                                                        entry.project_name[:30] }}{% if
+                                                        entry.project_name|length > 30 %}...{% endif %}
+                                                    </td>
+                                                    <td style="text-align: right;">{{ "{:,}".format(entry.count) }}</td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!--Last Row -->
+                    <div class="row-2-card-3" style="padding: 0px;">
+                        <div class="nested-cards-grid">
+                            <div class="nested-card"></div>
+                            <div class="nested-card"></div>
+                            <div class="nested-card"></div>
+                            <div class="nested-card">Metric 4</div>
+                            <div class="nested-card">Metric 5</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card row-2-card-1">
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main"
+                                style="width: 100%;  border-radius: 12px;  box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+
+                                <thead style="background: linear-gradient(90deg, #004085, #007bff); color: white;">
+                                    <tr>
+                                        <th style="text-align: left; ">
+                                            Top PR Initiators</th>
+                                        <th style="text-align: right;">
+                                            Count</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for employee, count in created_by_counts.items() %}
+                                    <tr
+                                        style="background-color: {% if loop.index0 % 2 == 0 %}#f8f9fa{% else %}#ffffff{% endif %}; transition: background-color 0.3s;">
+                                        <td style="text-align: left; ">{{ employee
+                                            }}</td>
+                                        <td style="text-align: right; ">{{
+                                            "{:,}".format(count) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-card row-2-card-2">
+
+
+                        <!-- Load Google Charts -->
+                        <p style="color: rgb(92, 90, 90); font-weight: bold;">DO Status</p>
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+                        <div id="doStatusChart3D" style="width: 300px; height: 500px;"></div>
+
+                        <script type="text/javascript">
+                            google.charts.load("current", { packages: ["corechart"] });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                const data = google.visualization.arrayToDataTable([
+                                    ['Status', 'Count'],
+                                    {% for entry in do_status_data %}
+                            ['{{ entry.status }}', {{ entry.count }}],
+                                {% endfor %}
+                                ]);
+
+                            const options = {
+
+                                pieHole: 0.5,
+                                is3D: true,  // `is3D` and `pieHole` can't be used together — to keep doughnut view, this must be false
+                                titleTextStyle: {
+                                    color: '#333',
+                                    fontSize: 20,
+                                    bold: true,
+                                    italic: false,
+                                    // center alignment is default in Google Charts
+                                },
+                                chartArea: {
+                                    width: '100%',
+                                    top: 10
+                                },
+                                legend: {
+                                    position: 'bottom',
+                                    alignment: 'center',
+                                    textStyle: {
+                                        color: '#444',
+                                        fontSize: 13,
+                                        bold: true
+                                    }
+                                },
+                                slices: {
+                                    0: { color: '#4CAF50' }, // Closed
+                                    1: { color: '#FF9800' }, // Open
+                                    2: { color: '#2196F3' }  // Partial
+                                },
+                                tooltip: {
+                                    text: 'both' // shows value + percentage
+                                }
+                            };
+
+
+                            const chart = new google.visualization.PieChart(document.getElementById('doStatusChart3D'));
+                            chart.draw(data, options);
+    }
+                        </script>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+    <style>
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 270px;
+            border-radius: 10px;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 12.5% 19% 19% 19% 28%;
+            grid-template-rows: auto auto auto auto;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 7px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0eafc, #9ebbe4);
+        }
+
+        .dashboard-card {
+            background: #f0f4f8;
+            border-radius: 7px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px;
+            min-height: 230px;
+            max-height: 230px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .dashboard-card h3 {
+            color: #1c1675;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .dashboard-card canvas {
+            width: 100%;
+            height: 200px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-1 {
+            background: white;
+            border: 1px solid #ff6f3c;
+        }
+
+        .card-2 {
+            background: white;
+            border: 1px solid #4d089a;
+        }
+
+        .card-3 {
+            background: white;
+            border: 1px solid #00bbf0;
+        }
+
+        .card-5 {
+            background: white;
+            border: 1px solid #740d4c;
+        }
+
+        .card-4 {
+            background: white;
+            border: 1px solid #eb2632;
+        }
+
+        .grid-row3-container {
+            grid-column: 1 / -1;
+            /* full width */
+            display: block;
+        }
+
+        .middle-row-card {
+            display: flex;
+            gap: 10px;
+            border-radius: 10px;
+            min-height: 300px;
+            max-height: 300px;
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .middle-row-card .first {
+            width: 51.8%;
+            padding: 5px;
+            background: white;
+            border: 1px solid #42e6fc;
+            border-radius: 7px;
+
+        }
+
+        .middle-row-card .second {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            width: 50%;
+        }
+
+        .child-one {
+            width: 50%;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #ece907;
+            border-radius: 5px;
+        }
+
+        .child-two {
+            width: 50%;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #f01179;
+            border-radius: 5px;
+        }
+
+
+        .row-2-container {
+            display: contents;
+        }
+
+        .row-2-card-1,
+        .row-2-card-2 {
+            background: #fff;
+            grid-column: span 1;
+            min-height: 260px;
+            max-height: 260px;
+        }
+
+        .row-2-card-3 {
+            grid-column: span 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .nested-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            /* optional max width */
+        }
+
+        .nested-card {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            /* soft gray */
+            border-radius: 12px;
+            padding: 8px 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            text-align: center;
+            font-weight: 600;
+            color: #111827;
+            /* dark gray */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .nested-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Metric label styling */
+        .metric-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        /* Metric value styling */
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        @media (min-width: 600px) {
+            .nested-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Different colors for each nested-card using nth-child */
+        .nested-card:nth-child(1) .metric-value {
+            color: #1e88e5;
+            /* blue */
+        }
+
+        .nested-card:nth-child(2) .metric-value {
+            color: #43a047;
+            /* green */
+        }
+
+        .nested-card:nth-child(3) .metric-value {
+            color: #f4511e;
+            /* orange */
+        }
+
+        .nested-card:nth-child(4) .metric-value {
+            color: #6d4c41;
+            /* brown */
+        }
+
+        .nested-card:nth-child(5) .metric-value {
+            color: #8e24aa;
+            /* purple */
+        }
+    </style>
+
+</body>
+
+</html>

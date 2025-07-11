@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="dashboard-container table-responsive">
+
+                <div class="dashboard-content">
+
+                    <!-- Key Metrics Row -->
+                    <div class="stats-grid">
+
+                        <a href="#" style="text-decoration: none; display: block;">
+                            <div class="stats-card">
+                                <div class="card-content">
+                                    <div class="stats-info">
+                                        <p class="stats-title">Purchase Requests</p>
+                                        <p class="stats-value">{{ "{:,.0f}".format(status_counts.pr.total_pr) }}</p>
+
+                                        <div class="stats-subvalues">
+                                            <span class="badge badge-yellow">Pending: {{
+                                                "{:,.0f}".format(status_counts.pr.pending_pr)}}</span>
+                                            <span class="badge badge-green">Approved: {{
+                                                "{:,.0f}".format(status_counts.pr.paid_pr) }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="stats-icon icon-blue">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+
+                        <div class="stats-card">
+                            <div class="card-content">
+                                <div class="stats-info">
+                                    <p class="stats-title">Purchase Order</p>
+                                    <p class="stats-value">{{ "{:,.0f}".format(status_counts.po.total_po) }}</p>
+                                    <div class="stats-subvalues">
+                                        <span class="badge badge-yellow">Open: {{
+                                            "{:,.0f}".format(status_counts.po.pending_po)}}</span>
+                                        <span class="badge badge-green">Closed: {{
+                                            "{:,.0f}".format(status_counts.po.paid_po) }}</span>
+                                    </div>
+                                </div>
+                                <div class="stats-icon icon-green">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <div class="card-content">
+                                <div class="stats-info">
+                                    <p class="stats-title">Project Requests</p>
+                                    <p class="stats-value">{{ "{:,.0f}".format(status_counts.projects_request.total_prj)
+                                        }}</p>
+                                    <div class="stats-subvalues">
+                                        <span class="badge badge-yellow">Pending: {{
+                                            "{:,.0f}".format(status_counts.projects_request.prj_pending) }}</span>
+                                        <span class="badge badge-green">Approved: {{
+                                            "{:,.0f}".format(status_counts.projects_request.prj_created) }}</span>
+                                    </div>
+                                </div>
+                                <div class="stats-icon icon-purple">
+                                    <i class="fas fa-project-diagram"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <div class="card-content">
+                                <div class="stats-info">
+                                    <p class="stats-title">Payment Requests</p>
+                                    <p class="stats-value">{{
+                                        "{:,.0f}".format(status_counts.payment_requests.total_payments) }}</p>
+                                    <div class="stats-subvalues">
+                                        <span class="badge badge-yellow">Pending: {{
+                                            "{:,.0f}".format(status_counts.payment_requests.pending_payments)}}</span>
+                                        <span class="badge badge-green">Paid: {{
+                                            "{:,.0f}".format(status_counts.payment_requests.paid_payments) }}</span>
+                                    </div>
+                                </div>
+                                <div class="stats-icon icon-fuchsia">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <div class="card-content">
+                                <div class="stats-info">
+                                    <p class="stats-title">Claims</p>
+                                    <p class="stats-value">{{ "{:,.0f}".format(status_counts.claims.total_claims) }}</p>
+                                    <div class="stats-subvalues">
+                                        <span class="badge badge-yellow">Pending: {{
+                                            "{:,.0f}".format(status_counts.claims.open_claims)}}</span>
+                                        <span class="badge badge-green">Approved: {{
+                                            "{:,.0f}".format(status_counts.claims.approved_claims)}}</span>
+                                    </div>
+                                </div>
+                                <div class="stats-icon icon-orange">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <div class="card-content">
+                                <div class="stats-info">
+                                    <p class="stats-title">Leaves</p>
+                                    <p class="stats-value">{{ "{:,.0f}".format(status_counts.leaves.total_leaves) }}</p>
+                                    <div class="stats-subvalues">
+                                        <span class="badge badge-yellow">Pending: {{
+                                            "{:,.0f}".format(status_counts.leaves.pending_leaves)}}</span>
+                                        <span class="badge badge-green">Approved: {{
+                                            "{:,.0f}".format(status_counts.leaves.paid_leaves) }}</span>
+                                    </div>
+                                </div>
+                                <div class="stats-icon icon-stone">
+                                    <i class="fas fa-calendar-times"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Main Content Grid -->
+                    <div class="main-grid">
+                        <!-- Left Column - Charts -->
+                        <div class="left-column">
+                            <!-- Chart Section -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-bar"></i> Financial Performance</h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="chart-placeholder">
+                                        <p>Chart visualization would go here</p>
+                                        <p>Revenue vs Expenses over time</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Section -->
+                            <div class="bottom-grid">
+                                <!-- Financial Overview -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-dollar-sign"></i> Financial Overview</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metrics-grid">
+                                            <div class="metric-item metric-green">
+                                                <p class="metric-value">$2,457K</p>
+                                                <p class="metric-label">Total Revenue</p>
+                                            </div>
+                                            <div class="metric-item metric-red">
+                                                <p class="metric-value">$146K</p>
+                                                <p class="metric-label">Monthly Costs</p>
+                                            </div>
+                                            <div class="metric-item metric-blue">
+                                                <p class="metric-value">432</p>
+                                                <p class="metric-label">Total Invoices</p>
+                                            </div>
+                                            <div class="metric-item metric-purple">
+                                                <p class="metric-value">1,876</p>
+                                                <p class="metric-label">Assets Issued</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- HR & Training -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-graduation-cap"></i> HR & Training</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="metrics-grid">
+                                            <div class="metric-item metric-blue">
+                                                <p class="metric-value">156</p>
+                                                <p class="metric-label">Available Courses</p>
+                                            </div>
+                                            <div class="metric-item metric-green">
+                                                <p class="metric-value">1,823</p>
+                                                <p class="metric-label">Completions</p>
+                                            </div>
+                                            <div class="metric-item metric-yellow">
+                                                <p class="metric-value">145</p>
+                                                <p class="metric-label">Approved Leaves</p>
+                                            </div>
+                                            <div class="metric-item metric-indigo">
+                                                <p class="metric-value">8.7K</p>
+                                                <p class="metric-label">Working Hours</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="right-column">
+                            <!-- Quick Actions -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-cog"></i> Quick Links</h3>
+                                </div>
+                                <div class="card-content">
+
+                                    <div class="action-buttons">
+
+                                        <button class="action-btn btn-blue">
+                                            <div class="btn-content">
+                                                <i class="fas fa-credit-card"></i>
+                                                <span>Process Payment</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-green">
+                                            <div class="btn-content">
+                                                <i class="fas fa-file-signature"></i>
+                                                <span>Create PR</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-purple">
+                                            <div class="btn-content">
+                                                <i class="fas fa-check-circle"></i>
+                                                <span>Approve PR/PO</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-orange">
+                                            <div class="btn-content">
+                                                <i class="fas fa-file-invoice-dollar"></i>
+                                                <span>Create Invoice</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-teal">
+                                            <div class="btn-content">
+                                                <i class="fas fa-project-diagram"></i>
+                                                <span>Projects</span>
+                                            </div>
+                                            <div class="badge badge-secondary"></div>
+                                        </button>
+
+                                        <button class="action-btn btn-brown">
+                                            <div class="btn-content">
+                                                <i class="fas fa-clipboard-list"></i>
+                                                <span>Material Receipt</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-dark">
+                                            <div class="btn-content">
+                                                <i class="fas fa-chart-line"></i>
+                                                <span>Reports</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-pink">
+                                            <div class="btn-content">
+                                                <i class="fas fa-clock"></i>
+                                                <span>Hours View</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="action-btn btn-cyan">
+                                            <div class="btn-content">
+                                                <i class="fas fa-question-circle"></i>
+                                                <span>Enquiries</span>
+                                            </div>
+                                        </button>
+
+                                    </div>
+
+
+                                    <!-- <div class="stats-footer">
+                                        <div class="stat-item">
+                                            <p class="stat-value">98.5%</p>
+                                            <p class="stat-label">System Uptime</p>
+                                        </div>
+                                        <div class="stat-item">
+                                            <p class="stat-value">2.3s</p>
+                                            <p class="stat-label">Avg Response</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <script>
+                // Update current time
+                function updateTime() {
+                    const now = new Date();
+                    document.getElementById('current-time').textContent = now.toLocaleTimeString();
+                }
+                updateTime();
+                setInterval(updateTime, 1000);
+            </script>
+
+
+
+        </div>
+
+    </div>
+
+
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: #d8eaf3;
+        }
+    </style>
+
+    <style>
+        .stats-subvalues {
+            margin-top: 5px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: 1;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background-color: #c8f7c5;
+            color: #2e7d32;
+        }
+
+        .badge-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .dashboard-content {
+            width: 100%;
+        }
+
+
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+        }
+
+        .badge-green {
+            background-color: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .badge-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-color: #bfdbfe;
+        }
+
+        .badge-purple {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+            border-color: #e9d5ff;
+        }
+
+        .badge-emerald {
+            background-color: #d1fae5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+
+        .badge-red {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        .badge-orange {
+            background-color: #fed7aa;
+            color: #ea580c;
+            border-color: #fdba74;
+        }
+
+        .badge-secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+            border-color: #e2e8f0;
+        }
+
+        .badge-yellow {
+            background-color: #fef3c7;
+            color: #d97706;
+            border-color: #fde68a;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 0 0 0 24px;
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-content {
+            padding: 3px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .stats-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card .card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stats-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .stats-icon {
+            padding: 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .stats-icon i {
+            font-size: 1.5rem;
+        }
+
+        .icon-blue {
+            color: #2563eb;
+        }
+
+        .icon-green {
+            color: #059669;
+        }
+
+        .icon-purple {
+            color: #7c3aed;
+        }
+
+        .icon-emerald {
+            color: #10b981;
+        }
+
+        .icon-orange {
+            color: #ea580c;
+        }
+
+        .icon-stone {
+            color: #78716c;
+            /* Tailwind Stone-500 */
+        }
+
+        .icon-fuchsia {
+            color: #d946ef;
+            /* Tailwind Fuchsia-500 */
+        }
+
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2.5fr 0.5fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .left-column,
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Chart Placeholder */
+        .chart-placeholder {
+            height: 300px;
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        /* Progress Bars */
+        .progress-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid;
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-blue {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .btn-blue:hover {
+            background-color: #dbeafe;
+        }
+
+        .btn-green {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #bbf7d0;
+        }
+
+        .btn-green:hover {
+            background-color: #d1fae5;
+        }
+
+        .btn-purple {
+            background-color: #f5f3ff;
+            color: #6b21a8;
+            border: 1px solid #ddd6fe;
+        }
+
+        .btn-purple:hover {
+            background-color: #ede9fe;
+        }
+
+        .btn-orange {
+            background-color: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+
+        .btn-orange:hover {
+            background-color: #ffedd5;
+        }
+
+        .btn-teal {
+            background-color: #f0fdfa;
+            color: #0f766e;
+            border: 1px solid #99f6e4;
+        }
+
+        .btn-teal:hover {
+            background-color: #ccfbf1;
+        }
+
+        .btn-brown {
+            background-color: #fdf6f1;
+            color: #7c3e1d;
+            border: 1px solid #f3e8e1;
+        }
+
+        .btn-brown:hover {
+            background-color: #faeee5;
+        }
+
+        .btn-dark {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-dark:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-pink {
+            background-color: #fdf2f8;
+            color: #be185d;
+            border: 1px solid #fbcfe8;
+        }
+
+        .btn-pink:hover {
+            background-color: #fce7f3;
+        }
+
+        .btn-cyan {
+            background-color: #ecfeff;
+            color: #0e7490;
+            border: 1px solid #a5f3fc;
+        }
+
+        .btn-cyan:hover {
+            background-color: #cffafe;
+        }
+
+
+        .btn-blue {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .btn-blue:hover {
+            background-color: #dbeafe;
+        }
+
+        .btn-green {
+            background-color: #f0fdf4;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .btn-green:hover {
+            background-color: #dcfce7;
+        }
+
+        .btn-purple {
+            background-color: #faf5ff;
+            color: #7c3aed;
+            border-color: #e9d5ff;
+        }
+
+        .btn-purple:hover {
+            background-color: #f3e8ff;
+        }
+
+        .btn-orange {
+            background-color: #fff7ed;
+            color: #ea580c;
+            border-color: #fed7aa;
+        }
+
+        .btn-orange:hover {
+            background-color: #ffedd5;
+        }
+
+        .btn-emerald {
+            background-color: #ecfdf5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+
+        .btn-emerald:hover {
+            background-color: #d1fae5;
+        }
+
+        .btn-indigo {
+            background-color: #eef2ff;
+            color: #4338ca;
+            border-color: #c7d2fe;
+        }
+
+        .btn-indigo:hover {
+            background-color: #e0e7ff;
+        }
+
+        /* Stats Footer */
+        .stats-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Activity List */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.icon-blue {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .activity-icon.icon-green {
+            background-color: #dcfce7;
+            color: #059669;
+        }
+
+        .activity-icon.icon-purple {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .activity-icon.icon-orange {
+            background-color: #fed7aa;
+            color: #ea580c;
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 0.875rem;
+        }
+
+        .activity-description {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .activity-time {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .view-all {
+            text-align: center;
+            padding-top: 8px;
+        }
+
+        .view-all-btn {
+            background: none;
+            border: none;
+            color: #2563eb;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .view-all-btn:hover {
+            color: #1d4ed8;
+        }
+
+        /* Alert Card */
+        .alert-card {
+            background: linear-gradient(135deg, #fef2f2 0%, #fed7aa 100%);
+        }
+
+        .alert-card .card-header h3 {
+            color: #dc2626;
+        }
+
+        .alert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 0.875rem;
+        }
+
+        .alert-description {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        /* Bottom Grid */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+        }
+
+        .metric-green {
+            background-color: #dcfce7;
+        }
+
+        .metric-green .metric-value {
+            color: #166534;
+        }
+
+        .metric-green .metric-label {
+            color: #059669;
+        }
+
+        .metric-red {
+            background-color: #fee2e2;
+        }
+
+        .metric-red .metric-value {
+            color: #dc2626;
+        }
+
+        .metric-red .metric-label {
+            color: #ef4444;
+        }
+
+        .metric-blue {
+            background-color: #dbeafe;
+        }
+
+        .metric-blue .metric-value {
+            color: #1d4ed8;
+        }
+
+        .metric-blue .metric-label {
+            color: #2563eb;
+        }
+
+        .metric-purple {
+            background-color: #f3e8ff;
+        }
+
+        .metric-purple .metric-value {
+            color: #7c3aed;
+        }
+
+        .metric-purple .metric-label {
+            color: #8b5cf6;
+        }
+
+        .metric-yellow {
+            background-color: #fef3c7;
+        }
+
+        .metric-yellow .metric-value {
+            color: #d97706;
+        }
+
+        .metric-yellow .metric-label {
+            color: #f59e0b;
+        }
+
+        .metric-indigo {
+            background-color: #eef2ff;
+        }
+
+        .metric-indigo .metric-value {
+            color: #4338ca;
+        }
+
+        .metric-indigo .metric-label {
+            color: #6366f1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-left h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-content {
+                padding: 16px;
+            }
+
+            .card-header {
+                padding: 16px 16px 0 16px;
+            }
+
+            .stats-card .card-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+
+
+</body>
+
+</html>

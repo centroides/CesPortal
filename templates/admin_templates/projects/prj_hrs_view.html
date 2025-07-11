@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects" class="active">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleDashboard'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('projects') }}" class="link">
+                                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProjectStatus'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prj_status') }}" class="link">
+                                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleHoursEdit'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('hours_edit') }}" class="link">
+                                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                        <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i
+                                    class="fa-solid fa-industry"></i>
+                                Material Receipt</a></li>
+                        {% endif %}
+
+                        {% if user_access['toggleHoursView'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('hrs_view') }}" class="link">
+                                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <div class="timenav">
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+                    <ul id="menuList1" class="timebar">
+                        {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+                        department_code in [10, 11, 16, 1000]) %}
+                        <li>
+                            <a href="{{ url_for('project_details_page', id=project_id) }}">
+                                <i class="fa-solid fa-chart-bar"></i> Overview
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleOverview'] == 'On' and (project_details.pm == user['name'] or
+                        department_code in [10, 11, 16, 1000]) %}
+                        <li>
+                            <a href="/prj_hrs_view?project_id={{ project_id }}" class="active">
+                                <i class="fa-regular fa-clock"></i> Hrs View
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleGeneratePR'] == 'On' %}
+                        <li>
+                            <a href="/project_pr?project_id={{ project_id }}">
+                                <i class="fa-solid fa-file-invoice"></i> Generate PR
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePRJViewPR'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('pr_view', project_id=project_id) }}">
+                                <i class="fa-solid fa-list"></i> View PR's
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleprjViewPO'] == 'On' %}
+                        <li>
+                            <a href="/project_po?project_id={{ project_id }}">
+                                <i class="fa-solid fa-file-contract"></i> View PO's
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleViewClaims'] == 'On' %}
+                        <li>
+                            <a href="/claiminfo?project_id={{ project_id }}">
+                                <i class="fa-solid fa-receipt"></i> View Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePrjViewDO'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('project_do', project_id=project_id) }}">
+                                <i class="fa-solid fa-truck-moving"></i> DO's
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequests'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prj_pay_req', project_id=project_id) }}">
+                                <i class="fa-solid fa-money-bill-wave"></i> Payment Request
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a href="{{ url_for('prj_planner', project_id=project_id) }}">
+                                <i class="fa-solid fa-calendar-check"></i> Planner
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="menu-icon1">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+                    </div>
+                </div>
+
+                <div class="line1"></div>
+
+                <style>
+                    .timenav .active i {
+                        color: white !important;
+                        /* Ensures icon turns white */
+                    }
+
+                    .search_container {
+
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+                    .line1 {
+                        margin: 3px auto;
+                        /* Centers horizontally */
+                        height: 2px;
+                        background-color: rgb(82, 79, 79);
+                        width: 97%;
+                        display: block;
+                        /* Ensures it behaves as a block element */
+                    }
+
+
+                    /* Style for headings and icons */
+                    .timenav a,
+                    .timenav i {
+                        color: #8d7f5c !important;
+                        font-weight: bold;
+                    }
+
+                    /* Active link style */
+                    .timenav .active {
+                        background-color: #FF6347 !important;
+                        color: white !important;
+                        padding: 10px;
+                        font-weight: bold;
+                        border-top-left-radius: 5px;
+                        border-top-right-radius: 5px;
+                    }
+
+                    .timebar {
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                    }
+
+                    .timebar li {
+                        flex: 1 1 20%;
+                        margin: 5px;
+                        text-align: center;
+                    }
+
+                    .link1 {
+                        color: #8d7f5c;
+                        font-size: 16px;
+                        font-weight: bold;
+                        transition: color 0.3s ease;
+                        cursor: pointer;
+                    }
+                </style>
+
+            </div>
+
+
+            <form id="filterForm" method="POST">
+
+                <div class="container">
+
+                    <div class="row-inside">
+
+                        <div class="form-group" style="display: none;">
+                            <input type="text" class="form-control small-input" id="project_id" name="project_id"
+                                value="{{ project_id }}" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control small-input" id="project_id_name"
+                                name="project_id_name" value="{{ project_id }} - {{project_details.project_name}} "
+                                readonly style="background-color: #d8eaf3;">
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control small-input" id="update_employee_id" name="employee_id">
+                                <option value="">Select Employee </option>
+                                <option value="All">SELECT ALL </option>
+                                {% for username in prj_members %}
+
+                                <option value="{{ username }}">
+                                    {{ username }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control small-input" id="section_code" name="section_code">
+                                <option value="">Select Category</option>
+                                <option value="4000">Project</option>
+                                <option value="5000">Estimation</option>
+                                <option value="5002">Service</option>
+                                <option value="5003">Warranty</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control small-input" id="department_code" name="department_code">
+                                <option value="">Select Department</option>
+                                {% for department in department_codes %}
+                                <option value="{{ department }}">{{ department }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="date" class="form-control small-input" id="start_date" name="start_date"
+                                value="{{ start_date }}">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="date" class="form-control small-input" id="end_date" name="end_date"
+                                value="{{ end_date }}">
+                        </div>
+
+                        <script>
+                            // Set default date to current date for both start_date and end_date
+                            window.onload = function () {
+                                const currentDate = new Date().toISOString().split('T')[0];  // Get current date in YYYY-MM-DD format
+                                // document.getElementById('start_date').value = currentDate;
+                                document.getElementById('end_date').value = currentDate;
+                            };
+                        </script>
+
+
+                        <button type="button" id="filterButton" class="custom-btn1 btn-21 small-button">View
+                            Hours</button>
+
+                    </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <script>
+                        // Fetch data from server and update table and charts
+                        let pieChart; // Declare pie chart variable
+                        let lineChart;
+
+                        // Fetch data from server and update table and charts
+                        function fetchData() {
+                            const formData = new FormData(document.getElementById('filterForm'));
+
+                            fetch('/prj_working_hours', { method: 'POST', body: formData })
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Update table
+                                    const tableBody = document.getElementById('project_dynamicTable').querySelector('tbody');
+                                    tableBody.innerHTML = ''; // Clear existing rows
+
+                                    data.data.forEach(row => {
+                                        const tr = document.createElement('tr');
+                                        tr.innerHTML = `
+                                            <td style="color: black; background-color: white; text-align: left;">${row.employeeID}</td>
+                                            <td>${row.workingDate.slice(0, 6) + row.workingDate.slice(-2)}</td>
+                                            <td style="color: blue; background-color: #80deea; padding: 2px 8px;">${row.hoursWorked}</td>
+                                            <td style="color: purple; background-color: #f3e5f5; padding: 2px 8px;">${row.overtime_1_5}</td>
+                                            <td style="color: darkorange; background-color: #ffcc80; padding: 2px 8px;">${row.overtime_2_0}</td>
+                                            <td style="color: green; background-color: #c8e6c9; padding: 2px 8px;">${row.total_cost}</td>
+                                        `;
+                                        tableBody.appendChild(tr);
+                                    });
+
+                                    // Update insights with international number formatting
+                                    function formatNumber(number) {
+                                        return new Intl.NumberFormat().format(number);
+                                    }
+
+                                    console.log("Data received:", data);
+
+                                    document.getElementById('total_days').textContent = formatNumber(data.total_days);
+                                    document.getElementById('active_days').textContent = formatNumber(data.days_active);
+                                    document.getElementById('days_left').textContent = formatNumber(data.days_left);
+                                    document.getElementById('std_hours1').textContent = formatNumber(data.insights.total_hours) + ' hr';
+                                    document.getElementById('total_overtime_1_51').textContent = formatNumber(data.insights.total_overtime_1_5) + ' hr';
+                                    document.getElementById('total_overtime_2_01').textContent = formatNumber(data.insights.total_overtime_2_0) + ' hr';
+                                    document.getElementById('worked_hrs').textContent = formatNumber(data.insights.total_cost) + ' hr';
+
+                                    document.getElementById('distinct_date_count').textContent = formatNumber(data.total_hours_all_departments);
+                                    document.getElementById('std_hours').textContent = formatNumber(data.insights.total_cost) + ' hr';
+                                    document.getElementById('total_overtime_1_5').textContent = formatNumber((data.total_hours_all_departments) - (data.insights.total_cost)) + ' hr';
+                                    document.getElementById('total_overtime_2_0').textContent = formatNumber(data.avg_hours_per_day_all_departments.toFixed(2)) + ' hr';
+                                    document.getElementById('total_cost').textContent = formatNumber(data.days_left) + ' Days';
+                                    document.getElementById('peak_day').textContent = `${(data.highest_workload_date)} `;
+                                    document.getElementById('peak_hrs').textContent = `${formatNumber(data.highest_workload_hours)} hr`;
+
+                                    // Project data for Donut Chart
+                                    const pieData = [
+                                        data.insights.total_hours,
+                                        data.insights.total_overtime_1_5,
+                                        data.insights.total_overtime_2_0
+                                    ];
+
+                                    const pieLabels = ['Standard', 'Overtime 1.5x', 'Overtime 2x'];
+
+                                    // Destroy the existing pie chart if it exists
+                                    if (pieChart) {
+                                        pieChart.destroy();
+                                    }
+
+                                    // Pie Chart Options
+                                    const pieChartOptions = {
+                                        series: pieData,
+                                        chart: {
+                                            type: 'pie',
+                                            height: 320
+                                        },
+                                        labels: pieLabels,
+                                        colors: ['#36a2eb', '#ff6384', '#ffce56'],
+                                        title: {
+                                            text: 'Hours Distribution',
+                                            align: 'center',
+                                            style: {
+                                                color: 'black',
+                                                fontWeight: 'bold',
+                                                fontSize: '14px'
+                                            }
+                                        },
+                                        dataLabels: {
+                                            enabled: true,
+                                            formatter: function (val, opts) {
+                                                const percentage = val.toFixed(1) + '%';
+                                                return `(${percentage})`;
+                                            },
+                                            style: {
+                                                fontSize: '12px',
+                                                fontWeight: 'bold',
+                                                colors: ['#fff']
+                                            }
+                                        },
+                                        legend: {
+                                            show: true,
+                                            offsetY: 10,
+                                            position: 'top',
+                                            horizontalAlign: 'center',
+                                            floating: false,
+                                            fontSize: '12px',
+                                            fontFamily: 'Merriweather Sans',
+                                            labels: {
+                                                colors: 'black',
+                                                font: { weight: 'bold' }
+                                            },
+                                            itemMargin: { horizontal: 10, vertical: 0 }
+                                        },
+                                        responsive: [{
+                                            breakpoint: 480,
+                                            options: {
+                                                chart: { height: 250 },
+                                                legend: { position: 'bottom' }
+                                            }
+                                        }]
+                                    };
+
+                                    // Render the Pie Chart
+                                    pieChart = new ApexCharts(document.querySelector('#pie-chart'), pieChartOptions);
+                                    pieChart.render();
+
+                                    // Line chart data preparation
+                                    // Process dynamic data
+                                    const workload_by_date_dict = data.workload_by_date_dict;
+
+                                    // Extract unique dates for labels (x-axis)
+                                    const labels = Array.from(new Set(
+                                        Object.values(workload_by_date_dict)
+                                            .flat()
+                                            .map(item => item.date)
+                                    )).sort();
+
+                                    // Prepare datasets dynamically
+                                    const datasets = Object.keys(workload_by_date_dict).map(employee => {
+                                        const employeeData = workload_by_date_dict[employee];
+                                        const hoursData = labels.map(date => {
+                                            const entry = employeeData.find(item => item.date === date);
+                                            return entry ? entry.hours : 0; // Fill with 0 for missing dates
+                                        });
+
+                                        return {
+                                            label: employee,
+                                            data: hoursData,
+                                            borderColor: getRandomColor(),
+                                            backgroundColor: 'rgba(0, 0, 0, 0)',
+                                            tension: 0.1
+                                        };
+                                    });
+
+                                    // Destroy the existing line chart if it exists
+                                    if (lineChart) {
+                                        lineChart.destroy();
+                                    }
+
+                                    // Create and render a new line chart
+                                    const ctx = document.getElementById('workloadChart').getContext('2d');
+                                    lineChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {
+                                            labels: labels,
+                                            datasets: datasets,
+
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            plugins: {
+                                                legend: {
+                                                    position: 'top',
+                                                    labels: {
+                                                        usePointStyle: true, // Enable circular markers
+                                                        boxWidth: 5,        // Size of the circle
+                                                        padding: 15,         // Add padding between legend items
+                                                    },
+                                                },
+                                                tooltip: {
+                                                    mode: 'index',
+                                                    intersect: false
+                                                }
+                                            },
+                                            interaction: {
+                                                mode: 'nearest',
+                                                axis: 'x',
+                                                intersect: false
+                                            },
+
+                                            scales: {
+                                                x: {
+                                                    type: 'category',
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Dates'
+                                                    }
+                                                },
+                                                y: {
+                                                    beginAtZero: true,
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Hours Worked'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+
+
+                                });
+                        }
+
+                        // Helper function to generate random colors for each employee
+                        function getRandomColor() {
+                            const letters = '0123456789ABCDEF';
+                            let color = '#';
+                            for (let i = 0; i < 6; i++) {
+                                color += letters[Math.floor(Math.random() * 16)];
+                            }
+                            return color;
+                        }
+
+                        // Attach event listener to the filter button
+                        document.getElementById('filterButton').addEventListener('click', fetchData);
+
+                    </script>
+
+                    <style>
+                        .custom-btn1 {
+                            height: 30px;
+                            color: white;
+                            border-radius: 10px;
+                            padding: 15px 15px;
+                            font-family: 'Lato', sans-serif;
+                            font-weight: 500;
+                            background: transparent;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            position: relative;
+                            display: inline-block;
+                            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                                4px 4px 5px 0px rgba(0, 0, 0, .1);
+                            outline: none;
+                            font-size: 15px;
+                        }
+
+                        .btn-21 {
+                            background: #004B5D;
+                            background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+                            border: none;
+                        }
+
+                        .btn-21:before {
+                            height: 0%;
+                            width: 2px;
+                        }
+
+                        .btn-21:hover {
+                            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+                                -4px -4px 6px 0 rgba(116, 125, 136, .5),
+                                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                                inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+                        }
+                    </style>
+
+                </div>
+
+            </form>
+
+            <div class="data_container">
+
+                <div class="tabledata table-responsive11">
+
+                    <table class="overhead_table" id="project_dynamicTable">
+
+                        <thead>
+
+                            <tr>
+                                <th style="width: 8%; text-align: left; ">Employee</th>
+                                <th style="width: 7%;">Date</th>
+                                <th style="width: 5%;">Std. Hr</th>
+                                <th style="width: 5%;">OT 1.5x</th>
+                                <th style="width: 5%;">OT 2.0x</th>
+                                <th style="width: 5%;">Total Hr</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="graphdata">
+
+                    <div class="piechartdata">
+
+                        <div class="data_insight_card">
+                            <div class="data_insight_card__title">Workload & Overtime Stats</div>
+                            <div class="data_insight_card__data">
+                                <div class="data_insight_card__right">
+
+                                    <div class="item">Allcated Days</div>
+                                    <div class="item">Days Active</div>
+                                    <div class="item">Days Left</div>
+                                    <div class="item">Std Hrs</div>
+                                    <div class="item">OT 1.5X</div>
+                                    <div class="item">OT 2.0X</div>
+                                    <div class="item">Total</div>
+
+                                </div>
+                                <div class="data_insight_card__left">
+
+                                    <div class="item" id="total_days"> Days
+                                    </div>
+
+                                    <div class="item" id="active_days">
+                                        Days</div>
+
+                                    <div class="item" id="days_left">
+                                        Days</div>
+
+
+                                    <div class="item" id="std_hours1"> Hrs</div>
+
+                                    <div class="item" id="total_overtime_1_51">
+                                        Hrs</div>
+
+                                    <div class="item" id="total_overtime_2_01">
+                                        Hrs</div>
+
+                                    <div class="item" id="worked_hrs"> Hrs
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <style>
+                            /* From Uiverse.io by Rodrypaladin */
+                            .data_insight_card {
+                                width: 250px;
+                                background: white;
+                                border-top-left-radius: 12px;
+                                border-top-right-radius: 12px;
+                                border-bottom-left-radius: 4px;
+                                border-bottom-right-radius: 4px;
+                                overflow: hidden;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                                /* max-height: 96%; */
+
+                                /* Smooth transition for hover effect */
+                            }
+
+                            /* Add box shadow */
+                            .data_insight_card:hover {
+                                /* Light shadow effect */
+                                transform: translateY(-5px);
+                                /* Slight lifting effect */
+                            }
+
+
+                            .data_insight_card__title {
+                                color: #026178;
+                                font-weight: bold;
+                                padding: 5px 5px;
+                                border-bottom: 1px solid rgb(167, 159, 159);
+                                font-size: 0.95rem;
+                                justify-content: center;
+                                text-align: center;
+                            }
+
+                            .data_insight_card__data {
+                                font-size: 1.1rem;
+                                display: flex;
+                                justify-content: space-between;
+                                border-right: 1px solid rgb(203, 203, 203);
+                                border-left: 1px solid rgb(203, 203, 203);
+                                border-bottom: 1px solid rgb(203, 203, 203);
+                            }
+
+                            .data_insight_card__right {
+                                width: 60%;
+                                border-right: 1px solid rgb(203, 203, 203);
+                            }
+
+                            .data_insight_card__left {
+                                width: 40%;
+                                text-align: end;
+                            }
+
+                            .item {
+                                padding: 10px 0;
+                                background-color: white;
+                                color: black;
+                                font-weight: bold;
+                            }
+
+                            .data_insight_card__right .item {
+                                padding-left: 0.8em;
+                            }
+
+                            .data_insight_card__left .item {
+                                padding-right: 0.8em;
+                            }
+
+                            .item:nth-child(even) {
+                                background: rgb(234, 235, 234);
+                            }
+                        </style>
+
+                        <div id="pie-chart"></div>
+
+                        <div class="parent insights">
+
+                            <div class="insight purple">
+                                <p class="tip">Alloc. Hrs</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+
+                                <p class="second-text" id="distinct_date_count">
+                                    hr
+                                </p>
+                            </div>
+
+                            <div class="insight red">
+                                <p class="tip">Hrs Spent</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+
+                                <p class="second-text" id="std_hours">{{insights ['total_hours']}} hr</p>
+                            </div>
+
+                            <div class="insight blue">
+                                <p class="tip">Hrs Left</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+
+                                <p class="second-text" id="total_overtime_1_5">{{insights
+                                    ['total_overtime_1_5']}}
+                                    hr</p>
+                            </div>
+
+                            <div class="insight green">
+                                <p class="tip">Avg. hrs/day</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+
+                                <p class="second-text" id="total_overtime_2_0">{{insights
+                                    ['total_overtime_2_0']}}
+                                    hr</p>
+                            </div>
+
+                            <div class="insight orange">
+                                <p class="tip">Days left</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+
+                                <p class="second-text" id="total_cost">{{insights ['total_cost']}} days</p>
+                            </div>
+
+                            <div class="insight dark-teal">
+                                <p class="tip">Peak Day</p>
+                                <hr style="border: 1px solid white; width: 30%; margin: 5px auto;">
+                                <p class="second-text" id="peak_day"> day</p>
+                                <hr>
+                                <p class="second-text" id="peak_hrs"> hr</p>
+
+                            </div>
+
+                        </div>
+
+                        <style>
+                            .parent {
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                grid-template-rows: repeat(3, 1fr);
+                                gap: 8px;
+                            }
+                        </style>
+
+
+                    </div>
+                    <div class="linechartdata">
+                        <canvas id="workloadChart" width="1500" height="400"></canvas>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+
+        </div>
+
+    </div>
+
+
+    <style>
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            padding: 6px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+
+            .row1 {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flex-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .double-container {
+                width: 100%;
+            }
+        }
+    </style>
+
+
+    <style>
+        .data_container {
+            margin-top: 10px;
+            display: flex;
+            flex: 1;
+            height: 650px;
+            gap: 10px;
+        }
+
+        .data_container .tabledata {
+            background-color: white;
+            flex: 0 0 29%;
+            max-width: 29%;
+            min-width: 29%;
+        }
+
+        .data_container .graphdata {
+            /* background-color: #81aaca; */
+            flex: 1;
+            display: flex;
+            flex: 0 0 70%;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 70%;
+            min-width: 70%;
+        }
+
+        .piechartdata {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            max-height: 325px;
+            min-height: 325px;
+        }
+
+        #doughnut-chart,
+        #pie-chart {
+            width: 48%;
+            /* Each chart takes up 48% of the container */
+            height: 325px;
+            /* Fixed height for both charts */
+        }
+
+        .linechartdata {
+
+
+            justify-content: space-between;
+            max-height: 325px;
+            min-height: 325px;
+
+        }
+    </style>
+
+    <style>
+        .insights {}
+
+        .insights .red {
+            background-color: #f54663;
+        }
+
+        .insights .blue {
+            background-color: #3b7ae0;
+        }
+
+        .insights .green {
+            background-color: #43d679;
+        }
+
+        .insights .orange {
+            background-color: orange;
+        }
+
+        .insights .purple {
+            background-color: rgb(150, 5, 150);
+        }
+
+        .insights .dark-teal {
+            background-color: #f055c9;
+            /* Dark Teal */
+        }
+
+        .insights .insight {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100px;
+            width: 150px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: 400ms;
+        }
+
+        .insights .insight p.tip {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .insights .insight p.second-text {
+            font-size: 1.2em;
+        }
+
+        .insights .insight:hover {
+            transform: scale(1.1, 1.1);
+        }
+
+        .insights:hover>.insight:not(:hover) {
+            filter: blur(10px);
+            transform: scale(0.9, 0.9);
+        }
+    </style>
+
+    <style>
+        .table-responsive11 {
+            width: 100%;
+            overflow: auto;
+            max-height: 650px;
+        }
+
+        /* Basic styling for the table */
+        .overhead_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            table-layout: fixed;
+            /* Ensures the table occupies the full width */
+        }
+
+        .overhead_table th,
+        .overhead_table td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+            height: 30px;
+            border: none;
+        }
+
+        .add-row-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-row-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            th {
+                position: absolute;
+                left: -9999px;
+                top: -9999px;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+            }
+
+            td:before {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+
+        }
+
+        /* Remove styling from table elements */
+        .overhead_table td {
+            margin: 0;
+            padding: 0;
+        }
+
+        .button-container1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+        }
+    </style>
+
+    <style>
+        .overhead_table thead th:nth-child(1),
+        .overhead_table tbody td:nth-child(1),
+        .overhead_table thead th:nth-child(2),
+        .overhead_table tbody td:nth-child(2),
+        .overhead_table thead th:nth-child(3),
+        .overhead_table tbody td:nth-child(3),
+        .overhead_table thead th:nth-child(4),
+        .overhead_table tbody td:nth-child(4),
+        .overhead_table thead td:nth-child(5),
+        .overhead_table tbody td:nth-child(5),
+
+        .overhead_table thead th:nth-child(6),
+        .overhead_table tbody th:nth-child(6),
+        .overhead_table thead td:nth-child(9),
+        .overhead_table tbody td:nth-child(9) {
+            text-align: center;
+        }
+
+        .overhead_table thead th:nth-child(7),
+        .overhead_table tbody td:nth-child(7),
+        .overhead_table thead td:nth-child(8),
+        .overhead_table tbody td:nth-child(8) {
+            text-align: left;
+        }
+
+
+        .double-container {
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(248, 245, 245);
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+            box-sizing: border-box;
+            /* Ensure padding and border are included in width */
+        }
+
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+
+            .row1 {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flex-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .double-container {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <style>
+        .container {
+            align-items: center;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            /* Center the row-inside */
+        }
+
+        .row-inside {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            /* Ensure responsiveness */
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .small-input {
+            width: 200px;
+            /* Set a smaller width for inputs */
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .small-button {
+            width: 100px;
+            /* Same width for button */
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+
+    <style>
+        .form-control {
+            font-size: 16px;
+            border-radius: 5px;
+
+        }
+
+
+        .form-control {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+        }
+
+
+        .form-control1 {
+            font-size: 16px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .form-control1 {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+        }
+
+
+        .form-group {
+            display: inline-block;
+            margin-right: 0px;
+            flex-grow: 1;
+
+        }
+
+        select {
+            width: 70%;
+        }
+
+        .btn {
+            background-color: rgb(0, 75, 93);
+            color: whitesmoke;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .row-inside {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+    </style>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin" class="active">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  <li class="dropdown">
+
+                     <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                        <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                     </a>
+
+                     <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                        <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                 style="margin-right: 5px;"></i>
+                              Add</a></li>
+                        <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                              Cash FLow</a></li>
+
+                        <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                 style="margin-right: 5px;"></i>
+                              Budget</a></li>
+                        <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                 style="margin-right: 5px;"></i>
+                              Hours</a></li>
+                        <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                 style="margin-right: 5px;"></i>
+                              PO
+                              Status</a></li>
+                     </ul>
+
+                  </li>
+
+                  <li class="active"><a href="{{ url_for('admin_add_project') }}" class="link "><i
+                           class="fas fa-plus-circle"></i>
+                        Add</a>
+                  </li>
+                  <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                        Employees</a></li>
+
+                  <li class="dropdown">
+                     <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                        <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                     </a>
+                     <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                        <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                 style="margin-right: 0px;"></i>
+                              Claims</a></li>
+                        <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                 style="margin-right: 5px;"></i>
+                              Expenses</a></li>
+                        <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                 style="margin-right: 5px;"></i> Leaves</a>
+                        </li>
+                        <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                 style="margin-right: 1px;"></i>
+                              Payment</a></li>
+                        <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                 style="margin-right: 5px;"></i> Projects</a>
+                        </li>
+                        <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                 style="margin-right: 0px;"></i> PR</a></li>
+                        <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                 style="margin-right: 5px;"></i>
+                              PO</a></li>
+                     </ul>
+
+                  </li>
+
+                  <li><a href="{{ url_for('client_details') }}" class="link"><i
+                           class="fa-solid fa-handshake-simple"></i>
+                        Clients</a></li>
+                  <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                           style="margin-right: 5px;"></i>Suppliers</a></li>
+
+               </ul>
+
+               <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                     let dropdown = document.getElementById("dropdownMenu1");
+                     let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                     // Ensure dropdown is initially hidden
+                     dropdown.style.display = "none";
+
+                     function toggleDropdown(event) {
+                        event.preventDefault();
+                        event.stopPropagation(); // Prevent event bubbling
+                        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                     }
+
+                     function closeDropdown(event) {
+                        if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                           dropdown.style.display = "none";
+                        }
+                     }
+
+                     // Toggle dropdown when clicking on "Approvals"
+                     dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                     // Close dropdown when clicking outside
+                     document.addEventListener("click", closeDropdown);
+
+                     // Prevent closing when clicking inside the dropdown itself
+                     dropdown.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                     });
+                  });
+                  document.addEventListener("DOMContentLoaded", function () {
+                     let dropdown = document.getElementById("dropdownMenu");
+                     let dropdownTrigger = document.querySelector(".dropbtn");
+
+                     // Ensure dropdown is initially hidden
+                     dropdown.style.display = "none";
+
+                     function toggleDropdown(event) {
+                        event.preventDefault();
+                        event.stopPropagation(); // Prevent event bubbling
+                        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                     }
+
+                     function closeDropdown(event) {
+                        if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                           dropdown.style.display = "none";
+                        }
+                     }
+
+                     // Toggle dropdown when clicking on "Approvals"
+                     dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                     // Close dropdown when clicking outside
+                     document.addEventListener("click", closeDropdown);
+
+                     // Prevent closing when clicking inside the dropdown itself
+                     dropdown.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                     });
+                  });
+
+               </script>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            <div class="timenav">
+
+               <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+               <ul id="menuList1" class="timebar">
+
+                  <li style="display: none;">
+                     <input type="radio" id="adduserRadio" name="sectionRadio"
+                        onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none;">
+                     <label for="adduserRadio" class="link"> <i class="fa-solid fa-user-plus"
+                           style="margin-right: 5px;"> </i>User</label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="subContractRadio" name="sectionRadio"
+                        onclick="showSection('Sub_contract'); toggleContainer('Sub_contract')" style="display: none;">
+                     <label for="subContractRadio" class="link1"><i class="fa-solid fa-circle-dollar-to-slot"
+                           style="margin-right: 5px;"></i>Cost Center</label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="hours_allocRadio" name="sectionRadio"
+                        onclick="showSection('hours_alloc'); toggleContainer('hours_alloc')" style="display: none;">
+                     <label for="hours_allocRadio" class="link1">
+                        <i class="fa-solid fa-landmark" style="margin-right: 5px;"></i> Bank
+                     </label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="othersRadio" name="sectionRadio"
+                        onclick="showSection('Others'); toggleContainer('Others')" style="display: none;">
+                     <label for="othersRadio" class="link1"><i class="fa-solid fa-industry"
+                           style="margin-right: 5px;"></i>Industry </label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="vehicleRadio" name="sectionRadio"
+                        onclick="showSection('Vehicle'); toggleContainer('Vehicle')" style="display: none;">
+                     <label for="vehicleRadio" class="link1"><i class="fa-solid fa-car"
+                           style="margin-right: 5px;"></i>Vehicle</label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="GSTRadio" name="sectionRadio"
+                        onclick="showSection('GST'); toggleContainer('GST')" style="display: none;">
+                     <label for="GSTRadio" class="link1"><i class="fa-solid fa-tag fa-beat"
+                           style="margin-right: 5px;"></i>GST</label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="AccommodationRadio" name="sectionRadio"
+                        onclick="showSection('Accommodation'); toggleContainer('Accommodation')" style="display: none;">
+                     <label for="AccommodationRadio" class="link1">
+                        <i class="fa-solid fa-bed " style="margin-right: 5px;"></i>Accommodation
+                     </label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="ExpensesRadio" name="sectionRadio"
+                        onclick="showSection('Expenses'); toggleContainer('Expenses')" style="display: none;">
+                     <label for="ExpensesRadio" class="link1">
+                        <i class="fa-solid fa-money-bill-wave" style="margin-right: 5px;"></i>Expenses List
+                     </label>
+                  </li>
+
+                  <script>
+                     function showSection(sectionId) {
+                        // Hide all sections
+                        var sections = document.querySelectorAll('.hours_alloc, .adduser, .Sub_contract, .Others, .Vehicle, .GST, .OH_Budget, .Accommodation, .Expenses');
+                        sections.forEach(function (section) {
+                           section.style.display = 'none';
+                        });
+
+                        // Show the selected section
+                        var selectedSection = document.getElementById(sectionId);
+                        if (selectedSection) {
+                           selectedSection.style.display = 'block';
+                        }
+                     }
+
+                     function toggleContainer(containerId) {
+                        // Optional custom logic for toggling
+                     }
+
+                     window.onload = function () {
+                        var show = '{{ show }}'; // From backend context
+
+                        if (show === 'cost_center') {
+                           showSection('Sub_contract');
+                           document.getElementById('subContractRadio').checked = true;
+                        } else if (show === 'industry') {
+                           showSection('Others');
+                           document.getElementById('othersRadio').checked = true;
+                        } else if (show == 'Vehicle') {
+                           showSection('Vehicle');
+                           document.getElementById('vehicleRadio').checked = true;
+                        } else if (show == 'adduser') {
+                           showSection('adduser');
+                           document.getElementById('hours_allocRadio').checked = true;
+                        } else if (show == 'hours_alloc') {
+                           showSection('hours_alloc');
+                           document.getElementById('hours_allocRadio').checked = true;
+                        } else if (show == 'GST') {
+                           showSection('GST');
+                           document.getElementById('GSTRadio').checked = true;
+                        } else if (show == 'OH_Budget') {
+                           showSection('OH_Budget');
+                           document.getElementById('OH_Budget_Radio').checked = true;
+                        } else if (show == 'bank_add') {
+                           showSection('hours_alloc');
+                           document.getElementById('hours_allocRadio').checked = true;
+                        } else if (show == 'Accommodation') {
+                           showSection('Accommodation');
+                           document.getElementById('AccommodationRadio').checked = true;
+                        } else if (show == 'Expenses') {
+                           showSection('Expenses');
+                           document.getElementById('ExpensesRadio').checked = true;
+                        }
+                     };
+                  </script>
+
+               </ul>
+
+               <div class="menu-icon1">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+               </div>
+
+            </div>
+
+         </div>
+
+         <style>
+            .search_container {
+
+               width: 100%;
+               padding: 10px;
+            }
+
+
+            #projectTable {
+               width: 100%;
+               border-collapse: separate;
+               border-spacing: 0;
+               border-radius: 10px;
+            }
+         </style>
+
+         <div class="Expenses" id="Expenses" style="display: none;">
+
+            <div class="main_box">
+
+               <form id="expensesForm">
+
+                  <div class="flex-row1"
+                     style=" width: 150%; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 15px; ">
+
+                     <div class="flex-item">
+                        <label for="Expenses_Type" class="form-label"> Type <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Expenses_Type" name="Expenses_Type" required>
+                     </div>
+
+                     <div class="flex-item" style="width: 150%;">
+                        <label for="Expenses_Value" class="form-label">Expenses Value <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Expenses_Value" name="Expenses_Value" required>
+                     </div>
+
+                     <div class="flex-item" style="margin-top: 20px;">
+                        <button type="submit" class="custom-btn btn-2">Add</button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <script>
+
+                  document.getElementById('expensesForm').addEventListener('submit', function (e) {
+                     e.preventDefault(); // Prevent default form submission
+
+                     const form = this;
+                     const formData = new FormData(form);
+
+                     fetch('/admin_add_expense_type', {
+                        method: 'POST',
+                        body: formData
+                     })
+                        .then(res => res.json())
+                        .then(data => {
+                           if (data.success) {
+                              alert('Expense saved successfully!');
+
+                              // Reset the form
+                              form.reset();
+
+                              const tableBody = document.querySelector('.table.table-main tbody');
+
+                              if (!tableBody) return;
+
+                              if (data.updated) {
+                                 // If updated, find the existing row by data-id and update its cells
+                                 const existingRow = tableBody.querySelector(`tr[data-id="${data.new_data.id}"]`);
+                                 if (existingRow) {
+                                    existingRow.cells[1].textContent = data.new_data.type;
+                                    existingRow.cells[2].textContent = data.new_data.type_values;
+                                 }
+                              } else {
+                                 // If inserted, add a new row
+                                 const rowCount = tableBody.rows.length + 1;
+                                 const newRow = document.createElement('tr');
+                                 newRow.setAttribute('ex-data-id', data.new_data.id);  // for future reference
+
+                                 newRow.innerHTML = `
+                                    <td style="text-align: center;">${rowCount}</td>
+                                    <td>${data.new_data.type}</td>
+                                    <td>${data.new_data.type_values}</td>
+                                    <td style="text-align: center;">
+                                       <button class="btn btn-sm btn-primary editexpenses">
+                                          <i class="fa-solid fa-pen-to-square"></i>
+                                       </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                       <button class="btn btn-sm btn-danger delete-expense-btn" ex-data-id="${data.new_data.id}">
+                                          <i class="fa-solid fa-trash"></i>
+                                       </button>
+                                    </td>
+                                 `;
+
+                                 tableBody.appendChild(newRow);
+                              }
+
+                           } else {
+                              alert('Error: ' + data.message);
+                           }
+                        })
+                        .catch(error => {
+                           console.error('Error:', error);
+                           alert('Something went wrong while submitting the form.');
+                        });
+                  });
+
+               </script>
+
+
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+                  {% if expense_types %}
+                  <table id="aexpensesTable" class="table table-main" width="70%">
+                     <thead>
+                        <tr>
+                           <th style="text-align: center;">S/N</th>
+                           <th style="text-align: left;">Expenses Type</th>
+                           <th style="text-align: left;">Values</th>
+                           <th style="text-align: center;">Edit</th>
+                           <th style="text-align: center;">Del</th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for row in expense_types %}
+                        <tr ex-data-id="{{ row.id }}">
+                           <td style="text-align: center;">{{ loop.index }}</td>
+                           <td>{{ row['type'] }}</td>
+                           <td>{{ row['type_values'] }}</td>
+                           <td style="text-align: center;">
+                              <button class="btn btn-sm btn-primary editexpenses">
+                                 <i class="fa-solid fa-pen-to-square"></i>
+                              </button>
+                           </td>
+                           <td style="text-align: center;">
+                              <button class="btn btn-sm btn-danger delete-expense-btn" ex-data-id="{{ row.id }}">
+                                 <i class="fa-solid fa-trash"></i>
+                              </button>
+                           </td>
+
+
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+
+                  </table>
+                  {% endif %}
+               </div>
+
+
+               <script>
+                  document.addEventListener('DOMContentLoaded', function () {
+                     const tbody = document.querySelector('#aexpensesTable tbody');
+                     if (!tbody) {
+                        console.warn('Expense table body not found');
+                        return;
+                     }
+
+                     tbody.addEventListener('click', function (e) {
+                        const deleteBtn = e.target.closest('.delete-expense-btn');
+                        if (deleteBtn) {
+                           const expenseId = deleteBtn.getAttribute('ex-data-id');
+                           const row = deleteBtn.closest('tr');
+
+                           if (confirm('Are you sure you want to delete this expense item?')) {
+                              fetch(`/delete_expense_type/${expenseId}`, { method: 'POST' })
+                                 .then(res => res.json())
+                                 .then(data => {
+                                    if (data.success) {
+                                       row.remove();
+                                       alert('Expense type deleted successfully!');
+                                    } else {
+                                       alert('Error deleting expense: ' + data.message);
+                                    }
+                                 })
+                                 .catch(err => {
+                                    console.error('Delete failed:', err);
+                                    alert('Something went wrong during deletion.');
+                                 });
+                           }
+                        }
+                     });
+                  });
+               </script>
+
+               <script>
+                  document.addEventListener('DOMContentLoaded', () => {
+                     const table = document.getElementById('aexpensesTable');
+                     const typeInput = document.getElementById('Expenses_Type');
+                     const valueInput = document.getElementById('Expenses_Value');
+                     const form = document.getElementById('expensesForm');
+
+                     if (!table || !typeInput || !valueInput || !form) {
+                        console.warn('Required elements not found.');
+                        return;
+                     }
+
+                     // When user clicks on Edit button in the table
+                     table.addEventListener('click', (event) => {
+                        const editBtn = event.target.closest('.editexpenses');
+                        if (!editBtn) return;
+
+                        // Find the <tr> containing the clicked edit button
+                        const row = editBtn.closest('tr');
+                        if (!row) return;
+
+                        // Extract type and value from the row's cells (assuming columns fixed)
+                        const type = row.children[1].textContent.trim();
+                        const value = row.children[2].textContent.trim();
+
+                        // Fill inputs in the form
+                        typeInput.value = type;
+                        valueInput.value = value;
+
+
+                     });
+                  });
+               </script>
+
+
+
+
+
+
+            </div>
+
+         </div>
+
+         <div class="Accommodation" id="Accommodation" style="display: none;">
+
+            <div class="main_box">
+
+               <form id="accommodationForm">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+                        <label for="Building_Name" class="form-label">Building Name <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Building_Name" name="Building_Name" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Address_Line1" class="form-label">Address Line 1 </label>
+                        <input type="text" class="form-control" id="Address_Line1" name="Address_Line1">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Address_Line2" class="form-label">Address Line 2 </label>
+                        <input type="text" class="form-control" id="Address_Line2" name="Address_Line2">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Address_Line3" class="form-label">Address Line 3 <span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Address_Line3" name="Address_Line3">
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Contact" class="form-label">Contact </label>
+                        <input type="text" class="form-control" id="Contact" name="Contact">
+                     </div>
+
+                     <div class="flex-item" style="margin-top: 20px;">
+                        <button type="submit" class="custom-btn btn-2">Add</button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <script>
+                  document.getElementById('accommodationForm').addEventListener('submit', function (e) {
+                     e.preventDefault(); // prevent default form submission
+
+                     const form = this;
+                     const formData = new FormData(form);
+
+                     fetch('/add_accommodation', {
+                        method: 'POST',
+                        body: formData
+                     })
+                        .then(res => res.json())
+                        .then(data => {
+                           if (data.success) {
+                              alert('Accommodation added successfully!');
+
+                              // Add the tab only if it doesn't already exist
+                              if (!document.getElementById('AccommodationRadio')) {
+                                 const li = document.createElement('li');
+                                 li.innerHTML = `
+                                    <input type="radio" id="AccommodationRadio" name="sectionRadio"
+                                       onclick="showSection('Accommodation'); toggleContainer('Accommodation')" style="display: none;">
+                                    <label for="AccommodationRadio" class="link1">
+                                       <i class="fa-solid fa-bed fa-bounce" style="margin-right: 5px;"></i>Accommodation
+                                    </label>
+                                 `;
+                                 document.querySelector('.tab-list').appendChild(li);
+                              }
+
+                              // Automatically switch to Accommodation section
+                              document.getElementById('AccommodationRadio').checked = true;
+                              showSection('Accommodation');
+
+                              // Reset the form
+                              form.reset();
+
+                              // Update the table dynamically
+                              const table = document.querySelector('.table.table-main tbody');
+                              const rowCount = table ? table.rows.length + 1 : 1;
+
+                              const newRow = document.createElement('tr');
+                              newRow.setAttribute('data-id', data.new_data.id); // Required for delete
+                              newRow.innerHTML = `
+                              <td>${rowCount}</td>
+                              <td>${data.new_data.Building_Name}</td>
+                              <td>${data.new_data.Address_Line1}</td>
+                              <td>${data.new_data.Address_Line2}</td>
+                              <td>${data.new_data.Address_Line3}</td>
+                              <td>${data.new_data.Contact}</td>
+                              <td>
+                                 <button class="btn delete-btn" data-id="${data.new_data.id}">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </td>
+                           `;
+                              table.appendChild(newRow);
+
+
+                           } else {
+                              alert('Error: ' + data.message);
+                           }
+                        })
+                        .catch(error => {
+                           console.error('Error:', error);
+                           alert('Something went wrong while submitting the form.');
+                        });
+                  });
+               </script>
+
+
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+                  {% if Accommodation_details %}
+                  <table id="accommodationTable" class="table table-main" width="70%">
+
+                     <thead>
+                        <tr>
+                           <th scope="col">S/N</th>
+                           <th scope="col">Building Name</th>
+                           <th scope="col">Address Line 1</th>
+                           <th scope="col">Address Line 2</th>
+                           <th scope="col">Address Line 3</th>
+                           <th scope="col">Contact</th>
+                           <th scope="col">Del</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for row in Accommodation_details %}
+                        <tr data-id="{{ row.id }}">
+                           <td>{{ loop.index }}</td>
+                           <td>{{ row.Building_Name }}</td>
+                           <td>{{ row.Address_Line1 }}</td>
+                           <td>{{ row.Address_Line2 }}</td>
+                           <td>{{ row.Address_Line3 }}</td>
+                           <td>{{ row.Contact }}</td>
+                           <td>
+                              <button class="btn delete-btn" data-id="{{ row.id }}">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-trash" style="color: red;"></span>
+                                 </span>
+                              </button>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+                  {% endif %}
+               </div>
+
+               <script>
+
+                  document.addEventListener('DOMContentLoaded', function () {
+                     const tbody = document.querySelector('#accommodationTable tbody');
+                     if (!tbody) {
+                        console.warn('Accommodation table body not found');
+                        return;
+                     }
+
+                     tbody.addEventListener('click', function (e) {
+                        const deleteBtn = e.target.closest('.delete-btn');
+                        if (deleteBtn) {
+                           const accommodationId = deleteBtn.getAttribute('data-id');
+                           const row = deleteBtn.closest('tr');
+
+                           if (confirm('Are you sure you want to delete this accommodation?')) {
+                              fetch(`/delete_accommodation/${accommodationId}`, { method: 'POST' })
+                                 .then(res => res.json())
+                                 .then(data => {
+                                    if (data.success) {
+                                       row.remove();
+                                       alert('Accommodation deleted successfully!');
+                                    } else {
+                                       alert('Error deleting accommodation: ' + data.message);
+                                    }
+                                 })
+                                 .catch(err => {
+                                    console.error('Delete failed:', err);
+                                    alert('Something went wrong during deletion.');
+                                 });
+                           }
+                        }
+                     });
+                  });
+
+               </script>
+
+            </div>
+
+         </div>
+
+         <div class="hours_alloc" id="hours_alloc" style="display: none;">
+
+            <div class="main_box">
+
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'bankadd' %}
+                     <div class="alert alert-success" id="alert-{{ loop.index }}">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'bankexits' %}
+                     <div class="alert alert-danger" id="alert-{{ loop.index }}">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/admin_add_employee" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+                        <label for="Bank_Name" class="form-label"> Bank Name<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Bank_Name" name="Bank_Name" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Account_Number" class="form-label">Account Number<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Account_Number" name="Account_Number" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Branch" class="form-label">Branch<span style="color: red;">*</span></label>
+                        <input type="text" step="0.1" class="form-control" id="Branch" name="Branch" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Swift" class="form-label">Swift<span style="color: red;">*</span></label>
+                        <input type="text" step="0.1" class="form-control" id="Swift" name="Swift" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Pay_Now" class="form-label">Pay Now<span style="color: red;">*</span></label>
+                        <input type="text" step="0.1" class="form-control" id="Pay_Now" name="Pay_Now" required>
+                     </div>
+
+                     <div class="flex-item" style="margin-top: 20px;">
+                        <button type="submit" class="custom-btn btn-2" name="submit" value="bank_add">Add
+                        </button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+
+                  {% if bank_details %}
+                  <table class="table table-main" width="70%">
+
+                     <thead>
+                        <tr>
+                           <th scope="col">S/N</th>
+                           <th scope="col">Bank</th>
+                           <th scope="col">Account Number</th>
+                           <th scope="col">Branch</th>
+                           <th scope="col">Swift</th>
+                           <th scope="col">Pay Now</th>
+                           <th scope="col">Del</th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for row in bank_details %}
+                        <tr>
+                           <td>{{ loop.index }}</td> <!-- Serial Number -->
+                           <td>{{ row.Bank_Name }}</td>
+                           <td>{{ row.Account_Number }}</td>
+                           <td>{{ row.Branch }}</td>
+                           <td>{{ row.Swift }}</td>
+                           <td>{{ row.Pay_Now }}</td>
+
+                           <td>
+                              <form method="POST" action="{{ url_for('admin_add_employee') }}"
+                                 onsubmit="return confirm('Are you sure you want to delete Bank details Permanently?');">
+                                 <input type="hidden" name="Delete_bank" value="{{ row['id'] }}">
+                                 <button type="submit" class="btn"
+                                    style="background-color: transparent; border: none; cursor: pointer;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+                  {% endif %}
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Sub_contract" id="Sub_contract" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'code_added' %}
+                     <div class="alert alert-success" id="alert-{{ loop.index }}">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'code_exits' %}
+                     <div class="alert alert-danger" id="alert-{{ loop.index }}">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <script>
+                  // Hide flash messages after 3 seconds
+                  setTimeout(function () {
+                     const alerts = document.querySelectorAll('.alert');
+                     alerts.forEach(alert => {
+                        alert.style.display = 'none';
+                     });
+                  }, 3000); // 3000 milliseconds = 3 seconds
+               </script>
+
+               <form class="p-3" action="/admin_add_employee" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+                        <label for="Expenses_Code" class="form-label">Expenses Code<span
+                              style="color: red;">*</span></label>
+                        <input type="number" class="form-control" id="Expenses_Code" name="Expenses_Code" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Expenses_Name" class="form-label">Expenses Name<span
+                              style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Expenses_Name" name="Expenses_Name" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="pay_rate" class="form-label">Pay Rate<span style="color: red;">*</span></label>
+                        <input type="number" step="0.1" class="form-control" id="pay_rate" name="pay_rate" required>
+                     </div>
+
+                     <div class="flex-item" style="margin-top: 20px;">
+                        <button type="submit" class="custom-btn btn-2" name="submit" value="add_cost_center">Add
+                        </button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+
+                  {% if cost_center %}
+                  <table class="table table-main" width="43%">
+
+                     <thead>
+                        <tr>
+                           <th scope="col">Code</th>
+                           <th scope="col">Expenses</th>
+                           <th scope="col">Pay Rate</th>
+                           <th scope="col">Delete</th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for row in cost_center %}
+                        <tr>
+                           <td>{{row.code}}</td>
+                           <td>{{row.expenses_name}}</td>
+                           <td>{{row.hourly_rate}}</td>
+
+                           <td>
+                              <form method="POST" action="{{ url_for('admin_add_employee') }}"
+                                 onsubmit="return confirm('Are you sure you want to delete this Code Permanently?');">
+                                 <input type="hidden" name="Delete_Course" value="{{ row['id'] }}">
+                                 <button type="submit" class="btn"
+                                    style="background-color: transparent; border: none; cursor: pointer;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+
+                  </table>
+                  {% endif %}
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Others" id="Others" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'indusry' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'indusry_exits' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/admin_add_employee" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Industry_Name" name="Industry_Name" required
+                           placeholder="Industry Name">
+                     </div>
+
+                     <div class="flex-row">
+
+                        <button type="submit" class="custom-btn btn-2" name="submit" value="add_industry">Add
+                           Industry</button>
+
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+
+                  <table class="table table-main" width="20%">
+                     {% if industry_list %}
+                     <thead>
+                        <tr>
+                           <th scope="col">S/N</th>
+                           <th scope="col">Industry</th>
+                           <th scope="col">Delete</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for row in industry_list %}
+                        <tr>
+                           <td>{{ loop.index }}</td> <!-- Serial Number -->
+                           <td>{{ row.industry }}</td>
+                           <td>
+                              <form method="POST" action="{{ url_for('admin_add_employee') }}"
+                                 onsubmit="return confirm('Are you sure you want to delete this Code Permanently?');">
+                                 <input type="hidden" name="Delete_industry" value="{{ row['id'] }}">
+                                 <button type="submit" class="btn"
+                                    style="background-color: transparent; border: none; cursor: pointer;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                     {% endif %}
+                  </table>
+
+
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Vehicle" id="Vehicle" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'Vehicle' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'Vehicle_exits' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/admin_add_employee" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Vehicle_Name" name="Vehicle_Name"
+                           placeholder="Vehicle Type" required>
+                     </div>
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Vehicle_Number" name="Vehicle_Number"
+                           placeholder="Vehicle Number" required>
+                     </div>
+
+                     <div class="flex-item">
+
+                        <button type="submit" class="custom-btn btn-2" name="submit" value="add_Vehicle">Add</button>
+
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+
+                  {% if Vehicle_list %}
+
+                  <table class="table table-main" width="30%">
+
+                     <thead>
+                        <tr>
+
+                           <th scope="col">S/N</th>
+                           <th scope="col">Vehicle Type</th>
+                           <th scope="col">Vehicle Number</th>
+                           <th scope="col">Delete</th>
+
+                        </tr>
+                     </thead>
+                     <tbody>
+
+                        {% for row in Vehicle_list %}
+                        <tr>
+
+                           <td>{{ loop.index }}</td> <!-- Serial Number -->
+                           <td>{{ row.Vehicle_name }}</td>
+                           <td>{{ row.Vehicle_number }}</td>
+
+                           <td>
+                              <form method="POST" action="{{ url_for('admin_add_employee') }}"
+                                 onsubmit="return confirm('Are you sure you want to delete this Vehicle Permanently?');">
+                                 <input type="hidden" name="Delete_Vehicle" value="{{ row['id'] }}">
+                                 <button type="submit" class="btn"
+                                    style="background-color: transparent; border: none; cursor: pointer;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                        </tr>
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+                  {% endif %}
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="GST" id="GST" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'GST_update' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'GST_update1' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/admin_add_employee" method="POST">
+
+                  <div class='flex-row'>
+
+                     <div class='flex-item'>
+                        <input type="number" class="form-control" id="GST" name="GST" placeholder="GST(%)" required>
+                     </div>
+
+                     <div class='flex-item'>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                     </div>
+
+                     <div class='flex-item'>
+
+                        <button type="submit" class="custom-btn btn-2" name="submit" value="add_gst">Update</button>
+
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1" style="margin-top: 10px;">
+
+                  {% if gst_data %}
+
+                  <table class="table table-main" width="30%">
+
+                     <thead>
+                        <tr style="font-size: small;">
+                           <th scope="col">S/N</th>
+                           <th scope="col">Date</th>
+                           <th scope="col">GST %</th>
+                           <th scope="col">Del</th>
+
+                        </tr>
+                     </thead>
+
+                     <tbody>
+
+                        {% for row in gst_data %}
+                        <tr
+                           style="{% if row['Date'] == latest_date %}background-color: #DAF7A6; color: black; font-weight: bold;{% endif %}">
+                           <td>{{ loop.index }}</td> <!-- Serial Number -->
+                           <td class="start-time">{{ row.Date }}</td>
+                           <td>{{ row.GST }} %</td>
+
+                           <td>
+                              <form method="POST" action="{{ url_for('admin_add_employee') }}"
+                                 onsubmit="return confirm('Are you sure you want to delete this GST Permanently?');">
+                                 <input type="hidden" name="Delete_gst" value="{{ row['id'] }}">
+                                 <button type="submit" class="btn"
+                                    style="background-color: transparent; border: none; cursor: pointer;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                        </tr>
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+                  {% endif %}
+
+               </div>
+
+            </div>
+
+         </div>
+
+
+
+
+      </div>
+
+   </div>
+
+
+   <style>
+      .table-responsive1 {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .table-main {
+         margin: auto;
+      }
+
+      .record-header7 {
+         padding: 1rem;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         width: 100%;
+      }
+
+      .table thead th:nth-child(1),
+      .table tbody td:nth-child(1) {
+         text-align: center;
+      }
+
+      .content-table .fa-trash,
+      .fa-edit {
+         font-size: 1.2em;
+      }
+
+      .main_box {
+         position: relative;
+         padding: 10px;
+         background-color: white;
+         border-radius: 5px;
+         display: flex;
+         flex-direction: column;
+         /* Enables flexbox */
+         align-items: center;
+         /* Align items vertically */
+         justify-content: center;
+         /* Align items horizontally */
+      }
+
+
+      .flex-item-full-width {
+         flex: 1;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         /* Align items vertically at the center */
+         justify-content: center;
+         /* Align items to the center horizontally */
+         gap: 15px;
+         /* Optional: add spacing between items */
+      }
+
+
+      input[type=text],
+      input[type=date],
+      input[type=number],
+      select {
+         width: 100%;
+         padding: 10px 20px;
+         margin: 2px 0;
+         /* Reduce the top and bottom margin */
+         display: block;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         box-sizing: border-box;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+         .record-header7 {
+            padding: 0.5rem;
+            flex-direction: column;
+            /* Stack the header content vertically */
+         }
+
+         .flex-row {
+            flex-direction: column;
+            /* Stack flex items vertically */
+            gap: 10px;
+            /* Adjust gap for smaller screens */
+         }
+
+         .main_box {
+            padding: 5px;
+            /* Reduce padding for smaller screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 1em;
+            /* Adjust icon size for smaller screens */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 8px 15px;
+            /* Reduce padding for smaller screens */
+         }
+
+         /* Adjust table column widths for better readability */
+         .table thead th,
+         .table tbody td {
+            padding: 5px;
+            /* Reduce cell padding */
+            font-size: 0.9em;
+            /* Reduce font size */
+         }
+      }
+
+      @media (max-width: 480px) {
+         .record-header7 {
+            padding: 0.25rem;
+         }
+
+         .flex-row {
+            gap: 5px;
+            /* Further reduce gap for very small screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 0.9em;
+            /* Further adjust icon size */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 6px 10px;
+            /* Further reduce padding */
+         }
+
+         /* Further adjust table column widths */
+         .table thead th,
+         .table tbody td {
+            padding: 3px;
+            font-size: 0.8em;
+            /* Further reduce font size */
+         }
+      }
+   </style>
+
+
+
+   <script>
+      function validateDepartmentCode() {
+         var inputField = document.getElementById('department_code');
+         var errorMessage = document.getElementById('error-message');
+
+         if (inputField.value == '1000') {
+            errorMessage.style.display = 'block';
+            inputField.value = '';
+         } else {
+            errorMessage.style.display = 'none';
+         }
+      }
+   </script>
+
+   <script> /* date format */
+
+      function formatDate(dateString) {
+         const date = new Date(dateString);
+         if (isNaN(date.getTime())) {
+            // Return an empty string for invalid dates
+            return '';
+         }
+
+         const day = date.getDate().toString().padStart(2, '0');
+         const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+         const year = date.getFullYear().toString().slice(-2);
+
+         return `${day}/${month}/${year}`;
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+         const start_time_elements = document.querySelectorAll(".start-time");
+         start_time_elements.forEach(function (element) {
+            element.textContent = formatDate(element.textContent);
+         });
+
+      });
+   </script>
+
+
+</body>
+
+</html>

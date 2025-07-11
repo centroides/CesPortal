@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='ces_logo.png') }}">
+
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects" class="active">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            <li class="active">
+              <a href="{{ url_for('projects') }}" class="link">
+                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+              </a>
+            </li>
+
+            <li>
+              <a href="{{ url_for('prj_status') }}" class="link">
+                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+              </a>
+            </li>
+
+            <li>
+              <a href="{{ url_for('hours_edit') }}" class="link">
+                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+              </a>
+            </li>
+
+            {% if user_access['toggleMaterialReceipt'] == 'On' %}
+            <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i class="fa-solid fa-industry"></i>
+                Material Receipt</a></li>
+            {% endif %}
+
+            <li>
+              <a href="{{ url_for('hrs_view') }}" class="link">
+                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+
+      <div class="card-container">
+
+        <div class="card">
+          <h3>{{ project_details.id }} </h3>
+          <p>{{ project_details.project_name }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Client</h3>
+          <p>{{ project_details.client }}</p>
+        </div>
+
+
+        <div class="card">
+
+          <h3>
+            {% if project_details.start_time %}
+            {{ project_details.start_time[5:7] }}/{{ project_details.start_time[2:4] }}
+            {% else %}
+            Not set
+            {% endif %} -
+            {% if project_details.end_time %}
+            {{ project_details.end_time[5:7] }}/{{ project_details.end_time[2:4] }}
+            {% else %}
+            Not set
+            {% endif %}
+          </h3>
+
+          <p>
+            Prj Status - {{ project_details.status or "N/A" }}
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>PR</h3>
+            <h2 class="count-number">(12)</h2> <!-- Replace 12 with your dynamic number -->
+          </div>
+          <p>S$ 100,000.00</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>PO</h3>
+            <h2 class="count-number">(12)</h2> <!-- Replace 12 with your dynamic number -->
+          </div>
+          <p>S$ 100,000.00</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>ER</h3>
+            <h2 class="count-number">(12)</h2> <!-- Replace 12 with your dynamic number -->
+          </div>
+          <p>S$ 100,000.00</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Claims</h3>
+            <h2 class="count-number">(12)</h2> <!-- Replace 12 with your dynamic number -->
+          </div>
+          <p>S$ 100,000.00</p>
+        </div>
+
+      </div>
+
+
+      <div class="graph-container">
+        <!-- Left Column: 2 Rows -->
+        <div class="graph-left">
+
+          <div class="box">
+
+            <!-- Timesheet Table -->
+            <div class="timesheet-table scroll-minimal"
+              style=" max-height: 300px; min-height: 80px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 6px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                <thead style="background-color: #f3f4f6; position: sticky; top: 0;">
+                  <tr>
+                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Category</th>
+                    <th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">Budget (S$)</th>
+                    <th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">Actual (S$)</th>
+                    <th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">Balance (S$)</th>
+                  </tr>
+                </thead>
+
+                <tbody id="timesheetTableBody">
+                  {% set total_budget = 0 %}
+                  {% set total_actual = 0 %}
+
+                  {% for category in ['Resources', 'Material', 'Sub Contract', 'Site', 'Others'] %}
+                  {% set budget_total = budget_grouped[category] | dictsort | map(attribute=1) | sum %}
+                  {% set actual_total = actuals_grouped[category] | dictsort | map(attribute=1) | sum %}
+                  {% set total_budget = total_budget + budget_total %}
+                  {% set total_actual = total_actual + actual_total %}
+                  <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ category }}</td>
+                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{
+                      "{:,.2f}".format(budget_total) }}</td>
+                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{
+                      "{:,.2f}".format(actual_total) }}</td>
+                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{
+                      "{:,.2f}".format(budget_total - actual_total) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+
+                  <tr style="font-weight: bold; background-color: #f9fafb;">
+                    <td style="padding: 8px; border-top: 1px solid #ccc;">Total</td>
+                    <td style="padding: 8px; text-align: right; border-top: 1px solid #ccc;">{{
+                      "{:,.2f}".format(total_budgets) }}</td>
+                    <td style="padding: 8px; text-align: right; border-top: 1px solid #ccc;">{{
+                      "{:,.2f}".format(total_actuals) }}</td>
+                    <td style="padding: 8px; text-align: right; border-top: 1px solid #ccc;">{{
+                      "{:,.2f}".format(total_budgets - total_actuals) }}</td>
+                  </tr>
+
+                  <!-- PO Value Row -->
+                  <tr style="font-weight: bold;">
+                    <td style="padding: 8px;">PO Value</td>
+                    <td style="padding: 8px; text-align: right;">
+                      {% if project_details.po_value %}
+                      {{ "{:,.2f}".format(project_details.po_value|float) }}
+                      {% else %}
+                      N/A
+                      {% endif %}
+                    </td>
+                    <td style="padding: 8px; text-align: right;">
+                      {% if project_details.po_value %}
+                      {{ "{:,.2f}".format(project_details.po_value|float) }}
+                      {% else %}
+                      N/A
+                      {% endif %}
+                    </td>
+                    <td></td>
+                  </tr>
+
+                  <!-- Budget Margin Row -->
+                  <tr style="font-weight: bold;">
+                    <td style="padding: 8px;"> Margin</td>
+                    <td style="padding: 8px; text-align: right;">
+                      {% if project_details.po_value and project_details.po_value|float > 0 %}
+                      {{ "{:,.2f}".format(((project_details.po_value|float - total_budgets) /
+                      project_details.po_value|float) * 100) }}%
+                      {% else %}
+                      N/A
+                      {% endif %}
+                    </td>
+                    <td style="padding: 8px; text-align: right;">
+                      {% if project_details.po_value and project_details.po_value|float > 0 %}
+                      {{ "{:,.2f}".format(((project_details.po_value|float - total_actuals) /
+                      project_details.po_value|float) * 100) }}%
+                      {% else %}
+                      N/A
+                      {% endif %}
+                    </td>
+                    <td></td>
+                  </tr>
+
+
+                </tfoot>
+
+
+              </table>
+            </div>
+
+          </div>
+
+          <div class="box">
+            <h3 style="text-align: center; font-weight: 600; margin-bottom: 10px;">Actuals by Category</h3>
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <div style="position: relative; width: 280px; height: 280px;">
+                <canvas id="actualsDonutChart"></canvas>
+                <div id="donutCenterText" style="
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      transform: translate(-50%, -50%);
+                      font-size: 15px;
+                      text-align: center;
+                      font-weight: bold;
+                      color: #222;
+                      line-height: 1.4;">
+                  Budget<br>
+                  S$ {{ "{:,.2f}".format(total_budgets) }}
+                </div>
+
+              </div>
+              <div style="margin-left: 20px;">
+                <ul id="donutLegend"
+                  style="list-style: none; padding: 0; font-size: 13px; font-weight: 500; color: #111;"></ul>
+              </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+            <script
+              src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+
+            <script>
+
+              document.addEventListener("DOMContentLoaded", function () {
+                const ctx = document.getElementById("actualsDonutChart").getContext("2d");
+                const actualsData = {{ actuals_per_category | tojson
+              }};
+
+              const colors = [
+                "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"
+              ];
+
+              const labels = Object.keys(actualsData);
+              const values = Object.values(actualsData);
+              const total = values.reduce((acc, val) => acc + val, 0);
+
+              const data = {
+                labels: labels,
+                datasets: [{
+                  label: "Actuals by Category",
+                  data: values,
+                  backgroundColor: colors,
+                  borderColor: "#fff",
+                  borderWidth: 2,
+                  hoverOffset: 10
+                }]
+              };
+
+              const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                  cutout: '75%',
+                  responsive: true,
+                  plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                      callbacks: {
+                        label: function (ctx) {
+                          const value = ctx.raw;
+                          const percent = ((value / total) * 100).toFixed(1);
+                          return `${ctx.label}: S$ ${value.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${percent}%)`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      color: "#000",
+                      font: {
+                        weight: 'bold',
+                        size: 11
+                      },
+                      formatter: (value, ctx) => {
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return `${percentage}%`;
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+
+              // Custom Legend Rendering (Right Side)
+              const legendContainer = document.getElementById("donutLegend");
+              labels.forEach((label, i) => {
+                const item = document.createElement("li");
+                item.style.display = "flex";
+                item.style.alignItems = "center";
+                item.style.marginBottom = "6px";
+                item.innerHTML = `
+                    <span style="
+                      width: 12px;
+                      height: 12px;
+                      background-color: ${colors[i]};
+                      display: inline-block;
+                      margin-right: 8px;
+                      border-radius: 2px;">
+                    </span>
+                    ${label}
+                  `;
+                legendContainer.appendChild(item);
+              });
+              });
+            </script>
+
+          </div>
+
+
+        </div>
+
+        <!-- Right Column: Single Box -->
+        <div class="graph-right">
+          <div class="tab-header"
+            style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('resources')">Resources</button>
+            <button class="tab-button" onclick="showTab('material')">Material</button>
+            <button class="tab-button" onclick="showTab('subcontract')">Sub Contract</button>
+            <button class="tab-button" onclick="showTab('others')">Others</button>
+          </div>
+
+          <div id="overview" class="tab-content">
+            <div class="box">
+              <canvas id="categoryBarChart" style="max-width: 1100px; margin: 0 auto;  height: 600px;"></canvas>
+            </div>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                const budgetPerCategory = {{ budget_per_category | tojson
+              }};
+              const actualsPerCategory = {{ actuals_per_category | tojson }};
+
+              const categoryCtx = document.getElementById('categoryBarChart').getContext('2d');
+              const categoryLabels = Object.keys(budgetPerCategory);
+              const categoryBudgetData = categoryLabels.map(cat => budgetPerCategory[cat] || 0);
+              const categoryActualsData = categoryLabels.map(cat => actualsPerCategory[cat] || 0);
+
+              new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                  labels: categoryLabels,
+                  datasets: [
+                    {
+                      label: 'Budget',
+                      data: categoryBudgetData,
+                      backgroundColor: '#1E90FF', // DodgerBlue - bright
+                      borderRadius: 5, // rounded bars
+                    },
+                    {
+                      label: 'Actuals',
+                      data: categoryActualsData,
+                      backgroundColor: '#FF4500', // OrangeRed - bright
+                      borderRadius: 5,
+                    }
+                  ]
+                },
+                options: {
+                  responsive: true,
+                  animation: {
+                    duration: 1200,
+                    easing: 'easeOutQuart'
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: {
+                        display: false,  // no horizontal grid lines
+                      },
+                      ticks: {
+                        callback: value => 'S$ ' + value.toLocaleString()
+                      },
+                      title: {
+                        display: true,
+                        text: 'Amount (S$)'
+                      }
+                    },
+                    x: {
+                      grid: {
+                        display: false,  // no vertical grid lines
+                      },
+                      title: {
+                        display: true,
+                        text: 'Category'
+                      }
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        boxWidth: 16,
+                        boxHeight: 16,
+                        usePointStyle: false, // square shape
+                        color: '#222',
+                        font: {
+                          size: 14,
+                          weight: '600'
+                        }
+                      }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: ctx => `${ctx.dataset.label}: S$ ${ctx.raw.toLocaleString(undefined, { minimumFractionDigits: 2 })}`
+                      }
+                    }
+                  }
+                }
+              });
+    });
+            </script>
+          </div>
+          <!-- Resources -->
+          <div id="resources" class="tab-content" style="display: none;">
+            <div class="box">
+              <canvas id="resourcesBarChart" style="max-width: 1100px; margin: 0 auto; height: 600px;"></canvas>
+            </div>
+          </div>
+
+          <!-- Material -->
+          <div id="material" class="tab-content" style="display: none;">
+            <div class="box">
+              <canvas id="materialBarChart" style="max-width: 1100px; margin: 0 auto; height: 600px;"></canvas>
+            </div>
+          </div>
+
+          <!-- Sub Contract -->
+          <div id="subcontract" class="tab-content" style="display: none;">
+            <div class="box">
+              <canvas id="subcontractBarChart" style="max-width: 1100px; margin: 0 auto; height: 600px;"></canvas>
+            </div>
+          </div>
+
+          <!-- Others (Site) -->
+          <div id="others" class="tab-content" style="display: none;">
+            <div class="box">
+              <canvas id="siteBarChart" style="max-width: 1100px; margin: 0 auto; height: 600px;"></canvas>
+            </div>
+          </div>
+
+
+          <script>
+            let chartRendered = {
+              'resources': false,
+              'material': false,
+              'subcontract': false,
+              'others': false
+            };
+
+            const budgetData = {{ budget_department_data | tojson }};
+            const actualData = {{ actual_department_data | tojson }};
+
+            function drawCategoryChart(categoryKey, canvasId) {
+              const deptCodes = Object.keys(budgetData[categoryKey] || {});
+              const budgetVals = deptCodes.map(code => budgetData[categoryKey][code] || 0);
+              const actualVals = deptCodes.map(code => actualData[categoryKey]?.[code] || 0);
+              const totalVals = deptCodes.map((_, i) => budgetVals[i] + actualVals[i]);
+
+              const ctx = document.getElementById(canvasId).getContext("2d");
+
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: deptCodes,
+                  datasets: [
+                    {
+                      label: 'Budget',
+                      data: budgetVals,
+                      backgroundColor: '#1E90FF',
+                      borderRadius: 5
+                    },
+                    {
+                      label: 'Actuals',
+                      data: actualVals,
+                      backgroundColor: '#FF4500',
+                      borderRadius: 5
+                    }
+                  ]
+                },
+                options: {
+                  responsive: true,
+                  animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: { display: false },
+                      ticks: {
+                        callback: val => 'S$ ' + val.toLocaleString()
+                      },
+                      title: {
+                        display: true,
+                        text: 'Amount (S$)'
+                      }
+                    },
+                    x: {
+                      grid: { display: false },
+                      title: {
+                        display: true,
+                        text: 'Department Code'
+                      }
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        boxWidth: 16,
+                        boxHeight: 16,
+                        usePointStyle: false,
+                        color: '#222',
+                        font: {
+                          size: 14,
+                          weight: 'bold'
+                        }
+                      }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: ctx => `${ctx.dataset.label}: S$ ${ctx.raw.toLocaleString(undefined, { minimumFractionDigits: 2 })}`
+                      }
+                    },
+                    datalabels: {
+                      color: 'black',
+                      anchor: 'end',
+                      align: 'top',
+                      font: { size: 12, weight: 'bold' },
+                      formatter: function (value, context) {
+                        const index = context.dataIndex;
+                        const total = totalVals[index];
+                        return total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '';
+                      }
+                    }
+                  }
+                },
+                plugins: [ChartDataLabels]
+              });
+            }
+
+
+
+          </script>
+
+          <script>
+            function showTab(tabId) {
+              const contents = document.querySelectorAll('.tab-content');
+              const buttons = document.querySelectorAll('.tab-button');
+
+              contents.forEach(c => c.style.display = 'none');
+              buttons.forEach(b => b.classList.remove('active'));
+
+              document.getElementById(tabId).style.display = 'block';
+              const clickedButton = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+              if (clickedButton) {
+                clickedButton.classList.add('active');
+              }
+
+              if (!chartRendered[tabId]) {
+                switch (tabId) {
+                  case 'resources':
+                    drawCategoryChart('Resources', 'resourcesBarChart');
+                    break;
+                  case 'material':
+                    drawCategoryChart('Material', 'materialBarChart');
+                    break;
+                  case 'subcontract':
+                    drawCategoryChart('Sub Contract', 'subcontractBarChart');
+                    break;
+                  case 'others':
+                    drawCategoryChart('Site', 'siteBarChart');
+                    break;
+                }
+                chartRendered[tabId] = true;
+              }
+            }
+          </script>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+
+
+  <style>
+    tfoot {
+      position: sticky;
+      bottom: 0;
+      background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+      color: #333;
+      z-index: 1;
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab-button:hover {
+      color: #2563eb;
+    }
+
+    .tab-button.active {
+      border-bottom: 2px solid #2563eb;
+      font-weight: bold;
+      color: #2563eb;
+    }
+  </style>
+
+  <style>
+    /* ===== Graph Container ===== */
+    .graph-container {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+
+      min-height: 700px;
+      /* Adjust as needed */
+      max-height: 700px;
+      /* Adjust as needed */
+    }
+
+
+    .graph-left {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .graph-left .box {
+      background-color: #e0f2fe;
+      border-radius: 10px;
+      padding: 10px;
+      flex: 1;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .graph-right {
+      width: 75%;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Responsive Tweaks */
+    @media (max-width: 1000px) {
+      .graph-container {
+        flex-direction: column;
+      }
+
+      .graph-left,
+      .graph-right {
+        width: 100%;
+      }
+    }
+
+    /* === Animations === */
+    @keyframes fadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .graph-container {
+      display: flex;
+      gap: 20px;
+      animation: fadeSlideIn 0.8s ease forwards;
+      opacity: 0;
+      /* Start hidden, will fade in via animation */
+      animation-delay: 0.2s;
+    }
+
+    /* Left + Right Boxes Hover Effect */
+    .graph-left .box,
+    .graph-right {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .graph-left .box:hover,
+    .graph-right:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .card-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      padding: 14px;
+      flex: 1 1 calc(14.66% - 20px);
+      /* 6 cards in a row */
+      min-width: 100px;
+      max-width: 220px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      color: #2563eb;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #2e333a;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      margin-right: 10px;
+
+    }
+
+    .card-header .count-number {
+      font-size: 0.95rem;
+      color: #3b82f6;
+      margin: 0;
+    }
+
+    .card p {
+      color: #62748f;
+      /* Cool subtext */
+      font-size: 15px;
+      margin-top: 10px;
+
+    }
+
+    @media (max-width: 1200px) {
+      .card {
+        flex: 1 1 calc(33.33% - 20px);
+        /* 3 per row on medium screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        flex: 1 1 calc(50% - 20px);
+        /* 2 per row on small screens */
+      }
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        flex: 1 1 100%;
+        /* 1 per row on mobile */
+      }
+    }
+  </style>
+
+
+</body>
+
+</html>

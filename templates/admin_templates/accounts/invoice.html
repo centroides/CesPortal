@@ -1,0 +1,2729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts" class="active">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleClient'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('client_details') }}" class="link">
+                                <i class="fa-solid fa-handshake-simple" style="margin-right: 5px;"></i> Clients
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('vendor') }}" class="link">
+                                <i class="fa-sharp fa-solid fa-store" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleExpenses'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('ac_pay_req') }}" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('reports') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Reports
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleInvoice'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('invoice') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i>Invoice
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleOverHeadPayReq'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('add_expense') }}" class="link">
+                                <i class="fa-solid fa-money-bill-wave" style="margin-right: 5px;"></i> Add Expenses
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <h3 style="color: #004274;">Invoices's (<span id="requestCount">0</span>) </h3>
+                <input type="text" id="searchInput" placeholder="Search....." onkeyup="filterTable()">
+                <span class="span_tag" style="color: #007bff; font-weight: bold;">Open : <span id="openamount"
+                        style="color: #dc3545;">$ 0.00</span></span>
+                <span class="span_tag" style="color: #28a745; font-weight: bold; margin-left: 15px;">Paid : <span
+                        id="paidamount" style="color: #20c997;">$ 0.00</span></span>
+
+                {% if user_access['toggleNewInvoice'] == 'On' %}
+                <button type="button" id="openModalButton" data-project-id="#" class="new-enquiry-btn">
+                    + New Invoice
+                </button>
+                {% endif %}
+
+                <div id="modal" class="modal">
+
+                    <div class="modal-content">
+
+                        <div class="button-container1">
+
+                            <h3>New Invoice</h3>
+
+                            <span class="close-button">&times;</span>
+
+                        </div>
+
+                        <form id="invoiceForm1" method="POST" action="/invoice" onsubmit="validateForm(event)">
+
+                            <div class="container">
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Invoice_No" class="form-label">Invoice No<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Invoice_No" readonly
+                                                value="I-YY-XXXX" name="Invoice_No" required>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Invoice_date" class="form-label">Invoice Date <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="date" class="form-control" id="Invoice_date"
+                                                name="Invoice_date" required>
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                let today = new Date().toISOString().split('T')[0];
+                                                document.getElementById("Invoice_date").value = today;
+                                            });
+                                        </script>
+
+                                    </div>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="po_number" class="form-label">PO Number</label>
+                                            <select class="form-control" id="po_number" name="po_number">
+                                                <option value="">Select PO Number</option>
+                                                {% for prj_po_list in prj_po_list %}
+                                                <option value="{{ prj_po_list[0] }}">{{ prj_po_list[0]
+                                                    }} - {{prj_po_list[1]}} </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <script>
+                                            document.getElementById("po_number").addEventListener("change", function () {
+                                                let selectedproj = this.value;
+                                                if (selectedproj) {
+                                                    fetch("/invoice_prj_details", {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        body: JSON.stringify({ projectid: selectedproj })
+                                                    })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            // console.log(".............responce..........", data);
+
+                                                            if (!data.error) {
+                                                                document.getElementById("Delivery_Address_Line1").value = data.delivery_address;
+                                                                document.getElementById("Delivery_Address_Line2").value = data.delivery_address2;
+                                                                document.getElementById("Delivery_Address_Line3").value = data.delivery_address3;
+                                                                document.getElementById("Billing_Address_Line1").value = data.billing_address;
+                                                                document.getElementById("Billing_Address_Line2").value = data.billing_address2;
+                                                                document.getElementById("Billing_Address_Line3").value = data.billing_address3;
+                                                                document.getElementById("Bill_to").value = data.client;
+                                                                document.getElementById("Delivery_to").value = data.client;
+                                                            }
+                                                        })
+                                                        .catch(error => console.error("Error fetching client details:", error));
+                                                } else {
+
+                                                    document.getElementById("Delivery_Address_Line1").value = "";
+                                                    document.getElementById("Delivery_Address_Line2").value = "";
+                                                    document.getElementById("Delivery_Address_Line3").value = "";
+                                                    document.getElementById("Billing_Address_Line1").value = "";
+                                                    document.getElementById("Billing_Address_Line2").value = "";
+                                                    document.getElementById("Billing_Address_Line3").value = "";
+                                                    document.getElementById("Bill_to").value = "";
+                                                    document.getElementById("Delivery_to").value = "";
+
+
+                                                }
+                                            });
+                                        </script>
+
+                                        <div class="flex-item">
+                                            <label for="External_po" class="form-label">External PO</label>
+                                            <input type="text" class="form-control" id="External_po" name="External_po">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Attn" class="form-label">Attn<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Attn" name="Attn"
+                                                value="Accounts Payable Department" required>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Terms" class="form-label">Pay Terms<span
+                                                    style="color: red;">*</span></label>
+                                            <div style="display: flex; gap: 2px;">
+                                                <input type="text" class="form-control" id="Terms" name="Terms">
+                                                <select class="form-control" id="time_period" name="time_period"
+                                                    required onchange="toggleTermsRequired()">
+                                                    <option value="Days">Days</option>
+                                                    <option value="COD">COD</option>
+                                                    <option value="Advance">Advance</option>
+                                                </select>
+                                            </div>
+
+                                            <script>
+                                                function toggleTermsRequired() {
+                                                    const timePeriod = document.getElementById("time_period").value;
+                                                    const termsInput = document.getElementById("Terms");
+
+                                                    if (timePeriod === "Days") {
+                                                        termsInput.setAttribute("required", "required");
+                                                    } else {
+                                                        termsInput.removeAttribute("required");
+                                                    }
+                                                }
+
+                                                // Run on page load in case "Days" is preselected
+                                                window.addEventListener("DOMContentLoaded", toggleTermsRequired);
+                                            </script>
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Currency" class="form-label">Currency<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Currency" name="Currency" required>
+                                                <option value="SGD" selected>SGD - Singapore Dollar</option>
+                                                <option value="USD">USD - US Dollar</option>
+                                                <option value="EUR">EUR - Euro</option>
+                                                <option value="GBP">GBP - British Pound</option>
+                                                <option value="JPY">JPY - Japanese Yen</option>
+                                                <option value="CNY">CNY - Chinese Yuan</option>
+                                                <option value="AUD">AUD - Australian Dollar</option>
+                                                <option value="CAD">CAD - Canadian Dollar</option>
+                                                <option value="INR">INR - Indian Rupee</option>
+                                                <option value="MYR">MYR - Malaysian Ringgit</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="exchange_rate" class="form-label">Ex. Rate</label>
+                                            <input type="number" class="form-control" id="exchange_rate"
+                                                name="exchange_rate" step="0.01" value="1"
+                                                placeholder="Enter Exchange rate">
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="gst" class="form-label">GST<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="gst" name="gst" onchange="calculateGST()"
+                                                required>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Bank" class="form-label">Bank<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Bank" name="Bank" required>
+                                                <option value="">Select a bank</option>
+                                                {% for bank in bank_details %}
+                                                <option value="{{ bank[0] }}">{{ bank[0] }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+
+                                        <div class="flex-item">
+                                            <label for="Account_No" class="form-label">Account No<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Account_No" name="Account_No"
+                                                required readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-row">
+                                        <div class="flex-item">
+                                            <label for="Branch" class="form-label">Branch</label>
+                                            <input type="text" class="form-control" id="Branch" name="Branch" readonly>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Swift" class="form-label">Swift </label>
+                                            <input type="text" class="form-control" id="Swift" name="Swift" readonly>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        // When the user selects a bank, fetch its details
+                                        $('#Bank').on('change', function () {
+                                            var bankName = $(this).val();
+                                            if (bankName) {
+                                                $.ajax({
+                                                    url: '/get_bank_details',
+                                                    method: 'GET',
+                                                    data: { bank_name: bankName },
+                                                    success: function (response) {
+                                                        if (response.account_number) {
+                                                            $('#Account_No').val(response.branch);
+                                                            $('#Branch').val(response.swift);
+                                                            $('#Swift').val(response.pay_now);
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                // Clear the fields if no bank is selected
+                                                $('#Account_No').val('');
+                                                $('#Branch').val('');
+                                                $('#Swift').val('');
+                                            }
+                                        });
+                                    </script>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item" style="max-width: 25%;">
+                                            <label for="Bill_to" class="form-label">Bill To</label>
+                                            <select class="form-control" id="Bill_to" name="Bill_to">
+                                                <option value=""> Client</option>
+                                                {% for client in clients %}
+                                                <option value="{{ client[0] }}">{{ client[0] }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Billing_Address_Line1" class="form-label">Billing Address
+                                                Line1<span style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Billing_Address_Line1"
+                                                name="Billing_Address_Line1" required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex-item">
+                                        <label for="Billing_Address_Line2" class="form-label">Billing Address
+                                            Line2<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" id="Billing_Address_Line2"
+                                            name="Billing_Address_Line2" required>
+                                    </div>
+
+                                    <div class="flex-item">
+                                        <label for="Billing_Address_Line3" class="form-label">Billing Address
+                                            Line2<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" id="Billing_Address_Line3"
+                                            name="Billing_Address_Line3" required>
+                                    </div>
+
+                                    <script>
+                                        document.getElementById("Bill_to").addEventListener("change", function () {
+                                            let selectedClient = this.value;
+                                            if (selectedClient) {
+                                                fetch("/get_client_details", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({ client: selectedClient })
+                                                })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (!data.error) {
+                                                            document.getElementById("Billing_Address_Line1").value = data.company_name;
+                                                            document.getElementById("Billing_Address_Line2").value = data.billing_address1;
+                                                            document.getElementById("Billing_Address_Line3").value = data.billing_address2;
+                                                        }
+                                                    })
+                                                    .catch(error => console.error("Error fetching client details:", error));
+                                            } else {
+                                                document.getElementById("Billing_Address_Line1").value = "";
+                                                document.getElementById("Billing_Address_Line2").value = "";
+                                                document.getElementById("Billing_Address_Line3").value = "";
+                                            }
+                                        });
+                                    </script>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item" style="max-width: 25%;">
+                                            <label for="Delivery_to" class="form-label">Delivery
+                                            </label>
+                                            <select class="form-control" id="Delivery_to" name="Delivery_to">
+                                                <option value="">Client</option>
+                                                {% for client in clients %}
+                                                <option value="{{ client[0] }}">{{ client[0] }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Delivery_Address_Line1" class="form-label">Delivery Address
+                                                Line1<span style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Delivery_Address_Line1"
+                                                name="Delivery_Address_Line1" required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex-item">
+                                        <label for="Delivery_Address_Line2" class="form-label">Delivery Address
+                                            Line2<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" id="Delivery_Address_Line2"
+                                            name="Delivery_Address_Line2" required>
+                                    </div>
+
+                                    <div class="flex-item">
+                                        <label for="Delivery_Address_Line3" class="form-label">Delivery Address
+                                            Line2<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" id="Delivery_Address_Line3"
+                                            name="Delivery_Address_Line3" required>
+                                    </div>
+
+
+                                    <script>
+                                        document.getElementById("Delivery_to").addEventListener("change", function () {
+                                            let selectedClient = this.value;
+                                            if (selectedClient) {
+                                                fetch("/get_client_delivary_details", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({ client: selectedClient })
+                                                })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (!data.error) {
+                                                            document.getElementById("Delivery_Address_Line1").value = data.company_name;
+                                                            document.getElementById("Delivery_Address_Line2").value = data.billing_address2;
+                                                            document.getElementById("Delivery_Address_Line3").value = data.billing_address3;
+                                                        }
+                                                    })
+                                                    .catch(error => console.error("Error fetching client details:", error));
+                                            } else {
+                                                document.getElementById("Delivery_Address_Line1").value = "";
+                                                document.getElementById("Delivery_Address_Line2").value = "";
+                                                document.getElementById("Delivery_Address_Line3").value = "";
+                                            }
+                                        });
+                                    </script>
+
+
+                                </div>
+
+                                <div class="invice_header">
+                                    <label for="comments" class="form-label">Comments</label>
+                                    <textarea class="form-control" id="comments" name="comments" rows="8"></textarea>
+                                </div>
+
+                                <div class="table-responsive1">
+
+                                    <table class="mat_rec_table" width="100%" id="dynamicTable">
+
+                                        <thead>
+
+                                            <tr>
+                                                <th style="width: 3%;">S/N</th>
+                                                <th style="width: 50%;">Description</th>
+                                                <th style="width: 10%;">Qty</th>
+                                                <th style="width: 10%;">Unit Price</th>
+                                                <th style="width: 10%;">Total</th>
+                                                <th style="width: 5%;">Trash</th>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody id="itemsTableBody">
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td><input type="text" class="form-control description"
+                                                        name="description[]" placeholder="Enter description">
+                                                </td>
+                                                <td><input type="number" class="form-control qty" name="qty[]"
+                                                        step="any" placeholder="Qty" oninput="calculateTotal(this)">
+                                                </td>
+                                                <td><input type="number" class="form-control unit_price" step="any"
+                                                        name="unit_price[]" placeholder="Unit Price"
+                                                        oninput="calculateTotal(this)"></td>
+
+                                                <td><input type="text" class="form-control total" readonly></td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-danger btn-sm" onclick="removeRow(this)"
+                                                        style="border: none; background: none; padding: 0; cursor: pointer;">
+                                                        <i class="fa-solid fa-trash" style="color: red;"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="button-container1">
+
+                                    <button type="button" class="new-enquiry-btn" onclick="addRow()">➕ Add
+                                        Row</button>
+
+
+                                    <div>
+                                        <label for="total_amount">Amount:</label>
+                                        <input id="total_amount" name="total_amount" class="form-control" type="number"
+                                            step="any" readonly>
+                                    </div>
+
+                                    <div>
+                                        <label for="gst_value">GST Value:</label>
+                                        <input id="gst_value" name="gst_value" class="form-control" type="number"
+                                            step="any" readonly>
+                                    </div>
+
+                                    <div>
+                                        <label for="overall_total_amount">Total (Including GST):</label>
+                                        <input id="overall_total_amount" name="overall_total_amount"
+                                            class="form-control" type="number" step="any" readonly>
+                                    </div>
+
+                                    <div style="display: none;">
+                                        <label for="gst_percent"> GST:</label>
+                                        <input id="gst_percent" name="gst_percent" class="form-control" type="number"
+                                            step="any">
+                                    </div>
+
+
+                                    <button type="submit" class="new-enquiry-btn sub"
+                                        onclick="validateForm(event)">Submit
+
+                                    </button>
+                                </div>
+
+                                <script>
+                                    // Function to fetch GST value from backend
+                                    async function fetchGSTValue(year) {
+                                        try {
+                                            let response = await fetch(`/get_gst_for_year/${year}`);
+                                            let data = await response.json();
+                                            const gstValue = data.gst_value;
+
+                                            // Set the fetched gst_value to the input field
+                                            document.getElementById('gst_percent').value = gstValue;
+
+                                            return gstValue;  // Optionally return the fetched value if needed elsewhere
+                                        } catch (error) {
+                                            document.getElementById('gst_percent').value = 1; // Default GST value in case of error
+                                            return 1; // Default GST value
+                                        }
+                                    }
+
+
+                                    // Function to calculate total for a row
+                                    function calculateTotal(input) {
+                                        let row = input.parentNode.parentNode;
+                                        let qty = parseFloat(row.querySelector(".qty").value) || 0;
+                                        let unitPrice = parseFloat(row.querySelector(".unit_price").value) || 0;
+                                        let rowTotal = qty * unitPrice;
+                                        row.querySelector(".total").value = rowTotal.toFixed(2);
+                                        calculateGrandTotal();
+                                    }
+
+                                    // Function to calculate grand total including GST
+                                    async function calculateGrandTotal() {
+                                        let total = 0;
+                                        document.querySelectorAll(".total").forEach(input => {
+                                            total += parseFloat(input.value) || 0;
+                                        });
+
+                                        // Only round when displaying the final total to avoid precision errors during calculation
+                                        let roundedTotal = Math.round(total * 100) / 100;
+                                        document.getElementById("total_amount").value = roundedTotal.toFixed(2);
+
+                                        await calculateGST(); // Ensure GST is recalculated correctly
+                                    }
+                                    function roundToTwoFromThreeDecimals2(value) {
+                                        const num = parseFloat(value);
+                                        const threeDecimal = Math.round(num * 1000) / 1000;
+                                        return (Math.round(threeDecimal * 100) / 100).toFixed(2);
+                                    }
+                                    // Function to calculate GST based on invoice date
+                                    // Function to calculate GST based on invoice date
+                                    async function calculateGST() {
+                                        let gstOption = document.getElementById("gst").value;
+                                        let invoiceDate = document.getElementById("Invoice_date").value;
+                                        let gstAmount = 0;
+
+                                        if (gstOption === "Yes" && invoiceDate) {
+                                            let year = new Date(invoiceDate).getFullYear();
+                                            let gstValue = await fetchGSTValue(year);
+                                            let total = parseFloat(document.getElementById("total_amount").value) || 0;
+
+                                            // Calculate GST with intermediate 3-decimal rounding
+                                            let rawGst = total * gstValue / 100;
+                                            gstAmount = roundToTwoFromThreeDecimals2(rawGst);
+                                        }
+
+                                        document.getElementById("gst_value").value = gstAmount;
+
+                                        // Include GST in total and apply same 3-decimal then 2-decimal rounding
+                                        let totalAmount = parseFloat(document.getElementById("total_amount").value) || 0;
+                                        let overallRawTotal = totalAmount + parseFloat(gstAmount || 0);
+                                        let overallTotal = roundToTwoFromThreeDecimals2(overallRawTotal);
+
+                                        document.getElementById("overall_total_amount").value = overallTotal;
+                                    }
+
+                                    // Function to add a new row
+                                    function addRow() {
+                                        let gstValue = document.getElementById("gst").value;
+                                        if (gstValue === "") {
+                                            alert("Please select a GST option before adding items.");
+                                            return;
+                                        }
+
+                                        let table = document.getElementById("itemsTableBody");
+                                        let rowCount = table.rows.length + 1;
+                                        let row = table.insertRow();
+
+                                        row.innerHTML = `
+                                            <td class="text-center">${rowCount}</td>
+                                            <td><input type="text" class="form-control description" name="description[]" placeholder="Enter description"></td>
+                                            <td><input type="number" class="form-control qty" step="any" placeholder="Qty" name="qty[]" oninput="calculateTotal(this)"></td>
+                                            <td><input type="number" class="form-control unit_price" step="any" name="unit_price[]" placeholder="Unit Price" oninput="calculateTotal(this)"></td>
+                                            <td><input type="text" class="form-control total" readonly></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-danger btn-sm" onclick="removeRow(this)" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                                    <i class="fa-solid fa-trash" style="color: red;"></i>
+                                                </button>
+                                            </td>
+                                        `;
+                                    }
+
+                                    // Function to remove a row
+                                    function removeRow(button) {
+                                        let row = button.parentNode.parentNode;
+                                        row.parentNode.removeChild(row);
+                                        updateSerialNumbers();
+                                        calculateGrandTotal();
+                                    }
+
+                                    // Function to update serial numbers
+                                    function updateSerialNumbers() {
+                                        let table = document.getElementById("itemsTableBody");
+                                        let rows = table.getElementsByTagName("tr");
+                                        for (let i = 0; i < rows.length; i++) {
+                                            rows[i].cells[0].innerText = i + 1;
+                                        }
+                                    }
+
+                                    function validateForm(event) {
+                                        let tableRows = document.querySelectorAll("#itemsTableBody tr");
+                                        let isValid = true;
+
+                                        tableRows.forEach((row, index) => {
+                                            let description = row.querySelector(".description");
+                                            let qty = row.querySelector(".qty");
+                                            let unitPrice = row.querySelector(".unit_price");
+                                            let total = row.querySelector(".total");
+
+                                            // Remove existing highlights
+                                            description.style.border = "";
+                                            qty.style.border = "";
+                                            unitPrice.style.border = "";
+                                            total.style.border = "";
+
+                                            if (!description.value.trim()) {
+                                                description.style.border = "2px solid red";
+                                                isValid = false;
+                                            }
+
+                                            // Allow both positive and negative numbers, but ensure input is a number
+                                            if (qty.value.trim() === "" || isNaN(parseFloat(qty.value))) {
+                                                qty.style.border = "2px solid red";
+                                                isValid = false;
+                                            }
+
+                                            if (unitPrice.value.trim() === "" || isNaN(parseFloat(unitPrice.value))) {
+                                                unitPrice.style.border = "2px solid red";
+                                                isValid = false;
+                                            }
+
+                                            if (total.value.trim() === "" || isNaN(parseFloat(total.value))) {
+                                                total.style.border = "2px solid red";
+                                                isValid = false;
+                                            }
+                                        });
+
+                                        if (!isValid) {
+                                            alert("Please fill in all required fields correctly.");
+                                            event.preventDefault(); // Stop form submission
+                                        }
+                                    }
+
+
+                                </script>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-main" width="100%" id="invoiceTable">
+
+                    <thead>
+
+                        <tr>
+                            {% if user_access['toggleViewInvoice'] == 'On' %}
+                            <th class="text-center">
+                                <span class="fa-solid fa-eye" style="font-size: 1.25em; color: black;"></span>
+                            </th>
+                            {% endif %}
+                            {% if user_access['toggleViewInvoice'] == 'On' %}
+                            <th class="text-center">
+                                <span class="far fa-copy" style="font-size: 1.25em; color: black;"></span>
+                            </th>
+                            {% endif %}
+                            <th class="text-center" style="display: none;">ID</th>
+                            <th class="text-center">Quarter</th>
+                            <th class="text-center" style="text-align: center;">Prj ID</th>
+
+                            <th class="text-center">Inv ID</th>
+                            <th class="text-center">PO No</th>
+                            <th class="text-center">Client</th>
+                            <th class="text-center" style="text-align: center;">Inv Date</th>
+                            <!-- <th class="text-center">curr</th> -->
+                            <th class="text-center" style="text-align: right;">Amount (S$)</th>
+                            <th class="text-center" style="text-align: right;">GST (S$)</th>
+                            <th class="text-center" style="text-align: right;">Total (S$)</th>
+                            <th class="text-center">Terms</th>
+                            <th class="text-center" style="text-align: center;">DueDate</th>
+                            <th class="text-center">DueDays</th>
+                            <th class="text-center" style="text-align: center;">Recv. On</th>
+                            <th class="text-center" style="text-align: right;">Balance ($)</th>
+                            <th class="text-center">Status</th>
+                            {% if user_access['toggleEditInvoice'] == 'On' %}
+                            <th class="text-center" style="text-align: center;">Edit</th>
+                            {% endif %}
+                            <th class="text-center" style="text-align: center;">Print</th>
+                            {% if user_access['toggleDeleteInvoice'] == 'On' %}
+                            <th class="text-center delete-col" style="width: 3%; text-align: center;">
+                                Del
+                            </th>
+                            {% endif %}
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        {% if not grouped_df_inv.empty %}
+                        {% for index, row in grouped_df_inv.iterrows() %}
+                        <tr class="mainRow">
+
+                            {% if user_access['toggleViewInvoice'] == 'On' %}
+                            <td class="text-center view-col">
+                                <span class="icon" onclick="openPaymentDetails('{{ row['id'] }}')"
+                                    style="cursor: pointer;">
+                                    <span class="fa-solid fa-eye"
+                                        style="font-size: 1.25em; color: rgb(22, 154, 206);"></span>
+                                </span>
+                            </td>
+                            {% endif %}
+
+                            {% if user_access['toggleViewInvoice'] == 'On' %}
+                            <td class="text-center copy-col">
+
+                                <a href="javascript:void(0)" onclick="getInvoiceDetailsToCopy('{{ row['inv_no'] }}')">
+                                    <span class="far fa-copy" style="font-size: 1.25em; color: orange;"></span>
+                                </a>
+
+                            </td>
+
+                            {% endif %}
+
+                            <td class="text-center" style="display: none;">{{ row['id'] }}</td>
+                            <td class="text-center quarter">{{ row['quarter'] }}</td>
+                            <td class="text-center prj_id" style="text-align: center;">{{ row['prj_id'] }}</td>
+
+                            <td class="text-center invoice-no invid">{{ row['inv_no'] }}</td>
+
+                            <td class="text-center po-no pono">
+                                {% if row is not none and row['po_number'] %}
+                                {{ row['po_number'][:15] }}{% if row['po_number']|length > 15 %}...{% endif %}
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center client1">
+                                {{ row['bill_to_line1'][:15] }}{% if row['bill_to_line1']|length > 15 %}...{% endif %}
+                            </td>
+
+                            <td class="text-center start-time inv_date" style="text-align: center;">{{ row['inv_date']
+                                }}</td>
+                            <!-- <td class="text-center ">{{ row['Currency'] }}</td> -->
+                            <td class="text-center amount-cell" style="text-align: right;">{{
+                                "{:,.2f}".format(row['amount']) }}</td>
+                            <td class="text-center gst-cell" style="text-align: right;">{{
+                                "{:,.2f}".format(row['gst_value']) }}</td>
+                            <td class="text-center total-cell" style="text-align: right;">{{
+                                "{:,.2f}".format(row['total']) }}</td>
+
+
+                            <td class="text-center">
+                                {% if row['payment_terms'] == 'COD' or row['payment_terms'] == 'Advance' %}
+                                {{ row['payment_terms'] }}
+                                {% else %}
+                                {{ row['Terms']|int }} {{ row['payment_terms'] }}
+                                {% endif %}
+
+                            </td>
+
+                            <td class="text-center start-time" style="text-align: center;">{{ row['due_date'] }}</td>
+                            <td class="text-center">
+                                {{ row['due_days']|int }} {{ 'Day' if row['due_days']|int == 1 else 'Days' }}
+                            </td>
+                            <td class="text-center start-time Recent_rec_On" style="text-align: center;">
+                                {{row['Recent_rec_On']}} </td>
+                            <td class="text-center balance-cell" style="text-align: right;">{{
+                                "{:,.2f}".format(row['balence']) }}</td>
+
+                            <td class="status-label {{ row['status']  }} statuss" style="font-weight: bold;">
+                                <span style="color: 
+                                {% if row['status'] == 'Open' %}
+                                    blue
+                                {% elif row['status'] == 'Partial' %}
+                                    orange
+                                {% elif row['status'] == 'Paid' %}
+                                    green
+                                {% endif %};
+                                background-color: 
+                                {% if row['status'] == 'Open' %}
+                                    #e0f7fa; /* Light blue background */
+                                {% elif row['status'] == 'Partial' %}
+                                    #ffecb3; /* Light yellow background */
+                                {% elif row['status'] == 'Paid' %}
+                                    #c8e6c9; /* Light green background */
+                                {% endif %};
+                                padding: 2px 8px; 
+                                border-radius: 8px; 
+                                display: inline-block;
+                            ">
+                                    {{ row['status'] }}
+                                </span>
+                            </td>
+
+                            {% if user_access['toggleEditInvoice'] == 'On' and row['status'] == 'Open' %}
+
+                            <td class="text-center" style="text-align: center;">
+                                <a href="javascript:void(0)" onclick="getInvoiceDetails('{{ row['inv_no'] }}')">
+                                    <span class="fa-solid fa-edit" style="font-size: 1.25em"></span>
+                                </a>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+
+                            <td class="text-center delete-col" style="text-align: center;">
+
+                                <span class="icon" onclick="openPrintDetails('{{ row['inv_no'] }}')"
+                                    style="cursor: pointer;">
+                                    <ion-icon name="print" style="color: rgb(21, 33, 37); font-size: 1.4em;"></ion-icon>
+                                </span>
+
+                            </td>
+
+                            <div id="printModal" class="modal1">
+
+                                <div class="modal-content1">
+
+                                    <div class="button-container1">
+
+                                        <h2>Print Details</h2>
+                                        <span class="close" onclick="closePrintModal()">&times;</span>
+
+                                    </div>
+
+                                    <div class="container">
+
+                                        <form method="POST" action="{{ url_for('invoice') }}" target="_blank"
+                                            onsubmit="closePrintModal()">
+                                            <div class="invoice-header1">
+                                                <div class="flex-item" style="display: none;">
+                                                    <label for="inv_Print" class="form-label">Invoice No</label>
+                                                    <input type="text" class="form-input" id="inv_Print"
+                                                        name="inv_Print">
+                                                </div>
+
+                                                <div class="flex-row1">
+                                                    <label for="calim_history" class="form-label">Claim History</label>
+                                                    <input type="checkbox" class="form-check-input" id="calim_history"
+                                                        name="calim_history">
+                                                </div>
+
+                                                <div class="flex-row1">
+                                                    <label for="Exchange_GST" class="form-label">Exchange GST</label>
+                                                    <input type="checkbox" class="form-check-input" id="Exchange_GST"
+                                                        name="Exchange_GST">
+                                                </div>
+
+                                                <div class="flex-row1">
+                                                    <label for="comments_on_pdf" class="form-label">Comments</label>
+                                                    <input type="checkbox" class="form-check-input" id="comments_on_pdf"
+                                                        name="comments_on_pdf">
+                                                </div>
+
+                                                <div class="flex-row">
+                                                    <button type="submit" id="downloadBtn" class="download-btn">
+                                                        Download Invoice
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <td class="text-center" style="text-align: center;">
+                                {% if user_access['toggleDeleteInvoice'] == 'On' and row['status'] == 'Open' %}
+                                <button type="button" class="btn-delete"
+                                    onclick="confirmDelete({{ row['id'] }}, {{ index }})"
+                                    style="cursor: pointer; border: none; color: red; font-size: 1.2em">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                {% else %}
+                                <!-- No content will be rendered if the condition is false -->
+                                {% endif %}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="15" class="text-center">No items available</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" style="text-align:left; font-weight:bold;"></td>
+                            <td style="text-align:left; font-weight:bold;">Totals:</td>
+                            <td id="totalAmount" style="text-align: right;">45</td>
+                            <td id="totalGST" style="text-align: right;">45</td>
+                            <td id="overallTotal" style="text-align: right;">45</td>
+                            <td colspan="4" style="text-align:right; font-weight:bold;"></td>
+                            <td id="balancecoltotal" style="text-align:right; color: #d307ee;">4</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+                <script>
+
+
+                    function filterTable() {
+                        let input = document.getElementById("searchInput").value.toLowerCase().trim();
+                        let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+
+                        let rows = document.querySelectorAll(".mainRow");
+
+                        const monthNames = {
+                            jan: 0, january: 0,
+                            feb: 1, february: 1,
+                            mar: 2, march: 2,
+                            apr: 3, april: 3,
+                            may: 4,
+                            jun: 5, june: 5,
+                            jul: 6, july: 6,
+                            aug: 7, august: 7,
+                            sep: 8, sept: 8, september: 8,
+                            oct: 9, october: 9,
+                            nov: 10, november: 10,
+                            dec: 11, december: 11
+                        };
+
+                        rows.forEach(row => {
+                            let prj_id = row.querySelector(".prj_id")?.textContent.trim().toLowerCase() || '';
+                            let invid = row.querySelector(".invid")?.textContent.trim().toLowerCase() || '';
+                            let pono = row.querySelector(".pono")?.textContent.trim().toLowerCase() || '';
+                            let client = row.querySelector(".client1")?.textContent.trim().toLowerCase() || '';
+                            let statuss = row.querySelector(".statuss")?.textContent.trim().toLowerCase() || '';
+                            let quarter = row.querySelector(".quarter")?.textContent.trim().toLowerCase() || '';
+                            let inv_date = row.querySelector(".inv_date")?.textContent.trim().toLowerCase() || '';
+                            let recent_rec_on = row.querySelector(".Recent_rec_On")?.textContent.trim().toLowerCase() || '';
+
+                            // Convert DD/MM/YY to month
+                            let recMonth = "";
+                            if (recent_rec_on && recent_rec_on.includes('/')) {
+                                let parts = recent_rec_on.split('/');
+                                if (parts.length === 3) {
+                                    let day = parts[0];
+                                    let month = parts[1];
+                                    let year = parts[2];
+
+                                    // Convert 2-digit year to 4-digit
+                                    let fullYear = parseInt(year) < 50 ? '20' + year : '19' + year;
+
+                                    let formattedDate = `${fullYear}-${month}-${day}`; // ISO format: yyyy-mm-dd
+                                    let dateObj = new Date(formattedDate);
+                                    if (!isNaN(dateObj.getTime())) {
+                                        recMonth = dateObj.toLocaleString('default', { month: 'short' }).toLowerCase(); // e.g., "jun"
+                                    }
+                                }
+                            }
+
+                            let combinedText = `${invid} ${pono} ${client} ${statuss} ${quarter} ${inv_date} ${recent_rec_on} ${prj_id}`;
+
+                            const matchesAll = keywords.every(keyword => {
+                                if (monthNames.hasOwnProperty(keyword)) {
+                                    return recMonth === keyword.slice(0, 3); // match abbreviated month
+                                }
+                                return combinedText.includes(keyword);
+                            });
+
+                            row.style.display = matchesAll ? "" : "none";
+                        });
+
+                        updateTotals(); // recalculate totals after filtering
+                    }
+
+
+                    function updateTotals() {
+                        let requestCount = 0;
+                        let totalAmount = 0;
+                        let totalGST = 0;
+                        let totalSum = 0;
+                        let totalOpenAmount = 0;
+                        let totalPaidAmount = 0;
+                        let totalbalanacecol = 0;
+
+                        const rows = document.querySelectorAll("#invoiceTable tbody tr.mainRow");
+
+                        rows.forEach(row => {
+                            if (row.style.display !== "none") {
+                                requestCount++;
+
+                                let amount = parseFloat(row.querySelector(".amount-cell")?.textContent.replace(/[^0-9.]/g, '') || 0);
+                                let gstValue = parseFloat(row.querySelector(".gst-cell")?.textContent.replace(/[^0-9.]/g, '') || 0);
+                                let total = parseFloat(row.querySelector(".total-cell")?.textContent.replace(/[^0-9.]/g, '') || 0);
+                                let balanacecol = parseFloat(row.querySelector(".balance-cell")?.textContent.replace(/[^0-9.]/g, '') ||
+                                    0);
+                                let status = row.querySelector(".statuss")?.textContent.trim() || '';
+                                let balance = parseFloat(row.querySelector(".balance-cell")?.textContent.replace(/[^0-9.]/g, '') || 0);
+
+                                totalAmount += amount;
+                                totalGST += gstValue;
+                                totalSum += total;
+                                totalbalanacecol += balanacecol;
+
+                                if (status === 'Open' || status === 'Partial') {
+                                    totalOpenAmount += balance;
+                                } else if (status === 'Paid') {
+                                    totalPaidAmount += total;
+                                }
+                            }
+                        });
+
+                        const format = num => num.toLocaleString('en-US', {
+                            minimumFractionDigits: 2, maximumFractionDigits: 2
+                        });
+
+                        document.getElementById("requestCount").textContent = requestCount;
+                        document.getElementById("totalAmount").textContent = `S$ ${format(totalAmount)}`;
+                        document.getElementById("totalGST").textContent = `S$ ${format(totalGST)}`;
+                        document.getElementById("overallTotal").textContent = `S$ ${format(totalSum)}`;
+                        document.getElementById("openamount").textContent = `S$ ${format(totalOpenAmount)}`;
+                        document.getElementById("paidamount").textContent = `S$ ${format(totalPaidAmount)}`;
+                        document.getElementById("balancecoltotal").textContent = `S$ ${format(totalbalanacecol)}`;
+                    }
+
+                    // Call the function when the page loads
+                    document.addEventListener("DOMContentLoaded", () => {
+                        updateTotals();
+                    });
+                </script>
+
+            </div>
+
+            <script>
+
+                function getInvoiceDetailsToCopy(invoiceNo) {
+                    document.getElementById("modal").style.display = "block";
+                    // Perform an AJAX request to get the details
+                    fetch(`/get_invoice_details/${invoiceNo}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // console.log("...data.......", data);
+
+                            document.querySelector(".button-container1 h3").textContent = `Duplicating Invoice`;
+                            document.querySelector(".sub").textContent = "Submit";
+                            document.getElementById('Invoice_date').value = data.inv_date;
+                            document.getElementById('External_po').value = data.po_number;
+                            document.getElementById('po_number').value = data.prj_id;
+                            document.getElementById('Attn').value = data.attn;
+                            document.getElementById('Terms').value = data.terms;
+                            document.getElementById('time_period').value = data.payment_terms;
+                            document.getElementById('Currency').value = data.currency;
+                            document.getElementById('exchange_rate').value = data.exchange_rate;
+                            document.getElementById('gst').value = data.gst;
+                            document.getElementById('Bank').value = data.bank_name;
+                            document.getElementById('Account_No').value = data.bank_acc_no;
+                            document.getElementById('Branch').value = data.branch;
+                            document.getElementById('Swift').value = data.swift;
+                            document.getElementById('Bill_to').value = data.bill_to_line1;
+                            document.getElementById('Billing_Address_Line1').value = data.B_client;
+                            document.getElementById('Billing_Address_Line2').value = data.bill_to_line2;
+                            document.getElementById('Billing_Address_Line3').value = data.bill_to_line3;
+                            document.getElementById('Delivery_to').value = data.delivary_to_line1;
+                            document.getElementById('Delivery_Address_Line1').value = data.D_client;
+                            document.getElementById('Delivery_Address_Line2').value = data.delivary_to_line2;
+                            document.getElementById('Delivery_Address_Line3').value = data.delivary_to_line3;
+                            document.getElementById('comments').value = data.comments;
+                            let tableBody = document.getElementById("itemsTableBody");
+                            tableBody.innerHTML = ""; // Clear the table before adding new rows
+                            data.items.forEach((item, index) => {
+                                let row = tableBody.insertRow();
+                                row.innerHTML = `
+                                <td class="text-center">${index + 1}</td>
+                                <td><input type="text" class="form-control description" name="description[]" value="${item.item}"></td>
+                                <td><input type="number" class="form-control qty" name="qty[]" step='any' value="${item.quantity}" oninput="calculateTotal(this)"></td>
+                                <td><input type="number" class="form-control unit_price" step='any' name="unit_price[]" value="${item.unit_price}" oninput="calculateTotal(this)"></td>
+                                <td><input type="text" class="form-control total" name="total[]" value="${item.total}" readonly></td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger btn-sm" onclick="removeRow(this)" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                        <i class="fa-solid fa-trash" style="color: red;"></i>
+                                    </button>
+                                </td>
+                                `;
+                            });
+                            calculateGrandTotal(); // Recalculate totals after populating items
+                            // Add any other fields here that need to be populated
+                        })
+                        .catch(error => console.error('Error fetching invoice details:', error));
+                }
+
+
+                function getInvoiceDetails(invoiceNo) {
+                    document.getElementById("modal").style.display = "block";
+                    // Perform an AJAX request to get the details
+                    fetch(`/get_invoice_details/${invoiceNo}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // console.log("...data.......", data);
+                            // Update the modal header and button label
+                            document.querySelector(".button-container1 h3").textContent = `Editing Invoice ${invoiceNo}`;
+                            document.querySelector(".sub").textContent = "Update";
+
+                            document.getElementById('Invoice_No').value = data.inv_no;
+                            document.getElementById('Invoice_date').value = data.inv_date;
+                            document.getElementById('External_po').value = data.po_number;
+                            document.getElementById('po_number').value = data.prj_id;
+                            document.getElementById('Attn').value = data.attn;
+                            document.getElementById('Terms').value = data.terms;
+                            document.getElementById('time_period').value = data.payment_terms;
+                            document.getElementById('Currency').value = data.currency;
+                            document.getElementById('exchange_rate').value = data.exchange_rate;
+                            document.getElementById('gst').value = data.gst;
+                            document.getElementById('Bank').value = data.bank_name;
+                            document.getElementById('Account_No').value = data.bank_acc_no;
+                            document.getElementById('Branch').value = data.branch;
+                            document.getElementById('Swift').value = data.swift;
+                            document.getElementById('Bill_to').value = data.bill_to_line1;
+                            document.getElementById('Billing_Address_Line1').value = data.B_client;
+                            document.getElementById('Billing_Address_Line2').value = data.bill_to_line2;
+                            document.getElementById('Billing_Address_Line3').value = data.bill_to_line3;
+                            document.getElementById('Delivery_to').value = data.delivary_to_line1;
+                            document.getElementById('Delivery_Address_Line1').value = data.D_client;
+                            document.getElementById('Delivery_Address_Line2').value = data.delivary_to_line2;
+                            document.getElementById('Delivery_Address_Line3').value = data.delivary_to_line3;
+                            document.getElementById('comments').value = data.comments;
+                            let tableBody = document.getElementById("itemsTableBody");
+                            tableBody.innerHTML = ""; // Clear the table before adding new rows
+                            data.items.forEach((item, index) => {
+                                let row = tableBody.insertRow();
+                                row.innerHTML = `
+    <td class="text-center">${index + 1}</td>
+    <td><input type="text" class="form-control description" name="description[]" value="${item.item}"></td>
+    <td><input type="number" class="form-control qty" name="qty[]" step='any' value="${item.quantity}" oninput="calculateTotal(this)"></td>
+    <td><input type="number" class="form-control unit_price"  step='any' name="unit_price[]" value="${item.unit_price}" oninput="calculateTotal(this)"></td>
+    <td><input type="text" class="form-control total" name="total[]" value="${item.total}" readonly></td>
+    <td class="text-center">
+        <button class="btn btn-danger btn-sm" onclick="removeRow(this)" style="border: none; background: none; padding: 0; cursor: pointer;">
+            <i class="fa-solid fa-trash" style="color: red;"></i>
+        </button>
+    </td>
+                            `;
+                            });
+                            calculateGrandTotal(); // Recalculate totals after populating items
+                            // Add any other fields here that need to be populated
+                        })
+                        .catch(error => console.error('Error fetching invoice details:', error));
+                }
+
+            </script>
+
+            <script>
+
+                function confirmDelete(invoiceId, rowIndex) {
+                    // Show confirmation dialog
+                    if (confirm("Are you sure you want to delete this invoice?")) {
+                        // Call a function to delete the row from the table
+                        deleteInvoiceRow(rowIndex);
+                        // You can also make an AJAX request here to delete the invoice from the database
+                        deleteInvoiceFromDatabase(invoiceId);
+                    }
+                }
+
+                function deleteInvoiceRow(rowIndex) {
+                    // Delete the row from the table
+                    var row = document.getElementById("row" + rowIndex);
+                    if (row) {
+                        row.remove();
+                    }
+                }
+
+                function deleteInvoiceFromDatabase(invoiceId) {
+                    // Example AJAX request to delete the invoice from the database
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/delete_invoice", true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            location.reload(); // This will reload the current page
+
+                        }
+                    };
+                    xhr.send(JSON.stringify({ invoiceId: invoiceId }));
+                }
+            </script>
+
+            <div id="paymentModal" class="modal">
+
+                <div class="modal-content">
+
+                    <div class="button-container1">
+
+                        <h2>Invoice Details</h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Invoice ID</strong></p> <span id="modalInvoiceID"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Project</strong></p> <span id="modalProject"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Project Name</strong></p> <span id="modalProjectName"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>PO Number</strong></p> <span id="modalPoNumber"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Terms</strong></p> <span id="modalTerms"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Attn</strong></p> <span id="modalAttn"></span>
+                            </div>
+
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Created By</strong></p> <span id="modalRequestedBy"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Req Date</strong></p> <span id="modalReqDate"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Inv Date</strong></p> <span id="modalInvDate"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Bill To</strong></p> <span id="modalBillTo"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Delivery To</strong></p> <span id="modalDeliveryTo"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Currency</strong></p> <span id="modalCurrency"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Exch. Rate</strong></p> <span id="modalExchRate"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Amount</strong></p> <span id="modalAmount"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>GST</strong></p> <span id="modalGST"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Total</strong></p> <span id="modalTotal"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Status</strong></p> <span id="modalStatus"></span>
+                                <input type="text" class="form-control" id="actul_status" name="actul_status"
+                                    style="display: none;">
+                            </div>
+
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Comments</strong></p> <span id="modalcomments"></span>
+                            </div>
+
+                            <form id="invoiceForm" action="{{ url_for('invoice') }}" method="POST">
+
+                                <input type="text" class="form-control" id="actul_req_amt" name="actul_req_amt"
+                                    style="display: none;">
+
+                                <div class="flex-row">
+                                    <div class="flex-item">
+                                        <label for="recv_on" class="form-label">
+                                            <strong>Recv. On</strong>
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="recv_on" name="recv_on" required>
+                                    </div>
+
+                                    <script>
+                                        // Get the current date in YYYY-MM-DD format
+                                        const currentDate = new Date().toISOString().split('T')[0];
+
+                                        // Set the default value to the current date
+                                        document.getElementById('recv_on').value = currentDate;
+                                    </script>
+
+                                    <div class="flex-item">
+                                        <label for="paid_amount" class="form-label"> <strong>
+                                                Amount</strong>
+                                            <span style="color: red;">*</span></label>
+                                        <input type="number" class="form-control" id="paid_amount" name="paid_amount"
+                                            required min="0" step="0.01" onchange="validateAmountPaid()">
+                                    </div>
+                                </div>
+
+                                <script>
+                                    let previousValidAmount = 0; // Variable to store the previous valid amount
+                                    function validateAmountPaid() {
+                                        const actualAmount = parseFloat(document.getElementById('actul_req_amt').value); // Get the actual requested amount
+                                        const paidAmount = parseFloat(document.getElementById('paid_amount').value);
+                                        if (paidAmount > actualAmount) {
+                                            alert("Amount paid cannot exceed the requested amount.");
+                                            document.getElementById('paid_amount').value = actualAmount; // Reset to the actual requested amount
+                                        } else {
+                                            previousValidAmount = paidAmount; // Update the previous valid value if it's within the limit
+                                        }
+                                    }
+                                </script>
+
+                                <div class="button-container" style="margin-top: 20px; display: none;"
+                                    id="invoiceFormContainer">
+                                    <div class="flex-item">
+                                        <input type="text" class="form-control" id="invoice_req_id"
+                                            name="invoice_req_id" required style="display: none;">
+                                        <button type="submit" class="new-enquiry-btn">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    function checkPaymentStatus() {
+                                        const statusElement = document.getElementById('actul_status');
+                                        const invoiceFormContainer = document.getElementById('invoiceFormContainer');
+                                        if (statusElement.value.trim() == "Paid") {
+                                            invoiceFormContainer.style.display = "none";
+                                        } else {
+                                            invoiceFormContainer.style.display = "block";
+                                        }
+                                    }
+
+                                </script>
+
+                            </form>
+
+                            <script>
+                                document.getElementById("invoiceForm").addEventListener("submit", function (event) {
+                                    let payReqId = document.getElementById("invoice_req_id").value.trim();
+
+                                    if (!payReqId) {
+                                        alert("Invoice Request ID is required!");
+                                        event.preventDefault();
+                                    }
+                                });
+                            </script>
+                        </div>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" width="100%">
+
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center; width: 2%;">S/N</th>
+                                        <th style="text-align: left; width: 53%;">Item</th>
+                                        <th style="text-align: right; width: 10%;">Qty</th>
+                                        <th style="text-align: right; width: 10%;">Unit Price</th>
+                                        <th style="text-align: right; width: 10%;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalInvTable">
+                                    <!-- Items will be inserted here -->
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="button-container1">
+
+                        <h3 id="InvHistoryHeading">Invoice History</h3>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive2">
+
+                            <table class="table table-main" width="50%">
+
+                                <thead>
+
+                                    <tr>
+                                        <th style="text-align: left;">Received On</th>
+                                        <th style="text-align: left;">Received By</th>
+                                        <th style="text-align: left;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalInvHostoryItemsTable1">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <script>
+
+                function formatNumber(number) {
+                    return new Intl.NumberFormat('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(number);
+                }
+
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const day = String(date.getDate()).padStart(2, '0');  // Pad with zero if single digit
+                    const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed, so add 1
+                    const year = String(date.getFullYear()).slice(-2);  // Get last two digits of the year
+                    return `${day}/${month}/${year}`;
+                }
+
+                function openPaymentDetails(id) {
+                    fetch(`/ac_get_invoice_details?id=${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('modalInvoiceID').textContent = data.invoice_data.inv_no;
+                                document.getElementById('modalProject').textContent = data.invoice_data.prj_id;
+                                if (data.invoice_data.project_name) {
+                                    document.getElementById('modalProjectName').textContent =
+                                        data.invoice_data.project_name && data.invoice_data.project_name.length > 12 ?
+                                            data.invoice_data.project_name.slice(0, 12) + "....." : data.invoice_data.project_name || '';
+                                } else {
+                                    document.getElementById('modalProjectName').textContent = ''; // Show nothing if project_name is not available
+                                }
+
+                                if (data.invoice_data.po_number) {
+                                    document.getElementById('modalPoNumber').textContent =
+                                        data.invoice_data.po_number && data.invoice_data.po_number.length > 12 ?
+                                            data.invoice_data.po_number.slice(0, 12) + "....." : data.invoice_data.po_number || '';
+                                } else {
+                                    document.getElementById('modalPoNumber').textContent = ''; // Show nothing if project_name is not available
+                                }
+                                if (data.invoice_data.payment_terms === 'COD') {
+                                    document.getElementById('modalTerms').textContent = data.invoice_data.payment_terms;
+                                } else {
+                                    document.getElementById('modalTerms').textContent = (data.invoice_data.Terms || '') + ' - ' + (data.invoice_data.payment_terms || '');
+                                }
+                                document.getElementById('modalAttn').textContent = data.invoice_data.attn;
+                                document.getElementById('modalCurrency').textContent = data.invoice_data.Currency;
+
+
+                                const currencySymbols = {
+                                    SGD: 'S$ ',
+                                    USD: '$ ',
+                                    EUR: '€ ',
+                                    GBP: '£ ',
+                                    JPY: '¥ ',
+                                    CNY: '¥ ',
+                                    AUD: 'A$ ',
+                                    CAD: 'C$ ',
+                                    INR: '₹ ',
+                                    MYR: 'RM '
+                                };
+
+                                const currency = data.invoice_data.Currency || 'SGD';
+                                const symbol = currencySymbols[currency] || 'S$ ';
+
+
+
+                                document.getElementById('modalExchRate').textContent = data.invoice_data.exchange_rate;
+                                document.getElementById('modalRequestedBy').textContent = data.invoice_data.created_by;
+                                document.getElementById('modalReqDate').textContent = formatDate(data.invoice_data.created_date) || '';
+                                document.getElementById('modalInvDate').textContent = formatDate(data.invoice_data.inv_date) || '';
+                                document.getElementById('modalBillTo').textContent = `${data.invoice_data.B_client}`;
+                                document.getElementById('modalDeliveryTo').textContent = `${data.invoice_data.D_client}`;
+                                function roundToTwoFromThreeDecimals(value) {
+                                    const num = parseFloat(value);
+                                    const threeDecimal = Math.round(num * 1000) / 1000;  // Round to 3 decimals
+                                    return (Math.round(threeDecimal * 100) / 100).toFixed(2);  // Then round to 2 decimals
+                                }
+
+                                // Usage
+                                document.getElementById('modalAmount').textContent = ` ${symbol} ${formatNumber(roundToTwoFromThreeDecimals(data.invoice_data.amount ?? 0))}`;
+                                document.getElementById('modalGST').textContent = ` ${symbol} ${formatNumber(roundToTwoFromThreeDecimals(data.invoice_data.gst_value ?? 0))}`;
+                                document.getElementById('modalTotal').textContent = ` ${symbol} ${formatNumber(roundToTwoFromThreeDecimals(data.invoice_data.total ?? 0))}`;
+
+                                document.getElementById('actul_req_amt').value = (data.invoice_data.balence ?? 0);
+                                document.getElementById('paid_amount').value = (data.invoice_data.balence ?? 0).toFixed(2);
+                                document.getElementById('invoice_req_id').value = data.invoice_data.inv_no;
+                                document.getElementById('actul_status').value = data.invoice_data.status;
+                                document.getElementById('modalStatus').textContent = data.invoice_data.status;
+                                document.getElementById('modalcomments').textContent = data.invoice_data.comments;
+                                // Populate the items table
+                                const itemsTable = document.getElementById('modalInvTable');
+                                itemsTable.innerHTML = ''; // Clear existing rows
+
+                                let index = 1; // start index from 1
+
+                                data.items.forEach(item => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td style= "text-align:center;">${index}</td>
+                                        <td>${item.item}</td>
+                                        <td style="text-align: right;">${item.quantity}</td>
+                                        <td style="text-align: right;">${formatNumber(item.Unit_Price)}</td>
+                                        <td style="text-align: right;">${formatNumber(item.total)}</td>
+                                    `;
+                                    itemsTable.appendChild(row);
+                                    index++;
+                                });
+
+
+                                // Populate the invoice payment history table
+                                const historyTable = document.getElementById('modalInvHostoryItemsTable1');
+                                historyTable.innerHTML = ''; // Clear existing rows
+
+                                // Check if there are any history items
+                                if (data.history_items.length === 0) {
+                                    // If no history, show a message
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                            <td colspan="3" style="text-align: center;">No history available</td>
+                                        `;
+                                    historyTable.appendChild(row);
+                                } else {
+                                    // Populate the table with history items
+                                    data.history_items.forEach(historyItem => {
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `
+                                            <td>${formatDate(historyItem.pay_date)}</td>
+                                            <td> ${historyItem.paid_by}</td>
+                                            <td>$ ${formatNumber(historyItem.amount)}</td>
+                                        `;
+                                        historyTable.appendChild(row);
+                                    });
+                                }
+                                checkPaymentStatus();
+
+                                document.getElementById('paymentModal').style.display = 'block';
+                            } else {
+                                alert('Payment details not found!');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching payment details:', error);
+                            alert('Error fetching payment details!');
+                        });
+                }
+
+                function closeModal() {
+                    document.getElementById('paymentModal').style.display = 'none';
+                }
+
+            </script>
+
+            <style>
+                tfoot {
+                    position: sticky;
+                    bottom: 0;
+                    background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+                    color: #333;
+                    z-index: 1;
+                }
+
+                .table-responsive1 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 450px;
+                    border-radius: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .table-responsive2 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 120px;
+                    border-radius: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .table-main {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .table-main thead {
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    z-index: 10;
+                }
+
+                .container {
+                    background-color: white;
+                    padding: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    flex: 1;
+                    gap: 20px;
+                    border: 2px solid #ccc;
+                    /* Adding border with 2px width and light gray color */
+
+                }
+
+                .invoice-header {
+                    flex: 1;
+                    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                    padding: 20px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: #004d40;
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                .invoice-header:hover {
+                    transform: scale(1.02);
+                }
+
+
+                .invoice-row {
+                    display: grid;
+                    grid-template-columns: 120px auto;
+                    /* First column for labels, second for values */
+                    gap: 10px;
+                    align-items: center;
+                    padding: 5px 0;
+                }
+
+                .invoice-row p {
+                    margin: 0;
+                    font-weight: bold;
+                    text-align: left;
+                }
+
+                .invoice-row span {
+                    text-align: left;
+                }
+
+
+                .invice_header {
+                    width: 100%;
+                    padding: 10px;
+                    flex: 1;
+                    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: #004d40;
+                    transition: transform 0.2s ease-in-out;
+
+                }
+
+                .invoice-header:hover {
+                    transform: scale(1.02);
+                }
+
+                .button-container1 {
+                    display: flex;
+                    flex: 1;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    margin-top: 10px;
+                    gap: 10px;
+                }
+
+                .button-container2 {
+                    display: flex;
+                    flex: 1;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    margin-top: 10px;
+                    gap: 10px;
+                }
+
+
+                .title-box {
+                    display: flex;
+                    padding: 5px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 10px;
+                    justify-content: space-between;
+
+                }
+
+                .title-item {
+                    display: flex;
+                    align-items: center;
+
+                    /* Align title and value on the same row */
+                }
+
+                .title-item span {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #004b5d;
+                }
+
+
+                @keyframes open {
+                    from {
+                        width: 20px;
+                        /* Start with 0 width */
+                    }
+
+                    to {
+                        width: 573px;
+                        /* Animate to 473px width */
+                    }
+                }
+
+                /* Responsive styling for smaller screens */
+                @media (max-width: 768px) {
+                    .title-box {
+                        flex-direction: column;
+                        /* Stack items vertically on smaller screens */
+                        align-items: flex-start;
+                    }
+
+                    .title-item {
+                        margin-bottom: 15px;
+                        /* Space between stacked items */
+                    }
+                }
+
+                .mat_rec_table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 0px;
+                }
+
+                .mat_rec_table th,
+                .mat_rec_table td {
+                    padding: 5px;
+                    text-align: center;
+                }
+
+                .mat_rec_table td {
+                    margin: 0;
+                    padding: 0;
+                }
+            </style>
+
+        </div>
+
+    </div>
+
+    <style>
+        .custom-btn1 {
+            height: 30px;
+            color: whitesmoke;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+            font-size: 15px;
+        }
+
+        .btn-21 {
+            background: #004B5D;
+            background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+            border: none;
+        }
+
+        .btn-21:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        .btn-21:hover {
+            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5),
+                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+        }
+    </style>
+
+    <style>
+        .record-header1 {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+        }
+
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 450px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+
+    <style>
+        .search_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+
+        #projectTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+
+
+        #searchInput {
+            width: 20%;
+            padding: 2px;
+            margin: auto;
+            display: block;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            /* Rounded corners */
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #searchInput:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchInput:focus {
+            border-color: #004b5d;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: space-around;
+            border-radius: 5px;
+            width: 100%;
+            gap: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .invice_header {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+            box-sizing: border-box;
+            /* Ensure padding and border are included in width */
+        }
+
+
+        .form-label {
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+
+            .row1 {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flex-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .invice_header {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Return an empty string for invalid dates
+                return "";
+            }
+
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = (date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0"); // Adding 1 because months are zero-based
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const start_time_elements =
+                document.querySelectorAll(".start-time");
+            start_time_elements.forEach(function (element) {
+                element.textContent = formatDate(element.textContent);
+            });
+
+
+        });
+    </script>
+
+    <script>
+
+        document.getElementById('openModalButton').onclick = function () {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex'; // Show the modal
+        };
+
+        function toggleSelectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('#itemsTableBody input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        document.querySelector('.close-button').onclick = function () {
+            document.getElementById('modal').style.display = 'none';
+            window.location.reload();
+        };
+
+    </script>
+
+    <style>
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.5s ease-in-out forwards;
+        }
+
+
+
+        .modal11 {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+        }
+
+        .modal-content11 {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 30%;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+
+        .button-container1 h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007AFF;
+            /* Apple Blue */
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #007AFF, #34AADC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        /* Smooth fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <style>
+        .span_tag {
+            font-size: 14px;
+            font-weight: bold;
+            color: #004b5d;
+            padding: 5px 8px;
+            border: 1px solid #004b5d;
+            border-radius: 5px;
+            background-color: #f1f8ff;
+            color: #004b5d;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        #totalAmount {
+            color: #28a745;
+            /* Green for amount */
+        }
+
+        #totalGST {
+            color: #0c8de2;
+            /* Yellow for GST */
+        }
+
+        #overallTotal {
+            color: #dc3545;
+            /* Red for overall total */
+        }
+    </style>
+
+    <style>
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+    </style>
+
+    <script>
+
+        function openPrintDetails(inv_no) {
+            document.getElementById('inv_Print').value = inv_no;
+            document.getElementById('printModal').style.display = 'block';
+        }
+
+        function closePrintModal() {
+            document.getElementById('printModal').style.display = 'none';
+        }
+
+    </script>
+
+    <style>
+        /* Modal Background */
+        .modal1 {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Fixed at the top of the page */
+            z-index: 1000;
+            /* Sit on top of other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent background */
+            overflow: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Modal Content */
+        .modal-content1 {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 13%;
+            /* Adjust width as per your preference */
+            animation: modalIn 0.3s ease;
+        }
+
+        /* Header inside modal */
+        .button-container1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Modal Close Button */
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+        }
+
+        /* Title inside modal */
+        h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* Form Styling */
+        .container {
+            margin-top: 20px;
+        }
+
+        /* Flex Row for Input Groups */
+        .flex-row1 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Label Styling */
+        .form-label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        /* Checkbox Styling */
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        /* Button Container Styling */
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Modal Open Animation */
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Show/Hide Transitions */
+        .modal1.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Optional: For larger screens, you may adjust the modal width */
+        @media (max-width: 768px) {
+            .modal-content1 {
+                width: 80%;
+            }
+
+            .button-container1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+
+</body>
+
+</html>

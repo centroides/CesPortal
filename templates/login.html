@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css'>
+    <link rel="stylesheet" href="./static/loginstyle.css">
+    <title>Centroid Engineering Solutions</title>
+</head>
+
+<body>
+
+    <div class="plc-line" style="left: 10%;"></div>
+    <div class="plc-line" style="left: 30%; animation-delay: 0.5s;"></div>
+    <div class="plc-line" style="left: 50%; animation-delay: 1s;"></div>
+    <div class="plc-line" style="left: 70%; animation-delay: 1.5s;"></div>
+    <div class="plc-line" style="left: 90%; animation-delay: 2s;"></div>
+
+
+
+    <!-- Blinking Indicators -->
+    <div class="indicator" style="top: 20%; left: 15%;"></div>
+    <div class="indicator" style="top: 30%; left: 25%;"></div>
+    <div class="indicator" style="top: 60%; left: 60%;"></div>
+    <div class="indicator" style="top: 80%; left: 80%;"></div>
+    <h2>CENTROID ENGINEERING SOLUTIONS</h2>
+
+    <div class="container" id="container">
+
+        <div class="form-container sign-up-container">
+            <form class="p-3" action="/register" method="POST">
+                <h1 style="color: rgb(130, 209, 183);">Create Account</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <input type="email" class="form-control" placeholder="Email" id="exampleInputEmail1" name="email"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Enter a valid email address" required>
+                <input type="password" name="password" placeholder="Password" class="form-control"
+                    id="exampleInputPassword1">
+                <button type="submit" type="submit" class="btn text-light Glowing-btn">Register</button>
+                <div id="emailHelp" class="form-text" style="color:rgb(0, 75, 93);"></div>
+            </form>
+        </div>
+
+        <div class="form-container sign-in-container">
+            <form class="p-3" action="/login" method="POST">
+                <h1 style="color: rgb(130, 209, 183);">Login Form {% if loginerror %} {{ loginerror }} {% endif %}</h1>
+                <h3>{% if registererror %} {{registererror}} {% endif %}</h3>
+                <hr>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Username</label>
+                    <input type="text" name="name" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp">
+                    <div id="emailHelp" class="form-text" style="color:rgb(0, 75, 93);"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <a href="/forgot_password"
+                    style="color:rgb(0, 75, 93); text-decoration:none; margin-bottom: 10px; display:block;">Forgot
+                    Password?</a>
+                <button type="submit" class="btn text-light Glowing-btn">Sign In</button>
+
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with CES please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <img src="static/ces_logo.png" alt="CES Logo" class="ces-logo">
+                    <p>www.centroides.com</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <style>
+        .ces-logo {
+            width: 120px;
+            /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 10px;
+            /* Adds spacing between logo and text */
+        }
+
+        .Glowing-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 50px;
+            font-weight: 200;
+            font-size: 16px;
+            background: linear-gradient(to right, rgb(0, 75, 93), orange, lightblue, Tomato);
+            background-size: 600% 600%;
+            border: 1px solid transparent;
+            animation: gradient 30s linear infinite;
+            color: white;
+            box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+                rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+                rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+                rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+                rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        }
+
+        .Glowing-btn:hover {
+            background: linear-gradient(to right, CornflowerBlue, Aqua, DeepPink, CornflowerBlue);
+            background-size: 600% 600%;
+            animation: gradient 20s linear infinite;
+            filter: drop-shadow(0px 0px 30px CornflowerBlue);
+            font-weight: 400;
+            text-shadow: 0px 0px 3px CornflowerBlue;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+
+
+    <style>
+        /* Background Animation */
+
+
+        /* Animated Vertical PLC Control Lines */
+        .plc-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #0ff;
+            opacity: 0.7;
+            animation: moveLines 3s linear infinite;
+        }
+
+        @keyframes moveLines {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Animated Horizontal PLC Control Lines */
+        .plc-line-horizontal {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background-color: #0ff;
+            opacity: 0.7;
+            animation: moveLinesHorizontal 3s linear infinite;
+        }
+
+        @keyframes moveLinesHorizontal {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Blinking PLC Indicators */
+        .indicator {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0.2;
+            }
+        }
+
+        /* Glowing Button */
+        .Glowing-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 50px;
+            font-weight: 200;
+            font-size: 16px;
+            background: linear-gradient(to right, #00ffcc, #ffcc00, #ff0033, #00ffcc);
+            background-size: 600% 600%;
+            border: 1px solid transparent;
+            animation: gradient 30s linear infinite;
+            color: white;
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.7);
+        }
+
+        .Glowing-btn:hover {
+            background: linear-gradient(to right, #00ccff, #ffcc33, #ff3300, #00ccff);
+            background-size: 600% 600%;
+            animation: gradient 20s linear infinite;
+            filter: drop-shadow(0px 0px 30px cyan);
+            font-weight: 400;
+            text-shadow: 0px 0px 3px cyan;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}" class="active"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table" style="width: 100%;">
+
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">Code</th>
+                            <th>Role</th>
+                            <th>Avail Hrs</th>
+                            <th>AL Hrs</th>
+                            <th>PH Hrs</th>
+                            <th>MC Hrs</th>
+                            <th>Rem. Hrs</th>
+                            <th style="text-align: center;">Qty</th>
+                            <th>Totals</th>
+                            <th>Prj. Bal</th>
+                            <th>Diff</th>
+                            <th>Result</th>
+                            <th style="text-align: center;">Edit</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for code, data_item in data.items() %}
+
+                        <tr>
+                            <td style="text-align: center;" class="dept-code">{{ code }}</td>
+                            <td class="description">{{ data_item.get('role', 'N/A') }}</td>
+                            <td class="available-hours">{{ "{:,.2f}".format(data_item.get('available_hrs',
+                                0)) }} </td>
+                            <td class="annual-hours">{{ "{:,.2f}".format(data_item.get('annual_hrs', 0)) }}
+                            </td>
+                            <td class="ph-hours">{{ "{:,.2f}".format(data_item.get('holiday_hrs', 0)) }}
+                            </td>
+                            <td class="mc-hours">{{ "{:,.2f}".format(data_item.get('medical_hrs', 0)) }}
+                            </td>
+                            <td>{{ "{:,.2f}".format(data_item.get('remaining_hours', 0)) }}
+                            </td>
+                            <td style="text-align: center;">{{ data_item.get('qty', 0) }}</td>
+                            <td>{{ "{:,.2f}".format(data_item.get('total_hrs', 0)) }}</td>
+                            <td>{{ "{:,.2f}".format(data_item.get('balance_hrs', 0)) }}</td>
+                            <td>{{ "{:,.2f}".format(data_item.get('Difference', 0)) }}</td>
+                            <td>{{ "{:,.2f}".format(data_item.get('result', 0)) }}</td>
+
+                            <td style="text-align: center;">
+                                <span class="openModalButton fa-solid fa-pen-to-square"
+                                    style="color: rgb(54, 65, 226); cursor: pointer;"></span>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" style="text-align: center; font-weight: bold;">Total</td>
+                            <td id="total-available"></td>
+                            <td id="total-annual"></td>
+                            <td id="total-ph"></td>
+                            <td id="total-mc"></td>
+                            <td id="total-remaining"></td>
+                            <td id="total-qty" style="text-align: center;"></td>
+                            <td id="total-totalhrs"></td>
+                            <td id="total-balance"></td>
+                            <td id="total-diff"></td>
+                            <td id="total-result"></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+
+                    <script>
+                        window.onload = function () {
+                            function sumColumn(selector) {
+                                let total = 0;
+                                document.querySelectorAll(selector).forEach(cell => {
+                                    let value = parseFloat(cell.textContent.replace(/,/g, '')) || 0;
+                                    total += value;
+                                });
+                                return total;
+                            }
+
+                            // Define selectors for each column class
+                            const columns = {
+                                "total-available": ".available-hours",
+                                "total-annual": ".annual-hours",
+                                "total-ph": ".ph-hours",
+                                "total-mc": ".mc-hours",
+                                "total-remaining": "td:nth-child(7)", // assuming last .mc-hours is for remaining
+                                "total-qty": "td:nth-child(8)",
+                                "total-totalhrs": "td:nth-child(9)",
+                                "total-balance": "td:nth-child(10)",
+                                "total-diff": "td:nth-child(11)",
+                                "total-result": "td:nth-child(12)"
+                            };
+
+                            for (const [id, selector] of Object.entries(columns)) {
+                                const total = sumColumn(selector);
+                                const cell = document.getElementById(id);
+                                if (cell) {
+                                    cell.textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                }
+                            }
+                        };
+                    </script>
+
+                    <script>
+
+                        function closeGSTModal() {
+                            document.getElementById('modal1').style.display = 'none';
+                        }
+
+                        function validateForm(event) {
+                            // Prevent default form submission
+                            event.preventDefault();
+
+                            // Get the values of the fields
+                            let code = document.getElementById("Code").value.trim();
+                            let availableHrs = document.getElementById("availableHours").value.trim();
+                            let annualHrs = document.getElementById("annualHours").value.trim();
+                            let medicalHrs = document.getElementById("mcHours").value.trim();
+                            let role = document.getElementById("role").value.trim();
+
+
+                            // Prepare data object
+                            let formData = {
+                                code: parseInt(code),
+                                available_hrs: parseFloat(availableHrs),
+                                annual_hrs: parseFloat(annualHrs),
+                                medical_hrs: parseFloat(medicalHrs || 0),
+
+                                role: role
+                            };
+
+                            // Send data to Flask using Fetch API
+                            fetch("/save_depart_hours", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    alert(data.message);
+                                    if (data.success) {
+                                        document.getElementById("invoiceForm").reset();  // Reset form after success
+
+                                        // Close the modal
+                                        document.getElementById('modal1').style.display = 'none';
+
+
+                                        location.reload();
+
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error:", error);
+                                    alert("Something went wrong. Please try again.");
+                                });
+                        }
+
+                        document.querySelectorAll('.openModalButton').forEach(function (button) {
+                            button.addEventListener('click', function () {
+                                const row = this.closest('tr');  // Get the clicked row
+                                // console.log("sairammmmmmmmmmmmmmmmmm")
+
+                                const deptCode = parseInt(row.querySelector('.dept-code').textContent.trim().replace(/,/g, ''));
+                                const description = row.querySelector('.description').textContent.trim();
+
+                                const availableHours = parseFloat(row.querySelector('.available-hours').textContent.trim().replace(/,/g, ''));
+                                const annualHours = parseFloat(row.querySelector('.annual-hours').textContent.trim().replace(/,/g, ''));
+                                const mcHours = parseFloat(row.querySelector('.mc-hours').textContent.trim().replace(/,/g, ''));
+
+                                document.getElementById('role').textContent = `${deptCode} - ${description}`;
+                                document.getElementById('availableHours').value = isNaN(availableHours) ? 0 : availableHours.toFixed(2);
+                                document.getElementById('annualHours').value = isNaN(annualHours) ? 0 : annualHours.toFixed(2);
+                                document.getElementById('mcHours').value = isNaN(mcHours) ? 0 : mcHours.toFixed(2);
+                                document.getElementById('role').value = description || "";
+                                document.getElementById('Code').value = deptCode || "";
+
+
+
+
+                                document.getElementById('modal1').style.display = 'flex'; // Show the modal
+                            });
+                        });
+
+                    </script>
+
+                    <div id="modal1" class="modal1" style="display: none;">
+
+                        <div class="modal-content1">
+
+                            <div class="button-container1">
+
+                                <h2 id="role"></h2>
+
+                                <span class="close" onclick="closeGSTModal()">&times;</span>
+
+                            </div>
+
+                            <div class="container">
+
+                                <form id="invoiceForm" method="POST" action="#" onsubmit="validateForm(event)">
+
+                                    <div class="invice_header1">
+
+                                        <div class="flex-row" style="display: none;">
+
+                                            <div class="flex-item">
+                                                <label for="Code" class="form-label">Code</label>
+                                                <input type="number" class="form-control" id="Code" name="Code">
+                                            </div>
+
+                                            <div class="flex-item">
+                                                <label for="role" class="form-label">Role</label>
+                                                <input type="text" class="form-control" id="role" name="role">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="availableHours" class="form-label">Available Hrs</label>
+                                            <input type="number" step="any" class="form-control" id="availableHours"
+                                                name="availableHours">
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="annualHours" class="form-label">Annual Hrs</label>
+                                            <input type="number" step="any" class="form-control" id="annualHours"
+                                                name="annualHours">
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="mcHours" class="form-label">Medical Hrs </label>
+                                            <input type="number" step="any" class="form-control" id="mcHours"
+                                                name="mcHours">
+                                        </div>
+
+                                        <div class="button-container">
+                                            <button type="submit" class="new-enquiry-btn"
+                                                style="margin-bottom: 10px;">Add /
+                                                Save
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <style>
+        tfoot {
+            position: sticky;
+            bottom: 0;
+            background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+            color: #333;
+            z-index: 1;
+        }
+
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: #d8eaf3;
+        }
+
+        .table {
+            margin: auto;
+        }
+
+        .table thead th:nth-child(1),
+        .table tbody td:nth-child(1),
+        .table thead th:nth-child(2),
+        .table tbody td:nth-child(2),
+        .table thead th:nth-child(3),
+        .table tbody td:nth-child(3),
+        .table thead th:nth-child(4),
+        .table tbody td:nth-child(4),
+        .table thead th:nth-child(5),
+        .table tbody td:nth-child(5),
+        .table thead th:nth-child(6),
+        .table tbody td:nth-child(6),
+        .table thead th:nth-child(7),
+        .table tbody td:nth-child(7) {
+            text-align: left;
+        }
+
+        .table-responsive {
+            overflow: auto;
+            max-height: 750px;
+        }
+    </style>
+
+
+    <style>
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .form-label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+        /* Modal Background */
+        .modal1 {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content1 {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 17%;
+            animation: modalIn 0.3s ease;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal1.show {
+            display: block;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content1 {
+                width: 80%;
+            }
+
+            .button-container1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+
+        .button-container1 .button-container h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007AFF;
+            /* Apple Blue */
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #007AFF, #34AADC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        /* Smooth fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+
+
+</body>
+
+</html>

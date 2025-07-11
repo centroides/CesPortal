@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li class="active"><a href="{{ url_for('employees_view') }}" class="link"><i
+                                    class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+
+            <div class="search_container">
+                <h3 style="color: #004274;">Employees(<span id="requestCount">0</span>) </h3>
+
+                <input type="text" id="searchInput" placeholder="Search by Email, Username, Code, Active, Role....."
+                    onkeyup="filterTable()">
+
+                <span class="span_tag">Active: <span id="active">0</span></span>
+                <span class="span_tag">Inactive: <span id="inactive">0</span></span>
+
+
+                <button type="button" id="openModalButton" data-project-id="#"
+                    style="background: linear-gradient(45deg, #FF2D55, #34AADC, #5856D6, #007AFF); color: white; font-weight: bold;  padding: 5px; border-radius: 10px;  cursor: pointer;">
+                    + New Employee
+                </button>
+
+                <style>
+                    .span_tag {
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: #004b5d;
+                        padding: 5px 8px;
+                        border: 1px solid #004b5d;
+                        border-radius: 5px;
+                        background-color: #f1f8ff;
+                        color: #004b5d;
+                        text-align: center;
+                        margin-right: 10px;
+                    }
+
+                    #totalAmount {
+                        color: #28a745;
+                        /* Green for amount */
+                    }
+
+                    #totalGST {
+                        color: #0c8de2;
+                        /* Yellow for GST */
+                    }
+
+                    #overallTotal {
+                        color: #dc3545;
+                        /* Red for overall total */
+                    }
+
+                    .search_container {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                        padding: 10px;
+                    }
+
+
+                    #projectTable {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        border-radius: 10px;
+                    }
+
+
+                    #searchInput {
+                        width: 40%;
+                        padding: 2px;
+                        margin: auto;
+                        display: block;
+                        border: 2px solid #ccc;
+                        border-radius: 5px;
+                        /* Rounded corners */
+                        outline: none;
+                        transition: all 0.3s ease-in-out;
+                        text-align: center;
+                        font-size: 16px;
+                    }
+
+                    #searchInput:hover {
+                        background-color: #f0f0f0;
+                    }
+
+                    #searchInput:focus {
+                        border-color: #004b5d;
+                        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                    }
+                </style>
+
+                <style>
+                    #openModalButton:hover {
+                        background-color: #04a389;
+                        color: #ffffff;
+                        border-color: #ffffff;
+                        transform: scale(1.05);
+                    }
+                </style>
+
+                <div id="modal" class="modal">
+
+                    <div class="modal-content">
+
+                        <div class="button-container1">
+
+                            <h3>New / Update Employee</h3>
+
+                            <span class="close-button">&times;</span>
+
+                        </div>
+
+                        <form method="POST" action="/edituser">
+
+                            <div class="container">
+
+                                <div class="flex-item">
+                                    <label for="id" class="form-label">ID</label>
+                                    <input type="text" class="form-control" id="id" name="id" readonly>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="name" class="form-label">Email <span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="username" class="form-label">User Name <span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label for="rate_per_hour" class="form-label">Hourly Rate</label>
+                                    <input type="number" class="form-control" id="rate_per_hour" name="rate_per_hour"
+                                        step="any">
+                                </div>
+
+                                <!-- Select Primary Role -->
+                                <div class="flex-item">
+                                    <label for="Primary_role" class="form-label">Primary Role <span
+                                            style="color: red;">*</span></label>
+                                    <select class="form-control" id="Primary_role" name="Primary_role" required>
+                                        <option value="" disabled selected>Select Primary Role</option>
+                                        {% for code, name in cost_centers %}
+                                        <option value="{{ code }}|{{ name }}">{{ code }} - {{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Select Secondary Role -->
+                                <div class="flex-item">
+                                    <label for="Secondary_role" class="form-label">Secondary Role</label>
+                                    <select class="form-control" id="Secondary_role" name="Secondary_role">
+                                        <option value="" disabled selected>Select Secondary Role</option>
+                                        {% for code, name in cost_centers %}
+                                        <option value="{{ code }}|{{ name }}">{{ code }} - {{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <script>
+                                    document.getElementById("Secondary_role").addEventListener("change", function () {
+                                        let primaryRole = document.getElementById("Primary_role").value.split("|")[0]; // Extract code
+                                        let secondaryRole = this.value.split("|")[0]; // Extract code
+
+                                        console.log("......primaryRole...........", primaryRole);
+                                        console.log("......secondaryRole...........", secondaryRole);
+
+                                        if (parseInt(secondaryRole) <= parseInt(primaryRole)) {  // Ensure numeric comparison
+                                            alert("The Secondary Role must have a smaller code than the Primary Role. Please select a valid role.");
+                                            this.selectedIndex = 0; // Reset to default
+                                        }
+                                    });
+
+
+                                </script>
+
+
+                                <div class="flex-item">
+                                    <label for="active" class="form-label">Active: <span
+                                            style="color: red;">*</span></label>
+                                    <div class="toggle-container">
+                                        <input class="toggle-input" type="radio" id="register_1" name="register"
+                                            value="1" required>
+                                        <label class="toggle-label" for="register_1">Yes</label>
+                                        <input class="toggle-input" type="radio" id="register_0" name="register"
+                                            value="0">
+                                        <label class="toggle-label" for="register_0">No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="button-container2">
+                                <button type="submit" class="custom-btn btn-2">Add / Update </button>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+                <script>
+
+                    document.getElementById('openModalButton').onclick = function () {
+                        const modal = document.getElementById('modal');
+                        modal.style.display = 'flex'; // Show the modal
+                    };
+
+                    function toggleSelectAll(checkbox) {
+                        const checkboxes = document.querySelectorAll('#itemsTableBody input[type="checkbox"]');
+                        checkboxes.forEach(cb => cb.checked = checkbox.checked);
+                    }
+
+                    document.querySelector('.close-button').onclick = function () {
+                        document.getElementById('modal').style.display = 'none';
+                        window.location.reload();
+                    };
+
+                </script>
+
+                <style>
+                    .button-container1 {
+                        display: flex;
+                        flex: 1;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                    }
+
+                    .title-box {
+                        display: flex;
+                        padding: 5px;
+                        background-color: white;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        margin-bottom: 10px;
+                        justify-content: space-between;
+
+                    }
+
+                    .title-item {
+                        display: flex;
+                        align-items: center;
+
+                        /* Align title and value on the same row */
+                    }
+
+                    .title-item span {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #0fabf3;
+                    }
+
+
+                    @keyframes open {
+                        from {
+                            width: 20px;
+                            /* Start with 0 width */
+                        }
+
+                        to {
+                            width: 573px;
+                            /* Animate to 473px width */
+                        }
+                    }
+
+                    /* Responsive styling for smaller screens */
+                    @media (max-width: 768px) {
+                        .title-box {
+                            flex-direction: column;
+                            /* Stack items vertically on smaller screens */
+                            align-items: flex-start;
+                        }
+
+                        .title-item {
+                            margin-bottom: 15px;
+                            /* Space between stacked items */
+                        }
+                    }
+                </style>
+
+                <!-- CSS for Modal -->
+                <style>
+                    .button-container2 {
+                        display: flex;
+                        flex: 1;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        margin-top: 10px;
+                        gap: 10px;
+                    }
+
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        z-index: 1000;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        overflow: auto;
+                        background: rgba(255, 255, 255, 0.1);
+                        backdrop-filter: blur(10px);
+                        justify-content: center;
+                    }
+
+
+                    .modal-content {
+                        background-color: white;
+                        margin: auto;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        width: 20%;
+                    }
+
+                    .close-button {
+                        color: #aaa;
+                        float: right;
+                        font-size: 28px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+
+                    .close {
+                        color: #aaa;
+                        float: right;
+                        font-size: 28px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+                </style>
+
+            </div>
+
+            <div style="margin-top: 20px;">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="alert-container">
+                    {% for category, message in messages %}
+                    {% if category == 'user_edit_sucess' %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                    {% elif category == 'user_edit_error' %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(function () {
+                        var flashMessages = document.querySelectorAll('.flash-message');
+                        flashMessages.forEach(function (message) {
+                            message.style.transition = "opacity 0.5s ease-out";
+                            message.style.opacity = '0';
+                            setTimeout(function () {
+                                message.remove();
+                            }, 500);
+                        });
+                    }, 10000); // 10000 milliseconds = 10 seconds
+                });
+            </script>
+
+            <style>
+                #projectTable {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border-radius: 10px;
+                }
+
+
+                #searchInput {
+                    width: 30%;
+                    padding: 2px;
+                    margin: auto;
+                    display: block;
+                    border: 2px solid #ccc;
+                    border-radius: 5px;
+                    /* Rounded corners */
+                    outline: none;
+                    transition: all 0.3s ease-in-out;
+                    text-align: center;
+                    font-size: 16px;
+                }
+
+                #searchInput:hover {
+                    background-color: #f0f0f0;
+                }
+
+                #searchInput:focus {
+                    border-color: #004b5d;
+                    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                }
+            </style>
+
+            <div class="table-responsive">
+                <!-- Table -->
+                <table class="table" width="100%" id="adminTable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">S.No</th>
+                            <th class="text-center" scope="col">Email</th>
+                            <th class="text-center" scope="col">User Name</th>
+                            <th class="text-center" scope="col">Rate</th>
+                            <th class="text-center" scope="col">Primary Role</th>
+                            <th class="text-center" scope="col">Primary Code</th>
+                            <th class="text-center" scope="col">Secondary Role</th>
+                            <th class="text-center" scope="col">Secondary Code</th>
+                            <th class="text-center" scope="col">Active</th>
+                            <th class="text-center" scope="col" colspan="2">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody style="background-color: white;">
+                        {% for admin_user in admin_users %}
+                        <tr>
+                            <td class="text-center">{{ loop.index }}</td> <!-- Index value -->
+                            <td class="text-center">{{ admin_user['name'] or '' }}</td>
+                            <td class="text-center">{{ admin_user['username'] or '' }}</td>
+                            <td class="text-center">
+                                {% if admin_user['rate_per_hour'] is not none %}
+                                $ {{ admin_user['rate_per_hour'] }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ admin_user['primary_role'] or '' }}</td>
+                            <td class="text-center">{{ admin_user['department_code'] or '' }}</td>
+                            <td class="text-center">{{ admin_user['secondary_role'] or '' }}</td>
+                            <td class="text-center">{{ admin_user['secondary_role_code'] or '' }}</td>
+                            <td class="text-center">
+                                {% if admin_user['register'] == 1 %}
+                                <label class="toggle-label"
+                                    style="background-color: rgb(123, 205, 123); color: whitesmoke;">Yes</label>
+                                {% else %}
+                                <label class="toggle-label"
+                                    style="background-color: rgb(239, 131, 131); color: whitesmoke;">No</label>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="#" onclick="populateForm(
+                           '{{ admin_user['id'] }}', 
+                           '{{ admin_user['name'] or '' }}', 
+                           '{{ admin_user['username'] or '' }}', 
+                           '{{ admin_user['rate_per_hour'] or '' }}', 
+                           '{{ admin_user['primary_role'] or '' }}', 
+                           '{{ admin_user['secondary_role'] or '' }}',
+                           '{{ admin_user['register'] or '' }}'
+                       )">
+                                    <span class="icon"><span class="fa-solid fa-edit"></span></span>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('deleteuser', userid=admin_user['id']) }}"
+                                    onclick="return confirm('Are you sure you want to delete the User Permanently?')">
+                                    <span class="icon"><span class="fa-solid fa-trash"
+                                            style="color: red;"></span></span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+
+                function populateForm(id, name, username, rate_per_hour, primary_role, secondary_role, register) {
+                    // Set form fields with the selected user's details
+                    document.getElementById("id").value = id;
+                    document.getElementById("name").value = name;
+                    document.getElementById("username").value = username;
+                    document.getElementById("rate_per_hour").value = rate_per_hour;
+
+                    console.log(id, name, username, rate_per_hour, register, primary_role, secondary_role);
+                    console.log(register);
+
+                    // Set primary role
+                    let primaryRoleSelect = document.getElementById("Primary_role");
+
+                    for (let i = 0; i < primaryRoleSelect.options.length; i++) {
+                        let optionValue = primaryRoleSelect.options[i].value; // Example: "11|Operation Manager"
+                        let optionName = optionValue.split("|")[1]; // Extract only the name part
+
+
+                        if (optionName === primary_role) {
+                            primaryRoleSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+
+
+                    // Set secondary role
+                    // Set secondary role
+                    let secondaryRoleSelect = document.getElementById("Secondary_role");
+
+                    for (let i = 0; i < secondaryRoleSelect.options.length; i++) {
+                        let optionValue = secondaryRoleSelect.options[i].value; // Example: "12|Accounts"
+                        let optionName = optionValue.split("|")[1]; // Extract only the name part
+
+
+                        if (optionName === secondary_role) {
+                            secondaryRoleSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+
+
+                    // Set register status
+                    if (register == "1") {
+                        document.getElementById("register_1").checked = true;
+                    } else {
+                        document.getElementById("register_0").checked = true;
+                    }
+
+                    // Display the modal
+                    document.getElementById("modal").style.display = "block";
+                }
+
+                // Close modal functionality
+                document.querySelector(".close-button").addEventListener("click", function () {
+                    document.getElementById("modal").style.display = "none";
+                });
+
+                // Hide modal when clicking outside of it
+                window.onclick = function (event) {
+                    let modal = document.getElementById("modal");
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                };
+            </script>
+
+            <script>
+                function filterTable() {
+                    let input = document.getElementById("searchInput").value.toLowerCase().trim(); // Get search input
+                    let rows = document.querySelectorAll("#adminTable tbody tr"); // Select all rows in the table
+
+                    rows.forEach(row => {
+                        let email = row.querySelector("td:nth-child(2)") ? row.querySelector("td:nth-child(2)").textContent.trim().toLowerCase() : '';
+                        let username = row.querySelector("td:nth-child(3)") ? row.querySelector("td:nth-child(3)").textContent.trim().toLowerCase() : '';
+                        let primaryRole = row.querySelector("td:nth-child(5)") ? row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase() : '';
+                        let primaryCode = row.querySelector("td:nth-child(6)") ? row.querySelector("td:nth-child(6)").textContent.trim().toLowerCase() : '';
+                        let secondaryRole = row.querySelector("td:nth-child(7)") ? row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase() : '';
+                        let secondaryCode = row.querySelector("td:nth-child(8)") ? row.querySelector("td:nth-child(8)").textContent.trim().toLowerCase() : '';
+                        let status = row.querySelector("td:nth-child(9) label") ? row.querySelector("td:nth-child(9) label").textContent.trim().toLowerCase() : '';
+
+                        // If any column contains the search input, show the row; otherwise, hide it
+                        if (
+                            email.includes(input) ||
+                            username.includes(input) ||
+                            primaryRole.includes(input) ||
+                            primaryCode.includes(input) ||
+                            secondaryRole.includes(input) ||
+                            secondaryCode.includes(input) ||
+                            status.includes(input)
+                        ) {
+                            row.style.display = "";
+                        } else {
+                            row.style.display = "none";
+                        }
+                    });
+
+                    updateTotals(); // Update counts after filtering
+                }
+
+                function updateTotals() {
+                    let activeCount = 0;
+                    let inactiveCount = 0;
+                    let totalEmployees = 0;
+                    let rows = document.querySelectorAll("#adminTable tbody tr");
+
+                    rows.forEach(row => {
+                        if (row.style.display !== "none") { // Count only visible rows
+                            totalEmployees++;
+                            let status = row.querySelector("td:nth-child(9) label") ? row.querySelector("td:nth-child(9) label").textContent.trim().toLowerCase() : '';
+
+                            if (status === "yes") {
+                                activeCount++;
+                            } else if (status === "no") {
+                                inactiveCount++;
+                            }
+                        }
+                    });
+
+                    // Update the spans with formatted values
+                    document.getElementById("requestCount").textContent = totalEmployees;
+                    document.getElementById("active").textContent = activeCount;
+                    document.getElementById("inactive").textContent = inactiveCount;
+                }
+
+                // Call functions on page load
+                document.addEventListener("DOMContentLoaded", () => {
+                    updateTotals();
+                });
+            </script>
+
+
+            <style>
+                .table thead th:nth-child(2),
+                .table tbody td:nth-child(2),
+                .table thead th:nth-child(3),
+                .table tbody td:nth-child(3),
+                .table thead th:nth-child(4),
+                .table tbody td:nth-child(4),
+                .table thead th:nth-child(5),
+                .table tbody td:nth-child(5),
+                .table thead th:nth-child(6),
+                .table tbody td:nth-child(6),
+                .table thead th:nth-child(7),
+                .table tbody td:nth-child(7) {
+                    text-align: left;
+                }
+
+
+                .table thead th:nth-child(8),
+                .table tbody td:nth-child(8),
+                .table thead th:nth-child(9),
+                .table tbody td:nth-child(9),
+
+
+                .table thead th:nth-child(6),
+                .table tbody td:nth-child(6) {
+                    text-align: center;
+                }
+
+
+
+                .records {
+                    width: 100%;
+                    overflow-x: auto;
+                }
+
+                .record-header {
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #d8eaf3;
+                }
+
+
+                #editUserForm {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    align-items: center;
+                }
+
+                input[type=text],
+                input[type=date],
+                input[type=number],
+                select {
+                    width: 100%;
+                    padding: 5px 10px;
+                    margin: 2px 0;
+                    /* Reduce the top and bottom margin */
+                    display: block;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                }
+
+                input[type=submit] {
+                    width: 100%;
+                    background-color: #04AA6D;
+                    color: white;
+                    padding: 7px 10px;
+                    margin: 4px 0;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                input[type=submit]:hover {
+                    background-color: #45a049;
+                }
+            </style>
+
+            <style>
+                /* Container for the toggle switches */
+                .toggle-container {
+                    display: flex;
+                    align-items: center;
+                }
+
+                /* Hide default radio buttons */
+                .toggle-input {
+                    display: none;
+                }
+
+                /* Style for the custom toggle switches */
+                .toggle-label {
+                    display: inline-block;
+                    padding: 5px 10px;
+                    margin: 0 5px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    background-color: #ccc;
+                    color: white;
+                    text-align: center;
+                    font-weight: bold;
+                    transition: background-color 0.3s;
+                }
+
+                /* Selected state styling for Yes */
+                #register_1:checked+.toggle-label {
+                    background-color: #4CAF50;
+                    /* Green for Yes */
+                    color: white;
+                }
+
+                /* Selected state styling for No */
+                #register_0:checked+.toggle-label {
+                    background-color: #F44336;
+                    /* Red for No */
+                    color: white;
+                }
+            </style>
+
+
+
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase" class="active">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['togglePurchaseRequest'] == 'On' %}
+                        <li><a href="{{ url_for('pur_purchase') }}" class="link"><i class="fas fa-cart-plus"></i>
+                                PR's</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglePurchaseOrder'] == 'On' %}
+                        <li><a href="{{ url_for('pur_po') }}" class="link"><i class="fa-solid fa-folder-open"></i>
+                                PO's</a>
+                        </li>
+                        {% endif %}
+
+
+
+
+
+                        {% if user_access['togglePOUpdate'] == 'On' %}
+                        <li class="active"><a href="{{ url_for('pur_poupdate') }}" class="link"><i
+                                    class="fa-solid fa-pen-nib"></i> PO
+                                Update</a></li>
+                        {% endif %}
+
+                        {% if user_access['togglepurSuppliers'] == 'On' %}
+                        <li><a href="{{ url_for('pur_suppliers') }}" class="link"><i class="fa-solid fa-file-alt"></i>
+                                Suppliers</a></li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <input list="po_number_suggestions" type="text" name="mar_rect_PO_No" id="mar_rect_PO_No"
+                    placeholder="Select PO Number" value="{{ do_edit.po_number if do_edit else '' }}" {% if do_edit
+                    %}readonly{% endif %} />
+                <datalist id="po_number_suggestions">
+                    {% for PO_No in PO_Numbers %}
+                    <option value="{{ PO_No }}">{{ PO_No }}</option>
+                    {% endfor %}
+                </datalist>
+
+            </div>
+
+            <script>
+                // Function to toggle select/deselect all checkboxes
+                function toggleSelectAll(selectAllCheckbox) {
+                    // Get all the checkboxes with name 'selected_items[]'
+                    const checkboxes = document.querySelectorAll("input[name='selected_items[]']");
+
+                    // Loop through all checkboxes and set their checked property based on the 'selectAllCheckbox' state
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = selectAllCheckbox.checked;
+                    });
+                }
+            </script>
+
+            <form class="p-3" action="#" method="POST" enctype="multipart/form-data">
+
+
+                <div class="table-responsive1" style="margin-top: 10px;">
+                    <table class="mat_rec_table" width="90%" id="dynamicTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 3%;">S/N</th>
+                                <th style="width: 50%;">Item Name</th>
+                                <th style="width: 5%;">UOM</th>
+                                <th style="width: 7%;">Ordered Qty</th>
+                                <th style="width: 8%;">Date</th>
+                                <th style="width: 5%;">Unit Price</th>
+                                <th style="width: 5%;">Total Price</th>
+                                <th style="width: 7%;">Received Qty</th>
+                                <th style="width: 5%;">Status</th>
+                                <th style="width: 5%;"><input type="checkbox" id="selectAll"
+                                        onclick="toggleSelectAll(this)"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <tr>
+                                <td colspan="10" class="text-center">Select a PO Number to load items</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="add1">
+                    <button type="submit" class="custom-btn btn-2" id="updatematerecipet">Update Materials</button>
+                </div>
+
+            </form>
+
+            <script>
+
+
+                document.getElementById('mar_rect_PO_No').addEventListener('change', function () {
+                    const poNumber = this.value;
+                    if (poNumber) {
+                        fetch('/fetch_poupdate_details', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ po_number: poNumber })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                populateTable(data);
+                            })
+                            .catch(error => console.error('Error fetching PO details:', error));
+                    }
+                });
+
+                function populateTable(data) {
+                    const { po_date, items } = data; // Extract po_date and items from the response
+                    console.log(data);
+                    const tableBody = document.getElementById('itemsTableBody');
+                    tableBody.innerHTML = '';
+
+                    items.forEach((item, index) => {
+                        const row = document.createElement('tr');
+
+                        // Check if the item status is exactly "Closed"
+                        const isClosed = item.status === 'Closed';
+
+                        // Create the row with conditional properties for the date input
+                        row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${item.item}</td>
+                                <td>${item.uom}</td>
+                                <td>${item.quantity}</td>
+                                <td>
+                                    <input type="date" name="received_date_${index}" 
+                                        value="${item.excepted_date || ''}" 
+                                        ${isClosed ? 'disabled' : ''} 
+                                        min="${po_date}" />
+                                </td>
+                                <td>${item.Unit_Price.toFixed(2)}</td>
+                                <td>${(item.quantity * item.Unit_Price).toFixed(2)}</td>
+                                <td>${item.received_qty}</td>
+                                <td>${item.status}</td>
+                                <td><input type="checkbox" name="selected_items[]" value="${item.id}" ${isClosed ? 'disabled' : ''}></td>
+                            `;
+                        tableBody.appendChild(row);
+                    });
+                }
+
+
+
+
+            </script>
+
+            <script>
+                document.getElementById('updatematerecipet').addEventListener('click', function (event) {
+                    event.preventDefault();  // Prevent the default form submission
+
+                    // Check if PO Number is selected
+                    const poNumber = document.getElementById('mar_rect_PO_No').value;
+                    if (!poNumber) {
+                        alert("Please select a PO Number.");
+                        return;
+                    }
+
+                    // Check if at least one checkbox is selected and validate dates
+                    const selectedItems = [];
+                    const checkboxes = document.querySelectorAll("input[name='selected_items[]']:checked");
+                    let dateMissing = false;
+
+                    checkboxes.forEach((checkbox) => {
+                        // Find the corresponding date input in the same row as the checkbox
+                        const row = checkbox.closest('tr');
+                        const dateInput = row.querySelector(`input[type="date"]`);
+
+                        if (dateInput && dateInput.value === "") {
+                            dateMissing = true;
+                        } else {
+                            selectedItems.push({
+                                id: checkbox.value,
+                                received_date: dateInput.value
+                            });
+                        }
+                    });
+
+                    if (checkboxes.length === 0) {
+                        alert("Please select at least one item.");
+                        return;
+                    }
+
+                    if (dateMissing) {
+                        alert("Please select a date for each selected item.");
+                        return;
+                    }
+
+                    // Submit data via JavaScript (AJAX)
+                    fetch('/update_po_update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            po_number: poNumber,
+                            items: selectedItems
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("PO updated successfully!");
+                                location.reload();  // Reload the page after successful update
+                                // Optionally, refresh the page or clear form fields here
+                            } else {
+                                alert("Failed to update materials.");
+                            }
+                        })
+                        .catch(error => console.error('Error submitting materials:', error));
+                });
+            </script>
+
+
+
+        </div>
+
+        <style>
+            .span_tag {
+                font-size: 14px;
+                font-weight: bold;
+                color: #004b5d;
+                padding: 5px 8px;
+                border: 1px solid #004b5d;
+                border-radius: 5px;
+                background-color: #f1f8ff;
+                color: #004b5d;
+                text-align: center;
+                margin-right: 10px;
+            }
+
+            #totalAmount {
+                color: #28a745;
+                /* Green for amount */
+            }
+
+            #totalGST {
+                color: #0c8de2;
+                /* Yellow for GST */
+            }
+
+            #overallTotal {
+                color: #dc3545;
+                /* Red for overall total */
+            }
+
+            .search_container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 30%;
+                padding: 10px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+
+
+            #projectTable {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                border-radius: 10px;
+            }
+
+
+            #searchInput {
+                width: 40%;
+                padding: 2px;
+                margin: auto;
+                display: block;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                /* Rounded corners */
+                outline: none;
+                transition: all 0.3s ease-in-out;
+                text-align: center;
+                font-size: 16px;
+            }
+
+            #searchInput:hover {
+                background-color: #f0f0f0;
+            }
+
+            #searchInput:focus {
+                border-color: #004b5d;
+                box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            }
+        </style>
+
+
+
+
+
+
+
+
+    </div>
+
+    </div>
+
+    <style>
+        .record-header1 {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+        }
+
+        .add1 {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+        }
+
+
+        .mat_rec_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+        }
+
+        .mat_rec_table th,
+        .mat_rec_table td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .mat_rec_table td {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: #d8eaf3;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap to the next line */
+            gap: 5px;
+            /* Add some gap between buttons */
+        }
+
+        .row label {
+            flex: 1;
+            /* Allow labels to expand and fill available space */
+            margin: 2px 0;
+            /* Vertical margin to separate rows of buttons */
+        }
+
+
+        input[type=text],
+        input[type=date],
+        input[type=number],
+        select {
+            width: 100%;
+            padding: 10px 20px;
+            margin: 2px 0;
+            /* Reduce the top and bottom margin */
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+
+
+    <script> // sub navvv
+        function showSection(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll('.addproject, .adduser, .Sub_contract, .Others');
+            sections.forEach(function (section) {
+                section.style.display = 'none';
+            });
+
+            // Show the selected section
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+        }
+
+        function toggleContainer(containerId) {
+            // You can add custom logic here if needed
+            console.log('Toggling container: ' + containerId);
+        }
+
+        window.onload = function () {
+            // Check visibility value from server-side
+            var show = '{{ show }}'; // The value of 'show' from the backend
+            if (show === 'do_list') {
+                showSection('adduser');
+                document.getElementById('adduserRadio').checked = true;
+            } else if (show === 'new') {
+                showSection('addproject');
+                document.getElementById('addprojectRadio').checked = true;
+            } else if (show === 'gen_pr') {
+                showSection('Sub_contract');
+                document.getElementById('subContractRadio').checked = true;
+            } else if (show === 'Mat_Receipt') {
+                showSection('Others');
+                document.getElementById('othersRadio').checked = true;
+            }
+        };
+    </script>
+
+
+</body>
+
+</html>

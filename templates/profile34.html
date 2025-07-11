@@ -1,0 +1,1130 @@
+<div class="addproject" id="addproject" style="display: none;"> <!-- Ocerhead -->
+
+    <form class="p-3" id="ov_expenseForm" method="POST" onsubmit="handleFormoverheadSubmit(event)"
+        enctype="multipart/form-data">
+
+        <div class="table-responsive">
+
+            <table class="table" id="overhead_dynamicTable">
+
+                <thead>
+                    <tr>
+                        <th style=" width: 2%; text-align: center;">S/N</th>
+                        <th style="width: 2%;"></th>
+                        <th style=" width: 8%; ">Category</th>
+                        <th style=" width: 2%; ">Date</th>
+                        <th style=" width: 12%; ">Supplier Name</th>
+                        <th style=" width: 28%; ">Item Name</th>
+                        <th style=" width: 10%; ">Inv NO</th>
+                        <th style=" width: 2%; ">Curr.</th>
+                        <th style=" width: 3%; ">Rate</th>
+                        <th style=" width: 2%; text-align: center;">GST%</th>
+                        <th style=" width: 5%; ">Amount</th>
+                        <th style=" width: 5%;  ">GST</th>
+                        <th style=" width: 7%; ">Total</th>
+                        <th style=" width: 3%; ">Doc</th>
+                        <th style=" width: 3%; ">Del</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for i in range(10) %}
+                    <tr>
+
+
+                        <td>{{i + 1}}</td>
+                        <td style="display: none;">
+                            <input type="hidden" name="ov_row_index[]" value="{{ i + 1 }}">
+                        </td>
+                        <td style="text-align: center;"><input type="checkbox" class="ov-row-check"
+                                style="text-align: center;"></td>
+
+                        <td style="width: 8%;">
+                            <select name="ov_category_subcategory[]" style="padding: 5px; width: 100%;" required>
+                                <option value="">Select Category</option>
+
+                                <optgroup label="Admin">
+                                    <option value="501 - Admin-Office Consumables">Office Consumables
+                                    </option>
+                                    <option value="501 - Admin-Pantry">Pantry</option>
+                                    <option value="501 - Admin-Furniture">Furniture</option>
+                                    <option value="501 - Admin-Repair">Repair</option>
+                                </optgroup>
+
+                                <optgroup label="Vehicle">
+                                    <option value="506 - Vehicle-Loan">Loan</option>
+                                    <option value="506 - Vehicle-Fuel">Fuel</option>
+                                    <option value="506 - Vehicle-Parking">Parking</option>
+                                    <option value="506 - Vehicle-Maintenance">Maintenance</option>
+                                    <option value="506 - Vehicle-Toll">Toll</option>
+                                </optgroup>
+
+                                <optgroup label="Training">
+                                    <option value="507 - Training-General">Training</option>
+                                </optgroup>
+
+                                <optgroup label="Utilities">
+                                    <option value="510 - Utilities-Phone">Phone</option>
+                                    <option value="510 - Utilities-Water">Water</option>
+                                    <option value="510 - Utilities-Gas">Gas</option>
+                                    <option value="510 - Utilities-Electricity">Electricity</option>
+                                    <option value="510 - Utilities-Net">Net</option>
+                                </optgroup>
+
+                                <optgroup label="Medical">
+                                    <option value="511 - Medical-General">General</option>
+                                </optgroup>
+
+                                <optgroup label="Travel">
+                                    <option value="512 - Travel-Flight">Flight</option>
+                                    <option value="512 - Travel-Taxi">Taxi</option>
+                                </optgroup>
+
+                                <optgroup label="Safety">
+                                    <option value="514 - Safety-PPE">PPE</option>
+                                    <option value="514 - Safety-Meeting">Meeting</option>
+                                    <option value="514 - Safety-Awards">Awards</option>
+                                </optgroup>
+
+                                <optgroup label="Food">
+                                    <option value="515 - Food">Food</option>
+                                </optgroup>
+
+                                <optgroup label="Entertainment">
+                                    <option value="516 - Entertainment">Entertainment</option>
+                                </optgroup>
+
+                                <optgroup label="Others">
+                                    <option value="517 - Others">Others</option>
+                                </optgroup>
+                            </select>
+                        </td>
+
+                        <td><input type="date" name="ov_purchase_date[]" required></td>
+                        <td><input type="text" name="ov_Supplier_name[]" class="supplier-input" required>
+                        </td>
+                        <td><input type="text" name="ov_item_name[]" class="item-name-input" required></td>
+                        <td><input type="text" name="ov_invoice_number[]" required></td>
+                        <td><input type="text" name="ov_currency[]" value="SGD" style="text-align: center;" required>
+                        </td>
+                        <td><input type="text" step="any" name="ov_rate[]" style="text-align: center;" value="1"
+                                required></td>
+
+                        <td><input type="text" step="any" name="ov_gst_percent[]" value="{{gst}}" class="ov-gst-percent"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_amount[]" class="ov-amount"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+
+                        <td><input type="text" step="any" name="ov_gst_value[]" class="ov-gst-value"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_total[]" style="text-align: center;" class="ov-total"
+                                oninput="calculateGST(this)" required></td>
+
+                        <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ov_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ov_attachment[]" id="ov_attachment_{{i}}" style="display: none;">
+                        </td>
+
+                        <td>
+
+                            <button type="button" class="btn-delete"
+                                style="color: red; background: none;  border: none; cursor: pointer;"
+                                onclick="ov_deleteRow(this)">
+                                <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="10" style="text-align: right; font-weight: bold; color: #FF5733;">
+                            Totals : </td>
+                        <td><input type="text" id="ov_footer_total_amount" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="text" id="ov_footer_total_gst" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="text" id="ov_footer_total_final" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="hidden" name="ov_footer_total_amount" id="ov_footer_total_amount_hidden"
+                                value="0.00"></td>
+                        <td><input type="hidden" name="ov_footer_total_gst" id="ov_footer_total_gst_hidden"
+                                value="0.00"></td>
+                        <td><input type="hidden" name="ov_footer_total_final" id="ov_footer_total_final_hidden"
+                                value="0.00"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+
+        <div class="button-container1">
+
+            <div class='flex-item'>
+                <button class="new-enquiry-btn" id="overheadaddRowButton">+</button>
+            </div>
+
+            <div class='flex-item' style="width: 50%;">
+                <input type="text" class="form-control" name="ov_comments"
+                    placeholder="Enter your comments here.............." />
+            </div>
+
+            <div class='flex-item' style="display: none;">
+                <input type="text" class="form-control" name="submit" value="existingcalim">
+            </div>
+
+            <div class='flex-item'>
+
+                <button type="submit" class="new-enquiry-btn" id="generateClaimButtonover">
+                    Generate Claim
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <script>
+
+        function ov_deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            ov_updateOverallTotal(); // Recalculate the total sum after deletion
+        }
+
+        function validateoverheadForm() {
+            let isValid = true;
+            let missingFields = [];
+
+
+            const rows = document.querySelectorAll('#overhead_dynamicTable tbody tr');
+
+            rows.forEach((row, index) => {
+                const rowNumber = index + 1;
+
+                const checks = [
+
+                    { ov_field: row.querySelector('select[name="ov_category_subcategory[]"]'), name: "Category" },
+                    { ov_field: row.querySelector('input[name="ov_purchase_date[]"]'), name: "Purchase Date" },
+                    { ov_field: row.querySelector('input[name="ov_Supplier_name[]"]'), name: "Supplier Name" },
+                    { ov_field: row.querySelector('input[name="ov_item_name[]"]'), name: "Item Name" },
+                    { ov_field: row.querySelector('input[name="ov_invoice_number[]"]'), name: "Invoice Number" },
+                    { ov_field: row.querySelector('input[name="ov_currency[]"]'), name: "Currency" },
+                    { ov_field: row.querySelector('input[name="ov_rate[]"]'), name: "Rate" },
+                    { ov_field: row.querySelector('input[name="ov_gst_percent[]"]'), name: "GST Percent" },
+                    { ov_field: row.querySelector('input[name="ov_amount[]"]'), name: "Amount" },
+                    { ov_field: row.querySelector('input[name="ov_gst_value[]"]'), name: "GST Value" },
+                    { ov_field: row.querySelector('input[name="ov_total[]"]'), name: "Total" },
+                    { ov_field: row.querySelector('input[name="ov_attachment[]"]'), name: "Attachment", type: "file" }
+                ];
+
+                checks.forEach(check => {
+                    const ov_field = check.ov_field;
+                    if (!ov_field || (check.type === "file" ? ov_field.files.length === 0 : !ov_field.value.trim())) {
+                        missingFields.push(`Row ${rowNumber}: ${check.name}`);
+                        isValid = false;
+                    }
+                });
+            });
+
+            if (!isValid) {
+                alert("The following fields are missing or invalid:\n\n" + missingFields.join("\n"));
+            }
+
+            return isValid;
+        }
+
+        let isOverheadClaimSubmitting = false;
+
+        function handleFormoverheadSubmit(event) {
+            event.preventDefault();
+
+            if (isOverheadClaimSubmitting) return; // Prevent double submission
+            isOverheadClaimSubmitting = true;
+
+            const form = document.getElementById('ov_expenseForm');
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+
+            // Run validation
+            if (!validateoverheadForm()) {
+                submitButton.disabled = false;
+                isOverheadClaimSubmitting = false;
+                return;
+            }
+
+            const formData = new FormData(form);
+
+            fetch('/overhead_claim', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        form.reset();
+
+                        const rows = document.querySelectorAll('#overhead_dynamicTable tbody tr');
+                        rows.forEach(row => {
+                            row.querySelectorAll('input').forEach(input => input.value = '');
+                            row.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                        });
+
+                        form.querySelectorAll('input[type="file"]').forEach(input => input.value = '');
+                    } else {
+                        alert('Unexpected response. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    isOverheadClaimSubmitting = false;
+                });
+        }
+
+        function calculateGST(input) {
+            const row = input.closest('tr');
+            const amount = parseFloat(row.querySelector('.ov-amount').value) || 0;
+            // const gstPercent = parseFloat(row.querySelector('.ov-gst-percent').value) || 9;
+            const gstPercent = row.querySelector('.ov-gst-percent').value.trim() === "" ? 9 : parseFloat(row.querySelector('.ov-gst-percent').value);
+
+            const gstValueField = row.querySelector('.ov-gst-value');
+            const totalField = row.querySelector('.ov-total');
+
+            let gstValue = parseFloat(gstValueField.value) || 0;
+            let total = parseFloat(totalField.value) || 0;
+
+            if (input.classList.contains('ov-total')) {
+                // Calculate GST value and percentage if total is entered
+                total = parseFloat(input.value) || 0;
+                gstValue = total - amount;
+                row.querySelector('.ov-gst-percent').value = ((gstValue / amount) * 100).toFixed(2);
+                gstValueField.value = gstValue.toFixed(2);
+            } else if (input.classList.contains('ov-gst-percent')) {
+                // Calculate GST value and total if GST percentage is entered
+                gstValue = (amount * gstPercent) / 100;
+                gstValueField.value = gstValue.toFixed(2);
+                totalField.value = (amount + gstValue).toFixed(2);
+            } else if (input.classList.contains('ov-gst-value')) {
+                // Calculate GST percentage and total if GST value is entered
+                gstValue = parseFloat(input.value) || 0;
+                row.querySelector('.ov-gst-percent').value = ((gstValue / amount) * 100).toFixed(2);
+                totalField.value = (amount + gstValue).toFixed(2);
+            } else if (input.classList.contains('ov-amount')) {
+                // Calculate GST value and total if amount is entered
+                gstValue = (amount * gstPercent) / 100;
+                gstValueField.value = gstValue.toFixed(2);
+                totalField.value = (amount + gstValue).toFixed(2);
+            }
+
+            ov_updateOverallTotal();
+        }
+
+        function ov_updateOverallTotal() {
+            let ov_totalAmount = 0;
+            let ov_totalGst = 0;
+            let ov_totalFinal = 0;
+            const ov_rows = document.querySelectorAll('#overhead_dynamicTable tbody tr');
+
+            ov_rows.forEach(row => {
+                const ov_amount = parseFloat(row.querySelector('.ov-amount')?.value) || 0;
+                const ov_gstValue = parseFloat(row.querySelector('.ov-gst-value')?.value) || 0;
+                const ov_total = parseFloat(row.querySelector('.ov-total')?.value) || 0;
+
+                ov_totalAmount += ov_amount;
+                ov_totalGst += ov_gstValue;
+                ov_totalFinal += ov_total;
+            });
+
+            const formatNumber = num => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('ov_footer_total_amount').value = formatNumber(ov_totalAmount);
+            document.getElementById('ov_footer_total_gst').value = formatNumber(ov_totalGst);
+            document.getElementById('ov_footer_total_final').value = formatNumber(ov_totalFinal);
+
+            document.getElementById('ov_footer_total_amount_hidden').value = formatNumber(ov_totalAmount);
+            document.getElementById('ov_footer_total_gst_hidden').value = formatNumber(ov_totalGst);
+            document.getElementById('ov_footer_total_final_hidden').value = formatNumber(ov_totalFinal);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('overheadaddRowButton').addEventListener('click', function (e) {
+                e.preventDefault();
+                const tableBody = document.querySelector('#overhead_dynamicTable tbody');
+                const selectedRows = tableBody.querySelectorAll('tr');
+                let currentRowCount = tableBody.rows.length;
+                let selected = false;
+
+                selectedRows.forEach((row, index) => {
+
+                    const checkbox = row.querySelector('.ov-row-check');
+
+                    if (checkbox && checkbox.checked) {
+                        selected = true;
+
+                        const ov_category = row.querySelector('select[name="ov_category_subcategory[]"]').value;
+                        const ov_purchase_date = row.querySelector('input[name="ov_purchase_date[]"]').value;
+                        const ov_supplier = row.querySelector('input[name="ov_Supplier_name[]"]').value;
+                        const ov_item_name = row.querySelector('input[name="ov_item_name[]"]').value;
+                        const ov_invoice_number = row.querySelector('input[name="ov_invoice_number[]"]').value;
+                        const ov_currency = row.querySelector('input[name="ov_currency[]"]').value;
+                        const ov_rate = row.querySelector('input[name="ov_rate[]"]').value;
+                        const ov_gst_percent = row.querySelector('input[name="ov_gst_percent[]"]').value;
+                        const ov_amount = row.querySelector('input[name="ov_amount[]"]').value;
+                        const ov_gst_value = row.querySelector('input[name="ov_gst_value[]"]').value;
+                        const ov_total = row.querySelector('input[name="ov_total[]"]').value;
+                        const ov_newRow = document.createElement('tr');
+                        const ov_newRowCount = ++currentRowCount;
+
+
+                        ov_newRow.innerHTML = `
+                            <td style="width: 2%;">${ov_newRowCount}</td>
+
+                            <td style="display: none;">
+                                <input type="hidden" name="ov_row_index[]" value="${ov_newRowCount}">
+
+                            </td>
+                            <td><input type="checkbox" class="ov-row-check"></td>
+
+                            <td style="width: 8%;">
+                                <select name="ov_category_subcategory[]" style="padding: 5px; width: 100%;" required>
+                                    <option value="">Select Category</option>
+
+                                    <optgroup label="Admin">
+                                        <option value="501 - Admin-Office Consumables" ${ov_category === "501 - Admin-Office Consumables" ? "selected" : ""}>Office Consumables</option>
+                                        <option value="501 - Admin-Pantry" ${ov_category === "501 - Admin-Pantry" ? "selected" : ""}>Pantry</option>
+                                        <option value="501 - Admin-Furniture" ${ov_category === "501 - Admin-Furniture" ? "selected" : ""}>Furniture</option>
+                                        <option value="501 - Admin-Repair" ${ov_category === "501 - Admin-Repair" ? "selected" : ""}>Repair</option>
+                                    </optgroup>
+
+                                    <optgroup label="Vehicle">
+                                        <option value="506 - Vehicle-Loan" ${ov_category === "506 - Vehicle-Loan" ? "selected" : ""}>Loan</option>
+                                        <option value="506 - Vehicle-Fuel" ${ov_category === "506 - Vehicle-Fuel" ? "selected" : ""}>Fuel</option>
+                                        <option value="506 - Vehicle-Parking" ${ov_category === "506 - Vehicle-Parking" ? "selected" : ""}>Parking</option>
+                                        <option value="506 - Vehicle-Maintenance" ${ov_category === "506 - Vehicle-Maintenance" ? "selected" : ""}>Maintenance</option>
+                                        <option value="506 - Vehicle-Toll" ${ov_category === "506 - Vehicle-Toll" ? "selected" : ""}>Toll</option>
+                                    </optgroup>
+
+                                    <optgroup label="Training">
+                                        <option value="507 - Training-General" ${ov_category === "507 - Training-General" ? "selected" : ""}>Training</option>
+                                    </optgroup>
+
+                                    <optgroup label="Utilities">
+                                        <option value="510 - Utilities-Phone" ${ov_category === "510 - Utilities-Phone" ? "selected" : ""}>Phone</option>
+                                        <option value="510 - Utilities-Water" ${ov_category === "510 - Utilities-Water" ? "selected" : ""}>Water</option>
+                                        <option value="510 - Utilities-Gas" ${ov_category === "510 - Utilities-Gas" ? "selected" : ""}>Gas</option>
+                                        <option value="510 - Utilities-Electricity" ${ov_category === "510 - Utilities-Electricity" ? "selected" : ""}>Electricity</option>
+                                        <option value="510 - Utilities-Net" ${ov_category === "510 - Utilities-Net" ? "selected" : ""}>Net</option>
+                                    </optgroup>
+
+                                    <optgroup label="Medical">
+                                        <option value="511 - Medical-General" ${ov_category === "511 - Medical-General" ? "selected" : ""}>General</option>
+                                    </optgroup>
+
+                                    <optgroup label="Travel">
+                                        <option value="512 - Travel-Flight" ${ov_category === "512 - Travel-Flight" ? "selected" : ""}>Flight</option>
+                                        <option value="512 - Travel-Taxi" ${ov_category === "512 - Travel-Taxi" ? "selected" : ""}>Taxi</option>
+                                    </optgroup>
+
+                                    <optgroup label="Safety">
+                                        <option value="514 - Safety-PPE" ${ov_category === "514 - Safety-PPE" ? "selected" : ""}>PPE</option>
+                                        <option value="514 - Safety-Meeting" ${ov_category === "514 - Safety-Meeting" ? "selected" : ""}>Meeting</option>
+                                        <option value="514 - Safety-Awards" ${ov_category === "514 - Safety-Awards" ? "selected" : ""}>Awards</option>
+                                    </optgroup>
+
+                                    <optgroup label="Food">
+                                        <option value="515 - Food" ${ov_category === "515 - Food" ? "selected" : ""}>Food</option>
+                                    </optgroup>
+
+                                    <optgroup label="Entertainment">
+                                        <option value="516 - Entertainment" ${ov_category === "516 - Entertainment" ? "selected" : ""}>Entertainment</option>
+                                    </optgroup>
+
+                                    <optgroup label="Others">
+                                        <option value="517 - Others" ${ov_category === "517 - Others" ? "selected" : ""}>Others</option>
+                                    </optgroup>
+                                </select>
+                            </td>
+
+                            <td><input type="date" name="ov_purchase_date[]" value="${ov_purchase_date}" required></td>
+                            <td><input type="text" name="ov_Supplier_name[]" value="${ov_supplier}" required></td>
+                            <td><input type="text" name="ov_item_name[]" value="${ov_item_name}" required></td>
+                            <td><input type="text" name="ov_invoice_number[]" ></td>
+                            <td><input type="text" name="ov_currency[]" value="${ov_currency}" required></td>
+                            <td><input type="text" step="any" name="ov_rate[]" value="${ov_rate}" style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_gst_percent[]" value="{{gst}}"
+                                class="ov-gst-percent" oninput="calculateGST(this)"
+                                style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_amount[]" class="ov-amount"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+
+                        <td><input type="text" step="any" name="ov_gst_value[]" class="ov-gst-value"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_total[]" style="text-align: center;"
+                                class="ov-total" oninput="calculateGST(this)" required></td>
+                            <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ov_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ov_attachment[]" id="ov_attachment_{{i}}"
+                                style="display: none;">
+                            </td>
+                            <td>
+                                <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="pr_deleteRow(this)">
+                                    <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                </button>
+                            </td>
+                        `;
+
+                        tableBody.appendChild(ov_newRow);
+                        ov_updateOverallTotal();
+                    }
+
+                });
+
+
+                if (!selected) {
+                    const ov_newRow = document.createElement('tr');
+                    const ov_newRowCount = currentRowCount + 1;
+
+                    ov_newRow.innerHTML = `
+                        <td style="width: 2%;">${ov_newRowCount}</td>
+                        <td style="display: none;">
+                            <input type="hidden" name="ov_row_index[]" value="${ov_newRowCount}">
+
+                        </td>
+                        <td><input type="checkbox" class="ov-row-check"></td>
+
+                        <td style="width: 8%;">
+                            <select name="ov_category_subcategory[]" style="padding: 5px; width: 100%;"
+                                required>
+                                <option value="">Select Category</option>
+
+                                <optgroup label="Admin">
+                                    <option value="501 - Admin-Office Consumables">Office Consumables
+                                    </option>
+                                    <option value="501 - Admin-Pantry">Pantry</option>
+                                    <option value="501 - Admin-Furniture">Furniture</option>
+                                    <option value="501 - Admin-Repair">Repair</option>
+                                </optgroup>
+
+                                <optgroup label="Vehicle">
+                                    <option value="506 - Vehicle-Loan">Loan</option>
+                                    <option value="506 - Vehicle-Fuel">Fuel</option>
+                                    <option value="506 - Vehicle-Parking">Parking</option>
+                                    <option value="506 - Vehicle-Maintenance">Maintenance</option>
+                                    <option value="506 - Vehicle-Toll">Toll</option>
+                                </optgroup>
+
+                                <optgroup label="Training">
+                                    <option value="507 - Training-General">Training</option>
+                                </optgroup>
+
+                                <optgroup label="Utilities">
+                                    <option value="510 - Utilities-Phone">Phone</option>
+                                    <option value="510 - Utilities-Water">Water</option>
+                                    <option value="510 - Utilities-Gas">Gas</option>
+                                    <option value="510 - Utilities-Electricity">Electricity</option>
+                                    <option value="510 - Utilities-Net">Net</option>
+                                </optgroup>
+
+                                <optgroup label="Medical">
+                                    <option value="511 - Medical-General">General</option>
+                                </optgroup>
+
+                                <optgroup label="Travel">
+                                    <option value="512 - Travel-Flight">Flight</option>
+                                    <option value="512 - Travel-Taxi">Taxi</option>
+                                </optgroup>
+
+                                <optgroup label="Safety">
+                                    <option value="514 - Safety-PPE">PPE</option>
+                                    <option value="514 - Safety-Meeting">Meeting</option>
+                                    <option value="514 - Safety-Awards">Awards</option>
+                                </optgroup>
+
+                                <optgroup label="Food">
+                                    <option value="515 - Food">Food</option>
+                                </optgroup>
+
+                                <optgroup label="Entertainment">
+                                    <option value="516 - Entertainment">Entertainment</option>
+                                </optgroup>
+
+                                <optgroup label="Others">
+                                    <option value="517 - Others">Others</option>
+                                </optgroup>
+                            </select>
+                        </td>
+
+                        <td><input type="date" name="ov_purchase_date[]" required></td>
+                        <td><input type="text" name="ov_Supplier_name[]" class="supplier-input" required></td>
+                        <td><input type="text" name="ov_item_name[]" class="item-name-input" required></td>
+                        <td><input type="text" name="ov_invoice_number[]"></td>
+                        <td><input type="text" name="ov_currency[]" value="SGD" required></td>
+                        <td><input type="text" step="any" name="ov_rate[]" value="1" style="text-align: center;" required></td>
+                        <td><input type="text" step="any" name="ov_gst_percent[]" value="{{gst}}"
+                                class="ov-gst-percent" oninput="calculateGST(this)"
+                                style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_amount[]" class="ov-amount"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+
+                        <td><input type="text" step="any" name="ov_gst_value[]" class="ov-gst-value"
+                                oninput="calculateGST(this)" style="text-align: center;" required></td>
+
+                        <td><input type="text" step="any" name="ov_total[]" style="text-align: center;"
+                                class="ov-total" oninput="calculateGST(this)" required></td>
+                        <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ov_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ov_attachment[]" id="ov_attachment_{{i}}"
+                                style="display: none;">
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="pr_deleteRow(this)">
+                                <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                            </button>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(ov_newRow);
+                }
+            });
+        });
+
+        ov_updateOverallTotal();
+
+    </script>
+
+
+</div>
+
+
+
+
+<div class="adduser" id="adduser" style="display: none;"> <!-- Vehicle-->
+
+    <form class="p-3" id="ve_expenseForm" method="POST" enctype="multipart/form-data"
+        onsubmit="handlevechicleFormSubmit(event)">
+
+        <div class="table-responsive">
+
+            <table class="table" id="Vehicle_dynamicTable">
+
+                <thead>
+                    <tr>
+                        <th style=" width: 2%; text-align: center;">S/N</th>
+                        <th style="width: 2%;"></th>
+                        <th style=" width: 8%;">Category</th>
+                        <th style=" width: 10%;">Vehicle NO</th>
+                        <th style=" width: 2%;">Date</th>
+                        <th style=" width: 20%;">Supplier Name</th>
+                        <th style=" width: 15%;">Invoice Number</th>
+                        <th style=" width: 6%;">Currency</th>
+                        <th style=" width: 5%;"> Rate</th>
+                        <th style=" width: 5%;">GST %</th>
+                        <th style=" width: 5%;">Amount</th>
+                        <th style=" width: 5%;">GST Value</th>
+                        <th style=" width: 5%;">Total</th>
+                        <th style=" width: 3%;">Doc</th>
+                        <th style=" width: 3%;">Del</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for i in range(3) %}
+                    <tr>
+
+                        <td>{{i + 1}}</td>
+                        <td style="display: none;">
+                            <input type="hidden" name="ve_row_index[]" value="{{ i + 1 }}">
+                        </td>
+
+
+                        <td style="text-align: center;"><input type="checkbox" class="ve_row-check"
+                                style="text-align: center;"></td>
+
+                        <td>
+                            <select name="ve_category[]" style="padding: 5px; width: 100%;" required>
+                                <option value="">Select</option>
+                                <option value="506-Loan">Loan / Rental</option>
+                                <option value="506-Fuel">Fuel</option>
+                                <option value="506-Parking">Parking</option>
+                                <option value="506-Toll">Toll</option>
+                                <option value="506-Maintenance">Maintenance</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select name="ve_Vehicle_NO[]" style="padding: 5px; width: 100%;" required>
+                                <option value="">Select</option>
+                                {% for vehicle_number in vehicle_numbers %}
+                                <option value="{{ vehicle_number }}">{{ vehicle_number }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+
+                        <td><input type="date" name="ve_purchase_date[]" required></td>
+                        <td><input type="text" name="ve_Supplier_name[]" class="supplier-input" required>
+                        </td>
+                        <td><input type="text" name="ve_invoice_number[]"></td>
+                        <td><input type="text" name="ve_currency[]" value="SGD" style="text-align: center;" required>
+                        </td>
+                        <td><input type="text" step="any" name="ve_rate[]" value="{{1}}" style="text-align: center;"
+                                required></td>
+                        <td><input type="text" step="any" name="ve_gst_percent[]" class="ve_gst_percent" value="{{gst}}"
+                                style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_amount[]" class="ve_amount"
+                                style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_gst_value[]" class="ve_gst_value"
+                                style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_total[]" class="ve_total"
+                                style="text-align: center;" oninput="calculateRow(this)" required></td>
+
+                        <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ve_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ve_attachment[]" id="ve_attachment_{{i}}" style="display: none;">
+                        </td>
+
+                        <td style="width: 3%">
+
+                            <button type="button" class="btn-delete"
+                                style="color: red; background: none;  border: none; cursor: pointer;"
+                                onclick="ve_deleteRow(this)">
+                                <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="10" style="text-align: right; font-weight: bold; color: #FF5733;">
+                            Totals : </td>
+                        <td><input type="text" id="ve_footer_total_amount" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="text" id="ve_footer_total_gst" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="text" id="ve_footer_total_final" value="0.00" style="text-align: center;"
+                                readonly></td>
+                        <td><input type="hidden" name="ve_footer_total_amount" id="ve_footer_total_amount_hidden"
+                                value="0.00"></td>
+                        <td><input type="hidden" name="ve_footer_total_gst" id="ve_footer_total_gst_hidden"
+                                value="0.00"></td>
+                        <td><input type="hidden" name="ve_footer_total_final" id="ve_footer_total_final_hidden"
+                                value="0.00"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+
+        <div class="button-container1">
+
+            <div class='flex-item'>
+                <button class="new-enquiry-btn" id="VehicleaddRowButton">+</button>
+            </div>
+
+            <div class='flex-item' style="width: 50%;">
+                <input type="text" class="form-control" name="ve_comments"
+                    placeholder="Enter your comments here.............." />
+            </div>
+
+            <div class='flex-item' style="display: none;">
+                <input type="text" class="form-control" name="submit" value="existingcalim">
+            </div>
+
+            <div class='flex-item'>
+
+                <button type="submit" class="new-enquiry-btn" id="generateClaimButtonve">
+                    Generate Claim
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <script>
+
+        function vechilevalidateForm() {
+            let isValid = true;
+            let missingFields = [];
+
+            const rows = document.querySelectorAll('#Vehicle_dynamicTable tbody tr');
+
+            rows.forEach((row, index) => {
+                const rowNumber = index + 1;
+
+                const checks = [
+                    { field: row.querySelector('select[name="ve_category[]"]'), name: "Category" },
+                    { field: row.querySelector('input[name="ve_purchase_date[]"]'), name: "Purchase Date" },
+                    { field: row.querySelector('input[name="ve_Supplier_name[]"]'), name: "Supplier Name" },
+                    { field: row.querySelector('input[name="ve_invoice_number[]"]'), name: "Invoice Number" },
+                    { field: row.querySelector('input[name="ve_currency[]"]'), name: "Currency" },
+                    { field: row.querySelector('input[name="ve_rate[]"]'), name: "Rate" },
+                    { field: row.querySelector('input[name="ve_gst_percent[]"]'), name: "GST Percent" },
+                    { field: row.querySelector('input[name="ve_amount[]"]'), name: "Amount" },
+                    { field: row.querySelector('input[name="ve_gst_value[]"]'), name: "GST Value" },
+                    { field: row.querySelector('input[name="ve_total[]"]'), name: "Total" },
+                    { field: row.querySelector('input[name="ve_attachment[]"]'), name: "Attachment", type: "file" }
+                ];
+
+                checks.forEach(check => {
+                    const field = check.field;
+                    if (!field || (check.type === "file" ? field.files.length === 0 : !field.value.trim())) {
+                        missingFields.push(`Row ${rowNumber}: ${check.name}`);
+                        isValid = false;
+                    }
+                });
+            });
+
+            if (!isValid) {
+                alert("The following fields are missing or invalid:\n\n" + missingFields.join("\n"));
+            }
+
+            return isValid;
+        }
+
+        let isvechicleClaimSubmitting = false;
+
+        function handlevechicleFormSubmit(event) {
+            event.preventDefault();
+
+            if (isvechicleClaimSubmitting) return; // Prevent double submission
+            isvechicleClaimSubmitting = true;
+
+            const form = document.getElementById('ve_expenseForm');
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+
+            // Run validation
+            if (!vechilevalidateForm()) {
+                submitButton.disabled = false;
+                isvechicleClaimSubmitting = false;
+                return;
+            }
+
+            const formData = new FormData(form);
+
+            fetch('/vechicle_claim', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        form.reset();
+
+                        const rows = document.querySelectorAll('#Vehicle_dynamicTable tbody tr');
+                        rows.forEach(row => {
+                            row.querySelectorAll('input').forEach(input => input.value = '');
+                            row.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                        });
+
+                        form.querySelectorAll('input[type="file"]').forEach(input => input.value = '');
+                    } else {
+                        alert('Unexpected response. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    isvechicleClaimSubmitting = false;
+                });
+        }
+        function ve_deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            ve_updateOverallTotal(); // Recalculate the total sum after deletion
+        }
+
+        function calculateRow(input) {
+            const row = input.closest('tr');
+            const amount = parseFloat(row.querySelector('input[name="ve_amount[]"]').value) || 0;
+            const gstPercentField = row.querySelector('input[name="ve_gst_percent[]"]');
+            const gstValueField = row.querySelector('input[name="ve_gst_value[]"]');
+            const totalField = row.querySelector('input[name="ve_total[]"]');
+
+            let gstPercent = parseFloat(gstPercentField.value) || 0;
+            let gstValue = parseFloat(gstValueField.value) || 0;
+            let total = parseFloat(totalField.value) || 0;
+
+            if (input.name === 've_amount[]') {
+                gstValue = (amount * gstPercent) / 100;
+                gstValueField.value = gstValue.toFixed(2);
+                total = amount + gstValue;
+                totalField.value = total.toFixed(2);
+            } else if (input.name === 've_gst_percent[]') {
+                gstValue = (amount * gstPercent) / 100;
+                gstValueField.value = gstValue.toFixed(2);
+                total = amount + gstValue;
+                totalField.value = total.toFixed(2);
+            } else if (input.name === 've_gst_value[]') {
+                gstValue = parseFloat(input.value) || 0;
+                gstPercent = (gstValue / amount) * 100;
+                gstPercentField.value = gstPercent.toFixed(2);
+                total = amount + gstValue;
+                totalField.value = total.toFixed(2);
+            } else if (input.name === 've_total[]') {
+                total = parseFloat(input.value) || 0;
+                gstValue = total - amount;
+                gstValueField.value = gstValue.toFixed(2);
+                gstPercent = (gstValue / amount) * 100;
+                gstPercentField.value = gstPercent.toFixed(2);
+            }
+
+            ve_updateOverallTotal();
+        }
+
+        function ve_updateOverallTotal() {
+
+            let ve_totalAmount = 0;
+            let ve_totalGst = 0;
+            let ve_totalFinal = 0;
+
+            const rows = document.querySelectorAll('#Vehicle_dynamicTable tbody tr');
+            rows.forEach(row => {
+                const ve_amount = parseFloat(row.querySelector('.ve_amount').value) || 0;
+                const ve_gstValue = parseFloat(row.querySelector('.ve_gst_value').value) || 0;
+                const ve_total = parseFloat(row.querySelector('.ve_total').value) || 0;
+
+                ve_totalAmount += ve_amount;
+                ve_totalGst += ve_gstValue;
+                ve_totalFinal += ve_total;
+            });
+
+            // Format numbers in international format (e.g., 1,234.56)
+            document.getElementById('ve_footer_total_amount').value = ve_totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('ve_footer_total_gst').value = ve_totalGst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('ve_footer_total_final').value = ve_totalFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('ve_footer_total_amount_hidden').value = ve_totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('ve_footer_total_gst_hidden').value = ve_totalGst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('ve_footer_total_final_hidden').value = ve_totalFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('VehicleaddRowButton').addEventListener('click', function (e) {
+                e.preventDefault();
+                const tableBody = document.querySelector('#Vehicle_dynamicTable tbody');
+                const selectedRows = tableBody.querySelectorAll('tr');
+                let currentRowCount = tableBody.rows.length;
+                let selected = false;
+
+                selectedRows.forEach((row, index) => {
+
+                    const checkbox = row.querySelector('.ve_row-check');
+
+                    if (checkbox && checkbox.checked) {
+                        selected = true;
+                        const ve_category = row.querySelector('select[name="ve_category[]"]').value;
+                        const ve_Vehicle_NO = row.querySelector('select[name="ve_Vehicle_NO[]"]').value;
+                        const ve_purchase_date = row.querySelector('input[name="ve_purchase_date[]"]').value;
+                        const ve_supplier = row.querySelector('input[name="ve_Supplier_name[]"]').value;
+                        const ve_invoice_number = row.querySelector('input[name="ve_invoice_number[]"]').value;
+                        const ve_currency = row.querySelector('input[name="ve_currency[]"]').value;
+                        const ve_rate = row.querySelector('input[name="ve_rate[]"]').value;
+                        const ve_gst_percent = row.querySelector('input[name="ve_gst_percent[]"]').value;
+                        const ve_amount = row.querySelector('input[name="ve_amount[]"]').value;
+                        const ve_gst_value = row.querySelector('input[name="ve_gst_value[]"]').value;
+                        const ve_total = row.querySelector('input[name="ve_total[]"]').value;
+                        const ve_newRow = document.createElement('tr');
+                        const ve_newRowCount = ++currentRowCount;
+
+                        ve_newRow.innerHTML = `
+                            <td style="width: 2%;">${ve_newRowCount}</td>
+
+                            <td style="display: none;">
+                                <input type="hidden" name="ve_row_index[]" value="${ve_newRowCount}">
+
+                            </td>
+                            <td><input type="checkbox" class="ve_row-check"></td>
+
+                            <td>
+                                <select name="ve_category[]" style="padding: 5px; width: 100%;" required>
+                                    <option value="">Select</option>
+                                    <option value="506-Loan" ${ve_category === "506-Loan" ? "selected" : ""}>Loan / Rental</option>
+                                    <option value="506-Fuel" ${ve_category === "506-Fuel" ? "selected" : ""}>Fuel</option>
+                                    <option value="506-Parking" ${ve_category === "506-Parking" ? "selected" : ""}>Parking</option>
+                                    <option value="506-Toll" ${ve_category === "506-Toll" ? "selected" : ""}>Toll</option>
+                                    <option value="506-Maintenance" ${ve_category === "506-Maintenance" ? "selected" : ""}>Maintenance</option>
+                                </select>
+                            </td>
+
+                            <td>
+                                <select name="Vehicle_NO[]" style="padding: 5px; width: 100%;" required>
+                                    <option value="">Select</option>
+                                    {% for vehicle_number in vehicle_numbers %}
+                                    <option value="{{ vehicle_number }}" {{ 'selected' if ve_Vehicle_NO == vehicle_number else '' }}>
+                                        {{ vehicle_number }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                            <td><input type="date" name="ve_purcahse_date[]" value="${ve_purchase_date}" required></td>
+                            <td><input type="text" name="ve_Supplier_name[]" value="${ve_supplier}" required></td>
+                            <td><input type="text" name="ve_invoice_number[]" ></td>
+                            <td><input type="text" name="ve_currency[]" value="${ve_currency}" style="text-align: center;" required></td>
+                            <td><input type="text" step="any" name="ve_rate[]" value="${ve_rate}" style="text-align: center;" required></td>
+                            <td><input type="text" step="any" name="ve_gst_percent[]" class="ve_gst_percent" value="{{gst}}" style="text-align: center;" oninput="calculateRow(this)" required></td>
+                            <td><input type="number" step="any" name="ve_amount[]" class="ve_amount"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                            <td><input type="number" step="any" name="ve_gst_value[]" class="ve_gst_value"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                            <td><input type="number" step="any" name="ve_total[]" class="ve_total"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                            
+                            <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ve_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ve_attachment[]" id="ve_attachment_{{i}}"
+                                style="display: none;">
+                            </td>
+                            <td>
+                                <button type="button" class="btn-delete" style="color: red; background: none; border: none; cursor: pointer;" onclick="pr_deleteRow(this)">
+                                    <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                </button>
+                            </td>
+                         `;
+
+                        tableBody.appendChild(ve_newRow);
+                        ve_updateOverallTotal();
+                    }
+
+                });
+
+
+                if (!selected) {
+                    const ve_newRow = document.createElement('tr');
+                    const ve_newRowCount = currentRowCount + 1;
+
+                    ve_newRow.innerHTML = `
+                            <td style="width: 2%;">${ve_newRowCount}</td>
+
+                            <td style="display: none;">
+                                <input type="hidden" name="ve_row_index[]" value="${ve_newRowCount}">
+
+                            </td>
+                            <td><input type="checkbox" class="ve_row-check"></td>
+
+                            <td>
+                                <select name="ve_category[]" style="padding: 5px; width: 100%;" required>
+                                    <option value="">Select</option>
+                                    <option value="506-Loan" >Loan / Rental</option>
+                                    <option value="506-Fuel" >Fuel</option>
+                                    <option value="506-Parking" >Parking</option>
+                                    <option value="506-Toll" >Toll</option>
+                                    <option value="506-Maintenance">Maintenance</option>
+                                </select>
+                            </td>
+
+                        <td>
+                            <select name="ve_Vehicle_NO[]" style="padding: 5px; width: 100%;" required>
+                                <option value="">Select</option>
+                                {% for vehicle_number in vehicle_numbers %}
+                                <option value="{{ vehicle_number }}">{{ vehicle_number }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+
+                        <td><input type="date" name="ve_purchase_date[]" required></td>
+                        <td><input type="text" name="ve_Supplier_name[]" class="supplier-input" required>
+                        </td>
+                        <td><input type="text" name="ve_invoice_number[]"></td>
+                        <td><input type="text" name="ve_currency[]" value="SGD" style="text-align: center;"
+                                required></td>
+                        <td><input type="text" step="any" name="ve_rate[]" value="{{1}}"
+                                style="text-align: center;" required></td>
+                        <td><input type="text" step="any" name="ve_gst_percent[]" class="ve_gst_percent" value="{{gst}}" style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_amount[]" class="ve_amount"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_gst_value[]" class="ve_gst_value"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        <td><input type="number" step="any" name="ve_total[]" class="ve_total"  style="text-align: center;" oninput="calculateRow(this)" required></td>
+                        
+
+                        <td>
+                            <button type="button" style="background: none; border: none; cursor: pointer;">
+                                <ion-icon name="link" name="link-sharp" style="font-size: 1.4em;"
+                                    onclick="document.getElementById('ve_attachment_{{i}}').click();"></ion-icon>
+                            </button>
+
+                            <input type="file" name="ve_attachment[]" id="ve_attachment_{{i}}"
+                                style="display: none;">
+                        </td>
+
+                        <td style="width: 3%">
+
+                            <button type="button" class="btn-delete"
+                                style="color: red; background: none;  border: none; cursor: pointer;"
+                                onclick="ve_deleteRow(this)">
+                                <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                            </button>
+
+                        </td>
+                         `;
+
+                    tableBody.appendChild(ve_newRow);
+                }
+            });
+        });
+
+
+    </script>
+
+</div>

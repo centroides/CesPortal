@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr" class="active">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  {% if user_access['toggleADD'] == 'On' %}
+                  <li class="active">
+                     <a href="{{ url_for('hr_add') }}" class="link">
+                        <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> Add
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleLeaveStats'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('leave_approvals') }}" class="link">
+                        <i class="fas fa-house-user" style="margin-right: 5px;"></i> Leaves
+                     </a>
+                  </li>
+                  {% endif %}
+
+                  <li>
+                     <a href="{{ url_for('hr_trade') }}" class="link">
+                        <i class="fa-sharp fa-solid fa-mountain-sun" style="margin-right: 5px;"></i>Trade
+                     </a>
+                  </li>
+
+                  {% if user_access['toggleHRProfile'] == 'On' %}
+                  <li>
+                     <a href="{{ url_for('hr_employee_bio') }}" class="link">
+                        <i class="fa-solid fa-users" style="margin-right: 5px;"></i> Profile
+                     </a>
+                  </li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            <div class="timenav">
+               <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+               <ul id="menuList1" class="timebar">
+
+                  {% if user_access['toggleAddCourse'] == 'On' %}
+                  <li>
+                     <input type="radio" id="addprojectRadio" name="sectionRadio"
+                        onclick="showSection('addproject'); toggleContainer('addproject')" style="display: none;">
+                     <label for="addprojectRadio" class="link1"> <i class="fa-solid fa-plus-square"
+                           style="margin-right: 5px;"></i>Course</label>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleAddLeave'] == 'On' %}
+                  <li>
+                     <input type="radio" id="adduserRadio" name="sectionRadio"
+                        onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none;">
+                     <label for="adduserRadio" class="link1"> <i class="fa-solid fa-user-plus"
+                           style="margin-right: 5px;"> </i>Leave</label>
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleAddAsset'] == 'On' %}
+                  <li>
+                     <input type="radio" id="subContractRadio" name="sectionRadio"
+                        onclick="showSection('Sub_contract'); toggleContainer('Sub_contract')" style="display: none;">
+                     <label for="subContractRadio" class="link1"><i class="fa-solid fa-circle-dollar-to-slot"
+                           style="margin-right: 5px;"></i>Asset</label>
+
+                  </li>
+                  {% endif %}
+
+                  {% if user_access['toggleAddHoliday'] == 'On' %}
+                  <li>
+                     <input type="radio" id="othersRadio" name="sectionRadio"
+                        onclick="showSection('Others'); toggleContainer('Others')" style="display: none;">
+                     <label for="othersRadio" class="link1"> <i class="fa-solid fa-bullhorn"
+                           style="margin-right: 5px;"></i>Public Holiday </label>
+                  </li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon1">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+               </div>
+
+            </div>
+
+         </div>
+
+         <style>
+            .search_container {
+
+               width: 100%;
+               padding: 10px;
+            }
+
+
+            #projectTable {
+               width: 100%;
+               border-collapse: separate;
+               border-spacing: 0;
+               border-radius: 10px;
+            }
+         </style>
+
+         <input type="hidden" id="optionValue" value="{{ option }}">
+
+         <div class="addproject" id="addproject" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'course_flash_sus' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'course_flash_err' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/hr_add" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Course_Name" placeholder="Enter Course Name"
+                           name="Course_Name" required>
+
+                     </div>
+
+                     <div class="flex-item">
+
+                        <input type="hidden" name="form_type" value="course">
+                        <button type="submit" class="custom-btn btn-2">Add Course</button>
+
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1">
+
+                  <table class="table table-main" width="50%">
+
+                     <thead>
+                        <tr>
+                           <th class="text-left" scope="col">S/N</th>
+                           <th class="text-left" scope="col">Course Name</th>
+                           {% if user_access['toggleDeleteCourse'] == 'On' %}
+                           <th class="text-left" scope="col">Del</th>
+                           {% endif %}
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for pro in courses %}
+                        <tr>
+                           <td class="text-left" style="color: black;">{{ loop.index }}</td> <!-- Index Column -->
+
+                           <td class="text-left" style="color: black;">{{ pro['Course_Name'] }}</td>
+
+                           {% if user_access['toggleDeleteCourse'] == 'On' %}
+
+                           <td class="text-center delete-col">
+                              <form method="POST"
+                                 onsubmit="return confirm('Are you sure you want to delete this Course Permanently?');">
+                                 <input type="hidden" name="Delete_Course" value="{{ pro['id'] }}">
+                                 <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                           {% endif %}
+
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="adduser" id="adduser" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'leaves_sus' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'leaves_sus1' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/hr_add" method="POST" id="editEnquiryForm">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+                        <select class="form-control" style="border-width: 1.5px;border-color: #333;"
+                           id="update_employee_id" name="employee_id" onchange="updateDepartmentCode(this)" required>
+                           <option value="" {% if not employee_id %}selected{% endif %}>Select Employee
+                           </option>
+                           {% for username in usernames %}
+                           <option value="{{ username }}" {% if username==employee_id %}selected{% endif %} required>{{
+                              username }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="number" class="form-control" id="Medical" placeholder="Medical" name="Medical">
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="number" class="form-control" id="Annual" placeholder="Annual" name="Annual">
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="number" class="form-control" id="Maternity" placeholder="Maternity"
+                           name="Maternity">
+                     </div>
+
+                     <!-- <div class="flex-item">
+                  <input type="number" class="form-control" id="Casual" placeholder="Casual" name="Casual"  >
+               </div> -->
+
+                     <div class="flex-item">
+                        <input type="number" class="form-control" id="Paternity" placeholder="Paternity"
+                           name="Paternity">
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="hidden" name="form_type" value="leave">
+                        <button type="submit" name="add_or_save" class="custom-btn btn-2">Add / Save </button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1">
+
+                  <table class="table table-main" width="90%">
+
+                     <thead>
+
+                        <tr>
+                           <th class="text-center" scope="col">S/N</th>
+                           <th class="text-center" scope="col">Employee</th>
+                           <th class="text-center" scope="col">Medical</th>
+                           <!-- <th class="text-center" scope="col">Casual</th> -->
+                           <th class="text-center" scope="col">Annual</th>
+                           <th class="text-center" scope="col">Maternity</th>
+                           <th class="text-center" scope="col">Paternity </th>
+                           <th class="text-center" scope="col">Public </th>
+                           {% if user_access['toggleEditLeave'] == 'On' %}
+                           <th class="text-left" scope="col">Edit</th>
+                           {% endif %}
+
+                           {% if user_access['toggleDeleteLeave'] == 'On' %}
+                           <th class="text-left" scope="col">Del</th>
+                           {% endif %}
+
+                        </tr>
+
+                     </thead>
+
+                     <tbody>
+
+                        {% for leaves in leaves_data %}
+
+                        <tr>
+                           <td class="text-left" style="color: black;">{{ loop.index }}</td> <!-- Index Column -->
+
+
+                           <td class="text-center">{{ leaves.EmployeeID}}</td>
+                           <td class="text-center">{{ leaves.Madical}}</td>
+                           <!-- <td class="text-center">{{ leaves.Casual}}</td> -->
+                           <td class="text-center">{{ leaves.Annual}}</td>
+                           <td class="text-center">{{ leaves.Maternity}}</td>
+                           <td class="text-center">{{ leaves.Paternity}}</td>
+                           <td class="text-center">{{ leaves.Public}}</td>
+
+                           {% if user_access['toggleEditLeave'] == 'On' %}
+                           <td class="text-center">
+                              <a href="#"
+                                 onclick="populateForm('{{ leaves.EmployeeID }}', '{{ leaves.Madical }}', '{{ leaves.Casual }}', '{{ leaves.Annual }}', '{{ leaves.Maternity }}', '{{ leaves.Paternity }}')">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-edit" style="font-size: 1.25em;"></span>
+                                 </span>
+                              </a>
+                           </td>
+                           {% endif %}
+
+                           {% if user_access['toggleDeleteLeave'] == 'On' %}
+
+                           <td class="text-center delete-col">
+                              <form method="POST"
+                                 onsubmit="return confirm('Are you sure you want to delete this leave Permanently?');">
+                                 <input type="hidden" name="Delete_Leave" value="{{ leaves['id'] }}">
+                                 <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+                           </td>
+
+                           {% endif %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Sub_contract" id="Sub_contract" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'asset_sus' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'asset_err' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <form class="p-3" action="/hr_add" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Asset_Name" placeholder="Asset Name"
+                           name="Asset_Name" required>
+
+                     </div>
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="Model" placeholder="Model" name="Model" required>
+
+                     </div>
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="S_N" placeholder=" S/N" name="S_N" required>
+
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="hidden" name="form_type" value="asset">
+                        <button type="submit" class="custom-btn btn-2">Add Asset</button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1">
+
+                  <table class="table table-main" width="50%">
+
+                     <thead>
+
+                        <tr>
+
+                           <th class="text-left" scope="col">S/N</th>
+                           <th class="text-left" scope="col">Asset Name</th>
+                           <th class="text-left" scope="col">Model</th>
+                           <th class="text-left" scope="col">S/N</th>
+                           {% if user_access['toggleDeleteAsset'] == 'On' %}
+                           <th class="text-left" scope="col">Del</th>
+                           {% endif %}
+
+                        </tr>
+
+                     </thead>
+
+                     <tbody>
+
+                        {% for pro in assets %}
+
+                        <tr>
+                           <td class="text-left" style="color: black;">{{ loop.index }}</td> <!-- Index Column -->
+
+                           <td class="text-left">{{ pro['Asset_Name'] }}</td>
+                           <td class="text-left">{{ pro['Model'] }}</td>
+                           <td class="text-left">{{ pro['S_N'] }}</td>
+
+                           {% if user_access['toggleDeleteAsset'] == 'On' %}
+                           <td class="text-center delete-col">
+
+                              <form method="POST"
+                                 onsubmit="return confirm('Are you sure you want to delete this Asset Permanently?');">
+                                 <input type="hidden" name="Asset_Delete" value="{{ pro['id'] }}">
+                                 <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+
+                           </td>
+                           {% endif %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="Others" id="Others" style="display: none;">
+
+            <div class="main_box">
+
+               <!-- Flash messages section -->
+               <div>
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                  <div class="alert-container">
+                     {% for category, message in messages %}
+                     {% if category == 'holiday_add' %}
+                     <div class="alert alert-success">
+                        {{ message }}
+                     </div>
+                     {% elif category == 'date_exists' %}
+                     <div class="alert alert-danger">
+                        {{ message }}
+                     </div>
+                     {% endif %}
+                     {% endfor %}
+                  </div>
+                  {% endif %}
+                  {% endwith %}
+               </div>
+
+               <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                     setTimeout(function () {
+                        let alertMessages = document.querySelectorAll(".alert");
+                        alertMessages.forEach(function (alert) {
+                           alert.style.transition = "opacity 1s ease-out"; // Smooth fade-out transition
+                           alert.style.opacity = "0";
+
+                           // Remove the alert from the DOM after fade-out
+                           setTimeout(function () {
+                              alert.remove();
+                           }, 1000); // Matches the transition duration
+                        });
+                     }, 5000); // 10 seconds delay
+                  });
+               </script>
+
+               <form class="p-3" action="/hr_add" method="POST">
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <input type="date" class="form-control" id="holiday_date" name="holiday_date" required>
+
+                     </div>
+
+                     <div class="flex-item">
+
+                        <input type="text" class="form-control" id="holiday_description" placeholder="Description"
+                           name="holiday_description" required>
+
+                     </div>
+
+                     <div class="flex-item">
+                        <input type="hidden" name="form_type" value="add_holiday">
+                        <button type="submit" class="custom-btn btn-2">Add Holiday</button>
+                     </div>
+
+                  </div>
+
+               </form>
+
+               <div class="table-responsive1">
+
+                  <table class="table table-main" width="30%">
+
+                     <thead>
+
+                        <tr>
+
+                           <th class="text-left" scope="col">S/N</th>
+                           <th class="text-left" scope="col">Date</th>
+                           <th class="text-left" scope="col">Description</th>
+                           {% if user_access['toggleDeleteHoliday'] == 'On' %}
+                           <th class="text-left" scope="col">Del</th>
+                           {% endif %}
+
+                        </tr>
+
+                     </thead>
+
+                     <tbody>
+
+                        {% for pro in holidays_data %}
+
+                        <tr>
+                           <td class="text-left" style="color: black;">{{ loop.index }}</td> <!-- Index Column -->
+
+                           <td class="text-left start-time">{{ pro['date'] }}</td>
+                           <td class="text-left">{{ pro['discription'] }}</td>
+
+                           {% if user_access['toggleDeleteHoliday'] == 'On' %}
+                           <td class="text-center delete-col">
+
+                              <form method="POST"
+                                 onsubmit="return confirm('Are you sure you want to delete this Asset Permanently?');">
+                                 <input type="hidden" name="holiday_Delete" value="{{ pro['id'] }}">
+                                 <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                                    <span class="icon">
+                                       <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                    </span>
+                                 </button>
+                              </form>
+
+                           </td>
+                           {% endif %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+
+
+
+   <style>
+      .table-responsive1 {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+
+      .table-main {
+         margin: auto;
+      }
+
+
+
+      /* Base styles */
+      .record-header7 {
+         padding: 1rem;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         width: 100%;
+         /* Ensure the header takes full width */
+      }
+
+
+      .table thead th:nth-child(1),
+      .table tbody td:nth-child(1) {
+         text-align: center;
+      }
+
+      .content-table .fa-trash,
+      .fa-edit {
+         font-size: 1.2em;
+      }
+
+      .main_box {
+         position: relative;
+         padding: 10px;
+         background-color: white;
+         border-radius: 5px;
+         display: flex;
+         flex-direction: column;
+         /* Enables flexbox */
+         align-items: center;
+         /* Align items vertically */
+         justify-content: center;
+         /* Align items horizontally */
+      }
+
+
+      .flex-item-full-width {
+         flex: 1;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         /* Align items vertically at the center */
+         justify-content: center;
+         /* Align items to the center horizontally */
+         gap: 15px;
+         /* Optional: add spacing between items */
+      }
+
+
+      input[type=text],
+      input[type=date],
+      input[type=number],
+      select {
+         width: 100%;
+         padding: 10px 20px;
+         margin: 2px 0;
+         /* Reduce the top and bottom margin */
+         display: block;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         box-sizing: border-box;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+         .record-header7 {
+            padding: 0.5rem;
+            flex-direction: column;
+            /* Stack the header content vertically */
+         }
+
+         .flex-row {
+            flex-direction: column;
+            /* Stack flex items vertically */
+            gap: 10px;
+            /* Adjust gap for smaller screens */
+         }
+
+         .main_box {
+            padding: 5px;
+            /* Reduce padding for smaller screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 1em;
+            /* Adjust icon size for smaller screens */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 8px 15px;
+            /* Reduce padding for smaller screens */
+         }
+
+         /* Adjust table column widths for better readability */
+         .table thead th,
+         .table tbody td {
+            padding: 5px;
+            /* Reduce cell padding */
+            font-size: 0.9em;
+            /* Reduce font size */
+         }
+      }
+
+      @media (max-width: 480px) {
+         .record-header7 {
+            padding: 0.25rem;
+         }
+
+         .flex-row {
+            gap: 5px;
+            /* Further reduce gap for very small screens */
+         }
+
+         .content-table .fa-trash,
+         .fa-edit {
+            font-size: 0.9em;
+            /* Further adjust icon size */
+         }
+
+         input[type=text],
+         input[type=date],
+         input[type=number],
+         select {
+            padding: 6px 10px;
+            /* Further reduce padding */
+         }
+
+         /* Further adjust table column widths */
+         .table thead th,
+         .table tbody td {
+            padding: 3px;
+            font-size: 0.8em;
+            /* Further reduce font size */
+         }
+      }
+   </style>
+
+   <script>
+      document.addEventListener('DOMContentLoaded', function () {
+         var optionValue = document.getElementById('optionValue').value;
+         if (optionValue === 'courses') {
+            document.getElementById('addprojectRadio').checked = true;
+            showSection('addproject');
+            toggleContainer('addproject');
+         }
+         if (optionValue === 'asset') {
+            document.getElementById('subContractRadio').checked = true;
+            showSection('Sub_contract');
+            toggleContainer('Sub_contract');
+         }
+         if (optionValue === 'leave') {
+            document.getElementById('adduserRadio').checked = true;
+            showSection('adduser');
+            toggleContainer('adduser');
+         }
+         if (optionValue === 'holiday') {
+            document.getElementById('othersRadio').checked = true;
+            showSection('Others');
+            toggleContainer('Others');
+         }
+
+      });
+
+      function showSection(sectionId) {
+         // Hide all sections
+         var sections = document.querySelectorAll('.addproject, .adduser, .Sub_contract, .Others');
+         sections.forEach(function (section) {
+            section.style.display = 'none';
+         });
+
+         // Show the selected section
+         var selectedSection = document.getElementById(sectionId);
+         if (selectedSection) {
+            selectedSection.style.display = 'block';
+         }
+      }
+
+      function toggleContainer(containerId) {
+         // You can add custom logic here if needed
+         console.log('Toggling container: ' + containerId);
+      }
+   </script>
+
+   <script>
+      function populateForm(employeeId, madical, casual, annual, maternity, paternity) {
+         // Get form elements by their IDs
+         var form = document.getElementById("editEnquiryForm");
+         var employeeIdInput = form.elements["employee_id"];
+         var madicalInput = form.elements["Medical"];
+         // var casualInput = form.elements["Casual"];
+         var annualInput = form.elements["Annual"];
+         var maternityInput = form.elements["Maternity"];
+         var paternityInput = form.elements["Paternity"];
+
+         // Set values in the form fields
+         employeeIdInput.value = employeeId;
+         madicalInput.value = madical;
+         // casualInput.value = casual;
+         annualInput.value = annual;
+         maternityInput.value = maternity;
+         paternityInput.value = paternity;
+      }
+   </script>
+
+   <script> /* date format */
+
+      function formatDate(dateString) {
+         const date = new Date(dateString);
+         if (isNaN(date.getTime())) {
+            // Return an empty string for invalid dates
+            return '';
+         }
+
+         const day = date.getDate().toString().padStart(2, '0');
+         const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+         const year = date.getFullYear().toString().slice(-2);
+
+         return `${day}/${month}/${year}`;
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+         const start_time_elements = document.querySelectorAll(".start-time");
+         start_time_elements.forEach(function (element) {
+            element.textContent = formatDate(element.textContent);
+         });
+
+      });
+   </script>
+
+
+
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+
+</html>

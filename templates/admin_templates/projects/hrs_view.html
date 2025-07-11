@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects" class="active">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleDashboard'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('projects') }}" class="link">
+                                <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProjectStatus'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prj_status') }}" class="link">
+                                <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleHoursEdit'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('hours_edit') }}" class="link">
+                                <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                        <li class="active"><a href="{{ url_for('Material_Receipt') }}" class="link"><i
+                                    class="fa-solid fa-industry"></i>
+                                Material Receipt</a></li>
+                        {% endif %}
+
+                        {% if user_access['toggleHoursView'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('hrs_view') }}" class="link">
+                                <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <form method="POST" action="#">
+
+                    <div class="container">
+
+                        <div class="row-inside">
+
+                            <div class="form-group">
+
+                                <select class="form-control small-input" id="project_id" name="project_id">
+
+                                    <option value="" selected>Select Project</option>
+                                    <option value="All">Select All </option>
+                                    {% for username in project_ids %}
+                                    <option value="{{ username }}">{{ username }}</option>
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <select class="form-control small-input" id="employee_id" name="employee_id">
+                                    <option value="">Select Employee </option>
+                                    <option value="All">Select All</option>
+                                    {% for username in usernames %}
+                                    <option value="{{ username }}" {% if username==employee_id %}selected{% endif %}>{{
+                                        username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select class="form-control small-input" id="section_code" name="section_code">
+                                    <option value="">Select Category</option>
+                                    <option value="All">Select All</option>
+                                    <option value="5000">Estimation</option>
+                                    <option value="4000">Project</option>
+                                    <option value="5002">Service</option>
+                                    <option value="5003">Warranty</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select class="form-control small-input" id="department_code" name="department_code">
+                                    <option value="">Select Department</option>
+                                    <option value="All">Select All</option>
+                                    {% for username in cost_center %}
+                                    <option value="{{ username }}">{{
+                                        username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="date" class="form-control small-input" style="padding: 7px;"
+                                    id="start_date" name="start_date">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="date" class="form-control small-input" style="padding: 7px;" id="end_date"
+                                    name="end_date">
+                            </div>
+
+                            <script>
+                                // Set the default value of the date input to the current date
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const today = new Date().toISOString().split('T')[0];  // Get today's date in YYYY-MM-DD format
+                                    document.getElementById('end_date').value = today;  // Set the default value
+                                });
+
+                            </script>
+
+
+                            <button type="button" id="filterButton" class="custom-btn btn-2 small-button">View
+                                Hours</button>
+
+                        </div>
+
+                    </div>
+
+                    <script>
+
+                        document.getElementById("filterButton").addEventListener("click", function () {
+                            // Get form values
+                            let project_id = document.getElementById("project_id").value;
+                            let employee_id = document.getElementById("employee_id").value;
+                            let section_code = document.getElementById("section_code").value;
+                            let department_code = document.getElementById("department_code").value;
+                            let start_date = document.getElementById("start_date").value;
+                            let end_date = document.getElementById("end_date").value;
+
+                            // Create data object
+                            let formData = {
+                                project_id: project_id,
+                                employee_id: employee_id,
+                                section_code: section_code,
+                                department_code: department_code,
+                                start_date: start_date,
+                                end_date: end_date
+                            };
+
+                            // Send data to Flask route using Fetch API
+                            fetch("/get_working_data", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(formData)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(Array.isArray(data)); // Check if data is an array
+
+                                    console.log(data); // Handle the response data
+
+                                    // Update the table
+                                    updateTable(data);
+                                })
+                                .catch(error => {
+                                    console.error("Error:", error);
+                                });
+                        });
+
+
+                        function updateTable(response) {
+                            // Clear existing table data
+                            let tableBody = document.querySelector("table tbody");
+                            let tableHeader = document.querySelector("table thead");
+
+                            tableHeader.innerHTML = ""; // Clear all headers
+                            tableBody.innerHTML = "";
+
+                            // Retrieve selected values
+                            let startDate = new Date(document.getElementById("start_date").value);
+                            let endDate = new Date(document.getElementById("end_date").value);
+                            let employee_id = document.getElementById("employee_id").value.trim();
+                            let project_id = document.getElementById("project_id").value.trim();
+
+                            // Create header row
+                            let headerRow = document.createElement("tr");
+                            let empTh = document.createElement("th");
+                            empTh.classList.add("text-center", "sticky-col");
+                            empTh.textContent = "Employee/ Prj";
+                            headerRow.appendChild(empTh);
+
+
+                            // Generate date range dynamically
+                            let dateRange = [];
+                            let tempDate = new Date(startDate);
+
+                            while (tempDate <= endDate) {
+                                dateRange.push(new Date(tempDate));
+                                tempDate.setDate(tempDate.getDate() + 1);
+                            }
+
+                            // Add Date headers dynamically
+                            dateRange.forEach(date => {
+                                let th = document.createElement("th");
+                                th.classList.add("text-center", "date-header");  // Added 'date-header' class
+
+                                let formattedDate = date.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "2-digit"
+                                });
+
+                                th.textContent = formattedDate;
+                                th.setAttribute("data-date", formattedDate);
+
+                                // Check if the date is Sunday
+                                if (date.getDay() === 0) {  // 0 is Sunday
+                                    th.classList.add("sunday");
+                                } else {
+                                    th.classList.add("not-sunday");
+                                }
+
+                                headerRow.appendChild(th);
+                            });
+
+                            // Add Total Hours header
+                            let totalHoursTh = document.createElement("th");
+                            totalHoursTh.classList.add("text-center", "sticky-col", "last-col");
+                            totalHoursTh.textContent = "   Total";
+                            headerRow.appendChild(totalHoursTh);
+
+                            // Append the header row to the table header
+                            tableHeader.appendChild(headerRow);
+
+                            // Create CSS rule to rotate the date text
+                            let style = document.createElement("style");
+
+                            style.innerHTML = `
+                                .date-header {
+                                    writing-mode: vertical-lr;
+                                    transform: rotate(180deg);
+                                    transform-origin: center;  /* Adjust the rotation point */
+                                    font-smoothing: antialiased;  /* Optional: enhance text rendering */
+                                }
+
+
+                                .sticky-col {
+                                    position: sticky;
+                                    background-color: #fff;
+                                    z-index: 1;
+                                }
+
+                                .first-col {
+                                    left: 0;
+                                }
+
+                                .last-col {
+                                    right: 0;
+                                }
+
+                                /* Add light red color to Sundays */
+
+                            `;
+
+                            document.head.appendChild(style);
+
+                            response.data.forEach(entry => {
+                                let tr = document.createElement("tr");
+
+                                let employeeTd = document.createElement("td");
+                                employeeTd.classList.add("sticky-col", "first-col");  // Sticky first column
+                                employeeTd.textContent = entry.employeeID;
+                                tr.appendChild(employeeTd);
+
+                                // Loop through the date range and populate corresponding hours or leave info
+                                dateRange.forEach(date => {
+                                    let formattedDate = date.getDate().toString().padStart(2, '0') + ' ' + (date.getMonth() + 1).toString().padStart(2, '0') + ' ' + date.getFullYear();
+
+                                    let dateTd = document.createElement("td");
+                                    dateTd.classList.add("text-center");
+
+                                    // Check if the date is a leave day
+                                    if (entry.leaves.includes(formattedDate)) {
+                                        // If the date is a leave day, display "L" with red color
+                                        dateTd.textContent = "L";
+                                        dateTd.style.color = "red";  // Apply red color to "L"
+                                    } else if (entry.date_hours[formattedDate]) {
+                                        // If hours are worked on that day, add the hours
+                                        dateTd.textContent = entry.date_hours[formattedDate];
+                                    } else {
+                                        dateTd.textContent = "0"; // If no data, display 0
+                                    }
+
+                                    tr.appendChild(dateTd);
+                                });
+
+                                // Add Total Hours
+                                let totalHoursTd = document.createElement("td");
+                                totalHoursTd.classList.add("text-center", "sticky-col", "last-col");  // Sticky last column
+                                totalHoursTd.textContent = entry.total_hours.toFixed(2);
+
+                                tr.appendChild(totalHoursTd);
+
+                                // Append the row to the table body
+                                tableBody.appendChild(tr);
+                            });
+
+
+                            // Add Day Total Row in the header
+                            let dayTotalRow = document.createElement("tr");
+                            dayTotalRow.classList.add("day-total-row");  // Custom class for styling
+                            let dayTotalTh = document.createElement("th");
+                            dayTotalTh.textContent = "Day Total";  // Label for Day Total
+
+                            // Add background color directly to the header cell
+                            dayTotalTh.style.backgroundColor = "#9e9e9e";  // Light red background color (you can change this color)
+
+                            // Optionally, you can style other properties like text color, padding, etc.
+                            dayTotalTh.style.color = "#721c24";  // Text color for better contrast
+                            dayTotalTh.style.textAlign = "center";  // Align the text to the center
+                            dayTotalRow.appendChild(dayTotalTh);
+
+                            // Calculate total for each day
+                            let dayTotals = dateRange.map(date => {
+                                let total = 0;
+                                response.data.forEach(entry => {
+                                    let formattedDate = date.getDate().toString().padStart(2, '0') + ' ' + (date.getMonth() + 1).toString().padStart(2, '0') + ' ' + date.getFullYear();
+                                    if (entry.date_hours[formattedDate]) {
+                                        total += parseFloat(entry.date_hours[formattedDate]);
+                                    }
+                                });
+                                return total;
+                            });
+
+                            // Create THs for each day's total in the header
+                            dayTotals.forEach(total => {
+                                let dayTotalTh = document.createElement("th");
+                                dayTotalTh.classList.add("text-center", "sticky-col", "last-col");
+
+                                // Set the text content to the total, rounded to two decimal places
+                                dayTotalTh.textContent = total.toFixed(2);
+
+                                // Add background color and text color
+                                dayTotalTh.style.backgroundColor = "#9e9e9e";  // Light red background
+                                dayTotalTh.style.color = "white";  // Dark red text for better contrast
+                                dayTotalTh.style.textAlign = "center";  // Ensure the text is centered
+
+                                // Append the created <th> to the dayTotalRow
+                                dayTotalRow.appendChild(dayTotalTh);
+                            });
+
+
+                            // Add Total Hours for all days
+                            let dayTotalLastTh = document.createElement("th");
+                            dayTotalLastTh.classList.add("text-center");
+                            let totalAllDays = dayTotals.reduce((acc, total) => acc + total, 0);
+                            dayTotalLastTh.textContent = totalAllDays.toLocaleString('en-US');  // You can specify other locales like 'de-DE' or 'fr-FR' for different formats
+
+                            dayTotalRow.appendChild(dayTotalLastTh);
+
+                            // Append the "Day Total" row to the table header
+                            tableHeader.appendChild(dayTotalRow);
+                        }
+
+
+                    </script>
+
+                    <style>
+                        .sunday {
+                            background-color: #eb3434;
+                            color: white;
+                            /* Light red background for Sundays */
+                        }
+
+                        .not-sunday {
+                            background-color: #3cce3c;
+                            color: white;
+                            /* Light green background for non-Sundays */
+                        }
+
+                        .table-responsive {
+                            position: relative;
+                            width: 100%;
+                            /* Adjust the width as needed */
+                            margin: 0 auto;
+                            /* Centers the table horizontally */
+                            overflow: auto;
+                            max-height: 650px;
+                            border-radius: 10px;
+                        }
+
+
+                        /* Make the entire header sticky */
+                        thead {
+                            position: sticky;
+                            top: 0;
+                            background-color: white;
+                            /* Optional: Background color to avoid transparency */
+                            z-index: 10;
+                            /* Ensure it appears above other content */
+                        }
+
+                        /* Sticky first column */
+                        th.first-col,
+                        td.first-col {
+                            position: sticky;
+                            left: 0;
+                            background-color: white;
+                            z-index: 10;
+                            border-right: 1px solid #dee2e6;
+                            /* Add a border to separate columns */
+                        }
+
+                        /* Sticky last column */
+                        th.last-col,
+                        td.last-col {
+                            position: sticky;
+                            right: 0;
+                            background-color: #fff;
+                            z-index: 5;
+                            border-left: 1px solid #dee2e6;
+                            /* Add a border to separate columns */
+                        }
+
+                        /* Optional: Style for sticky columns */
+                        th.sticky-col {
+                            position: sticky;
+                            left: 0;
+                            background-color: white;
+                            z-index: 5;
+                            /* Set a lower z-index for columns */
+                        }
+
+                        th,
+                        td {
+                            padding: 10px;
+                            border: 1px solid #dee2e6;
+                            /* Add border for grid effect */
+                            text-align: center;
+                        }
+
+                        /* Custom styles for the "Day Total" row */
+                        .day-total-row th {
+                            font-weight: normal;
+                            /* Remove bold weight */
+                            font-size: 0.9em;
+                            /* Reduce font size */
+                            background-color: white;
+                            /* Optional: Set a different background color */
+                            position: sticky;
+                            right: 0;
+                            background-color: #fff;
+                            z-index: 5;
+                            border-left: 1px solid #dee2e6;
+                        }
+                    </style>
+
+
+                </form>
+
+                <style>
+                    .search_container {
+
+                        width: 100%;
+                        padding: 10px;
+                    }
+                </style>
+
+            </div>
+
+            <div class="table-responsive" style="margin-top: 10px;">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="background-color: rgb(231, 170, 126); position: sticky; top: 0;">
+
+
+                            {% for date in date_range %}
+                            {% set full_date = "{} {} {}".format(date.day, date.month, date.strftime("%y")) %}
+                            <th class="text-center sticky-top" style="color: whitesmoke;">
+                                {{ date.strftime("%d %m %Y") }}
+                            </th>
+                            {% endfor %}
+
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td colspan="13"
+                                style="text-align: center; font-size: larger; color: #dc3545;  width: 100%; ">
+                                Pick your options to narrow down the list.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <style>
+        .form-group {
+            display: inline-block;
+            margin-right: 0px;
+            flex-grow: 1;
+        }
+
+        select.form-control,
+        select.form-control:focus,
+        select.form-control:active {
+            height: 30px;
+
+        }
+
+        select.form-control {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .row-inside {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+
+    <style>
+        .container {
+            align-items: center;
+            border-radius: 5px;
+            padding: 5px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+
+        .row-inside {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .small-input {
+            width: 200px;
+            border: 1px solid black;
+            border-radius: 40px;
+        }
+
+        .small-button {
+            width: 100px;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+
+</body>
+
+</html>

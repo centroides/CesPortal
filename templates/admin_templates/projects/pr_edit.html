@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects" class="active">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  <li class="active">
+                     <a href="{{ url_for('projects') }}" class="link">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 5px;"></i> Dashboard
+                     </a>
+                  </li>
+
+                  <li>
+                     <a href="{{ url_for('prj_status') }}" class="link">
+                        <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i> Status
+                     </a>
+                  </li>
+
+                  <li>
+                     <a href="{{ url_for('hours_edit') }}" class="link">
+                        <i class="fa-solid fa-clock-rotate-left" style="margin-right: 5px;"></i> Hours Edit
+                     </a>
+                  </li>
+
+                  {% if user_access['toggleMaterialReceipt'] == 'On' %}
+                  <li><a href="{{ url_for('Material_Receipt') }}" class="link"><i class="fa-solid fa-industry"></i>
+                        Material Receipt</a></li>
+                  {% endif %}
+
+                  <li>
+                     <a href="{{ url_for('hrs_view') }}" class="link">
+                        <i class="fa-solid fa-clock" style="margin-right: 5px;"></i> Hours View
+                     </a>
+                  </li>
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+
+
+         <form class="p-3" action="/project_pr" method="POST" enctype="multipart/form-data">
+
+            <div class="container">
+
+               <div class="double-container">
+
+                  <div class="form-group col-md-5" style="display: none ;">
+                     <label for="project_id" class="form-label">project_id<span style="color: red;">*</span></label>
+                     <input type="number" class="form-control" id="project_id" name="project_id"
+                        value="{% if project_id is none %}{{ header_details['project_id'] }}{% else %}{{ project_id }}{% endif %}"
+                        readonly style="background-color: antiquewhite;" required>
+                  </div>
+
+                  <div class="form-group col-md-6" style="display: none ;">
+                     <label for="Old_PR_no" class="form-label">PR Number <span style="color: red;">*</span></label>
+                     <input type="text" class="form-control" id="Old_PR_no" name="Old_PR_no"
+                        value="{{ header_details['PR_no'] }}" readonly style="background-color: antiquewhite;" required>
+                  </div>
+
+                  <div class="flex-row">
+                     <div class="flex-item">
+                        <label for="New_PR_no" class="form-label">PR Number <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="New_PR_no" name="New_PR_no" value="{{ New_PR_no }}"
+                           readonly style="background-color: antiquewhite;" required>
+                     </div>
+                     <div class="flex-item">
+                        <label for="PR_Date" class="form-label">PR Date<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="PR_Date" name="PR_Date" value="{{ current_date }}"
+                           readonly style="background-color: antiquewhite;" required>
+                     </div>
+                  </div>
+
+                  <div class="flex-row">
+                     <div class="flex-item">
+                        <label for="Attn" class="form-label">Attn <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Attn" name="Attn"
+                           value="{{ header_details['Attn'] }}" required>
+                     </div>
+                     <div class="flex-item">
+                        <label for="Quote_Ref" class="form-label">Quote Ref <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Quote_Ref" name="Quote_Ref"
+                           value="{{ header_details['Quote_Ref'] }}" required>
+                     </div>
+                  </div>
+
+                  <div class="flex-row">
+                     <div class="flex-item">
+                        <label for="Expenses" class="form-label">Expenses<span style="color: red;">*</span></label>
+                        <select class="form-control" id="Expenses" name="Expenses"
+                           onchange="updateDescriptionOptions()">
+                           <option value="" disabled selected>Type</option>
+                           <option value="2000" {% if header_details['Expenses']==2000 %}selected{% endif %}>
+                              Mechanical</option>
+                           <option value="3000" {% if header_details['Expenses']==3000 %}selected{% endif %}>Sub
+                              Contract</option>
+                           <option value="4000" {% if header_details['Expenses']==4000 %}selected{% endif %}>Site
+                           </option>
+                           <option value="500" {% if header_details['Expenses']==500 %}selected{% endif %}>Others
+                           </option>
+                        </select>
+                     </div>
+                     <div class="flex-item">
+                        <label for="Description" class="form-label">Description<span
+                              style="color: red;">*</span></label>
+                        <select class="form-control" id="Description" name="Description" onchange="updateCode()">
+                           <option value="" disabled selected>Description</option>
+                        </select>
+                     </div>
+                     <div class="flex-item">
+                        <label for="code_number" class="form-label">Code</label>
+                        <input type="number" class="form-control" id="code_number" name="code_number" readonly
+                           style="background-color: antiquewhite;" value="{{header_details['Expenses']}}">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="double-container">
+                  <label for="Supplier_Name" class="form-label">Supplier Name<span style="color: red;">*</span></label>
+                  <select class="form-control" id="Supplier_Name" name="Supplier_Name" required>
+                     <option value="">Select Supplier</option>
+                     {% for supplier in Supplier_Names %}
+                     <option value="{{ supplier }}" {% if header_details['Supplier_Name']==supplier %}selected{% endif
+                        %}>{{ supplier }}</option>
+                     {% endfor %}
+                  </select>
+
+                  <div class="flex-row">
+                     <div class="flex-item">
+                        <label for="Payment_Terms" class="form-label">Terms <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Payment_Terms" name="Payment_Terms"
+                           value="{{ header_details['Payment_Terms'] }}" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="Currency" class="form-label">Currency <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="Currency" name="Currency"
+                           value="{{ header_details['Currency'] }}" required>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="leat_time" class="form-label">Lead Time<span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="leat_time" name="leat_time"
+                           value="{{ header_details['leat_time'] }}" required>
+                     </div>
+                  </div>
+
+                  <div class="flex-row">
+                     <div class="flex-item">
+                        <label for="Contact" class="form-label">Select Username</label>
+                        <select class="form-control" id="Contact" name="Contact" required>
+                           <option value="" disabled selected>Select a username</option>
+                           {% for username in usernames %}
+                           <option value="{{ username }}" {% if header_details['created_by'] %} {% if
+                              username==header_details['created_by'] %}selected{% endif %} {% else %} {% if
+                              username==user['name'] %}selected{% endif %} {% endif %}>
+                              {{ username }}
+                           </option>
+                           {% endfor %}
+                        </select>
+                     </div>
+
+                     <div class="flex-item">
+                        <label for="number" class="form-label">Phone No</label>
+                        <input type="number" class="form-control" id="number" name="number"
+                           value="{{ header_details['phone_number'] }}">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="double-container">
+                  <label for="Delivery" class="form-label">Delivery <span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" id="Delivery" name="Delivery"
+                     value="{{ header_details['Delivery'] or 'Centroid Engineering Solutions Pte Ltd' }}" required>
+
+                  <label for="Address_Line1" class="form-label">Address Line1<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" id="Address_Line1" name="Address_Line1"
+                     value="{{ header_details['Address_Line1'] or '11, Woodlands close, #07-10' }}" required>
+
+                  <label for="Address_Line2" class="form-label">Address Line2<span style="color: red;">*</span></label>
+                  <input type="text" class="form-control" id="Address_Line2" name="Address_Line2"
+                     value="{{ header_details['Address_Line2'] or ' Singapore - 737853' }}" required>
+               </div>
+
+               <div class="double-container">
+                  <label for="comments" class="form-label">Comments</label>
+                  <textarea class="form-control" id="comments" name="comments"
+                     rows="4">{{ header_details['comments'] }}</textarea>
+
+                  <div class="flex-row">
+
+                     <div class="flex-item">
+
+                        <div class="button-container">
+                           <button type="submit" name="action" value="update_header" class="custom-btn btn-2"
+                              value="add_header">Update Header</button>
+
+                        </div>
+                     </div>
+
+                     <div class="flex-item">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                           {% for category, message in messages %}
+                           {% if category == 'pr_header_success' %}
+                           <div class="alert alert-success">
+                              {{ message }}
+                           </div>
+                           {% elif category == 'pr_header_success' %}
+                           <div class="alert alert-danger">
+                              {{ message }}
+                           </div>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                     </div>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+         </form>
+
+
+
+         <div class="table-responsive">
+
+            <form class="p-3" action="/pr_item" method="POST" enctype="multipart/form-data">
+
+               <div class="table-responsive1">
+
+                  <table class="table" width="100%" id="dynamicTable">
+
+                     <input style="display: none;" type="number" class="form-control" id="project_id" name="project_id"
+                        value="{{header_details['project_id']}}" required>
+                     <input style="display: none;" type="text" class="form-control" id="PR_no" name="PR_no"
+                        value="{{header_details['PR_no']}}" required>
+                     <input style="display: none;" type="text" class="form-control" id="New_PR_no" name="New_PR_no"
+                        value="{{New_PR_no}}" required>
+                     <thead>
+                        <tr>
+                           <th class="text-center">#</th>
+                           <th class="text-center">Part No</th>
+                           <th class="text-center">Description</th>
+                           <th class="text-center">UOM</th>
+                           <th class="text-center">Quantity</th>
+                           <th class="text-center">Unit Price</th>
+                           <th class="text-center">Total</th>
+                           <th class="text-center">Action</th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for item in pr_items %}
+                        <tr>
+                           <td class="text-center">{{ loop.index }}</td>
+                           <td><input class="form-control" type="text" name="part_no[]" class="form-item"
+                                 value="{{ item['Part_No'] }}"></td>
+                           <td><input class="form-control" type="text" name="description[]" class="form-item"
+                                 value="{{ item['item'] }}" required></td>
+                           <td><input class="form-control" type="text" name="uom[]" class="form-item"
+                                 value="{{ item['uom'] }}" required></td>
+                           <td><input class="form-control" type="number" name="quantity[]" class="form-item"
+                                 value="{{ item['quantity'] }}" required oninput="calculateTotal(this)"></td>
+                           <td><input class="form-control" type="number" step="any" name="unit_price[]"
+                                 class="form-item" value="{{ item['Unit_Price'] }}" required
+                                 oninput="calculateTotal(this)"></td>
+                           <td><input class="form-control" type="text" name="total[]" class="form-item"
+                                 value="{{ item['total'] }}" readonly></td>
+                           <td>
+                              <button type="button" class="btn-delete" style="color: red;" onclick="deleteRow(this)">
+                                 <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                              </button>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+
+                  </table>
+
+                  <div class="row1">
+
+                     <button type="button" class="custom-btn btn-2" onclick="addRow()">+</button>
+
+                     <div class="text-center mt-3">
+                        <label> Total : <span id="sumTotal" style="color: #004B5D;">0.00</span></label>
+                     </div>
+
+
+
+
+                     <div class='flex-item' style="display: none;">
+                        <input type="text" class="form-control" name="action" value="update_pr">
+                     </div>
+
+
+
+                     <script>
+                        function handleClick(event) {
+                           event.preventDefault(); // Prevent immediate form submission
+
+                           // Call both functions
+                           checkGST();
+                           disableButton();
+
+                           // Optionally, submit the form after a delay
+                           setTimeout(() => {
+                              event.target.closest('form').submit();
+                           }, 100); // Adjust the delay if needed
+                        }
+
+                        function disableButton() {
+                           const btn = document.getElementById('generatePRButton');
+                           if (btn) {
+                              btn.disabled = true;
+                              btn.innerText = 'Processing...';
+                           }
+                        }
+                     </script>
+
+
+                     <div class="pr-actions">
+                        <button type="submit" class="custom-btn btn-2" id="generatePRButton"
+                           onclick="handleClick(event)">Update PR</button>
+                        <div class="form-check m-3">
+                           <input class="form-check-input" type="checkbox" id="gstCheckbox" name="gstCheckbox">
+                           <label class="form-check-label" for="gstCheckbox">GST</label>
+                        </div>
+                     </div>
+
+                  </div>
+
+               </div>
+
+            </form>
+
+         </div>
+
+
+      </div>
+
+   </div>
+
+
+</body>
+
+<style>
+   .records {
+      width: 100%;
+      overflow-x: auto;
+   }
+
+   .record-header {
+      width: 100%;
+      padding: 10px;
+      background-color: #d8eaf3;
+   }
+
+   .container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-content: space-around;
+      gap: 15px;
+      border-radius: 5px;
+      background-color: #f1ecec;
+      padding: 10px;
+      width: 100%;
+   }
+
+   .double-container {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(235, 230, 230);
+      flex: 1;
+      /* This allows .double-container to grow and take up available space */
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+      box-sizing: border-box;
+      /* Ensure padding and border are included in width */
+   }
+
+
+   .form-label {
+      display: block;
+      margin-bottom: 5px;
+   }
+
+   .form-control {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 0px;
+      box-sizing: border-box;
+   }
+
+   .flex-item-full-width {
+      flex: 1;
+   }
+
+   .flex-row {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      /* Optional: add spacing between flex items within .flex-row */
+   }
+
+   .flex-item {
+      flex: 1;
+      /* Ensure flex items grow equally */
+   }
+
+   .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+   }
+
+   .custom-btn {
+      height: 40px;
+      color: #fff;
+      border-radius: 5px;
+      padding: 10px 15px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 500;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+         7px 7px 20px 0px rgba(0, 0, 0, .1),
+         4px 4px 5px 0px rgba(0, 0, 0, .1);
+      outline: none;
+      font-size: 15px;
+   }
+
+   .btn-2 {
+      background: #004B5D;
+      background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+      border: none;
+   }
+
+   .btn-2:before {
+      height: 0%;
+      width: 2px;
+   }
+
+   .btn-2:hover {
+      box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+         -4px -4px 6px 0 rgba(116, 125, 136, .5),
+         inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+         inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+   }
+
+   /* Responsive adjustments */
+   @media (max-width: 768px) {
+      .btn4 {
+         font-size: 14px;
+         padding: 8px 12px;
+         /* Adjusted padding for smaller screens */
+      }
+
+      .row1 {
+         flex-direction: column;
+         align-items: center;
+      }
+   }
+
+   @media (max-width: 480px) {
+      .btn4 {
+         font-size: 12px;
+         padding: 6px 10px;
+         /* Further adjusted padding */
+      }
+   }
+
+   @media (max-width: 768px) {
+      .flex-item {
+         flex: 1 1 100%;
+      }
+   }
+
+   @media (max-width: 768px) {
+      .double-container {
+         width: 100%;
+      }
+   }
+</style>
+
+<style>
+   /* alert message */
+   .alert-container {
+      margin-top: 10px;
+   }
+
+   .alert {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+   }
+
+   .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+   }
+
+   .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+   }
+</style>
+
+<style>
+   /* table */
+   .text-center {
+
+      align-items: center;
+      margin: 10px;
+   }
+
+   table {
+      width: 100%;
+      border-collapse: collapse;
+   }
+
+   th,
+   td {
+      text-align: center;
+      /* Ensure this is applied */
+      gap: 10px;
+   }
+
+   th {
+      background-color: #f4f4f4;
+   }
+
+   .table thead th:nth-child(1),
+   .table tbody td:nth-child(1),
+   .table thead th:nth-child(2),
+   .table tbody td:nth-child(2),
+   .table thead th:nth-child(3),
+   .table tbody td:nth-child(3),
+   .table thead th:nth-child(4),
+   .table tbody td:nth-child(4),
+   .table thead th:nth-child(5),
+   .table tbody td:nth-child(5),
+   .table thead th:nth-child(6),
+   .table tbody td:nth-child(6),
+   .table thead th:nth-child(7),
+   .table tbody td:nth-child(7),
+   .table thead th:nth-child(10),
+   .table tbody td:nth-child(10) {
+      text-align: center;
+   }
+
+   .row1 {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 10px 0;
+   }
+
+   .btn-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+   }
+
+   .btn-delete ion-icon {
+      font-size: 1.6em;
+   }
+
+   .fa-trash {
+      margin-left: 5px;
+   }
+</style>
+
+<script>
+
+   document.addEventListener('DOMContentLoaded', (event) => {
+      const form = document.querySelector('form');
+      const dynamicTable = document.getElementById('dynamicTable');
+
+      form.addEventListener('keydown', function (event) {
+         if (event.key === 'Enter') {
+            event.preventDefault();
+            const target = event.target;
+
+            if (target && target.tagName.toLowerCase() === 'input') {
+               // Check if the input is part of the dynamic table
+               const row = target.closest('tr');
+               if (row && row.closest('table') === dynamicTable) {
+                  addRow();
+               }
+            }
+         }
+      });
+
+      form.addEventListener('submit', function (event) {
+         if (document.activeElement.getAttribute('type') !== 'submit') {
+            event.preventDefault();
+            return false;
+         }
+      });
+   });
+
+   function deleteRow(button) {
+      var row = button.closest('tr');
+      row.remove();
+      updateRowIndices();
+      updateSumTotal(); // Recalculate totals after row deletion
+   }
+
+   function addRow() {
+      var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+      var newRow = table.insertRow();
+      var indexCell = newRow.insertCell(0);
+      var partNoCell = newRow.insertCell(1);
+      var descriptionCell = newRow.insertCell(2);
+      var uomCell = newRow.insertCell(3);
+      var quantityCell = newRow.insertCell(4);
+      var unitPriceCell = newRow.insertCell(5);
+      var totalCell = newRow.insertCell(6); // Added Total cell
+      var actionCell = newRow.insertCell(7);
+
+      indexCell.className = 'text-center';
+      indexCell.innerHTML = table.rows.length;
+
+      partNoCell.innerHTML = '<input class="form-control" type="text" name="part_no[]" class="form-item">';
+      descriptionCell.innerHTML = '<input class="form-control" type="text" name="description[]" class="form-item" required>';
+      uomCell.innerHTML = '<input class="form-control" type="text" name="uom[]" class="form-item" required>';
+      quantityCell.innerHTML = '<input class="form-control" type="number" name="quantity[]" class="form-item" required oninput="calculateTotal(this)">';
+      unitPriceCell.innerHTML = '<input class="form-control" type="number" step="any" name="unit_price[]" class="form-item" required oninput="calculateTotal(this)">';
+      totalCell.innerHTML = '<input class="form-control" type="text" name="total[]" class="form-item" readonly>'; // Added readonly Total input
+      actionCell.innerHTML = '<button type="button" class="btn-delete" style="color: red;" onclick="deleteRow(this)"> <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon> </button>';
+
+      updateRowIndices();
+   }
+
+   function updateRowIndices() {
+      var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+      for (var i = 0; i < table.rows.length; i++) {
+         table.rows[i].cells[0].innerHTML = i + 1;
+      }
+   }
+
+   function calculateTotal(input) {
+      var row = input.closest('tr');
+      var quantity = parseFloat(row.querySelector('input[name="quantity[]"]').value);
+      var unitPrice = parseFloat(row.querySelector('input[name="unit_price[]"]').value);
+      var total = quantity * unitPrice;
+      row.querySelector('input[name="total[]"]').value = total.toFixed(2);
+
+      updateSumTotal(); // Update the sum of totals
+   }
+
+   function updateSumTotal() {
+      var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+      var sumTotal = 0.0;
+      for (var i = 0; i < table.rows.length; i++) {
+         var total = parseFloat(table.rows[i].querySelector('input[name="total[]"]').value);
+         sumTotal += total;
+      }
+      document.getElementById('sumTotal').innerText = sumTotal.toFixed(2); // Display sum of totals
+   }
+
+
+   function checkGST(event) {
+      var gstCheckbox = document.getElementById('gstCheckbox');
+      if (!gstCheckbox.checked) {
+         var confirmation = confirm("You didn't select the GST option. Do you want to cancel form submission?");
+         if (confirmation === true) {
+            event.preventDefault(); // Prevent form submission
+         }
+         // If confirmation is false, allow form submission to proceed
+      }
+   }
+
+
+
+</script>
+
+<script>
+
+   const descriptionOptions = {
+      "2000": [
+         { value: "2001", text: "Mechanical" },
+         { value: "2002", text: "Electrical" },
+         { value: "2003", text: "Instrument" },
+         { value: "2004", text: "PLC Hardware" },
+         { value: "2005", text: "Panel Hardware" },
+         { value: "2006", text: "Consumables" },
+         { value: "2007", text: "Tools" },
+         { value: "2008", text: "Civil" }
+      ],
+      "3000": [
+         { value: "3001", text: "Scaffolding" },
+         { value: "3002", text: "Programming" },
+         { value: "3003", text: "E&I Fabrication" },
+         { value: "3004", text: "Mechanical Fabrication" },
+         { value: "3005", text: "Manpower Supply" },
+         { value: "3006", text: "LEW" },
+         { value: "3007", text: "Calibration" },
+         { value: "3008", text: "Equipment Rent" },
+         { value: "3009", text: "Servicing" },
+         { value: "3010", text: "Others" }
+      ],
+      "4000": [],
+      "500": [
+         { value: "501", text: "Admin" },
+         { value: "502", text: "Salary" },
+         { value: "503", text: "Levy" },
+         { value: "504", text: "CPF" },
+         { value: "505", text: "Asset" },
+         { value: "506", text: "Vehicle" },
+         { value: "507", text: "Training" },
+         { value: "508", text: "Insurance" },
+         { value: "509", text: "Renewal" },
+         { value: "510", text: "Utilities" },
+         { value: "511", text: "Medical" },
+         { value: "512", text: "Travel" },
+         { value: "513", text: "Rental" },
+         { value: "514", text: "Safety" },
+         { value: "515", text: "Food" },
+         { value: "516", text: "Entertainment" },
+         { value: "517", text: "Others" }
+      ]
+   };
+
+   function updateDescriptionOptions() {
+      const expensesSelect = document.getElementById('Expenses');
+      const descriptionSelect = document.getElementById('Description');
+      const selectedValue = expensesSelect.value;
+
+      // Clear existing options
+      descriptionSelect.innerHTML = '<option value="" disabled selected>Select Description</option>';
+
+      // Populate new options
+      if (descriptionOptions[selectedValue]) {
+         descriptionOptions[selectedValue].forEach(option => {
+            const newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.text = option.text;
+            descriptionSelect.appendChild(newOption);
+         });
+      }
+   }
+
+   function updateCode() {
+      const descriptionSelect = document.getElementById('Description');
+      const codeInput = document.getElementById('code_number');
+      const selectedOption = descriptionSelect.options[descriptionSelect.selectedIndex];
+
+      codeInput.value = selectedOption ? selectedOption.value : '';
+   }
+
+   // Initialize the description options if there's a preselected Expenses Type
+   document.addEventListener('DOMContentLoaded', function () {
+      updateDescriptionOptions();
+      updateCode();
+
+      // Select-all functionality for checkboxes
+      const selectAllCheckbox = document.getElementById('select-all-checkbox2');
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_assets[]"]');
+
+      selectAllCheckbox.addEventListener('change', function () {
+         checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+         });
+      });
+   });
+
+</script>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+      var select = document.getElementById('Expenses');
+      var options = select.getElementsByTagName('option');
+
+      for (var i = 1; i < options.length; i++) {
+         if (i % 2 == 0) {
+            options[i].classList.add('option-color-even');
+         } else {
+            options[i].classList.add('option-color-odd');
+         }
+      }
+   });
+
+   document.addEventListener('DOMContentLoaded', function () {
+      var select = document.getElementById('Supplier_Name');
+      var options = select.getElementsByTagName('option');
+
+      for (var i = 1; i < options.length; i++) {
+         if (i % 2 == 0) {
+            options[i].classList.add('option-color-even');
+         } else {
+            options[i].classList.add('option-color-odd');
+         }
+      }
+   });
+</script>
+
+
+
+</html>

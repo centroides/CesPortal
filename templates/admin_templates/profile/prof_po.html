@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile" class="active">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleAccountHub'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_act') }}" class="link">
+                                <i class="fa-solid fa-user" style="margin-right: 5px;"></i> Account Info
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_time') }}" class="link">
+                                <i class="fas fa-clock" style="margin-right: 5px;"></i> Time Sheet
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pr') }}" class="link">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i> Purchase Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('prof_po') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> Purchase Order
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_prj') }}" class="link">
+                                <i class="fa-solid fa-project-diagram" style="margin-right: 5px;"></i> Project Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pay') }}" class="link">
+                                <i class="fa-solid fa-hand-holding-dollar" style="margin-right: 5px;"></i> Payment
+                                Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_claim') }}" class="link">
+                                <i class="fa-solid fa-file-alt" style="margin-right: 5px;"></i> Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_do') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Delivery Order
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleprofSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_supplier') }}" class="link">
+                                <i class="fa-solid fa-truck" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+                <h3 style="color: #004274;">Purchase Orders's (<span id="requestCount">0</span>) </h3>
+                <input type="text" id="searchInput" placeholder="Search ...🔍" onkeyup="filterTable()">
+                <span class="span_tag">Amount : <span id="totalAmount">$ 0.00</span></span>
+                <span class="span_tag">GST : <span id="totalGST">$ 0.00</span></span>
+                <span class="span_tag">Total : <span id="overallTotal">$ 0.00</span></span>
+
+            </div>
+
+            <style>
+                .span_tag {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #004b5d;
+                    padding: 5px 8px;
+                    border: 1px solid #004b5d;
+                    border-radius: 5px;
+                    background-color: #f1f8ff;
+                    color: #004b5d;
+                    text-align: center;
+                    margin-right: 10px;
+                }
+
+                #totalAmount {
+                    color: #28a745;
+                    /* Green for amount */
+                }
+
+                #totalGST {
+                    color: #0c8de2;
+                    /* Yellow for GST */
+                }
+
+                #overallTotal {
+                    color: #dc3545;
+                    /* Red for overall total */
+                }
+
+                .search_container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    padding: 10px;
+                }
+
+
+                #projectTable {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border-radius: 10px;
+                }
+
+
+                #searchInput {
+                    width: 40%;
+                    padding: 2px;
+                    margin: auto;
+                    display: block;
+                    border: 2px solid #ccc;
+                    border-radius: 5px;
+                    /* Rounded corners */
+                    outline: none;
+                    transition: all 0.3s ease-in-out;
+                    text-align: center;
+                    font-size: 16px;
+                }
+
+                #searchInput:hover {
+                    background-color: #f0f0f0;
+                }
+
+                #searchInput:focus {
+                    border-color: #004b5d;
+                    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                }
+            </style>
+
+            <div class="table-responsive" style="background-color: white;">
+
+                <table class="table table-main" width="100%" id="projectTable">
+
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="text-align: center;"><span class="fa-solid fa-eye"
+                                    style="font-size: 1.25em; color: black;"></span></th>
+                            <th>PO NO</th>
+                            <th>Supplier</th>
+                            <th style="text-align: center;">PO Date</th>
+                            <th style="text-align: center;">Lead Time</th>
+                            <th style="text-align: center;">Delivary </th>
+                            <th style="text-align: right;">Amount (S$)</th>
+                            <th style="text-align: right;">GST (S$)</th>
+                            <th style="text-align: right;">Total (S$)</th>
+                            <th>Requested By</th>
+                            <th>Approved By</th>
+                            <th>Issued By</th>
+                            <th style="text-align: center;">PO Status</th>
+                            <th style="text-align: center;">DO Status</th>
+                            <th style="text-align: center;">Payment</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if not grouped_df.empty %}
+                        {% for index, row in grouped_df.iterrows() %}
+                        <tr class="mainRow">
+
+                            <td class="text-center view-col" style="text-align: center;">
+                                <span class="icon" onclick="openPaymentDetails('{{ row['PO_no'] }}')"
+                                    style="cursor: pointer;">
+                                    <span class="fa-solid fa-eye" style="font-size: 1.25em; color: orangered;"></span>
+                                </span>
+                            </td>
+
+                            <td class="text-center PR_no"> {{ row['PO_no']}}</td>
+
+
+                            <td class="Supplier_Name" style="text-align: left;"> {{ row['Supplier_Name'][:15] }}{% if
+                                row['Supplier_Name'][:15]|length > 20
+                                %}...{%
+                                endif %}</td>
+
+                            <td style="text-align: center;" class="text-center PR_Date"> {{ row['PO_Date']}}</td>
+                            <td style="text-align: center;" class="text-center"> {{ row['leat_time'][:8] }} </td>
+                            <td style="text-align: center;" class="text-center"> {{ row['delivery_date']}} </td>
+                            <td style="text-align: right;">{{ '{:,.2f}'.format(row['amount']) }}</td>
+                            <td style="text-align: right;">{{ '{:,.2f}'.format(row['GST']) }}</td>
+                            <td style="text-align: right;">{{ '{:,.2f}'.format(row['total']) }}</td>
+                            <td class="text-center created_by">{{ row['created_by'] }}</td>
+
+                            <td class="text-center">{{ row['approved_by'] }}</td>
+                            <td class="text-center created_by">{{ row['PO_Issued_by'] }}</td>
+
+                            <td class="text-center status" style="font-weight: bold; text-align: center;">
+                                <span style="color: 
+                                    {% if row['status'] == 'Issued' %}
+                                        brown;
+                                    {% elif row['status'] == 'Reissued' %}
+                                        blue;
+                                    {% elif row['status'] == 'Closed' %}
+                                        green;
+                                    {% elif row['status'] == 'Canceled' %}
+                                        red;
+                                    {% endif %};
+                                    background-color: 
+                                    {% if row['status'] == 'Issued' %}
+                                        #f2e1d7; /* Light brown background */
+                                    {% elif row['status'] == 'Reissued' %}
+                                        #a4acee; /* Light orange background */
+                                    {% elif row['status'] == 'Closed' %}
+                                        #d0f8e3; /* Light green background */
+                                    {% elif row['status'] == 'Canceled' %}
+                                        #f8d7da; /* Light red background */
+                                    {% endif %};
+                                    padding: 2px 8px; 
+                                    border-radius: 8px; 
+                                    display: inline-block; /* Ensures the span takes up only as much space as needed */
+                                ">
+                                    {{ row['status'] }}
+                                </span>
+                            </td>
+
+                            <td class="text-center status1" style="font-weight: bold; text-align: center;">
+                                <span style="color: 
+                                    {% if row['do_staus'] == 'Open' %}
+                                        #8b4513; /* Darker brown */
+                                    {% elif row['do_staus'] == 'Partial' %}
+                                        #1e90ff; /* Dodger blue */
+                                    {% elif row['do_staus'] == 'Closed' %}
+                                        #228b22; /* Forest green */
+                                    {% elif row['do_staus'] == 'Canceled' %}
+                                        #dc143c; /* Crimson */
+                                    {% endif %};
+                                    background-color: 
+                                    {% if row['do_staus'] == 'Open' %}
+                                        #fce5cd; /* Light peach background */
+                                    {% elif row['do_staus'] == 'Partial' %}
+                                        #d1e7fd; /* Light blue background */
+                                    {% elif row['do_staus'] == 'Closed' %}
+                                        #d0f8e3; /* Very light green background */
+                                    {% elif row['do_staus'] == 'Canceled' %}
+                                        #f8d7da; /* Soft red background */
+                                    {% endif %};
+                                    padding: 2px 8px; 
+                                    border-radius: 8px; 
+                                    display: inline-block; /* Ensures the span takes up only as much space as needed */
+                                ">
+                                    {{ row['do_staus'] }}
+                                </span>
+                            </td>
+
+                            <td class="text-center status2" style="font-weight: bold; text-align: center;">
+                                <span style="color: 
+                                    {% if row['payment_status'] == 'Issued' %}
+                                        #6a4e23; /* Dark brown */
+                                    {% elif row['payment_status'] == 'Reissued' %}
+                                        #4682b4; /* Steel blue */
+                                    {% elif row['payment_status'] == 'Closed' %}
+                                        #228b22; /* Forest green */
+                                    {% elif row['payment_status'] == 'Partial' %}
+                                        #1e90ff; /* Firebrick red */
+                                    {% elif row['payment_status'] is none %}
+                                        #8b4513; /* Gray for None */
+                                    {% endif %};
+                                    background-color: 
+                                    {% if row['payment_status'] == 'Issued' %}
+                                        #f4a300; /* Amber background */
+                                    {% elif row['payment_status'] == 'Reissued' %}
+                                        #add8e6; /* Light blue background */
+                                    {% elif row['payment_status'] == 'Closed' %}
+                                        #d0f8e3; /* Pale green background */
+                                    {% elif row['payment_status'] == 'Partial' %}
+                                        #d1e7fd; /* Very light red background */
+                                    {% elif row['payment_status'] is none %}
+                                        #fce5cd; /* Light gray background for None */
+                                    {% endif %};
+                                    padding: 2px 8px; 
+                                    border-radius: 8px; 
+                                    display: inline-block; /* Ensures the span takes up only as much space as needed */
+                                ">
+                                    {% if row['payment_status'] is none %}
+                                    Open
+                                    {% else %}
+                                    {{ row['payment_status'] }}
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <script>
+                                function approvePR(prNo) {
+                                    // Make an AJAX request to approve the PR
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open("POST", "/approve_pr", true);
+                                    xhr.setRequestHeader("Content-Type", "application/json");
+
+                                    xhr.onload = function () {
+                                        if (xhr.status === 200) {
+                                            // If successful, handle success (e.g., show a message, refresh data)
+                                            alert("PR Approved Successfully!");
+                                            // Optionally, refresh the page or remove the row from the table
+                                            document.getElementById(`approveForm-${prId}`).style.display = 'none';
+                                        } else {
+                                            // If an error occurs
+                                            alert("Failed to approve PR.");
+                                        }
+                                    };
+
+                                    const data = {
+                                        PR_no: prNo
+                                    };
+
+                                    xhr.send(JSON.stringify(data));
+                                }
+                            </script>
+
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="13" class="text-center"
+                                style="text-align: center; font-size: larger; color: #dc3545;">No
+                                Requests available</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+
+                </table>
+
+                <script>
+
+                    function formatNumber(number) {
+                        return new Intl.NumberFormat('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(number);
+                    }
+
+                    function formatDate(dateString) {
+                        const date = new Date(dateString);
+                        const day = String(date.getDate()).padStart(2, '0');  // Pad with zero if single digit
+                        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed, so add 1
+                        const year = String(date.getFullYear()).slice(-2);  // Get last two digits of the year
+                        return `${day} /${month}/${year} `;
+                    }
+
+                    function openPaymentDetails(PO_no) {
+                        fetch(`/get_po_details?PO_no=${PO_no} `)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById('modalPRNO').textContent = data.po_details.PO_no;
+                                    document.getElementById('project_id').textContent = data.po_details.project_id;
+                                    document.getElementById('supplier_name').textContent = data.po_details.Supplier_Name;
+                                    document.getElementById('attention').textContent = data.po_details.Attn;
+                                    document.getElementById('created_by').textContent = data.po_details.created_by;
+                                    document.getElementById('approved_by').textContent = data.po_details.approved_by;
+                                    document.getElementById('processed_by').textContent = data.po_details.PO_Issued_by;
+                                    document.getElementById('payment_terms').textContent = data.po_details.leat_time;
+                                    document.getElementById('pr_status').textContent = data.po_details.status;
+                                    document.getElementById('amount').textContent = `$ ${formatNumber((data.amount ?? 0).toFixed(2))} `;
+                                    document.getElementById('gst').textContent = `$ ${formatNumber((data.gst_amount ?? 0).toFixed(2))} `;
+                                    document.getElementById('total').textContent = `$ ${formatNumber((data.total ?? 0).toFixed(2))} `;
+                                    document.getElementById('material_status').textContent = data.po_details.do_staus;
+                                    document.getElementById('pay_status').textContent = data.po_details.payment_status;
+                                    // Populate items list
+                                    let itemsTable = document.getElementById('modalItemsTable');
+                                    itemsTable.innerHTML = "";
+
+                                    data.items.forEach((item, index) => {
+                                        let total = parseFloat(item.total) || 0;  // Ensure total is a number, default to 0
+                                        let quantity = parseFloat(item.quantity) || 0;
+                                        let unitPrice = parseFloat(item.Unit_Price) || 0;
+                                        let itemName = item.item || '';  // If item is null/undefined, default to an empty string
+                                        let uom = item.uom || '';        // If uom is null/undefined, default to an empty string
+                                        let exceptedDate = item.excepted_date || ''; // If excepted_date is null/undefined, default to an empty string
+                                        let status = item.status || '';  // If status is null/undefined, default to an empty string
+
+                                        // Ensure the excepted_date is valid before formatting
+                                        let formattedDate = '';
+                                        if (exceptedDate) {
+                                            let dateObj = new Date(exceptedDate);
+                                            if (!isNaN(dateObj.getTime())) {  // Check if it's a valid date
+                                                formattedDate = formatDate(dateObj);  // Assuming formatDate() formats the date correctly
+                                            } else {
+                                                formattedDate = '';  // In case the date is invalid
+                                            }
+                                        }
+
+                                        let row = `<tr>
+                                            <td style="width: 5%; text-align: center;">${index + 1}</td>  <!-- Index Column -->
+                                            <td style="width: 48%; text-align: left;">${itemName}</td>
+                                            <td style="width: 5%; text-align: center;">${formatNumber(quantity.toFixed(2))}</td>
+                                            <td style="width: 5%; text-align: center;">${uom}</td>
+                                            <td style="width: 10%; text-align: right;">$ ${formatNumber(unitPrice.toFixed(2))}</td>
+                                            <td style="width: 10%; text-align: right;">$ ${formatNumber(total.toFixed(2))}</td>
+                                            <td style="width: 10%; text-align: center;">${formattedDate}</td>
+                                            <td style="width: 10%; text-align: center;">${status || 'Pending'}</td>
+                                        </tr>`;
+                                        itemsTable.innerHTML += row;
+                                    });
+
+                                    document.getElementById('paymentModal').style.display = 'block';
+                                } else {
+                                    alert('Payment details not found!');
+                                }
+                            })
+                            .catch(error => console.error('Error fetching payment details:', error));
+                    }
+
+                    function closeModal() {
+                        document.getElementById('paymentModal').style.display = 'none';
+                    }
+
+                </script>
+
+
+            </div>
+
+            <div id="paymentModal" class="modal">
+
+                <div class="modal-content">
+
+                    <div class="button-container1">
+
+                        <h2>Purchase Order Details (<span id="modalPRNO"></span>)
+                        </h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+
+                    </div>
+
+                    <div class="container" style=" background-color: #f5f5f7;">
+
+                        <div class="invoice-header">
+                            <div class="invoice-row" style="display: none;">
+                                <p><strong>Project ID</strong></p>
+                                <span id="project_id"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Supplier</strong></p>
+                                <span id="supplier_name"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Attn</strong></p>
+                                <span id="attention"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Created By</strong></p>
+                                <span id="created_by"></span>
+                            </div>
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Approved By</strong></p>
+                                <span id="approved_by"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>PO Issued By</strong></p>
+                                <span id="processed_by"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Terms</strong></p>
+                                <span id="payment_terms"></span>
+                            </div>
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Amount</strong></p>
+                                <span id="amount"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>GST</strong></p>
+                                <span id="gst"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Total</strong></p>
+                                <span id="total"></span>
+                            </div>
+                        </div>
+
+                        <div class="invoice-header">
+                            <div class="invoice-row">
+                                <p><strong>Material Status</strong></p>
+                                <span id="material_status"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Pay Status</strong></p>
+                                <span id="pay_status"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>PO Status</strong></p>
+                                <span id="pr_status"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" width="100%">
+
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center; width: 2%;">S/N</th>
+                                        <th style="text-align: left; width: 45%;">Item</th>
+                                        <th style="text-align: center; width: 3%;">Qty</th>
+                                        <th style="text-align: center; width: 3%;">Uom</th>
+                                        <th style="text-align: center; width: 10%;">Unit Price</th>
+                                        <th style="text-align: center; width: 10%;">Total</th>
+                                        <th style="text-align: center; width: 20%;">Delivary</th>
+                                        <th style="text-align: center; width: 5%;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalItemsTable">
+                                    <!-- Items will be inserted here -->
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <style>
+                .table-responsive1 {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 450px;
+                    border-radius: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .table-responsive {
+                    width: 100%;
+                    overflow: auto;
+                    max-height: 750px;
+                }
+
+                .table-main {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .table-main thead {
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    z-index: 10;
+                }
+
+                .container {
+                    background-color: white;
+                    /* Light Gray - Similar to Apple's typical background */
+                    padding: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    flex: 1;
+                    gap: 20px;
+                    border: 2px solid #d3d3d3;
+                    /* Slightly darker light gray for border */
+                    margin-bottom: 15px;
+                }
+
+                .invoice-header {
+                    flex: 1;
+                    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                    padding: 20px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: #004d40;
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                .invoice-header:hover {
+                    transform: scale(1.02);
+                }
+
+
+                .invoice-row {
+                    display: grid;
+                    grid-template-columns: 150px auto;
+                    /* First column for labels, second for values */
+                    gap: 10px;
+                    align-items: center;
+                    padding: 5px 0;
+                }
+
+                .invoice-row p {
+                    margin: 0;
+                    font-weight: bold;
+                    text-align: left;
+                }
+
+                .invoice-row span {
+                    text-align: left;
+                }
+
+
+                .invice_header {
+                    width: 100%;
+                    padding: 10px;
+
+                }
+
+                .button-container1 {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                }
+
+                .button-container1 h2 {
+                    margin: 0;
+                    font-size: 1.5em;
+                    color: #333;
+                }
+
+
+
+                .title-box {
+                    display: flex;
+                    padding: 5px;
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 10px;
+                    justify-content: space-between;
+
+                }
+
+                .title-item {
+                    display: flex;
+                    align-items: center;
+
+                    /* Align title and value on the same row */
+                }
+
+                .title-item span {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #004b5d;
+                }
+
+
+                @keyframes open {
+                    from {
+                        width: 20px;
+                        /* Start with 0 width */
+                    }
+
+                    to {
+                        width: 573px;
+                        /* Animate to 473px width */
+                    }
+                }
+
+                /* Responsive styling for smaller screens */
+                @media (max-width: 768px) {
+                    .title-box {
+                        flex-direction: column;
+                        /* Stack items vertically on smaller screens */
+                        align-items: flex-start;
+                    }
+
+                    .title-item {
+                        margin-bottom: 15px;
+                        /* Space between stacked items */
+                    }
+                }
+            </style>
+
+            <style>
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 15% auto;
+                    /* 15% from the top and centered */
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                    /* Could be more or less, depending on screen size */
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+                    position: relative;
+                    animation: slideDown 0.5s ease-in-out forwards;
+                }
+
+                .form-label {
+                    display: block;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
+                }
+
+                .form-control {
+                    width: 60%;
+                    padding: 6px;
+                    margin-bottom: 0px;
+                    box-sizing: border-box;
+                }
+
+                .flex-item-full-width {
+                    flex: 1;
+                }
+
+                .flex-row {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 15px;
+                    /* Optional: add spacing between flex items within .flex-row */
+                }
+
+                .flex-item {
+                    flex: 1;
+                    /* Ensure flex items grow equally */
+                }
+
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+                    backdrop-filter: blur(4px);
+                    animation: fadeIn 0.3s ease-in-out;
+                }
+
+                /* Optional animation for smoother appearance */
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+
+                .modal-content {
+                    background-color: white;
+                    margin: 1% auto;
+                    padding: 20px;
+                    border-radius: 10px;
+                    width: 80%;
+                    border: 2px solid black;
+
+                }
+
+
+
+                .close {
+                    color: #aaa;
+                    font-size: 28px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+
+                .table-main th,
+                .table-main td {
+                    border: 0.5px solid #f3f1f1;
+                    padding: 5px;
+                    text-align: left;
+                }
+
+                .table-main thead th {
+                    background-color: #f2f2f2;
+                    font-weight: bold;
+                }
+            </style>
+
+        </div>
+
+    </div>
+
+
+
+    <style>
+        .custom-btn1 {
+            height: 20px;
+            color: whitesmoke;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 300;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-21 {
+            background: #004B5D;
+            background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+            border: none;
+        }
+
+        .btn-21:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        .btn-21:hover {
+            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5),
+                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+        }
+    </style>
+
+
+    <!-- Search Table -->
+    <script>
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase().trim();
+            let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+            let rows = document.querySelectorAll(".mainRow");
+
+            rows.forEach(row => {
+                let PR_no = row.querySelector(".PR_no") ? row.querySelector(".PR_no").textContent.trim().toLowerCase() : '';
+                let PR_Date = row.querySelector(".PR_Date") ? row.querySelector(".PR_Date").textContent.trim().toLowerCase() : '';
+                let Supplier_Name = row.querySelector(".Supplier_Name") ? row.querySelector(".Supplier_Name").textContent.trim().toLowerCase() : '';
+                let created_by = row.querySelector(".created_by") ? row.querySelector(".created_by").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+                let status1 = row.querySelector(".status1") ? row.querySelector(".status1").textContent.trim().toLowerCase() : '';
+                let status2 = row.querySelector(".status2") ? row.querySelector(".status2").textContent.trim().toLowerCase() : '';
+
+                // Combine all searchable fields
+                let combinedText = [PR_no, PR_Date, Supplier_Name, created_by, status, status1, status2].join(" ");
+
+                // Show row if every keyword is found in any field
+                let isMatch = keywords.every(keyword => combinedText.includes(keyword));
+
+                row.style.display = isMatch ? "" : "none";
+            });
+
+            updateTotals(); // Recalculate totals after filtering
+        }
+
+
+        function updateTotals() {
+            let requestCount = 0;
+            let totalAmount = 0;
+            let totalGST = 0;
+            let totalSum = 0;
+
+            // Get all table rows (excluding the header row)
+            const rows = document.querySelectorAll("#projectTable tbody tr.mainRow");
+
+            rows.forEach(row => {
+                if (row.style.display !== "none") { // Only include rows that are not hidden
+                    requestCount++;
+
+                    // Extract amount, GST value, and total from each row
+                    let amount = parseFloat(row.querySelector("td:nth-child(7)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                    let gstValue = parseFloat(row.querySelector("td:nth-child(8)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                    let total = parseFloat(row.querySelector("td:nth-child(9)").textContent.replace(/[^0-9.]/g, '')) || 0;
+
+                    totalAmount += amount;
+                    totalGST += gstValue;
+                    totalSum += total;
+                }
+            });
+
+            // Format the totals with international numbering format
+            let formattedAmount = totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedGST = totalGST.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Update the spans with formatted values
+            document.getElementById("requestCount").textContent = requestCount;
+            document.getElementById("totalAmount").textContent = "S$ " + formattedAmount;
+            document.getElementById("totalGST").textContent = "S$ " + formattedGST;
+            document.getElementById("overallTotal").textContent = "S$ " + formattedTotal;
+        }
+
+        // Call the function when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            updateTotals();
+        });
+
+
+    </script>
+
+</body>
+
+</html>

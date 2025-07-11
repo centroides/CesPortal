@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase" class="active">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  {% if user_access['togglePurchaseRequest'] == 'On' %}
+                  <li><a href="{{ url_for('pur_purchase') }}" class="link"><i class="fas fa-cart-plus"></i>
+                        PR's</a></li>
+                  {% endif %}
+
+                  {% if user_access['togglePurchaseOrder'] == 'On' %}
+                  <li><a href="{{ url_for('pur_po') }}" class="link"><i class="fa-solid fa-folder-open"></i>
+                        PO's</a>
+                  </li>
+                  {% endif %}
+
+
+
+
+
+                  {% if user_access['togglePOUpdate'] == 'On' %}
+                  <li><a href="{{ url_for('pur_poupdate') }}" class="link"><i class="fa-solid fa-pen-nib"></i> PO
+                        Update</a></li>
+                  {% endif %}
+
+                  {% if user_access['togglepurSuppliers'] == 'On' %}
+                  <li><a href="{{ url_for('pur_suppliers') }}" class="link"><i class="fa-solid fa-file-alt"></i>
+                        Suppliers</a></li>
+                  {% endif %}
+
+               </ul>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div>
+
+            <div class="button-container1">
+
+               <h2> </h2>
+
+               <span class="close-button">&times;</span>
+
+            </div>
+
+            <form id="invoiceForm1" method="POST" action="/edit_po">
+
+               <div class="container">
+
+                  <div class="invice_header">
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+
+                           <div class="flex-item" style="display: none;">
+                              <label for="gst_percent" class="form-label">gst_percent <span
+                                    style="color: red;">*</span></label>
+                              <input type="number" class="form-control" id="gst_percent" name="gst_percent"
+                                 value="{{gst}}" required>
+                           </div>
+
+                        </div>
+
+                        <script>
+                           document.addEventListener("DOMContentLoaded", function () {
+                              let today = new Date();
+                              let formattedDate = today.toLocaleDateString('en-GB', {
+                                 day: '2-digit',
+                                 month: '2-digit',
+                                 year: '2-digit'
+                              }).replace(/\//g, '-');  // Convert `/` to `-`
+
+                              document.getElementById("PO_Date").value = formattedDate;
+                           });
+                        </script>
+
+                        <div class="flex-item" style="display: none;">
+                           <label for="PO_Date" class="form-label">PO Date<span style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="PO_Date" name="PO_Date" readonly
+                              style="background-color: antiquewhite;" required>
+                        </div>
+
+
+                     </div>
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+                           <label for="Attn" class="form-label">Attn <span style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="Attn" name="Attn" required>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Quote_Ref" class="form-label">Quote Ref <span
+                                 style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="Quote_Ref" name="Quote_Ref" required>
+                        </div>
+
+
+                     </div>
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+
+                           <label for="Supplier_Name" class="form-label">Supplier Name<span
+                                 style="color: red;">*</span></label>
+                           <select class="form-control" id="Supplier_Name" name="Supplier_Name" required>
+                              <option value="">Select Supplier </option>
+                              {% for supplier in Supplier_Names %}
+                              <option value="{{ supplier }}">{{
+                                 supplier }}</option>
+                              {% endfor %}
+                           </select>
+
+                        </div>
+
+
+                        <div class="flex-item">
+                           <label for="Payment_Terms" class="form-label">Payment Terms <span
+                                 style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="Payment_Terms" name="Payment_Terms"
+                              maxlength="25" required>
+                        </div>
+
+
+                     </div>
+
+                  </div>
+
+                  <div class="invice_header">
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+                           <label for="Currency" class="form-label">Currency <span style="color: red;">*</span></label>
+                           <select class="form-control" id="Currency" name="Currency" required>
+                              <option value="SGD" selected>SGD - Singapore Dollar</option>
+                              <option value="USD">USD - US Dollar</option>
+                              <option value="EUR">EUR - Euro</option>
+                              <option value="GBP">GBP - British Pound</option>
+                              <option value="JPY">JPY - Japanese Yen</option>
+                              <option value="CNY">CNY - Chinese Yuan</option>
+                              <option value="AUD">AUD - Australian Dollar</option>
+                              <option value="CAD">CAD - Canadian Dollar</option>
+                              <option value="INR">INR - Indian Rupee</option>
+                              <option value="MYR">MYR - Malaysian Ringgit</option>
+                           </select>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Exchange_rate" class="form-label">Exc.Rate <span
+                                 style="color: red;">*</span></label>
+                           <input type="number" step="any" class="form-control" id="Exchange_rate" name="Exchange_rate"
+                              value="1" required>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="gst_option" class="form-label">GST <span style="color: red;">*</span></label>
+                           <select class="form-control" id="gst_option" name="gst_option" required>
+
+                              <option value="Yes" selected>Yes</option>
+                              <option value="No">No</option>
+
+                           </select>
+                        </div>
+
+                     </div>
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+                           <label for="leat_time" class="form-label">Lead Time<span style="color: red;">*</span></label>
+                           <input type="number" class="form-control" id="leat_time" name="leat_time" required>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Unit" class="form-label">Unit <span style="color: red;">*</span></label>
+                           <select class="form-control" id="Unit" name="Unit" required>
+                              <option value="" disabled selected>Select Unit</option>
+                              <option value="Days" selected>Days</option>
+                              <option value="Weeks">Weeks</option>
+                              <option value="Months">Months</option>
+                           </select>
+                        </div>
+                     </div>
+
+                     <div class="flex-row">
+
+                        <div class="flex-item">
+                           <label for="Contact" class="form-label">Created By</label>
+                           <select class="form-control" id="Contact" name="Contact" required>
+                              <option value="" disabled selected>Select a username</option>
+                              {% for username in usernames %}
+                              <option value="{{ username }}" {% if username==user['name'] %}selected{% endif %}>
+                                 {{ username }}
+                              </option>
+                              {% endfor %}
+                           </select>
+                        </div>
+
+
+                        <div class="flex-item">
+                           <label for="phone_number" class="form-label">Phone No</label>
+                           <input type="number" class="form-control" id="phone_number" name="phone_number">
+                        </div>
+                     </div>
+
+                  </div>
+
+                  <div class="invice_header">
+
+                     <label for="Delivery" class="form-label">Delivery <span style="color: red;">*</span></label>
+                     <input type="text" class="form-control" id="Delivery" name="Delivery"
+                        value="{{  'Centroid Engineering Solutions Pte Ltd' }}" required>
+
+                     <label for="Address_Line1" class="form-label">Address Line1<span
+                           style="color: red;">*</span></label>
+                     <input type="text" class="form-control" id="Address_Line1" name="Address_Line1"
+                        value="{{  '11, Woodlands close, #07-10' }}" required>
+
+                     <label for="Address_Line2" class="form-label">Address Line2<span
+                           style="color: red;">*</span></label>
+                     <input type="text" class="form-control" id="Address_Line2" name="Address_Line2"
+                        value="{{ 'Singapore - 737853' }}" required>
+
+                  </div>
+
+                  <div class="invice_header">
+
+                     <label for="comments" class="form-label1">Comments</label>
+                     <textarea class="form-control" id="comments" name="comments" rows="8"></textarea>
+
+                  </div>
+
+               </div>
+
+               <div class="table-responsive1" style=" background-color: #e6f2ff;">
+
+                  <table class="mat_rec_table" width="100%" id="dynamicTable">
+
+                     <thead>
+                        <tr>
+                           <th style=" text-align: center; width: 2%;">S/N</th>
+                           <th style=" text-align: center; width: 14%;">Part No</th>
+                           <th style=" text-align: center; width: 40%;">Description</th>
+                           <th style=" text-align: center; width: 8%;">UOM</th>
+                           <th style=" text-align: center; width: 8%;">Delivary Date</th>
+                           <th style=" text-align: center; width: 5%;">Qty</th>
+                           <th style=" text-align: center; width: 7%;">Unit Price</th>
+                           <th style=" text-align: center; width: 10%;">Total</th>
+                           <th style=" text-align: center; width: 2%;">Action</th>
+                        </tr>
+                     </thead>
+
+                     <tbody id="itemsTableBody">
+                        {% for i in range(2) %}
+                        <tr>
+                           <td class="text-center">{{ i + 1 }}</td>
+
+                           <td>
+                              <input class="form-control" type="text" name="part_no[]" placeholder="Part No">
+                           </td>
+
+                           <td>
+                              <div>
+                                 <button type="button" onclick="toggleDetails(this)"
+                                    style="background-color: #f8f9fa; color: #007bff; border: 1px solid #ced4da; border-radius: 4px; padding: 3px 8px; font-size: 0.875rem; cursor: pointer;">
+                                    + Headings
+                                 </button>
+
+                                 <div class="extra-details d-none mt-2">
+                                    <input class="form-control mb-1" type="text" name="description_header[]"
+                                       placeholder="Header (optional)">
+                                    <input class="form-control mb-1" type="text" name="description_subheader[]"
+                                       placeholder="Subheading (optional)">
+                                 </div>
+                                 <textarea class="form-control mb-1" name="description_body[]" rows="2"
+                                    placeholder="Main Description (required)"></textarea>
+
+                              </div>
+                           </td>
+
+                           <td>
+                              <input class="form-control" type="text" name="uom[]" maxlength="5" placeholder="UOM"
+                                 required>
+                           </td>
+
+                           <td>
+                              <input class="form-control" type="date" name="excepted_date[]">
+                           </td>
+
+                           <td>
+                              <input class="form-control" type="number" name="quantity[]" required
+                                 oninput="calculateTotal(this)" placeholder="Qty">
+                           </td>
+
+                           <td>
+                              <input class="form-control" type="number" step="any" name="unit_price[]" required
+                                 oninput="calculateTotal(this)" placeholder="Unit Price">
+                           </td>
+
+                           <td>
+                              <input class="form-control" type="text" name="total[]" readonly placeholder="Total">
+                           </td>
+
+                           <td>
+                              <button type="button" class="btn-delete" title="Delete row" onclick="deleteRow(this)">
+                                 <ion-icon name="trash" class="fa-solid fa-trash" style="color:red;"></ion-icon>
+                              </button>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+               <div class="button-container1">
+
+                  <button type="button" class="new-enquiry-btn" onclick="addRow()">+</button>
+
+
+                  <div class="text-center mt-3">
+                     <label> Amount : <span id="sumTotal" style="color: #004B5D;">0.00</span></label>
+                  </div>
+                  <div style="margin-bottom: 10px;">
+                     <label for="Discount" style="display: block; margin-bottom: 5px;">Discount (Only
+                        %)</label>
+                     <input type="number" style="width: 100%;" step="any" class="form-control" id="Discount"
+                        name="Discount" value="0" required>
+                  </div>
+
+                  <div class="text-center mt-3">
+                     <label> GST : <span id="gstvalue" style="color: #004B5D;">0.00</span></label>
+                  </div>
+
+
+                  <div class="text-center mt-3">
+                     <label> Total : <span id="overalsumTotal" style="color: #004B5D;">0.00</span></label>
+                  </div>
+
+                  <div class='flex-item' style="display: none;">
+                     <input type="text" class="form-control" name="existing_po" id="existing_po">
+                  </div>
+
+                  <div class="pr-actions">
+                     <button type="submit" class="new-enquiry-btn" id="generatePRButton"
+                        onclick="validateForm(event)">Update PO</button>
+                  </div>
+
+               </div>
+
+            </form>
+
+            <script>
+               window.onload = function () {
+                  onfecthingthepodetails();
+               };
+
+               function onfecthingthepodetails() {
+                  const created_po = {{ created_po | tojson | safe
+               }};
+               const po_items = {{ po_items | tojson | safe }};
+               console.log("........created_po.....", created_po);
+               console.log(".........po_items....", po_items);
+               console.log(".........created_po.Attn....", created_po[0].Attn);
+               console.log(".........created_po.Attn....", created_po[0].Payment_Terms);
+               document.querySelector(".button-container1 h2").textContent = "Editing Purchase Order - " + created_po[0].PO_no;
+
+
+               // Safely set each form field
+               document.getElementById("Attn").value = created_po[0].Attn || '';
+               document.getElementById("Quote_Ref").value = created_po[0].Quote_Ref || '';
+               document.getElementById("Supplier_Name").value = created_po[0].Supplier_Name || '';
+               document.getElementById("Payment_Terms").value = created_po[0].Payment_Terms || '';
+               document.getElementById("Currency").value = created_po[0].Currency || "SGD";
+               document.getElementById("Exchange_rate").value = created_po[0].Exchange_rate || "1";
+               document.getElementById("Discount").value = created_po[0].Discount || "";
+               document.getElementById("gst_option").value = created_po[0].gst_option || "Yes";
+               document.getElementById("Contact").value = created_po[0].created_by || '';
+               document.getElementById("phone_number").value = created_po[0].phone_number || '';
+               document.getElementById("Delivery").value = created_po[0].Delivery || 'Centroid Engineering Solutions Pte Ltd';
+               document.getElementById("Address_Line1").value = created_po[0].Address_Line1 || '11, Woodlands close, #07-10';
+               document.getElementById("Address_Line2").value = created_po[0].Address_Line2 || 'Singapore - 737853';
+               document.getElementById("comments").value = created_po[0].comments || '';
+               document.getElementById("existing_po").value = created_po[0].PO_no || '';
+
+               // ----- Format and Set PO Date -----
+               const poDateStr = created_po[0].PO_Date; // e.g., "05-06-25"
+               if (poDateStr) {
+                  const parts = poDateStr.split("-");
+                  if (parts.length === 3) {
+                     const [day, month, year] = parts;
+                     const fullYear = year.length === 2 ? "20" + year : year;
+                     const formattedDate = `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                     document.getElementById("PO_Date").value = formattedDate;
+                  }
+               }
+
+               // ----- Set Lead Time -----
+               const leadTimeParts = (created_po[0].leat_time || '').trim().split(' ');
+               document.getElementById("leat_time").value = leadTimeParts[0] || '';
+               if (leadTimeParts.length > 1) {
+                  const unit = leadTimeParts[1].charAt(0).toUpperCase() + leadTimeParts[1].slice(1).toLowerCase(); // capitalize
+                  const unitSelect = document.getElementById("Unit");
+                  for (let i = 0; i < unitSelect.options.length; i++) {
+                     if (unitSelect.options[i].value === unit) {
+                        unitSelect.selectedIndex = i;
+                        break;
+                     }
+                  }
+               }
+
+               // ----- Clear Table and Populate Rows -----
+               const tbody = document.getElementById("itemsTableBody");
+               tbody.innerHTML = ''; // Clear old rows
+
+               po_items.forEach((item, index) => {
+                  const fullText = item.item || '';
+                  const headerMatch = fullText.match(/Header\s*-\s*(.+)/i);
+                  const subheaderMatch = fullText.match(/Subheader\s*-\s*(.+)/i);
+                  const bodyMatch = fullText.match(/Body\s*-\s*([\s\S]*)/i);
+
+                  const header = headerMatch ? headerMatch[1].trim() : '';
+                  const subheader = subheaderMatch ? subheaderMatch[1].trim() : '';
+                  const body = bodyMatch ? bodyMatch[1].trim() : '';
+
+                  const row = document.createElement('tr');
+                  row.innerHTML = `
+            <td class="text-center">${index + 1}</td>
+            <td><input class="form-control" type="text" name="part_no[]" value="${item.Part_No || ''}" placeholder="Part No"></td>
+            <td>
+               <div>
+                  <button type="button" onclick="toggleDetails(this)" class="btn btn-outline-primary btn-sm">+ Headings</button>
+                  <div class="extra-details d-none mt-2">
+                     <input class="form-control mb-1" type="text" name="description_header[]" value="${header}" placeholder="Header (optional)">
+                     <input class="form-control mb-1" type="text" name="description_subheader[]" value="${subheader}" placeholder="Subheading (optional)">
+                  </div>
+                  <textarea class="form-control mb-1" name="description_body[]" rows="2" placeholder="Main Description (required)">${body}</textarea>
+               </div>
+            </td>
+            <td><input class="form-control" type="text" name="uom[]" value="${item.uom || ''}" maxlength="5" required></td>
+            <td><input class="form-control" type="date" name="excepted_date[]" value="${item.excepted_date || ''}"></td>
+            <td><input class="form-control" type="number" name="quantity[]" value="${item.quantity || ''}" oninput="calculateTotal(this)" required></td>
+            <td><input class="form-control" type="number" step="any" name="unit_price[]" value="${item.Unit_Price || ''}" oninput="calculateTotal(this)" required></td>
+            <td><input class="form-control" type="text" name="total[]" value="${item.total || ''}" readonly></td>
+            <td><button type="button" class="btn-delete" onclick="deleteRow(this)"><ion-icon name="trash" class="fa-solid fa-trash" style="color:red;"></ion-icon></button></td>
+         `;
+                  tbody.appendChild(row);
+                  updateSumTotal();
+               });
+   }
+
+               function toggleDetails(button) {
+                  const detailsDiv = button.nextElementSibling;
+                  detailsDiv.classList.toggle('d-none');
+               }
+            </script>
+
+
+            <script>
+
+               function validateForm(event) {
+                  // Check if 'existing_po' has a value
+                  const submitButton = document.getElementById('generatePRButton');
+                  if (!validateForm()) {
+                     event.preventDefault(); // Stop form submission if validation fails
+                     return false;
+                  }
+
+                  const existingPRValue = document.getElementById('existing_po').value.trim();
+
+                  // Set requiredFields conditionally
+                  const requiredFields = existingPRValue
+                     ? [
+                        'PO_Date', 'Attn', 'Quote_Ref', 'Exchange_rate',
+                        'Supplier_Name', 'Payment_Terms', 'Currency', 'leat_time', 'gst_option',
+                        'Unit', 'Delivery', 'Address_Line1', 'Address_Line2'
+                     ]
+                     : [
+                        'PO_Date', 'Attn', 'Quote_Ref', 'Expenses', 'Exchange_rate',
+                        'Description', 'Supplier_Name', 'Payment_Terms', 'Currency', 'leat_time', 'gst_option',
+                        'Unit', 'Delivery', 'Address_Line1', 'Address_Line2', 'attachment'
+                     ];
+
+
+                  for (const fieldId of requiredFields) {
+                     const field = document.getElementById(fieldId);
+
+                     if (field && (!field.value.trim() || field.value === "")) {
+                        alert(`The field "${fieldId}" is required. Please fill it in.`);
+                        field.focus();
+                        return false; // Return false on validation fail
+                     }
+                  }
+
+                  const rows = document.querySelectorAll('#dynamicTable tbody tr');
+                  for (let row of rows) {
+                     const quantity = row.querySelector('input[name="quantity[]"]');
+                     const unitPrice = row.querySelector('input[name="unit_price[]"]');
+
+                     if (!quantity.value || !unitPrice.value) {
+                        alert('Please fill out Quantity and Unit Price for all rows with valid values.');
+                        return false;
+                     }
+                  }
+
+                  submitButton.disabled = true;
+                  submitButton.textContent = 'Updating...'; // Optional: Change button text to indicate submission in progress
+
+
+                  return true; // Validation passed
+               }
+
+            </script>
+
+            <script>
+
+               function deleteRow(button) {
+                  var row = button.closest('tr');
+                  row.remove();
+                  updateRowIndices();
+                  updateSumTotal(); // Recalculate totals after row deletion
+               }
+
+               function addRow() {
+                  var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+                  var newRow = table.insertRow();
+
+                  // Create cells
+                  var indexCell = newRow.insertCell(0);
+                  var partNoCell = newRow.insertCell(1);
+                  var descriptionCell = newRow.insertCell(2);
+                  var uomCell = newRow.insertCell(3);
+                  var dateCell = newRow.insertCell(4);
+                  var quantityCell = newRow.insertCell(5);
+                  var unitPriceCell = newRow.insertCell(6);
+                  var totalCell = newRow.insertCell(7);
+                  var actionCell = newRow.insertCell(8);
+
+                  // Row index
+                  indexCell.className = 'text-center';
+                  indexCell.innerHTML = table.rows.length;
+
+                  // Inputs
+                  partNoCell.innerHTML = `<input class="form-control" type="text" name="part_no[]" placeholder="Part No">`;
+
+                  descriptionCell.innerHTML = `
+                                    <div>
+                                          <button type="button" onclick="toggleDetails(this)"
+                                             style="background-color: #f8f9fa; color: #007bff; border: 1px solid #ced4da; border-radius: 4px; padding: 3px 8px; font-size: 0.875rem; cursor: pointer;">
+                                             + Headings
+                                          </button>
+
+                                       <div class="extra-details d-none mt-2">
+                                          <input class="form-control mb-1" type="text" name="description_header[]" placeholder="Header (optional)">
+                                          <input class="form-control mb-1" type="text" name="description_subheader[]" placeholder="Subheading (optional)">
+                                       </div>
+                                       <textarea class="form-control mb-1" name="description_body[]" rows="2" placeholder="Main Description (required)"></textarea>
+                                    </div>
+                                 `;
+
+                  uomCell.innerHTML = `<input class="form-control" type="text" name="uom[]" maxlength="5" placeholder="UOM" required>`;
+
+                  dateCell.innerHTML = `<input class="form-control" type="date" name="excepted_date[]">`;
+
+                  quantityCell.innerHTML = `<input class="form-control" type="number" name="quantity[]" required oninput="calculateTotal(this)" placeholder="Qty">`;
+
+                  unitPriceCell.innerHTML = `<input class="form-control" type="number" step="any" name="unit_price[]" required oninput="calculateTotal(this)" placeholder="Unit Price">`;
+
+                  totalCell.innerHTML = `<input class="form-control" type="text" name="total[]" readonly placeholder="Total">`;
+
+                  actionCell.innerHTML = `
+                                    <button type="button" class="btn-delete" style="color: red;" onclick="deleteRow(this)">
+                                       <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                    </button>
+                                 `;
+
+                  updateRowIndices();
+               }
+
+               function updateRowIndices() {
+                  var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+                  for (var i = 0; i < table.rows.length; i++) {
+                     table.rows[i].cells[0].innerHTML = i + 1;
+                  }
+               }
+
+               function calculateTotal(input) {
+                  var row = input.closest('tr');
+                  var quantity = parseFloat(row.querySelector('input[name="quantity[]"]').value);
+                  var unitPrice = parseFloat(row.querySelector('input[name="unit_price[]"]').value);
+                  var total = quantity * unitPrice;
+                  row.querySelector('input[name="total[]"]').value = total.toFixed(2);
+
+                  updateSumTotal(); // Update the sum of totals
+               }
+
+
+               function updateSumTotal() {
+                  var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+                  var sumTotal = 0.0;
+                  for (var i = 0; i < table.rows.length; i++) {
+                     var total = parseFloat(table.rows[i].querySelector('input[name="total[]"]').value);
+                     sumTotal += total;
+                  }
+
+                  const discountInput = document.getElementById('Discount');
+                  const discountPercent = parseFloat(discountInput.value) || 0;
+
+                  // Step 3: Apply discount to sumTotal (only if it's positive)
+                  let discountedAmount = sumTotal;
+                  if (discountPercent > 0) {
+                     const discountValue = (discountPercent / 100) * sumTotal;
+                     discountedAmount = sumTotal - discountValue;
+                  }
+
+                  const gstOption = document.getElementById('gst_option').value;
+                  let gstValue = 0.0;
+                  const gstPercent = parseFloat(document.getElementById('gst_percent').value) || 0;
+
+                  if (gstOption === 'Yes') {
+                     gstValue = (gstPercent / 100) * discountedAmount;
+                  }
+
+                  const finalTotal = discountedAmount + gstValue;
+
+                  document.getElementById('sumTotal').innerText = sumTotal.toFixed(2);
+                  document.getElementById('gstvalue').innerText = gstValue.toFixed(2);
+                  document.getElementById('overalsumTotal').innerText = finalTotal.toFixed(2);
+                  // Optional: Call updateSumTotal when discount or GST option is changed
+                  document.getElementById('Discount').addEventListener('input', updateSumTotal);
+                  document.getElementById('gst_option').addEventListener('change', updateSumTotal);
+
+
+                  // document.getElementById('sumTotal').innerText = sumTotal.toFixed(2); // Display sum of totals
+               }
+
+
+            </script>
+
+         </div>
+
+
+
+      </div>
+
+   </div>
+
+
+   <style>
+      textarea.form-control {
+         resize: vertical;
+         min-height: 40px;
+         overflow-y: auto;
+      }
+
+      input.form-control,
+      textarea.form-control {
+         padding: 6px 10px;
+         font-size: 14px;
+         width: 100%;
+         box-sizing: border-box;
+      }
+
+      .d-none {
+         display: none;
+      }
+
+      /* Alternate row colors - formal look */
+      #itemsTableBody tr:nth-child(odd) {
+         background-color: #f8f9fa;
+         /* Light grey */
+      }
+
+      #itemsTableBody tr:nth-child(even) {
+         background-color: #ffffff;
+         /* White */
+      }
+
+
+      #itemsTableBody tr:hover {
+         background-color: #f1f7dd;
+         /* Slightly darker grey on hover */
+      }
+   </style>
+
+   <script>
+      function toggleDetails(button) {
+         const detailsDiv = button.nextElementSibling;
+         detailsDiv.classList.toggle('d-none');
+         button.textContent = detailsDiv.classList.contains('d-none') ? '+ Headings' : '− Headings';
+      }
+   </script>
+
+   <style>
+      .title-box {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 5px;
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+         margin-bottom: 10px;
+      }
+
+      .title-item {
+         display: flex;
+         align-items: center;
+         /* Align title and value on the same row */
+      }
+
+      .title-item span {
+         font-size: 18px;
+         font-weight: bold;
+         color: #0fabf3;
+      }
+
+      .open {
+         justify-content: space-between;
+         animation-name: open;
+         animation-duration: 1s;
+         animation-timing-function: ease-out;
+         animation-fill-mode: forwards;
+      }
+
+      @keyframes open {
+         from {
+            width: 20px;
+            /* Start with 0 width */
+         }
+
+         to {
+            width: 573px;
+            /* Animate to 473px width */
+         }
+      }
+
+      /* Responsive styling for smaller screens */
+      @media (max-width: 768px) {
+         .title-box {
+            flex-direction: column;
+            /* Stack items vertically on smaller screens */
+            align-items: flex-start;
+         }
+
+         .title-item {
+            margin-bottom: 15px;
+            /* Space between stacked items */
+         }
+      }
+   </style>
+
+   <style>
+      .table-responsive1 {
+         width: 100%;
+         overflow: auto;
+         max-height: 450px;
+         border-radius: 10px;
+         border: 1px solid #ddd;
+      }
+
+      .table-responsive {
+         width: 100%;
+         overflow: auto;
+         max-height: 750px;
+      }
+
+      .table-main {
+         width: 100%;
+         border-collapse: collapse;
+      }
+
+      .table-main thead {
+         position: sticky;
+         top: 0;
+         background: white;
+         z-index: 10;
+      }
+
+      .container {
+         background-color: white;
+         /* Light Gray - Similar to Apple's typical background */
+         padding: 10px;
+         border-radius: 10px;
+         display: flex;
+         flex: 1;
+         gap: 20px;
+         border: 2px solid #d3d3d3;
+         /* Slightly darker light gray for border */
+         margin-bottom: 15px;
+      }
+
+      .invoice-header {
+         flex: 1;
+         background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+         padding: 20px;
+         border-radius: 12px;
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         color: #004d40;
+         transition: transform 0.2s ease-in-out;
+      }
+
+      .invoice-header:hover {
+         transform: scale(1.02);
+      }
+
+
+      .invoice-row {
+         display: grid;
+         grid-template-columns: 140px auto;
+         /* First column for labels, second for values */
+         gap: 10px;
+         align-items: center;
+         padding: 5px 0;
+      }
+
+      .invoice-row p {
+         margin: 0;
+         font-weight: bold;
+         text-align: left;
+      }
+
+      .invoice-row span {
+         text-align: left;
+      }
+
+
+      .invice_header {
+         display: flex;
+         flex-direction: column;
+         flex: 1;
+         padding: 10px;
+         border-radius: 5px;
+         box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+         box-sizing: border-box;
+         background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+
+         /* Ensure padding and border are included in width */
+      }
+
+
+      .button-container1 {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 15px;
+      }
+
+      .button-container1 h2 {
+         margin: 0;
+         font-size: 1.5em;
+         color: #333;
+      }
+
+
+
+      .title-box {
+         display: flex;
+         padding: 5px;
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+         margin-bottom: 10px;
+         justify-content: space-between;
+
+      }
+
+      .title-item {
+         display: flex;
+         align-items: center;
+
+         /* Align title and value on the same row */
+      }
+
+      .title-item span {
+         font-size: 18px;
+         font-weight: bold;
+         color: #004b5d;
+      }
+
+
+      @keyframes open {
+         from {
+            width: 20px;
+            /* Start with 0 width */
+         }
+
+         to {
+            width: 573px;
+            /* Animate to 473px width */
+         }
+      }
+
+      /* Responsive styling for smaller screens */
+      @media (max-width: 768px) {
+         .title-box {
+            flex-direction: column;
+            /* Stack items vertically on smaller screens */
+            align-items: flex-start;
+         }
+
+         .title-item {
+            margin-bottom: 15px;
+            /* Space between stacked items */
+         }
+      }
+   </style>
+
+   <style>
+      .table-responsive2 {
+         width: 100%;
+         overflow: auto;
+         max-height: 120px;
+         border-radius: 10px;
+         border: 1px solid #ddd;
+      }
+
+      .table-main {
+         width: 100%;
+         border-collapse: collapse;
+      }
+
+      .table-main thead {
+         position: sticky;
+         top: 0;
+         background: white;
+         z-index: 10;
+      }
+
+
+
+
+      @keyframes open {
+         from {
+            width: 20px;
+            /* Start with 0 width */
+         }
+
+         to {
+            width: 573px;
+            /* Animate to 473px width */
+         }
+      }
+
+      /* Responsive styling for smaller screens */
+      @media (max-width: 768px) {
+         .title-box {
+            flex-direction: column;
+            /* Stack items vertically on smaller screens */
+            align-items: flex-start;
+         }
+
+         .title-item {
+            margin-bottom: 15px;
+            /* Space between stacked items */
+         }
+      }
+
+      .mat_rec_table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 0px;
+         border: none;
+      }
+
+      .mat_rec_table th,
+      .mat_rec_table td {
+         padding: 5px;
+         text-align: center;
+         /* Removes borders from cells */
+      }
+
+      .mat_rec_table td {
+         margin: 0;
+         padding: 0;
+         border: none;
+      }
+   </style>
+
+
+   <style>
+      .flex-item-full-width {
+         flex: 1;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         gap: 15px;
+         /* Optional: add spacing between flex items within .flex-row */
+      }
+
+      .flex-item {
+         flex: 1;
+         /* Ensure flex items grow equally */
+      }
+
+      .form-label {
+         font-size: 16px;
+         color: #333;
+         margin-right: 10px;
+         flex: 1;
+      }
+
+      .form-control {
+         width: 100%;
+         padding: 5px 6px;
+         margin-bottom: 10px;
+         box-sizing: border-box;
+         border: 1px solid #ced4da;
+         border-radius: 6px;
+         font-size: 1rem;
+         line-height: 1.0;
+         color: #495057;
+         background-color: #fff;
+         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+         transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+
+      .form-control:focus {
+         color: #495057;
+         background-color: #fff;
+         border-color: chartreuse;
+         outline: 0;
+         box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+      }
+
+      .form-control::placeholder {
+         color: #6c757d;
+         opacity: 1;
+      }
+
+      .form-control:disabled,
+      .form-control[readonly] {
+         background-color: #e9ecef;
+         opacity: 1;
+      }
+
+      .form-control:hover {
+         border-color: #b0b4b8;
+      }
+
+      .form-control::placeholder {
+         text-align: center;
+      }
+   </style>
+
+   <style>
+      textarea.form-control {
+         resize: vertical;
+         min-height: 40px;
+         overflow-y: auto;
+      }
+
+      input.form-control,
+      textarea.form-control {
+         padding: 6px 10px;
+         font-size: 14px;
+         width: 100%;
+         box-sizing: border-box;
+      }
+
+      .button-container1 {
+         display: flex;
+         flex: 1;
+         justify-content: space-between;
+         align-items: center;
+         width: 100%;
+      }
+
+      .title-box {
+         display: flex;
+         padding: 5px;
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+         margin-bottom: 10px;
+         justify-content: space-between;
+
+      }
+
+      .title-item {
+         display: flex;
+         align-items: center;
+
+         /* Align title and value on the same row */
+      }
+
+      .title-item span {
+         font-size: 18px;
+         font-weight: bold;
+         color: #0fabf3;
+      }
+
+
+      @keyframes open {
+         from {
+            width: 20px;
+            /* Start with 0 width */
+         }
+
+         to {
+            width: 573px;
+            /* Animate to 473px width */
+         }
+      }
+
+      /* Responsive styling for smaller screens */
+      @media (max-width: 768px) {
+         .title-box {
+            flex-direction: column;
+            /* Stack items vertically on smaller screens */
+            align-items: flex-start;
+         }
+
+         .title-item {
+            margin-bottom: 15px;
+            /* Space between stacked items */
+         }
+      }
+   </style>
+
+   <style>
+      .new-enquiry-btn {
+         background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+         background-size: 200% 200%;
+         color: white;
+         font-weight: bold;
+         border: none;
+         padding: 4px 6px;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 14px;
+         display: flex;
+         align-items: center;
+         transition: all 0.4s ease-in-out;
+         box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+         /* Soft shadow */
+      }
+
+      /* Hover effect: Darker Gradient + Glow */
+      .new-enquiry-btn:hover {
+         background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+         background-size: 200% 200%;
+         box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+         /* Stronger shadow on hover */
+         transform: scale(1.05);
+      }
+   </style>
+
+
+</body>
+
+</html>

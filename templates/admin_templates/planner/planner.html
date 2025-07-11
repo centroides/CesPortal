@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner" class="active">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+
+        </div>
+
+        <div class="page-content" style=" background: linear-gradient(to bottom, #234669 80%, white 100%);">
+
+            <div class="search_container">
+
+                <div class="view-switcher">
+                    <button onclick="switchView('table')">
+                        <i class="fas fa-table"></i> Grid
+                    </button>
+                    <button onclick="switchView('board')">
+                        <i class="fas fa-columns"></i> Board
+                    </button>
+                    <button onclick="switchView('calendar')">
+                        <i class="fas fa-calendar-alt"></i> Schedule
+                    </button>
+                    <button onclick="switchView('chart')">
+                        <i class="fas fa-chart-line"></i> Charts
+                    </button>
+                </div>
+
+
+            </div>
+
+            <div class="taskmain">
+
+                <div class="filter-buttons">
+                    <button onclick="openTaskModal()">New Task</button>
+
+                    <input type="text" id="taskSearchInput" placeholder="Search tasks..." style="width: 20%; background: #2d2d2d; margin-top: 5px;
+                        border: 1px solid #444;
+                        padding: 10px;
+                        color: white;
+                        border-radius: 5px; max-height: 30px; " oninput="handleSearch()" />
+
+                </div>
+
+
+
+                <div class="table-responsive">
+
+                    <div id="taskContainer" class="table"></div>
+
+                </div>
+
+            </div>
+
+            <script>
+
+                function formatDate(dateStr) {
+                    if (!dateStr) return '';
+                    const date = new Date(dateStr);
+                    if (isNaN(date)) return dateStr;
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = String(date.getFullYear()).slice(-2);
+                    return `${day}/${month}/${year}`;
+                }
+
+                const tasks = {{ tasks | tojson | safe }};
+                let filteredTasks = tasks;  // Default to all tasks
+
+                let currentView = 'table';
+
+                function handleSearch() {
+                    const input = document.getElementById("taskSearchInput").value.toLowerCase().trim();
+                    const keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+
+                    function formatDateForSearch(dateStr) {
+                        const date = new Date(dateStr);
+                        if (isNaN(date)) return '';
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = String(date.getFullYear()).slice(-2);
+                        return `${day}/${month}/${year}`;
+                    }
+
+                    if (keywords.length === 0) {
+                        filteredTasks = tasks;
+                    } else {
+                        filteredTasks = tasks.filter(task => {
+                            // Convert all values to string and include formatted date fields
+                            const values = Object.values(task).map(val => (val || '').toString().toLowerCase());
+
+                            // Add formatted dates (if present) for searchability
+                            if (task.due_date) values.push(formatDateForSearch(task.due_date));
+                            if (task.start_date) values.push(formatDateForSearch(task.start_date));
+
+                            const combinedText = values.join(" ");
+                            return keywords.every(keyword => combinedText.includes(keyword));
+                        });
+                    }
+
+                    renderTasks(filteredTasks);
+                }
+
+                function renderTasks(taskList) {
+                    const container = document.getElementById("taskContainer");
+                    container.innerHTML = "";
+
+                    if (taskList.length === 0) {
+                        container.innerHTML = "<div class='placeholder'>No tasks found for selected filter.</div>";
+                        return;
+                    }
+
+                    if (currentView === 'table') {
+                        renderTableView(container, taskList);
+                    } else if (currentView === 'board') {
+                        renderBoardView(container, taskList);
+                    } else if (currentView === 'calendar') {
+                        renderCalendarView(container, taskList);
+                    }
+                }
+
+                function getPriorityIcon(priority) {
+                    const icons = {
+                        'Urgent': '🔥',
+                        'Important': '⚠️',
+                        'Medium': '❗',
+                        'Low': '💤'
+                    };
+                    return icons[priority] || '';
+                }
+
+                function renderTableView(container, taskList) {
+                    container.className = "table";
+                    container.innerHTML = `
+                    <div class="task-header">
+                        <div style="text-align: center; margin-left: 10px;"><input type="checkbox" class="circle-checkbox" disabled /></div>
+                        <div style="text-align: center;">S/N</div>
+                        <div style="text-align: center;">id</div>
+                        <div>Task</div>
+                        <div>Assigned To</div>
+                        <div>Start</div>
+                        <div>Due</div>
+                        <div>Bucket</div>
+                         <div>Status</div>
+                        <div>Priority</div>
+                        <div>Labels</div>
+                        <div style="text-align: center; margin-right: 10px;">🗑️</div>
+                    </div>`;
+
+                    taskList.forEach((task, index) => {
+                        container.innerHTML += `
+                        <div class="task-row" >
+                            <div style="text-align: center; margin-left: 10px;">
+                                <input type="checkbox" class="circle-checkbox" onchange="handleCheckboxChange(event, ${task.id})" ${task.progress === 'Completed' ? 'checked' : ''}/>
+                            </div>
+
+                            <div style="text-align: center;">${index + 1}</div>
+                            <div style="text-align: center;">${task.id}</div>
+                            <div onclick="editTask(${task.id})" style="cursor: pointer; ${task.progress === 'Completed' ? 'text-decoration: line-through; color: gray;' : ''}">
+                                ${task.task_name}
+                            </div>
+
+
+
+                            <div class="avatar-group">
+                                ${(task.assigend_to || '')
+                                .split(',')
+                                .map(name => name.trim())
+                                .filter(name => name)
+                                .slice(0, 5)
+                                .map((name, index) => {
+                                    const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']; // Tailwind-inspired
+                                    const bgColor = colors[index % colors.length];
+                                    return `
+                                            <div class="avatar" title="${name}" style="background-color: ${bgColor};">
+                                                ${name.charAt(0).toUpperCase()}
+                                            </div>
+                                        `;
+                                }).join('')
+                            }
+                                ${(task.assigend_to || '').split(',').filter(name => name.trim()).length > 5
+
+                                ? `<div class="avatar more-avatars" title="More users" style='cursor: pointer;'>...</div>`
+                                : ''
+                            }
+                            </div>
+
+
+                            <div>${formatDate(task.start_date)}</div>
+                            <div>${formatDate(task.due_date)}</div>
+                            <div>${task.bucket}</div>
+                            <div>${task.progress}</div>
+
+                            <div>${task.priority} <span class="priority-icon">${getPriorityIcon(task.priority)}</span></div>
+                            <div>${task.label}</div>
+
+
+                            <div style="text-align: center; margin-right: 10px;cursor: pointer; "><span class="delete-icon" onclick="deleteTaskById(${task.id})">🗑️</span></div>
+                        </div>`;
+                    });
+                }
+
+                function renderBoardView(container, taskList) {
+                    container.className = "task-board-view";
+                    ['Not Started', 'In Progress', 'Completed'].forEach(status => {
+                        const column = document.createElement("div");
+                        column.className = "board-column";
+                        column.innerHTML = `<h3>${status}</h3>`;
+                        taskList
+                            .filter(t => t.progress === status)
+                            .forEach((task, index) => {
+                                column.innerHTML += `
+                                <div class="board-task" onclick="editTask(${index})">
+                                    <strong>${task.task_name}</strong>
+                                    <div class="task-meta">
+                                        <div class="task-meta-row"><span class="label">Bucket:</span><span class="value">${task.bucket}</span></div>
+                                        <div class="task-meta-row"><span class="label">Due:</span><span class="value">${formatDate(task.due_date)}</span></div>
+                                        <div class="task-meta-row"><span class="label">Priority:</span><span class="value">${task.priority} ${getPriorityIcon(task.priority)}</span></div>
+                                        <div class="task-meta-row"><span class="label">Assigned To:</span><span class="value">${task.assigend_to}</span></div>
+                                    </div>
+                                </div>`;
+                            });
+
+                        container.appendChild(column);
+                    });
+                }
+
+                function renderCalendarView(container, taskList) {
+                    container.className = "calendar-view";
+                    container.innerHTML = ""; // Clear before rendering
+
+                    if (!taskList || taskList.length === 0) {
+                        container.innerHTML = "<div class='placeholder'>No tasks available for schedule view.</div>";
+                        return;
+                    }
+
+                    // Extract and sort unique dates from taskList
+                    const uniqueDates = [...new Set(taskList.map(task => {
+                        const date = new Date(task.due_date);
+                        return isNaN(date) ? null : date.toISOString().split("T")[0];
+                    }).filter(Boolean))].sort();
+
+                    uniqueDates.forEach(day => {
+                        const cell = document.createElement("div");
+                        cell.className = "calendar-cell";
+                        cell.innerHTML = `<div class="calendar-date">${formatDate(day)}</div>`;
+
+                        taskList
+                            .filter(t => {
+                                const dueDate = new Date(t.due_date).toISOString().split("T")[0];
+                                return dueDate === day;
+                            })
+                            .forEach((task, index) => {
+                                cell.innerHTML += `
+                            <div class="calendar-task" onclick="editTask(${index})">
+                                <div class="task-row-calender"><span class="task-label-calender">Task:</span><span class="task-value">${task.task_name}</span></div>
+                                <div class="task-row-calender"><span class="task-label-calender">Bucket:</span><span class="task-value">${task.bucket}</span></div>
+                                <div class="task-row-calender"><span class="task-label-calender">Priority:</span><span class="task-value">${task.priority} ${getPriorityIcon(task.priority)}</span></div>
+                                <div class="task-row-calender"><span class="task-label-calender">Status:</span><span class="task-value">${task.progress}</span></div>
+                                <div class="task-row-calender"><span class="task-label-calender">Assigned To:</span><span class="task-value">${task.assigend_to}</span></div>
+                            </div>`;
+                            });
+
+                        container.appendChild(cell);
+                    });
+                }
+
+                function editTask(taskId) {
+                    fetch(`/get_task/${taskId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const task = data.task;
+                            console.log("..........task..............", task);
+
+                            // Set modal title and button
+                            document.getElementById('taskModalTitle').innerText = 'Update Task';
+                            document.getElementById('submitBtn').innerText = 'Update';
+
+                            // Set form values
+                            document.getElementsByName('taskName')[0].value = task.task_name;
+                            document.getElementById('taskIdInput').value = task.id;
+                            document.getElementsByName('bucket')[0].value = task.bucket;
+                            document.getElementsByName('progress')[0].value = task.progress;
+                            document.getElementsByName('priority')[0].value = task.priority;
+                            document.getElementsByName('startDate')[0].value = task.start_date;
+                            document.getElementsByName('dueDate')[0].value = task.due_date;
+                            document.getElementsByName('notes')[0].value = task.notes;
+                            document.getElementsByName('label')[0].value = task.label;
+
+                            // Checklist
+                            const checklistContainer = document.getElementById("checklistContainer");
+                            checklistContainer.innerHTML = '';
+
+                            let checklistItems = [];
+
+                            try {
+                                // Try JSON parse first (for properly stored JSON like '["Logs", "Retry"]')
+                                checklistItems = JSON.parse(task.checklist);
+                            } catch (e) {
+                                // Fallback: Split comma-separated string
+                                checklistItems = (task.checklist || "").split(',').map(item => item.trim()).filter(Boolean);
+                            }
+
+                            checklistItems.forEach(item => {
+                                const label = document.createElement("label");
+                                label.style.display = "block";
+                                label.style.marginTop = "6px";
+
+                                const checkbox = document.createElement("input");
+                                checkbox.type = "checkbox";
+                                checkbox.name = "checklist[]";
+                                checkbox.value = item;
+                                checkbox.checked = true;
+
+                                label.appendChild(checkbox);
+                                label.appendChild(document.createTextNode(" " + item));
+                                checklistContainer.appendChild(label);
+                            });
+
+                            // Assignment
+                            const selectedEmployees = document.getElementById('selectedEmployees');
+                            selectedEmployees.innerText = task.assigend_to;
+
+                            // Show modal
+                            document.getElementById("taskModal").style.display = "block";
+                        });
+                }
+
+                function switchView(view) {
+                    currentView = view;
+                    renderTasks(filteredTasks); // Apply search to new view too
+                }
+
+                function addTask() {
+                    const name = document.getElementById("taskName").value;
+                    const plan = document.getElementById("plan").value;
+                    const due = document.getElementById("dueDate").value;
+                    const priority = document.getElementById("priority").value;
+                    const progress = document.getElementById("progress").value;
+                    const type = document.getElementById("type").value;
+
+                    if (!name || !due) {
+                        alert("Please fill in task name and due date.");
+                        return;
+                    }
+
+                    tasks.push({ name, plan, due, priority, progress, type });
+                    renderTasks(tasks);
+                    document.getElementById("taskName").value = "";
+                }
+
+                function filterTasks(type) {
+                    const base = (type === 'all') ? tasks : tasks.filter(t => t.type === type);
+                    const keyword = document.getElementById("taskSearchInput").value.toLowerCase();
+
+                    filteredTasks = base.filter(task => {
+                        const values = Object.values(task).map(val => (val || '').toString().toLowerCase());
+                        return values.some(value => value.includes(keyword));
+                    });
+
+                    renderTasks(filteredTasks);
+                }
+
+                function handleCheckboxChange(event, taskId) {
+                    const isChecked = event.target.checked;
+
+                    fetch(`/update_task_status/${taskId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: isChecked ? 'Completed' : 'Not Started' })  // Or 'In Progress'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.reload();  // Refresh to re-render updated status with strikethrough
+                            } else {
+                                alert('Failed to update task status.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error updating task status:', err);
+                        });
+                }
+
+                function deleteTaskById(taskId) {
+                    if (!confirm("Are you sure you want to delete this task?")) return;
+
+                    fetch(`/delete_task/${taskId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Task deleted successfully.');
+                                location.reload();  // Reload the list after deletion
+                            } else {
+                                alert('Failed to delete task.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error deleting task:', err);
+                            alert('An error occurred while deleting the task.');
+                        });
+                }
+
+                renderTasks(tasks);
+            </script>
+
+            <!-- Task Modal -->
+            <div id="taskModal" class="modal">
+
+                <div class="modal-content dark-theme">
+
+                    <span class="close" onclick="closeTaskModal()">&times;</span>
+                    <h2 class="modal-title" id="taskModalTitle">New Task</h2>
+                    <input type="hidden" id="taskIdInput" name="task_id">
+
+
+                    <form id="newTaskForm" onsubmit="submitTask(event)">
+
+                        <div class="form-group">
+                            <label>Select Project</label>
+                            <select name="taskName" required>
+                                <option value="" disabled selected>Select project</option>
+                                {% for project in project_options %}
+                                <option value="{{ project }}">{{ project }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Assignment To</label>
+                            <div class="multiselect-wrapper" id="employeeDropdown">
+                                <input type="text" class="multiselect-input" placeholder="Select employee(s)" readonly
+                                    onclick="toggleDropdown()" />
+                                <div class="multiselect-dropdown" id="dropdownList">
+                                    <input type="text" id="searchBox" placeholder="Search employees..."
+                                        onkeyup="filterOptions()" />
+                                    <div id="optionsContainer">
+                                        <!-- Employee options will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                                <div class="selected-list" id="selectedEmployees"></div>
+                            </div>
+                        </div>
+
+                        <div class="row-3">
+
+                            <div class="form-group">
+                                <label>Bucket</label>
+                                <select name="bucket" id="bucketSelect" onchange="handleBucketChange()">
+                                    {% for bucket in buckets %}
+                                    <option value="{{ bucket }}">{{ bucket }}</option>
+                                    {% endfor %}
+                                    <option value="__new__">+ Add New Bucket</option>
+                                </select>
+                                <input type="text" id="newBucketInput" name="newBucket"
+                                    placeholder="Enter new bucket name" style="display: none; margin-top: 8px;" />
+                            </div>
+
+                            <script>
+                                function handleBucketChange() {
+                                    const bucketSelect = document.getElementById("bucketSelect");
+                                    const newBucketInput = document.getElementById("newBucketInput");
+
+                                    if (bucketSelect.value === "__new__") {
+                                        newBucketInput.style.display = "block";
+                                        newBucketInput.required = true;
+                                    } else {
+                                        newBucketInput.style.display = "none";
+                                        newBucketInput.required = false;
+                                    }
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label>Label</label>
+                                <select name="label" id="labelSelect" onchange="handleLabelChange()">
+                                    {% for label in labels %}
+                                    <option value="{{ label }}">{{ label }}</option>
+                                    {% endfor %}
+                                    <option value="__new__">+ Add New Label</option>
+                                </select>
+
+                                <input type="text" id="newLabelInput" name="newLabel" placeholder="Enter new label name"
+                                    style="display: none; margin-top: 8px;" />
+                            </div>
+
+                            <script>
+                                function handleLabelChange() {
+                                    const labelSelect = document.getElementById("labelSelect");
+                                    const newLabelInput = document.getElementById("newLabelInput");
+
+                                    if (labelSelect.value === "__new__") {
+                                        newLabelInput.style.display = "block";
+                                        newLabelInput.required = true;
+                                    } else {
+                                        newLabelInput.style.display = "none";
+                                        newLabelInput.required = false;
+                                    }
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label>Progress</label>
+                                <select name="progress">
+                                    <option>Not Started</option>
+                                    <option>In Progress</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="row-3">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" name="startDate" id="startDateInput" />
+                            </div>
+
+                            <script>
+                                // Set default date to today
+                                window.addEventListener('DOMContentLoaded', () => {
+                                    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+                                    document.getElementById('startDateInput').value = today;
+                                });
+                            </script>
+
+                            <div class="form-group">
+                                <label>Due Date</label>
+                                <input type="date" name="dueDate" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Priority</label>
+                                <select name="priority">
+                                    <option>Urgent</option>
+                                    <option>Important</option>
+                                    <option selected>Medium</option>
+                                    <option>Low</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label>Checklist</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="checklistInput" placeholder="Add an item" />
+                                <button type="button" onclick="addChecklistItem()"
+                                    style="padding: 10px; font-weight: bold; font-size: medium; border-radius: 5px;">+</button>
+                            </div>
+                            <div id="checklistContainer" style="margin-top: 10px;"></div>
+                        </div>
+
+                        <script>
+                            function addChecklistItem() {
+                                const input = document.getElementById("checklistInput");
+                                const container = document.getElementById("checklistContainer");
+                                const value = input.value.trim();
+
+                                if (value !== "") {
+                                    // Create a label with checkbox
+                                    const label = document.createElement("label");
+                                    label.style.display = "block";
+                                    label.style.marginTop = "6px";
+
+                                    const checkbox = document.createElement("input");
+                                    checkbox.type = "checkbox";
+                                    checkbox.name = "checklist[]";  // Submit as a list
+                                    checkbox.value = value;
+                                    checkbox.checked = true;
+
+                                    label.appendChild(checkbox);
+                                    label.appendChild(document.createTextNode(" " + value));
+                                    container.appendChild(label);
+
+                                    input.value = "";
+                                    input.focus();
+                                }
+                            }
+                        </script>
+
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea rows="4" name="notes"
+                                placeholder="Type a description or add notes here"></textarea>
+                        </div>
+
+                        <button class="submit-btn" type="submit" id="submitBtn">Create Task</button>
+
+                    </form>
+
+
+                    <script>
+                        function submitTask(e) {
+                            e.preventDefault();
+
+                            const form = document.getElementById('newTaskForm');
+                            const formData = new FormData(form);
+
+                            // Get selected employees from custom multiselect
+                            const selectedEmployees = document.getElementById('selectedEmployees').innerText.trim();
+                            formData.append('assigend_to', selectedEmployees);
+
+                            // Handle new bucket creation
+                            const bucketSelect = document.getElementById('bucketSelect');
+                            const newBucketInput = document.getElementById('newBucketInput');
+                            if (bucketSelect.value === "__new__") {
+                                const newBucketValue = newBucketInput.value.trim();
+                                if (newBucketValue) {
+                                    formData.set('bucket', newBucketValue);
+                                } else {
+                                    alert("Please enter a new bucket name.");
+                                    return;
+                                }
+                            }
+
+                            // Handle label creation (if applicable)
+                            const labelSelect = document.getElementById('labelSelect');
+                            const newLabelInput = document.getElementById('newLabelInput');
+                            if (labelSelect && newLabelInput && labelSelect.value === "__new__") {
+                                const newLabelValue = newLabelInput.value.trim();
+                                if (newLabelValue) {
+                                    formData.set('label', newLabelValue);
+                                } else {
+                                    alert("Please enter a new label name.");
+                                    return;
+                                }
+                            }
+
+                            // Check for task ID to determine update or create
+                            const taskId = document.getElementById('taskIdInput').value;
+                            const url = taskId ? `/update_task/${taskId}` : '/create_task';
+
+                            fetch(url, {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert(taskId ? 'Task updated!' : 'Task created!');
+                                        closeTaskModal();
+                                        location.reload(); // For dynamic update, replace with DOM refresh logic
+                                    } else {
+                                        alert('Error saving task.');
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    alert('Error during task submission.');
+                                });
+                        }
+                    </script>
+
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!--- employee search code and stylings -->
+    <script>
+        // Assuming 'usernames' is passed from Flask as a list of employee names
+        const employeeNames = {{ usernames | tojson }};
+        console.log("Employee Names:", employeeNames);  // Check if names are correct
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        const selectedEmployeesDisplay = document.getElementById('selectedEmployees');
+
+        // Populate dropdown with employee names from the 'usernames' list
+        employeeNames.forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'multiselect-option';
+            div.innerHTML = `<label><input type="checkbox" value="${name}" onchange="updateSelected()" /> ${name}</label>`;
+            optionsContainer.appendChild(div);
+        });
+
+        // Toggle dropdown visibility
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownList');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Filter options based on search input
+        function filterOptions() {
+            const filter = document.getElementById('searchBox').value.toLowerCase();
+            const options = document.querySelectorAll('.multiselect-option');
+            options.forEach(option => {
+                const text = option.innerText.toLowerCase();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        // Update the selected employees list
+        function updateSelected() {
+            const checkboxes = document.querySelectorAll('#optionsContainer input[type="checkbox"]:checked');
+            const selected = Array.from(checkboxes).map(cb => cb.value);
+            selectedEmployeesDisplay.innerText = selected.join(', ');
+        }
+
+        // Close dropdown on outside click
+        window.addEventListener('click', function (e) {
+            const wrapper = document.getElementById('employeeDropdown');
+            if (!wrapper.contains(e.target)) {
+                document.getElementById('dropdownList').style.display = 'none';
+            }
+        });
+    </script>
+
+    <style>
+        .multiselect-dropdown {
+            display: none;
+            position: absolute;
+            border: 1px solid #315d6e;
+            width: 100%;
+            background-color: #222729;
+            max-height: 200px;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .multiselect-option {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .multiselect-option:hover {
+            background-color: #244755;
+        }
+
+        .selected-list {
+            margin-top: 10px;
+        }
+
+        .multiselect-wrapper {
+            position: relative;
+        }
+
+        .multiselect-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .selected-list {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+
+    <!-- code for the model -->
+    <style>
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 480px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .new-task-btn {
+            padding: 10px 15px;
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background: #1e1e1e;
+            margin: 5% auto;
+            padding: 20px 30px;
+            border-radius: 10px;
+            width: 600px;
+            color: #f3f3f3;
+        }
+
+        .modal-title {
+            margin-top: 0;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #d4d4d4;
+            font-size: 14px;
+        }
+
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"],
+        select,
+        textarea {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .row-3 {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row-3 .form-group {
+            flex: 1;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            background-color: #3b82f6;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+
+    <script>
+        function openTaskModal() {
+            document.getElementById('taskModal').style.display = 'block';
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').style.display = 'none';
+        }
+    </script>
+
+    <style>
+        .task-row-calender {
+            display: flex;
+            margin-bottom: 4px;
+
+        }
+
+        .task-label-calender {
+            font-weight: bold;
+            color: #333;
+            width: 90px;
+            flex-shrink: 0;
+            text-align: left;
+        }
+
+        .task-value {
+            color: #444;
+            white-space: normal;
+            flex: 1;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .calendar-task {
+            background-color: #ffffff;
+            margin: 6px 0;
+            padding: 8px;
+            border-left: 4px solid #007BFF;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+    </style>
+
+
+    <style>
+        .circle-checkbox {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid white;
+            /* Blue border */
+            cursor: pointer;
+            vertical-align: middle;
+            display: inline-block;
+            position: relative;
+        }
+
+
+        .circle-checkbox:checked {
+            background-color: #2563eb;
+        }
+
+        .circle-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
+        }
+
+        .avatar {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50%;
+            background-color: #2563eb;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: default;
+            font-size: 0.7rem;
+            position: relative;
+            cursor: pointer;
+
+        }
+
+        .more-avatars {
+            background-color: #6b7280;
+            /* Neutral gray */
+            cursor: default;
+        }
+
+        .avatar:hover::after {
+            content: attr(title);
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2e2e2e;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 0.8rem;
+            z-index: 10;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .avatar-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-group .avatar {
+            margin-left: -5px;
+            border: 1px solid white;
+            z-index: 1;
+            transition: transform 0.2s;
+        }
+
+        .avatar-group .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .avatar-group .avatar:hover {
+            z-index: 2;
+            transform: scale(1.1);
+        }
+
+        .more-avatars {
+            background-color: gray;
+            cursor: default;
+        }
+    </style>
+
+    <style>
+        .table {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            background: transparent;
+            color: white;
+        }
+
+        .task-header,
+        .task-row {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            padding: 2px;
+            background: transparent;
+        }
+
+        .task-header {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            font-weight: bold;
+            background-color: #03425f;
+            color: white;
+            padding: 4px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+
+
+        .priority-icon {
+            margin-left: 6px;
+        }
+    </style>
+
+    <style>
+        .taskmain {
+            padding: 20px;
+        }
+
+        .view-switcher {
+            display: flex;
+            gap: 10px;
+            /* space between buttons */
+            align-items: center;
+        }
+
+        .view-switcher button {
+            border: none;
+            background: transparent;
+            color: white;
+            font: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            /* space between icon and text */
+            padding: 6px 10px;
+            transition: color 0.3s ease;
+        }
+
+        .view-switcher button i {
+            color: white;
+            font-size: 18px;
+        }
+
+        .view-switcher button:hover {
+            color: #cccccc;
+        }
+
+        .view-switcher button:hover i {
+            color: #cccccc;
+        }
+
+        .filter-buttons button {
+            background-color: #444;
+            color: white;
+            padding: 8px 12px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            margin: 5px;
+        }
+
+        .add-task input,
+        .add-task select {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        .task-header,
+        .task-row {
+            display: grid;
+            grid-template-columns: 0.1fr 0.1fr 0.1fr 2fr 0.5fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr 0.5fr 0.1fr;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .task-row.completed {
+            background-color: #e0ffe0;
+        }
+
+        .task-row.in-progress {
+            background-color: #fff7cc;
+        }
+
+        .task-row.not-started {
+            background-color: #ffe0e0;
+        }
+
+        .priority-icon {
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        .task-board-view {
+            display: flex;
+            gap: 20px;
+        }
+
+        .board-column {
+            flex: 1;
+            background: #f4f4f4;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .board-column h3 {
+            text-align: center;
+        }
+
+        .board-task {
+            background: rgb(185, 160, 241);
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            color: #222;
+        }
+
+        .board-task strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+            color: #2c234d;
+        }
+
+        .task-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .task-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-meta-row .label {
+            font-weight: bold;
+            width: 100px;
+            color: #333;
+        }
+
+        .task-meta-row .value {
+            flex: 1;
+            text-align: left;
+        }
+
+
+
+        .calendar-view {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .calendar-cell {
+            background-color: #fafafa;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 80px;
+        }
+
+        .calendar-task {
+            background-color: #d1e7dd;
+            padding: 3px 5px;
+            margin: 3px 0;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .placeholder {
+            text-align: center;
+            padding: 50px 0;
+            color: #888;
+        }
+    </style>
+
+</body>
+
+</html>

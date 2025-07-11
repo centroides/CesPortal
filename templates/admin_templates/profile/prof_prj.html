@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile" class="active">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleAccountHub'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_act') }}" class="link">
+                                <i class="fa-solid fa-user" style="margin-right: 5px;"></i> Account Info
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_time') }}" class="link">
+                                <i class="fas fa-clock" style="margin-right: 5px;"></i> Time Sheet
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pr') }}" class="link">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i> Purchase Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_po') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> Purchase Order
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('prof_prj') }}" class="link">
+                                <i class="fa-solid fa-project-diagram" style="margin-right: 5px;"></i> Project Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pay') }}" class="link">
+                                <i class="fa-solid fa-hand-holding-dollar" style="margin-right: 5px;"></i> Payment
+                                Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_claim') }}" class="link">
+                                <i class="fa-solid fa-file-alt" style="margin-right: 5px;"></i> Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_do') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Delivery Order
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleprofSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_supplier') }}" class="link">
+                                <i class="fa-solid fa-truck" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+
+                <div class="timenav">
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+                    <ul id="menuList1" class="timebar">
+
+                        {% if user_access['toggleprf_prj_NewRequest'] == 'On' %}
+                        <li>
+                            <input type="radio" id="addprojectRadio" name="sectionRadio"
+                                onclick="showSection('addproject'); toggleContainer('addproject')"
+                                style="display: none" />
+                            <label for="addprojectRadio" class="link1"><i class="fa-solid fa-check fa-fade"
+                                    style="margin-right: 5px"></i>New Project Request</label>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePendingRequest'] == 'On' %}
+                        <li>
+                            <input type="radio" id="adduserRadio" name="sectionRadio"
+                                onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none" />
+                            <label for="adduserRadio" class="link1">
+                                <i class="fa-solid fa-folder-open" style="margin-right: 5px">
+                                </i>Pending Requests ({{pending_req}})</label>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleRequestedList'] == 'On' %}
+                        <li>
+                            <input type="radio" id="subContractRadio" name="sectionRadio"
+                                onclick="showSection('Sub_contract'); toggleContainer('Sub_contract')"
+                                style="display: none" />
+                            <label for="subContractRadio" class="link1">
+                                <i class="fa-solid fa-industry" style="margin-right: 5px"></i>
+                                <span>Requests</span>
+                            </label>
+
+                        </li>
+                        {% endif %}
+
+
+                    </ul>
+
+                    <div class="menu-icon1">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <style>
+                .search_container {
+
+                    width: 100%;
+                    padding: 10px;
+                }
+
+
+                #projectTable {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    border-radius: 10px;
+                }
+            </style>
+
+            <div class="addproject" id="addproject" style="display: none">
+
+                <style>
+                    .form {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        /* max-width: 350px; */
+                        /* background-color: #355891; */
+                        background-color: white;
+                        padding: 5px;
+                        border-radius: 10px;
+                        position: relative;
+                    }
+
+                    .div1 {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        /* max-width: 350px; */
+                        padding: 5px;
+                        border-radius: 10px;
+                        position: relative;
+                        background: white;
+                        padding: 10px;
+                    }
+
+                    .message {
+                        color: #355891;
+                        font-size: 14px;
+                    }
+
+                    .flex {
+                        display: flex;
+                        width: 100%;
+                        gap: 6px;
+                    }
+
+                    .form label {
+                        position: relative;
+                    }
+
+                    .form label .input {
+                        width: 100%;
+                        padding: 9px 9px 18px 9px;
+                        outline: 0;
+                        border: 1px solid black;
+                        border-radius: 5px;
+                    }
+
+                    .form label .input+span {
+                        position: absolute;
+                        left: 10px;
+                        top: 15px;
+                        color: #355891;
+                        font-size: 0.9em;
+                        cursor: text;
+                        transition: 0.3s ease;
+                    }
+
+                    .form label .input:placeholder-shown+span {
+                        top: 15px;
+                        font-size: 0.9em;
+                    }
+
+                    .form label .input:focus+span,
+                    .form label .input:valid+span {
+                        top: 30px;
+                        font-size: 0.7em;
+                        font-weight: 600;
+                    }
+
+                    .form label .input:valid+span {
+                        color: rgb(87, 79, 8);
+                        /* bottom color */
+                    }
+
+                    .input01 {
+                        width: 100%;
+                        padding: 10px 10px 20px 10px;
+                        outline: 0;
+                        border: 1px solid #355891;
+                        border-radius: 5px;
+                    }
+
+                    .form label .input01+span {
+                        position: absolute;
+                        left: 10px;
+                        top: 50px;
+                        color: #355891;
+                        font-size: 0.9em;
+                        cursor: text;
+                        transition: 0.3s ease;
+                    }
+
+                    .form label .input01:placeholder-shown+span {
+                        top: 40px;
+                        font-size: 0.9em;
+                    }
+
+                    .form label .input01:focus+span,
+                    .form label .input01:valid+span {
+                        top: 50px;
+                        font-size: 0.7em;
+                        font-weight: 600;
+                    }
+
+                    .form label .input01:valid+span {
+                        color: green;
+                    }
+
+                    .fancy {
+                        background-color: white;
+                        border: 2px solid #355891;
+                        border-radius: 0px;
+                        box-sizing: border-box;
+                        color: #355891;
+                        cursor: pointer;
+                        display: inline-block;
+                        font-weight: 390;
+                        letter-spacing: 2px;
+                        margin: 0;
+                        outline: none;
+                        overflow: visible;
+                        padding: 8px 30px;
+                        position: relative;
+                        text-align: center;
+                        text-decoration: none;
+                        text-transform: none;
+                        transition: all 0.3s ease-in-out;
+                        user-select: none;
+                        font-size: 13px;
+                    }
+
+                    .fancy::before {
+                        content: " ";
+                        width: 1.7rem;
+                        height: 2px;
+                        background: #355891;
+                        top: 50%;
+                        left: 1.5em;
+                        position: absolute;
+                        transform: translateY(-50%);
+                        transform: translateX(230%);
+                        transform-origin: center;
+                        transition: background 0.3s linear, width 0.3s linear;
+                    }
+
+                    .fancy .text {
+                        font-size: 1.125em;
+                        line-height: 1.33333em;
+                        padding-left: 2em;
+                        display: block;
+                        text-align: left;
+                        transition: all 0.3s ease-in-out;
+                        text-transform: lowercase;
+                        text-decoration: none;
+                        color: #355891;
+                        transform: translateX(30%);
+                    }
+
+                    .fancy .top-key {
+                        height: 2px;
+                        width: 1.5625rem;
+                        top: -2px;
+                        left: 0.625rem;
+                        position: absolute;
+                        background: #355891;
+                        transition: width 0.5s ease-out, left 0.3s ease-out;
+                    }
+
+                    .fancy .bottom-key-1 {
+                        height: 2px;
+                        width: 1.5625rem;
+                        right: 1.875rem;
+                        bottom: -2px;
+                        position: absolute;
+                        background: #355891;
+                        transition: width 0.5s ease-out, right 0.3s ease-out;
+                    }
+
+                    .fancy .bottom-key-2 {
+                        height: 2px;
+                        width: 0.625rem;
+                        right: 0.625rem;
+                        bottom: -2px;
+                        position: absolute;
+                        background: #355891;
+                        transition: width 0.5s ease-out, right 0.3s ease-out;
+                    }
+
+                    .fancy:hover {
+                        color: #355891;
+                        background: #5f82a9;
+                    }
+
+                    .fancy:hover::before {
+                        width: 1.5rem;
+                        background: #355891;
+                    }
+
+                    .fancy:hover .text {
+                        color: white;
+                        padding-left: 1.5em;
+                    }
+
+                    .fancy:hover .top-key {
+                        left: -2px;
+                        width: 0px;
+                    }
+
+                    .fancy:hover .bottom-key-1,
+                    .fancy:hover .bottom-key-2 {
+                        right: 0;
+                        width: 0;
+                    }
+                </style>
+
+                <style>
+                    .parent {
+                        display: grid;
+                        grid-template-columns: 30% 17% 10% 10% 10% 10% 10%;
+                        grid-template-rows: 1fr;
+                        gap: 8px;
+                        background: linear-gradient(135deg, #e0f7fa, #b3e5fc, #81d4fa);
+
+                        padding: 5px;
+                        border-radius: 7px;
+                        color: #333;
+                        /* Dark text for readability on light background */
+                    }
+                </style>
+
+                <form class="form" method="POST" id="allocateForm">
+
+                    <div class="flex-item">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                            <div class="alert {{ 'alert-success' if category == 'prj_req' else 'alert-danger' }} alert-dismissible fade show"
+                                role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <script>
+                        // Automatically close the alert after 5 seconds (5000 ms)
+                        setTimeout(() => {
+                            const alerts = document.querySelectorAll('.alert');
+                            alerts.forEach(alert => alert.classList.remove('show'));
+                            setTimeout(() => {
+                                alerts.forEach(alert => alert.remove());
+                            }, 150); // Delay to ensure animation completes
+                        }, 5000);
+                    </script>
+
+                    <div class="parent">
+
+                        <div class="div1">
+
+                            <div class="button-container1">
+                                <h3>Project Details</h3>
+                            </div>
+
+                            <div class="flex-row">
+
+                                {% if project is not none %}
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="number" id="projectid" name="projectid"
+                                            value="{{ project[0] }}" required />
+                                        <span>Project ID *</span>
+                                    </label>
+                                </div>
+                                {% else %}
+
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-control input" id="projectid" name="projectid" required>
+                                            <option value="" {% if not projectid %}selected{% endif %}></option>
+                                            {% for project_id in project_ids %}
+                                            <option value="{{ project_id }}" {% if project_id==projectid %}selected{%
+                                                endif %}>{{ project_id
+                                                }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span>Project ID *</span>
+                                    </label>
+                                </div>
+
+                                {% endif %}
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="client" name="client"
+                                            value="{{ project.client }}" required />
+                                        <span>Client *</span>
+                                    </label>
+                                </div>
+
+                                <!-- Project Manager -->
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="projectmanager" name="projectmanager"
+                                            required>
+                                            <option value="" disabled {% if not project.pm %}selected{% endif %}>
+                                            </option>
+                                            {% for username in pmlist %}
+                                            {% if username != "None" %}
+                                            <option value="{{ username }}" {% if username==project.pm %}selected{% endif
+                                                %}>{{ username }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <span>Project Manager *</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="projectname"
+                                            name="projectname" value="{{ project.project_name }}" required />
+                                        <span>Project Name *</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="text" id="po_number" name="po_number"
+                                            value="{{ project.po_number }}" />
+                                        <span>PO Number</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <!-- Budget -->
+                                <div class="flex-item">
+                                    <label>
+                                        <input style="background-color: antiquewhite;" class="form-control input"
+                                            type="text" id="budget" name="budget" value="{{ project.budget }}"
+                                            readonly />
+                                        <span>Budget</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="date" id="start_time" name="start_time"
+                                            value="{{ project.start_time }}" />
+                                        <span>Start Date</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="date" id="end_time" name="end_time"
+                                            value="{{ project.end_time }}" />
+                                        <span>End Date</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input" type="number" id="po_value" name="po_value"
+                                            step="any" value="{{ project.po_value }}" />
+                                        <span>PO Value</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="status" name="status" required>
+                                            <option value="" {% if project.status=='' %}selected{% endif %}>
+                                            </option>
+                                            <option value="Open" {% if project.status=='Open' %}selected{% endif %}>
+                                                Open</option>
+                                            <option value="Design" {% if project.status=='Design' %}selected{% endif %}>
+                                                Design</option>
+                                            <option value="Install" {% if project.status=='Install' %}selected{% endif
+                                                %}>Install</option>
+                                            <option value="Testing" {% if project.status=='Testing' %}selected{% endif
+                                                %}>Testing</option>
+                                            <option value="Closed" {% if project.status=='Closed' %}selected{% endif %}>
+                                                Closed</option>
+                                        </select>
+                                        <span>Status *</span>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label>
+                                        <select class="form-select input" id="type" name="type" required>
+                                            <option value="" {% if project.type=='' %}selected{% endif %}></option>
+                                            <option value="All" {% if project.type=='All' %}selected{% endif %}>All
+                                            </option>
+                                            <option value="Civil" {% if project.type=='Civil' %}selected{% endif %}>
+                                                Civil</option>
+                                            <option value="Controls" {% if project.type=='Controls' %}selected{% endif
+                                                %}>Controls</option>
+                                            <option value="IT" {% if project.type=='IT' %}selected{% endif %}>IT
+                                            </option>
+                                            <option value="M & E" {% if project.type=='M & E' %}selected{% endif %}>
+                                                M & E</option>
+                                        </select>
+                                        <span>Type *</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <div class="multiselect-dropdown" id="multiselect-dropdown">
+                                        <input type="hidden" id="selected-members" name="selected_members" value="">
+                                        <div class="select-box" onclick="toggleDropdown()">
+                                            <div class="selected-items" id="selected-items">Team</div>
+                                            <div class="dropdown-arrow">&#9662;</div>
+                                        </div>
+                                        <div class="dropdown-list" id="dropdown-list">
+                                            <input type="text" class="dropdown-search form-control"
+                                                placeholder="Search..." oninput="filterOptions()" />
+                                            <div class="dropdown-options">
+                                                {% for username in teamlist %}
+                                                {% if username != "None" %}
+                                                <label>
+                                                    <input type="checkbox" value="{{ username }}"
+                                                        onchange="updateSelection()" {% if username in
+                                                        project.project_members %}checked{% endif %}> {{ username }}
+                                                </label>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </label>
+                            </div>
+
+                            <script>
+                                function updateSelection() {
+                                    const checkboxes = document.querySelectorAll('#dropdown-list input[type="checkbox"]');
+                                    const selected = [];
+
+                                    checkboxes.forEach(checkbox => {
+                                        if (checkbox.checked) {
+                                            selected.push(checkbox.value);
+                                        }
+                                    });
+
+                                    // Update the hidden input field with a comma-separated list of selected members
+                                    document.getElementById('selected-members').value = selected.join(',');
+                                }
+
+                            </script>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address1"
+                                        name="billing_address1" value="{{ project.billing_address }}" />
+                                    <span>Billing Address Line 1</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address2"
+                                        name="billing_address2" value="{{ project.billing_address2 }}" />
+                                    <span>Billing Address Line 2</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="billing_address3"
+                                        name="billing_address3" value="{{ project.billing_address3 }}" />
+                                    <span>Billing Address Line 3</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address1"
+                                        name="delivery_address1" value="{{ project.delivery_address }}" />
+                                    <span>Delivery Address Line 1</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address2"
+                                        name="delivery_address2" value="{{ project.delivery_address2}}" />
+                                    <span>Delivery Address Line 2</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input" type="text" id="delivery_address3"
+                                        name="delivery_address3" value="{{ project.delivery_address3 }}" />
+                                    <span>Delivery Address Line 3</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="div1">
+
+                            <div class="button-container1">
+                                <h3>Resources (Hr)</h3>
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1000"
+                                            name="1000" value="{{ resources['1000'] }}" oninput="upResourcedateSum()" />
+                                        <span>1000-Admin</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1011"
+                                            name="1011" value="{{ resources['1011'] }}" oninput="upResourcedateSum()" />
+                                        <span>1011 - WE</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1001"
+                                            name="1001" value="{{ resources['1001'] }}" oninput="upResourcedateSum()" />
+                                        <span>1001 - PM</span>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1012"
+                                            name="1012" value="{{ resources['1012'] }}" oninput="upResourcedateSum()" />
+                                        <span>1012 - FT</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1002"
+                                            name="1002" value="{{ resources['1002'] }}" oninput="upResourcedateSum()" />
+                                        <span>1002 - PE</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1013"
+                                            name="1013" value="{{ resources['1013'] }}" oninput="upResourcedateSum()" />
+                                        <span>1013 - SW</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1003"
+                                            name="1003" value="{{ resources['1003'] }}" oninput="upResourcedateSum()" />
+                                        <span>1003 - CE</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1014"
+                                            name="1014" value="{{ resources['1014'] }}" oninput="upResourcedateSum()" />
+                                        <span>1014 - GW</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1004"
+                                            name="1004" value="{{ resources['1004'] }}" oninput="upResourcedateSum()" />
+                                        <span>1004 - AE</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1015"
+                                            name="1015" value="{{ resources['1015'] }}" oninput="upResourcedateSum()" />
+                                        <span>1015 - DR</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1005"
+                                            name="1005" value="{{ resources['1005'] }}" oninput="upResourcedateSum()" />
+                                        <span>1005 - PS</span>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1016"
+                                            name="1016" value="{{ resources['1016'] }}" oninput="upResourcedateSum()" />
+                                        <span>1016 - QM</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1006"
+                                            name="1006" value="{{ resources['1006'] }}" oninput="upResourcedateSum()" />
+                                        <span>1006 - DES</span>
+                                    </label>
+                                </div>
+
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1017"
+                                            name="1017" value="{{ resources['1017'] }}" oninput="upResourcedateSum()" />
+                                        <span>1017 - QE</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1007"
+                                            name="1007" value="{{ resources['1007'] }}" oninput="upResourcedateSum()" />
+                                        <span>1007 - SC</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1018"
+                                            name="1018" value="{{ resources['1018'] }}" oninput="upResourcedateSum()" />
+                                        <span>1018 - DC</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1008"
+                                            name="1008" value="{{ resources['1008'] }}" oninput="upResourcedateSum()" />
+                                        <span>1008 - SS</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1019"
+                                            name="1019" value="{{ resources['1019'] }}" oninput="upResourcedateSum()" />
+                                        <span>1019 - PP</span>
+                                    </label>
+                                </div>
+
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1009"
+                                            name="1009" value="{{ resources['1009'] }}" oninput="upResourcedateSum()" />
+                                        <span>1009 - SS</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="flex-row">
+
+                                <div class="flex-item">
+                                    <label>
+                                        <input class="form-control input Resources" type="number" step="any" id="1010"
+                                            name="1010" value="{{ resources['1010'] }}" oninput="upResourcedateSum()" />
+                                        <span>1010 - EL</span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="div1">
+
+                            <div class="button-container1">
+                                <h3>Material ($)</h3>
+                            </div>
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2001"
+                                        name="2001" value="{{ resources['2001'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2001 - Mechanical</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2002"
+                                        name="2002" value="{{ resources['2002'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2002 - Electrical</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2003"
+                                        name="2003" value="{{ resources['2003'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2003 - Instruments</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2004"
+                                        name="2004" value="{{ resources['2004'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2004 - PLC Hardware</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2005"
+                                        name="2005" value="{{ resources['2005'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2005 - Panel Hardware</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2006"
+                                        name="2006" value="{{ resources['2006'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2006 - Consumables</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2007"
+                                        name="2007" value="{{ resources['2007'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2007 - IT Hardware</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2008"
+                                        name="2008" value="{{ resources['2008'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2008 - Tools</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2009"
+                                        name="2009" value="{{ resources['2009'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2009 - Civil</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input Material" type="number" step="any" id="2010"
+                                        name="2010" value="{{ resources['2010'] }}" oninput="upMaterialdateSum()" />
+                                    <span>2010 - Others</span>
+                                </label>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="div1">
+                            <div class="button-container1">
+                                <h3>Sub-Cont ($)</h3>
+                            </div>
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3001"
+                                        name="3001" value="{{ resources['3001'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3001 - Scaffolding</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3002"
+                                        name="3002" value="{{ resources['3002'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3002 - Programming</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3003"
+                                        name="3003" value="{{ resources['3003'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3003 - E & I Fabrication</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3004"
+                                        name="3004" value="{{ resources['3004'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3004 - Mech Fabrication</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3005"
+                                        name="3005" value="{{ resources['3005'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3005 - Manpower Supply</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3006"
+                                        name="3006" value="{{ resources['3006'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3006 - LEW</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3007"
+                                        name="3007" value="{{ resources['3007'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3007 - Calibration</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3008"
+                                        name="3008" value="{{ resources['3008'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3008 - Equipment Rent</span>
+                                </label>
+                            </div>
+
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3009"
+                                        name="3009" value="{{ resources['3009'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3009 - Servicing</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input SubContract" type="number" step="any" id="3010"
+                                        name="3010" value="{{ resources['3010'] }}" oninput="upSubContractdateSum()" />
+                                    <span>3010 - Others</span>
+                                </label>
+                            </div>
+
+
+                        </div>
+
+                        <div class="div1">
+                            <div class="button-container1">
+                                <h3>Site ($)</h3>
+                            </div>
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4001"
+                                        name="4001" value="{{ resources['4001'] }}" oninput="upsitedateSum()" />
+                                    <span>4001 - Admin</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4002"
+                                        name="4002" value="{{ resources['4002'] }}" oninput="upsitedateSum()" />
+                                    <span>4002 - Utilities</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4003"
+                                        name="4003" value="{{ resources['4003'] }}" oninput="upsitedateSum()" />
+                                    <span>4003 - Vehicle</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4004"
+                                        name="4004" value="{{ resources['4004'] }}" oninput="upsitedateSum()" />
+                                    <span>4004 - Travel</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4005"
+                                        name="4005" value="{{ resources['4005'] }}" oninput="upsitedateSum()" />
+                                    <span>4005 - Safety</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4006"
+                                        name="4006" value="{{ resources['4006'] }}" oninput="upsitedateSum()" />
+                                    <span>4006 - Food</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4007"
+                                        name="4007" value="{{ resources['4007'] }}" oninput="upsitedateSum()" />
+                                    <span>4007 - Entertainment</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4008"
+                                        name="4008" value="{{ resources['4008'] }}" oninput="upsitedateSum()" />
+                                    <span>4008 - Miscellanious</span>
+                                </label>
+                            </div>
+
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4009"
+                                        name="4009" value="{{ resources['4009'] }}" oninput="upsitedateSum()" />
+                                    <span>4009 - </span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input class="form-control input site" type="number" step="any" id="4010"
+                                        name="4010" value="{{ resources['4010'] }}" oninput="upsitedateSum()" />
+                                    <span>4010 - </span>
+                                </label>
+                            </div>
+
+
+                        </div>
+
+                        <div class="div1">
+                            <div class="button-container1">
+                                <h3>Others ($)</h3>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="501" id="501"
+                                        step="any" value="{{ resources['501'] }}" oninput="upOthersdateSum()" />
+                                    <span>501 - Admin</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="506" id="506"
+                                        step="any" value="{{ resources['506'] }}" oninput="upOthersdateSum()" />
+                                    <span>506 - Vehicle</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="507" id="507"
+                                        step="any" value="{{ resources['507'] }}" oninput="upOthersdateSum()" />
+                                    <span>507 - Training</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="510" id="510"
+                                        step="any" value="{{ resources['510'] }}" oninput="upOthersdateSum()" />
+                                    <span>510 - Utilities</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="511" id="511"
+                                        step="any" value="{{ resources['511'] }}" oninput="upOthersdateSum()" />
+                                    <span>511 - Medical</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="512" id="512"
+                                        step="any" value="{{ resources['512'] }}" oninput="upOthersdateSum()" />
+                                    <span>512 - Travel</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="514" id="514"
+                                        step="any" value="{{ resources['514'] }}" oninput="upOthersdateSum()" />
+                                    <span>514 - Safety</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="515" id="515"
+                                        step="any" value="{{ resources['515'] }}" oninput="upOthersdateSum()" />
+                                    <span>515 - Food</span>
+                                </label>
+                            </div>
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="516" id="516"
+                                        step="any" value="{{ resources['516'] }}" oninput="upOthersdateSum()" />
+                                    <span>516 - Entertainment</span>
+                                </label>
+                            </div>
+
+
+                            <div class="flex-item">
+                                <label>
+                                    <input type="number" class="form-control input Others_in" name="517" id="517"
+                                        step="any" value="{{ resources['517'] }}" oninput="upOthersdateSum()" />
+                                    <span>517 - Others</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="div1" style="background: linear-gradient(135deg, #ffe0b2, #ffcc80, #ffb74d);">
+
+                            <div class="button-container1">
+                                <h3>Details ($)</h3>
+                            </div>
+
+                            <div class="insightsdata">
+
+                                <div class="insights">
+
+                                    <div class="insight">
+                                        <p class="tip">Resources</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="Resource_sum">hr</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Material</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="Material_sum"> $ </p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Sub Cont</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="Sub_Contract_sum"> $</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Site</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="Site_sum"> $</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Others</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="others_sum"> $</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Total</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="input_total"> $</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">PO Value</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="po_value_in">$ {{ project.po_value }}</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Profit</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="profit_value"> $</p>
+                                    </div>
+
+                                    <div class="insight">
+                                        <p class="tip">Profit %</p>
+                                        <hr style="border: 1px solid whitesmoke; width: 50%; margin: 5px auto;">
+                                        <p class="second-text" id="profit_percent"> %</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <script>
+
+                                async function upResourcedateSum() {
+                                    let inputs = document.querySelectorAll('.form-control.Resources');
+                                    let sum = 0;
+
+                                    for (let input of inputs) {
+                                        let code = input.name; // Use the name attribute as the code
+                                        let hours = parseFloat(input.value);
+
+                                        if (!isNaN(hours)) {
+                                            try {
+                                                // Fetch hourly rate from the backend
+                                                let response = await fetch('/get_hourly_rate', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                    },
+                                                    body: JSON.stringify({ code }),
+                                                });
+
+                                                if (response.ok) {
+                                                    let data = await response.json();
+                                                    if (data.hourly_rate) {
+                                                        let hourlyRate = parseFloat(data.hourly_rate);
+                                                        sum += hours * hourlyRate;
+                                                    }
+                                                } else {
+                                                    console.error('Failed to fetch hourly rate for code:', code);
+                                                }
+                                            } catch (error) {
+                                                console.error('Error:', error);
+                                            }
+                                        }
+                                    }
+
+                                    // Update the sum in the designated element
+                                    document.getElementById('Resource_sum').textContent = '$ ' + sum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    });
+
+
+                                    // Recalculate total after updating resource cost
+                                    updateTotalAndProfit();
+                                }
+
+                                function upMaterialdateSum() {
+                                    let inputs = document.querySelectorAll('.form-control.Material');
+                                    let sum = 0;
+
+                                    inputs.forEach(input => {
+                                        let value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            sum += value;
+                                        }
+                                    });
+
+                                    document.getElementById('Material_sum').textContent = '$ ' + sum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    });
+
+                                    updateTotalAndProfit();
+                                }
+
+                                function upSubContractdateSum() {
+                                    let inputs = document.querySelectorAll('.form-control.SubContract');
+                                    let sum = 0;
+
+                                    inputs.forEach(input => {
+                                        let value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            sum += value;
+                                        }
+                                    });
+
+                                    document.getElementById('Sub_Contract_sum').textContent = '$ ' + sum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    });
+
+                                    updateTotalAndProfit();
+                                }
+
+                                function upsitedateSum() {
+                                    let inputs = document.querySelectorAll('.form-control.site');
+                                    let sum = 0;
+
+                                    inputs.forEach(input => {
+                                        let value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            sum += value;
+                                        }
+                                    });
+
+                                    document.getElementById('Site_sum').textContent = '$ ' + sum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    });
+
+                                    updateTotalAndProfit();
+                                }
+
+                                function upOthersdateSum() {
+                                    let inputs = document.querySelectorAll('.form-control.Others_in');
+                                    let sum = 0;
+
+                                    inputs.forEach(input => {
+                                        let value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            sum += value;
+                                        }
+                                    });
+
+                                    document.getElementById('others_sum').textContent = '$ ' + sum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    });
+
+                                    updateTotalAndProfit();
+                                }
+
+                                // Function to calculate total and update profit and profit percent
+                                function updateTotalAndProfit() {
+                                    let resourceSum = parseFloat(document.getElementById('Resource_sum').textContent.replace(/[$,]/g, '')) || 0;
+                                    let materialSum = parseFloat(document.getElementById('Material_sum').textContent.replace(/[$,]/g, '')) || 0;
+                                    let subcontractSum = parseFloat(document.getElementById('Sub_Contract_sum').textContent.replace(/[$,]/g, '')) || 0;
+                                    let othersSum = parseFloat(document.getElementById('others_sum').textContent.replace(/[$,]/g, '')) || 0;
+
+                                    let totalSum = resourceSum + materialSum + subcontractSum + othersSum;
+
+                                    // Update total sum
+                                    document.getElementById('input_total').textContent = `$ ${totalSum.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    })}`;
+
+                                    // Fetch PO value
+                                    let poValue = parseFloat(document.getElementById('po_value_in').textContent.replace(/[$,]/g, '')) || 0;
+
+                                    // Calculate and update profit
+                                    let profit = poValue - totalSum;
+                                    document.getElementById('profit_value').textContent = `$ ${profit.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    })}`;
+
+                                    // Calculate and update profit percent
+                                    let profitPercent = poValue !== 0 ? (profit / poValue) * 100 : 0;
+                                    document.getElementById('profit_percent').textContent = `${profitPercent.toFixed(2)} %`;
+                                }
+
+
+                                window.onload = function () {
+                                    // Call the functions to update calculations
+                                    upResourcedateSum();
+                                    upMaterialdateSum();
+                                    upSubContractdateSum();
+                                    upsitedateSum();
+                                    upOthersdateSum();
+                                };
+
+
+                            </script>
+
+                        </div>
+
+                    </div>
+
+                    <div class="button-container">
+                        {% if stage is not none %}
+                        {% if project.approved_status == 'Open' %}
+                        {% if department_code in [10, 11, 1000] %}
+                        <button type="submit" class="new-enquiry-btn" name="action" value="update_request">
+                            Update Project
+                        </button>
+                        <button type="submit" class="new-enquiry-btn" name="action" value="approve_request">
+                            Approve Request
+                        </button>
+                        {% else %}
+                        <button type="submit" class="new-enquiry-btn" name="action" value="update_request">
+                            Update Project
+                        </button>
+                        {% endif %}
+                        {% endif %}
+                        {% else %}
+                        <button type="submit" class="new-enquiry-btn" name="action" value="submit_request">
+                            Submit Request
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <style>
+                        .insightsdata {
+                            flex: 0 0 10%;
+                            border-radius: 8px;
+                            padding: 10px;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .insights {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+
+                        .insights .insight {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            text-align: center;
+                            height: 62px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            transition: 400ms;
+                            background: white;
+
+                        }
+
+                        .insights .insight p.tip {
+                            font-size: 1.0em;
+                            font-weight: 700;
+                        }
+
+                        .insights .insight p.second-text {
+                            font-size: 1em;
+                        }
+
+                        .insights .insight:hover {
+                            transform: scale(1.1, 1.1);
+                        }
+
+                        .insights:hover>.insight:not(:hover) {
+                            filter: blur(10px);
+                            transform: scale(0.9, 0.9);
+                        }
+                    </style>
+
+                    <style>
+                        .new-enquiry-btn {
+                            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+                            background-size: 200% 200%;
+                            color: white;
+                            font-weight: bold;
+                            border: none;
+                            padding: 8px 12px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-size: 14px;
+                            display: flex;
+                            align-items: center;
+                            transition: all 0.4s ease-in-out;
+                            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+                            /* Soft shadow */
+                        }
+
+                        /* Hover effect: Darker Gradient + Glow */
+                        .new-enquiry-btn:hover {
+                            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+                            background-size: 200% 200%;
+                            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+                            /* Stronger shadow on hover */
+                            transform: scale(1.05);
+                        }
+                    </style>
+
+                </form>
+
+                <script>
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        // Pre-fill the hidden input field with the initial selected members
+                        const hiddenInput = document.getElementById("selected-members");
+                        const selectedItems = document.getElementById("selected-items");
+                        const checkboxes = document.querySelectorAll(
+                            '.dropdown-options input[type="checkbox"]'
+                        );
+
+                        let selected = [];
+                        checkboxes.forEach((checkbox) => {
+                            if (checkbox.checked) {
+                                selected.push(checkbox.value);
+                            }
+                        });
+
+                        // Update the hidden input field and the display
+                        hiddenInput.value = selected.join(",");
+                        selectedItems.textContent =
+                            selected.length > 0 ? selected.join(", ") : "Select Employees";
+                    });
+
+                    document.querySelector('form').addEventListener('submit', function () {
+                        console.log("Submitting Selected Members:", document.getElementById('selected-members').value);
+                    });
+
+                </script>
+
+            </div>
+
+            <div class="adduser" id="adduser" style="display: none">
+
+                <div class="records table-responsive">
+
+                    <div class="table-responsive">
+
+                        <table class="table" width="100%">
+
+                            <thead>
+                                <tr>
+                                    <th>Edit</th>
+                                    <th>Project ID</th>
+                                    <th>Project Name</th>
+                                    <th>PO Value</th>
+                                    <th>Budget</th>
+                                    <th>Profit</th>
+                                    <th>Margin</th>
+                                    <th>Status</th>
+                                    <th>Del</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for project in project_requests if project[5] != 'Created' %}
+                                <tr>
+                                    {% if project is not none and project[5] is not none and project[5] != 'Approved'
+                                    %}
+                                    <td class="text-center">
+                                        <a href="{{ url_for('prof_prj', project_id=project['id']) }}">
+                                            <span class="icon">
+                                                <span class="fa-solid fa-pen-to-square fa-fade"></span>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    {% else %}
+                                    <td></td>
+                                    {% endif %}
+                                    <td>{{ project[0] }}</td>
+                                    <td>{{ project[1] }}</td>
+                                    <td> $ {{ "{:,.2f}".format(project[2]|float) if project[2]|float else "0.00" }}
+                                    </td>
+                                    <td> $ {{ "{:,.2f}".format(project[3]|float) if project[3]|float else "0.00" }}
+                                    </td>
+
+                                    <td>
+                                        $ {{ "{:,.2f}".format((project[2]|float if project[2] else 0) -
+                                        (project[3]|float if project[3]
+                                        else 0)) }}
+                                    </td>
+
+                                    <td></td>
+                                    <td
+                                        style="font-weight: bold; color: {{ 'blue' if project[5] == 'Open' else 'brown' if project[3] == 'Approved' else 'red' if project[5] == 'Rejected' else 'green' }};">
+                                        {{ project[5] }}
+                                    </td>
+
+
+
+                                    {% if department_code == 1000 %}
+                                    <td class="text-center">
+                                        <a href="#" class="delete-btn" data-id="{{ project['id'] }}">
+                                            <span class="icon">
+                                                <span class="fa-solid fa-trash" style="color: red"></span>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="10" class="text-center"
+                                        style="text-align: center; font-size: larger; color: #dc3545;">
+                                        No Project Requests Found
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="Sub_contract" id="Sub_contract" style="display: none">
+
+                <div class="records table-responsive">
+                    <div class="table-responsive">
+                        <table class="table" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project Name</th>
+                                    <th>PO Value</th>
+                                    <th>Budget</th>
+                                    <th>Profit</th>
+                                    <th>Margin</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for project in project_requests %}
+                                <tr>
+                                    <td>{{ project[0] }}</td>
+                                    <td>{{ project[1] }}</td>
+                                    <td> $ {{ "{:,.2f}".format(project[2]|float) if project[2]|float else "0.00" }}
+                                    </td>
+                                    <td> $ {{ "{:,.2f}".format(project[3]|float) if project[3]|float else "0.00" }}
+                                    </td>
+
+                                    <td>
+                                        $ {{ "{:,.2f}".format((project[2]|float if project[2] else 0) -
+                                        (project[3]|float if project[3]
+                                        else 0)) }}
+                                    </td>
+
+                                    <td></td>
+
+                                    <td class="text-center status" style="font-weight: bold;">
+                                        <span style="
+                                            color: 
+                                            {% if project[5] == 'Open' %}
+                                                brown;
+                                            {% elif project[5] == 'Approved' %}
+                                                blue;
+                                            {% elif project[5] == 'Created' %}
+                                                green;
+                                            {% elif project[5] == 'Rejected' %}
+                                                red;
+                                            {% endif %};
+                                            background-color: 
+                                            {% if project[5] == 'Open' %}
+                                                #f2e1d7; /* Light brown background */
+                                            {% elif project[5] == 'Approved' %}
+                                                #a4acee; /* Light blue background */
+                                            {% elif project[5] == 'Created' %}
+                                                #d0f8e3; /* Light green background */
+                                            {% elif project[5] == 'Rejected' %}
+                                                #f8d7da; /* Light red background */
+                                            {% endif %};
+                                            padding: 2px 8px; 
+                                            border-radius: 8px; 
+                                            display: inline-block;
+                                        ">
+                                            {{ project[5] }}
+                                        </span>
+                                    </td>
+
+
+
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="10" class="text-center"
+                                        style="text-align: center; font-size: larger; color: #dc3545;">
+                                        No project requests found
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <style>
+        .form label .input[readonly]+span {
+            top: 30px;
+            font-size: 0.7em;
+            font-weight: 600;
+            color: rgb(87, 79, 8);
+        }
+
+        .custom-btn1 {
+            height: 20px;
+            color: whitesmoke;
+            border-radius: 5px;
+            padding: 2px 5px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 300;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-21 {
+            background: #004B5D;
+            background: linear-gradient(0deg, #004B5D 0%, #004B5D 100%);
+            border: none;
+        }
+
+        .btn-21:before {
+            height: 0%;
+            width: 2px;
+        }
+
+        .btn-21:hover {
+            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .5),
+                -4px -4px 6px 0 rgba(116, 125, 136, .5),
+                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+        }
+    </style>
+
+    <style>
+        .button-container1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            background: linear-gradient(135deg, #dbeafe, #c7d2fe, #a5b4fc);
+            /* Light blue gradient */
+            color: rgb(54, 52, 52);
+            border-radius: 5px;
+        }
+
+
+        .button-container1:hover {
+            background-color: rgba(7, 89, 240, 0.594);
+            color: white;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .multiselect-dropdown {
+            position: relative;
+            width: 100%;
+            /* Adjust width as needed */
+        }
+
+        .select-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .selected-items {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+        }
+
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            /* box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); */
+            z-index: 1;
+            max-height: 200px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+            /* Adds a vertical scroll bar if content exceeds max height */
+        }
+
+        .dropdown-search {
+            width: calc(100% - 20px);
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .dropdown-options label {
+            display: block;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        .dropdown-options label:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Toggle dropdown visibility
+            function toggleDropdown() {
+                const dropdownList = document.getElementById("dropdown-list");
+                dropdownList.style.display =
+                    dropdownList.style.display === "block" ? "none" : "block";
+            }
+
+            // Update the selected items display and hidden input field
+            function updateSelection() {
+                const checkboxes = document.querySelectorAll(
+                    '.dropdown-options input[type="checkbox"]'
+                );
+                const selectedItems = document.getElementById("selected-items");
+                const hiddenInput = document.getElementById("selected-members");
+                let selected = [];
+
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        selected.push(checkbox.value);
+                    }
+                });
+
+                // Update the display of selected items
+                selectedItems.textContent =
+                    selected.length > 0 ? selected.join(", ") : "Select Employees";
+
+                // Update the hidden input field with selected values
+                hiddenInput.value = selected.join(",");
+            }
+
+            // Filter dropdown options based on search input
+            function filterOptions() {
+                const searchInput = document
+                    .querySelector(".dropdown-search")
+                    .value.toLowerCase();
+                const options = document.querySelectorAll(".dropdown-options label");
+
+                options.forEach((option) => {
+                    const text = option.textContent.toLowerCase();
+                    if (text.includes(searchInput)) {
+                        option.style.display = "";
+                    } else {
+                        option.style.display = "none";
+                    }
+                });
+            }
+
+            // Close the dropdown if clicking outside of it
+            document.addEventListener("click", function (event) {
+                const multiselect = document.querySelector(".multiselect-dropdown");
+                if (!multiselect.contains(event.target)) {
+                    document.getElementById("dropdown-list").style.display = "none";
+                }
+            });
+
+            // Attach event listeners
+            document
+                .getElementById("multiselect-dropdown")
+                .addEventListener("click", function (event) {
+                    // Prevent click events from bubbling up to the document
+                    event.stopPropagation();
+                });
+
+            document
+                .querySelectorAll('.dropdown-options input[type="checkbox"]')
+                .forEach((checkbox) => {
+                    checkbox.addEventListener("change", updateSelection);
+                });
+
+            document
+                .querySelector(".dropdown-search")
+                .addEventListener("input", filterOptions);
+
+            // Ensure the dropdown is hidden initially
+            document.getElementById("dropdown-list").style.display = "none";
+
+            // Attach click event to the select-box to toggle dropdown
+            document
+                .querySelector(".select-box")
+                .addEventListener("click", toggleDropdown);
+        });
+    </script>
+
+    <style>
+        .record-header1 {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+        }
+
+        .add1 {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+        }
+
+        .mat_rec_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+        }
+
+        .mat_rec_table th,
+        .mat_rec_table td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .mat_rec_table td {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+            background-color: #d8eaf3;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap to the next line */
+            gap: 5px;
+            /* Add some gap between buttons */
+        }
+
+        .row label {
+            flex: 1;
+            /* Allow labels to expand and fill available space */
+            margin: 2px 0;
+            /* Vertical margin to separate rows of buttons */
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px 20px;
+            margin: 2px 0;
+            /* Reduce the top and bottom margin */
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+
+
+        .table thead th:nth-child(2),
+        .table tbody td:nth-child(2),
+        .table thead th:nth-child(3),
+        .table tbody td:nth-child(3),
+        .table thead th:nth-child(4),
+        .table tbody td:nth-child(4),
+        .table thead th:nth-child(5),
+        .table tbody td:nth-child(5) {
+            text-align: left;
+        }
+
+        .table thead th:nth-child(9),
+        .table tbody td:nth-child(9),
+        .table thead th:nth-child(10),
+        .table tbody td:nth-child(10),
+        .table thead th:nth-child(8),
+        .table tbody td:nth-child(8),
+        .table thead th:nth-child(7),
+        .table tbody td:nth-child(7),
+        .table thead th:nth-child(1),
+        .table tbody td:nth-child(1),
+        .table thead th:nth-child(6),
+        .table tbody td:nth-child(6) {
+            text-align: center;
+
+        }
+    </style>
+
+    <script>
+        // sub navvv
+        function showSection(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll(
+                ".addproject, .adduser, .Sub_contract, .Others"
+            );
+            sections.forEach(function (section) {
+                section.style.display = "none";
+            });
+
+            // Show the selected section
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = "block";
+            }
+        }
+
+        function toggleContainer(containerId) {
+            // You can add custom logic here if needed
+            console.log("Toggling container: " + containerId);
+        }
+
+        window.onload = function () {
+            // Check visibility value from server-side
+            var show = "{{ show }}"; // The value of 'show' from the backend
+            if (show === "new_prj_req1") {
+                showSection("adduser");
+                document.getElementById("adduserRadio").checked = true;
+
+            } else if (show === "new_prj_req") {
+                showSection("addproject");
+                upResourcedateSum();
+                upMaterialdateSum();
+                upSubContractdateSum();
+                upsitedateSum();
+                upOthersdateSum();
+                document.getElementById("addprojectRadio").checked = true;
+            } else if (show === "gen_pr") {
+                showSection("Sub_contract");
+                document.getElementById("subContractRadio").checked = true;
+            } else if (show === "Mat_Receipt") {
+                showSection("Others");
+                document.getElementById("othersRadio").checked = true;
+            }
+        };
+
+    </script>
+
+    <script>
+        // Function to format a date string as 'day/month/year' with digits only
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Return an empty string for invalid dates
+                return '';
+            }
+
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}/${month}/${year}`;
+        }
+
+        // Call the formatDate function for each date element when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            const start_time_elements = document.querySelectorAll(".start-time");
+
+
+            start_time_elements.forEach(function (element) {
+                element.textContent = formatDate(element.textContent);
+            });
+
+
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.delete-btn').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const projectId = this.getAttribute('data-id');
+                const confirmDelete = confirm('Are you sure you want to delete this Project Permanently?');
+                if (confirmDelete) {
+                    fetch(`/delete_project_request/${projectId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ project_id: projectId })  // Send project ID in the body
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the row from the table on successful deletion
+                                const row = button.closest('tr');
+                                row.remove();
+                            } else {
+                                alert('Error deleting project!');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Something went wrong!');
+                        });
+                }
+            });
+        });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Attach a change event listener to the project ID select
+            $('#projectid').change(function () {
+                var projectId = $(this).val();
+
+                // Make an AJAX request to the server to fetch client, project name, and PO value
+                $.ajax({
+                    url: '/get_enquiry_details',  // Flask route to handle the request
+                    method: 'POST',
+                    data: { project_id: projectId },
+                    success: function (response) {
+                        // Convert PO value to integer format if it is a string
+                        let poValue = response.po_value;
+
+                        if (typeof poValue === 'string') {
+                            // Remove commas and dots, then parse as an integer
+                            poValue = parseInt(poValue.replace(/,/g, '').split('.')[0]);
+                        }
+
+                        // Update the client, project name, and PO value fields in the form
+                        $('#client').val(response.client);
+                        $('#projectname').val(response.projectName);
+                        $('#po_value').val(poValue);
+                        $('#po_value_in').text('$' + poValue.toLocaleString('en-GB'));  // Add $ and format the number
+
+                        $('#billing_address1').val(response.bcompany_name);
+                        $('#billing_address2').val(response.billing_address1);
+                        $('#billing_address3').val(response.billing_address2);
+
+                        $('#delivery_address1').val(response.dcompany_name);
+                        $('#delivery_address2').val(response.delivery_address1);
+                        $('#delivery_address3').val(response.delivery_address2);
+
+
+
+                    },
+                    error: function (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

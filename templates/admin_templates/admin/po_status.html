@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin" class="active">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+        </div>
+
+        <script>
+            window.addEventListener("load", function () {
+                document.getElementById("pageLoader").style.display = "none";
+            });
+        </script>
+
+        <style>
+            #pageLoader {
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: white;
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .loader {
+                border: 8px solid #f3f3f3;
+                /* Light grey */
+                border-top: 8px solid #3498db;
+                /* Blue */
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                                <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                            </a>
+
+                            <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                                <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                            style="margin-right: 5px;"></i>
+                                        Add</a></li>
+                                <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                                        Cash FLow</a></li>
+
+                                <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                            style="margin-right: 5px;"></i>
+                                        Budget</a></li>
+                                <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                            style="margin-right: 5px;"></i>
+                                        Hours</a></li>
+                                <li><a href="{{ url_for('po_status') }}" class="active"><i class="fas fa-file-invoice"
+                                            style="margin-right: 5px;"></i>
+                                        PO
+                                        Status</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                                Add</a>
+                        </li>
+                        <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                                Employees</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                                <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                            </a>
+                            <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                                <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                            style="margin-right: 0px;"></i>
+                                        Claims</a></li>
+                                <li><a href="{{ url_for('admin_expenses') }}"><i class="fas fa-receipt"
+                                            style="margin-right: 5px;"></i>
+                                        Expenses</a></li>
+                                <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Leaves</a>
+                                </li>
+                                <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                            style="margin-right: 1px;"></i>
+                                        Payment</a></li>
+                                <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                            style="margin-right: 5px;"></i> Projects</a>
+                                </li>
+                                <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                            style="margin-right: 0px;"></i> PR</a></li>
+                                <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                            style="margin-right: 5px;"></i>
+                                        PO</a></li>
+                            </ul>
+
+                        </li>
+
+                        <li><a href="{{ url_for('client_details') }}" class="link"><i
+                                    class="fa-solid fa-handshake-simple"></i>
+                                Clients</a></li>
+                        <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                                    style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+                    </ul>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu1");
+                            let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("dropdownMenu");
+                            let dropdownTrigger = document.querySelector(".dropbtn");
+
+                            // Ensure dropdown is initially hidden
+                            dropdown.style.display = "none";
+
+                            function toggleDropdown(event) {
+                                event.preventDefault();
+                                event.stopPropagation(); // Prevent event bubbling
+                                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                            }
+
+                            function closeDropdown(event) {
+                                if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                                    dropdown.style.display = "none";
+                                }
+                            }
+
+                            // Toggle dropdown when clicking on "Approvals"
+                            dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                            // Close dropdown when clicking outside
+                            document.addEventListener("click", closeDropdown);
+
+                            // Prevent closing when clicking inside the dropdown itself
+                            dropdown.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+
+                    </script>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+                <h3 style="color: #004274;">PO's (<span id="poCount">0</span>) </h3>
+                <input type="text" id="searchInput" placeholder="Search....." onkeyup="filterTable()">
+            </div>
+
+            <div class="table-responsive" style="background-color: white;">
+                <table class="table" width="100%" id="projectTable">
+                    <thead>
+                        <tr>
+                            <th>Proj</th>
+                            <th>Supplier</th>
+                            <th>PO NO</th>
+                            <th style="text-align: right;">Amount ($) </th>
+                            <th style="text-align: right;">GST ($) </th>
+                            <th style="text-align: right;">Total ($) </th>
+                            <th style="text-align: right;">Paid Amt ($) </th>
+                            <th style="text-align: right;">Balance ($) </th>
+                            <th style="text-align: center;">Delivery</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white;">
+                        {% for row in po_list %}
+                        <tr>
+                            <td class="col-proj">{{ row.prj_id }}</td>
+                            <td class="col-supplier">{{ row.Supplier_Name }}</td>
+                            <td class="col-po-no">{{ row.PO_NO }}</td>
+                            <td class="col-item-value" style="text-align: right;">{{ "{:,.2f}".format(row.Item_Value) }}
+                            </td>
+                            <td class="col-gst-value" style="text-align: right;">{{ "{:,.2f}".format(row.GST_Value) }}
+                            </td>
+                            <td class="col-total-po-value" style="text-align: right;">{{
+                                "{:,.2f}".format(row.total_po_value) }}</td>
+
+                            <td class="col-paid-amount" style="text-align: right;">{{ "{:,.2f}".format(row.paid_amount)
+                                }}
+                            </td>
+                            <td class="col-balance-amount" style="text-align: right;">{{
+                                "{:,.2f}".format( (row.total_po_value) - (row.paid_amount) ) }}</td>
+                            <td class="col-delivery text-center" style="font-weight: 550; text-align: center;">
+                                <span style="cursor: pointer;
+                        color:
+                            {% if row.do_staus == 'Open' %}brown;
+                            {% elif row.do_staus == 'Partial' %}blue;
+                            {% elif row.do_staus == 'Closed' %}green;
+                            {% elif row.do_staus == 'None' %}red;
+                            {% endif %};
+                        background-color:
+                            {% if row.do_staus == 'Open' %}#f2e1d7;
+                            {% elif row.do_staus == 'Partial' %}#a4acee;
+                            {% elif row.do_staus == 'Closed' %}#d0f8e3;
+                            {% elif row.do_staus == 'None' %}#f8d7da;
+                            {% endif %};
+                        padding: 2px 8px;
+                        border-radius: 7px;
+                        display: inline-block;
+                        min-width: 65px;
+                        text-align: center;"> {{ row.do_staus }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr style="
+                                    background-color: #59a7e2;
+                                    color: #ffffff;
+                                    font-weight: bold;
+                                    font-size: .9em;
+                                    border-top: 3px solid #005a91;
+                                    box-shadow: 0 -3px 8px rgba(173, 166, 166, 0.2);
+                                ">
+                            <td colspan="2" style="text-align:left;"></td>
+                            <td style="text-align:left;">Totals:</td>
+                            <td id="total_amount" style="text-align: right;">0</td>
+                            <td id="total_gst" style="text-align: right;">0</td>
+                            <td id="total_total" style="text-align: right;">0</td>
+                            <td id="total_paidamt" style="text-align: right;">0</td>
+                            <td id="total_balance" style="text-align: right;">0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    // Run initial calculations on page load
+                    updateTotalsAndCount();
+                });
+
+                function filterTable() {
+                    const input = document.getElementById("searchInput");
+                    const filter = input.value.toUpperCase();
+                    const table = document.getElementById("projectTable");
+                    const tbody = table.getElementsByTagName("tbody")[0];
+                    const tr = tbody.getElementsByTagName("tr");
+                    let visibleRowCount = 0;
+
+                    for (let i = 0; i < tr.length; i++) {
+                        // Get cells using their class names
+                        const td_proj = tr[i].querySelector(".col-proj");
+                        const td_supplier = tr[i].querySelector(".col-supplier");
+                        const td_po_no = tr[i].querySelector(".col-po-no");
+                        const td_delivery = tr[i].querySelector(".col-delivery");
+
+                        // Ensure all target elements exist before accessing their textContent
+                        const projText = td_proj ? td_proj.textContent.toUpperCase() : '';
+                        const supplierText = td_supplier ? td_supplier.textContent.toUpperCase() : '';
+                        const poNoText = td_po_no ? td_po_no.textContent.toUpperCase() : '';
+                        const deliveryText = td_delivery ? td_delivery.textContent.toUpperCase() : '';
+
+                        if (projText.indexOf(filter) > -1 ||
+                            supplierText.indexOf(filter) > -1 ||
+                            poNoText.indexOf(filter) > -1 ||
+                            deliveryText.indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                            visibleRowCount++;
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                    document.getElementById("poCount").textContent = visibleRowCount;
+                    updateTotals(); // Recalculate totals for visible rows after filtering
+                }
+
+                function updateTotalsAndCount() {
+                    const table = document.getElementById("projectTable");
+                    const tbody = table.getElementsByTagName("tbody")[0];
+                    const tr = tbody.getElementsByTagName("tr");
+
+                    let totalItemValue = 0;
+                    let totalGST = 0;
+                    let totalTotalPOValue = 0;
+                    // You previously had 'total_req_amount' in your footer but not a corresponding data cell in tbody.
+                    // If 'Req Amt ($)' is not present in your <tbody>, then total_req_amount will always be 0.
+                    // I'll keep it in the totals for now, assuming you might add the class later.
+                    let totalRequestedAmount = 0;
+                    let totalPaidAmount = 0;
+                    let totalBalance = 0;
+                    let poCount = 0;
+
+                    for (let i = 0; i < tr.length; i++) {
+                        // Only sum if the row is visible (not hidden by filter)
+                        if (tr[i].style.display !== "none") {
+                            poCount++;
+                            // Get cells by class name within the current row
+                            const itemValueCell = tr[i].querySelector(".col-item-value");
+                            const gstValueCell = tr[i].querySelector(".col-gst-value");
+                            const totalPoValueCell = tr[i].querySelector(".col-total-po-value");
+                            // If 'Req Amt ($)' is in your <thead>, make sure you have a corresponding <td> with a class like 'col-requested-amount'
+                            // For now, I'll assume if it's not found, it's 0.
+                            const paidAmountCell = tr[i].querySelector(".col-paid-amount");
+                            const balanceAmountCell = tr[i].querySelector(".col-balance-amount");
+
+                            // Get values from cells, parse them, and add to totals
+                            // Use parseFloat and handle potential non-numeric values gracefully
+                            totalItemValue += parseFloat(itemValueCell ? itemValueCell.textContent.replace(/,/g, '') : 0) || 0;
+                            totalGST += parseFloat(gstValueCell ? gstValueCell.textContent.replace(/,/g, '') : 0) || 0;
+                            totalTotalPOValue += parseFloat(totalPoValueCell ? totalPoValueCell.textContent.replace(/,/g, '') : 0) || 0;
+                            totalPaidAmount += parseFloat(paidAmountCell ? paidAmountCell.textContent.replace(/,/g, '') : 0) || 0;
+                            totalBalance += parseFloat(balanceAmountCell ? balanceAmountCell.textContent.replace(/,/g, '') : 0) || 0;
+                        }
+                    }
+
+                    // Update the PO count
+                    document.getElementById("poCount").textContent = poCount;
+
+                    // Update the totals in the table footer
+                    document.getElementById("total_amount").textContent = totalItemValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    document.getElementById("total_gst").textContent = totalGST.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    document.getElementById("total_total").textContent = totalTotalPOValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    document.getElementById("total_paidamt").textContent = totalPaidAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    document.getElementById("total_balance").textContent = totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                // Assign updateTotalsAndCount to a simpler name for calls within filterTable
+                const updateTotals = updateTotalsAndCount;
+
+            </script>
+
+
+        </div>
+
+    </div>
+
+</body>
+
+<style>
+    .search_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+    }
+
+
+    #projectTable {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+    }
+
+
+    #searchInput {
+        width: 20%;
+        padding: 2px;
+        margin: auto;
+        display: block;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        /* Rounded corners */
+        outline: none;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    #searchInput:hover {
+        background-color: #f0f0f0;
+    }
+
+    #searchInput:focus {
+        border-color: #004b5d;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+</style>
+
+<style>
+    tfoot {
+        position: sticky;
+        bottom: 0;
+        background-image: linear-gradient(to right, #d8e5f1, #d0e3f7);
+        color: #333;
+        z-index: 1;
+    }
+</style>
+
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Centroid Engineering Solutions</title>
+  <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+  <link rel="stylesheet" href="../static/res_style.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <input type="checkbox" id="menu-toggle">
+
+  <div class="sidebar">
+
+    <div class="side-header">
+      <h3>C<span>entroid</span></h3>
+
+    </div>
+
+    <div class="side-content">
+
+      <div class="profile">
+        <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+        <h4>{{user['name']}}</h4>
+        <small>{{department_code}}</small>
+      </div>
+
+      <div class="side-menu">
+        <ul>
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/admin">
+              <span class="fa-solid fa-user-tie"></span>
+              <small>Admin</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['Accounts'] == 'On' %}
+          <li>
+            <a href="/accounts">
+              <span class="fa-solid fa-file-invoice-dollar"></span>
+              <small>Accounts</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleEnquiry'] == 'On' %}
+          <li>
+            <a href="/admin_enquiry">
+              <span class="fa-solid fa-handshake"></span>
+              <small>Leads</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleHR'] == 'On' %}
+          <li>
+            <a href="/hr" class="active">
+              <span class="fa-solid fa-user-plus"></span>
+              <small>HR</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePlanner'] == 'On' %}
+          <li>
+            <a href="/planner">
+              <span class="fa-solid fa-calendar-check"></span>
+              <small>Planner</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProfile'] == 'On' %}
+          <li>
+            <a href="/profile">
+              <span class="fa-solid fa-user"></span>
+              <small>Profile</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['toggleProjects'] == 'On' %}
+          <li>
+            <a href="/projects">
+              <span class="fa-solid fa-chart-simple"></span>
+              <small>Project</small>
+            </a>
+          </li>
+          {% endif %}
+          {% if user_access['togglePurchase'] == 'On' %}
+          <li>
+            <a href="/purchase">
+              <span class="fa-solid fa-cart-shopping"></span>
+              <small>Purchase</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user_access['toggleResources'] == 'On' %}
+          <li>
+            <a href="/resources">
+              <span class="fa-solid fa-recycle"></span>
+              <small>Resources</small>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if department_code == 1000 %}
+          <li>
+            <a href="/settings">
+              <span class="fa-solid fa-gears"></span>
+              <small>Settings</small>
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ url_for('logout') }}">
+              <span class="fa-solid fa-right-from-bracket"></span>
+              <small>Log Out</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-content" style="background-color: white;">
+
+      <div class="page-header" style="background-color: white;">
+
+        <nav class="navbar1">
+
+          <ul id="menuList1" class="navitems1">
+
+            {% if user_access['toggleADD'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hr_add') }}" class="link">
+                <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> Add
+              </a>
+            </li>
+            {% endif %}
+
+            {% if user_access['toggleLeaveStats'] == 'On' %}
+            <li>
+              <a href="{{ url_for('leave_approvals') }}" class="link">
+                <i class="fas fa-house-user" style="margin-right: 5px;"></i> Leaves
+              </a>
+            </li>
+            {% endif %}
+
+            <li>
+              <a href="{{ url_for('hr_trade') }}" class="link">
+                <i class="fa-sharp fa-solid fa-mountain-sun" style="margin-right: 5px;"></i>Trade
+              </a>
+            </li>
+
+            {% if user_access['toggleHRProfile'] == 'On' %}
+            <li>
+              <a href="{{ url_for('hr_employee_bio') }}" class="link">
+                <i class="fa-solid fa-users" style="margin-right: 5px;"></i> Profile
+              </a>
+            </li>
+            {% endif %}
+
+          </ul>
+
+          <div class="menu-icon">
+            <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+          </div>
+
+          <script>
+            let menuList1 = document.getElementById("menuList1");
+            menuList1.style.maxHeight = "0px";
+
+            function toggleMenu1() {
+              if (menuList1.style.maxHeight == "0px") {
+                menuList1.style.maxHeight = "300px";
+              } else {
+                menuList1.style.maxHeight = "0px";
+              }
+            }
+          </script>
+
+        </nav>
+
+        <div class="line"></div>
+
+      </div>
+
+      <div class="analytics">
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-projects">
+            <div class="card1-inner">
+              <p style="color: blue;">Total Employees</p>
+              <i class="fa-solid fa-chart-simple" style="color: blue; font-size: 34px;"></i>
+            </div>
+            <span style="color: black; font-weight: bold;">14</span>
+          </div>
+        </a>
+
+        <a href="/leave_approvals" style="text-decoration: none;">
+          <div class="card1 card1-enquiries">
+            <div class="card1-inner">
+              <p style="color: orange;">Leaves Awaiting</p>
+              <i class="fa-solid fa-question-circle" style="color: orange; font-size: 34px;"></i>
+            </div>
+            <span style="color: black; font-weight: bold;">{{pending_leaves_count}}</span>
+          </div>
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+
+          <div class="card1 card1-Claims">
+
+            <div class="card1-inner">
+              <p style="color: green;">Course Alerts</p>
+              <i class="fa-solid fa-users" style="color: green; font-size: 34px;"></i>
+            </div>
+
+            <span style="color: black; font-weight: bold;">None </span>
+          </div>
+
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-option">
+
+            <div class="card1-inner">
+              <p style="color: red;">Asset Management</p>
+              <i class="fas fa-house-user" style="color: red; font-size: 34px;"></i>
+            </div>
+
+            <span style="color: black; font-weight: bold;">$</span>
+
+          </div>
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-projects1">
+            <div class="card1-inner">
+              <p style="color: brown;">Staff Portal</p>
+              <i class="fas fa-hand-holding-usd" style="color: brown; font-size: 34px;"></i>
+            </div>
+            <span style="color: black; font-weight: bold;">@</span>
+          </div>
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-enquiries1">
+            <div class="card1-inner">
+              <p style="color: palevioletred;">Identity Details</p>
+              <i class="fas fa-file-invoice-dollar" style="color: palevioletred; font-size: 34px;"></i>
+            </div>
+            <span style="color: black; font-weight: bold;">#</span>
+          </div>
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-Claims1">
+            <div class="card1-inner">
+              <p style="color: gray;">Option</p>
+              <i class="fas fa-cart-plus" style="color: gray; font-size: 34px;"></i>
+            </div>
+            <span style="color: black; font-weight: bold;">&</span>
+          </div>
+        </a>
+
+        <a href="#" style="text-decoration: none;">
+          <div class="card1 card1-option1">
+            <div class="card1-inner">
+              <p style="color: burlywood;">Option</p>
+              <i class="fas fa-file-alt" style="color: burlywood; font-size: 34px;"></i> <!-- Documents icon -->
+            </div>
+            <span style="color: black; font-weight: bold;">%</span>
+          </div>
+        </a>
+
+      </div>
+
+      <style>
+        /* wild cards */
+        .main-cards {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          gap: 20px;
+          margin: 10px 0;
+        }
+
+        .card1 {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          padding: 25px;
+          background-color: #ffffff;
+          box-sizing: border-box;
+          border: 1px solid #d2d2d3;
+          border-radius: 5px;
+          box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        .card1-projects {
+          border-left: 7px solid #246dec;
+        }
+
+        .card1-enquiries {
+          border-left: 7px solid #f5b74f;
+        }
+
+        .card1-Claims {
+          border-left: 7px solid #367952;
+        }
+
+        .card1-option {
+          border-left: 7px solid #cc3c43;
+        }
+
+        .card1>span {
+          font-size: 20px;
+          font-weight: 600;
+        }
+
+        .card1-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .card1-inner>p {
+          font-size: 18px;
+        }
+
+        .card1-inner>span {
+          font-size: 35px;
+        }
+
+        .charts {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+
+        .charts-card {
+          background-color: #ffffff;
+          margin-bottom: 20px;
+          padding: 25px;
+          box-sizing: border-box;
+          -webkit-column-break-inside: avoid;
+          border: 1px solid #d2d2d3;
+          border-radius: 5px;
+          box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-title {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22px;
+          font-weight: 600;
+        }
+      </style>
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+
+
+
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

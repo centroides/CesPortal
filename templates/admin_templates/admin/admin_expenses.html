@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+   <title>Centroid Engineering Solutions</title>
+   <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+   <link rel="stylesheet" href="../static/res_style.css">
+   <link rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+   <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+   <input type="checkbox" id="menu-toggle">
+
+   <div class="sidebar">
+
+      <div class="side-header">
+         <h3>C<span>entroid</span></h3>
+      </div>
+
+      <div class="side-content">
+
+         <div class="profile">
+            <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+            <h4>{{user['name']}}</h4>
+            <small>{{department_code}}</small>
+         </div>
+
+         <div class="side-menu">
+            <ul>
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/admin" class="active">
+                     <span class="fa-solid fa-user-tie"></span>
+                     <small>Admin</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['Accounts'] == 'On' %}
+               <li>
+                  <a href="/accounts">
+                     <span class="fa-solid fa-file-invoice-dollar"></span>
+                     <small>Accounts</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleEnquiry'] == 'On' %}
+               <li>
+                  <a href="/admin_enquiry">
+                     <span class="fa-solid fa-handshake"></span>
+                     <small>Leads</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleHR'] == 'On' %}
+               <li>
+                  <a href="/hr">
+                     <span class="fa-solid fa-user-plus"></span>
+                     <small>HR</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePlanner'] == 'On' %}
+               <li>
+                  <a href="/planner">
+                     <span class="fa-solid fa-calendar-check"></span>
+                     <small>Planner</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProfile'] == 'On' %}
+               <li>
+                  <a href="/profile">
+                     <span class="fa-solid fa-user"></span>
+                     <small>Profile</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['toggleProjects'] == 'On' %}
+               <li>
+                  <a href="/projects">
+                     <span class="fa-solid fa-chart-simple"></span>
+                     <small>Project</small>
+                  </a>
+               </li>
+               {% endif %}
+               {% if user_access['togglePurchase'] == 'On' %}
+               <li>
+                  <a href="/purchase">
+                     <span class="fa-solid fa-cart-shopping"></span>
+                     <small>Purchase</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if user_access['toggleResources'] == 'On' %}
+               <li>
+                  <a href="/resources">
+                     <span class="fa-solid fa-recycle"></span>
+                     <small>Resources</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               {% if department_code == 1000 %}
+               <li>
+                  <a href="/settings">
+                     <span class="fa-solid fa-gears"></span>
+                     <small>Settings</small>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li>
+                  <a href="{{ url_for('logout') }}">
+                     <span class="fa-solid fa-right-from-bracket"></span>
+                     <small>Log Out</small>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
+
+      </div>
+
+   </div>
+
+   <div class="main-content">
+
+      <div class="page-content" style="background-color: white;">
+
+         <div class="page-header" style="background-color: white;">
+
+            <nav class="navbar1">
+
+               <ul id="menuList1" class="navitems1">
+
+                  <li class="dropdown">
+
+                     <a href="#" class="dropbtn1 " onclick="toggleDropdown1(event)" class="link">
+                        <i class="fas fa-eye" style="margin-right: 5px;"></i> Overview
+                     </a>
+
+                     <ul class="dropdown-content" id="dropdownMenu1" style="display: none;">
+                        <li><a href="{{ url_for('ac_add') }}"><i class="fas fa-plus-circle"
+                                 style="margin-right: 5px;"></i>
+                              Add</a></li>
+                        <li><a href="#"><i class="fas fa-coins" style="margin-right: 5px;"></i>
+                              Cash FLow</a></li>
+
+                        <li><a href="{{ url_for('proj_budget') }}"><i class="fas fa-file-invoice-dollar"
+                                 style="margin-right: 5px;"></i>
+                              Budget</a></li>
+                        <li><a href="{{ url_for('proj_status') }}"><i class="fas fa-tasks"
+                                 style="margin-right: 5px;"></i>
+                              Hours</a></li>
+                        <li><a href="{{ url_for('po_status') }}"><i class="fas fa-file-invoice"
+                                 style="margin-right: 5px;"></i>
+                              PO
+                              Status</a></li>
+                     </ul>
+
+                  </li>
+
+                  <li><a href="{{ url_for('admin_add_project') }}" class="link"><i class="fas fa-plus-circle"></i>
+                        Add</a>
+                  </li>
+                  <li><a href="{{ url_for('employees_view') }}" class="link"><i class="fa-solid fa-users"></i>
+                        Employees</a></li>
+
+                  <li class="dropdown">
+                     <a href="#" class="dropbtn" onclick="toggleDropdown(event)" class="link">
+                        <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i> Approvals
+                     </a>
+                     <ul class="dropdown-content" id="dropdownMenu" style="display: none;">
+                        <li><a href="{{ url_for('admin_claims') }}"><i class="fas fa-hand-holding-dollar"
+                                 style="margin-right: 0px;"></i>
+                              Claims</a></li>
+                        <li><a href="{{ url_for('admin_expenses') }}" class="active"><i class="fas fa-receipt"
+                                 style="margin-right: 5px;"></i>
+                              Expenses</a></li>
+                        <li><a href="{{ url_for('leave_approvals') }}"><i class="fas fa-calendar-check"
+                                 style="margin-right: 5px;"></i> Leaves</a>
+                        </li>
+                        <li><a href="{{ url_for('pay_req') }}"><i class="fas fa-money-check-alt"
+                                 style="margin-right: 1px;"></i>
+                              Payment</a></li>
+                        <li><a href="{{ url_for('create_prj') }}"><i class="fas fa-calendar-check"
+                                 style="margin-right: 5px;"></i> Projects</a>
+                        </li>
+                        <li><a href="{{ url_for('pur_purchase') }}"><i class="fas fa-file-signature"
+                                 style="margin-right: 0px;"></i> PR</a></li>
+                        <li><a href="{{ url_for('pur_po') }}"><i class="fas fa-file-contract"
+                                 style="margin-right: 5px;"></i>
+                              PO</a></li>
+                     </ul>
+
+                  </li>
+
+                  <li><a href="{{ url_for('client_details') }}" class="link"><i
+                           class="fa-solid fa-handshake-simple"></i>
+                        Clients</a></li>
+                  <li><a href="{{ url_for('vendor') }}" class="link"><i class="fa-sharp fa-solid fa-store"
+                           style="margin-right: 5px;"></i>Suppliers</a></li>
+
+
+
+
+               </ul>
+
+               <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                     let dropdown = document.getElementById("dropdownMenu1");
+                     let dropdownTrigger = document.querySelector(".dropbtn1");
+
+                     // Ensure dropdown is initially hidden
+                     dropdown.style.display = "none";
+
+                     function toggleDropdown(event) {
+                        event.preventDefault();
+                        event.stopPropagation(); // Prevent event bubbling
+                        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                     }
+
+                     function closeDropdown(event) {
+                        if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                           dropdown.style.display = "none";
+                        }
+                     }
+
+                     // Toggle dropdown when clicking on "Approvals"
+                     dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                     // Close dropdown when clicking outside
+                     document.addEventListener("click", closeDropdown);
+
+                     // Prevent closing when clicking inside the dropdown itself
+                     dropdown.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                     });
+                  });
+                  document.addEventListener("DOMContentLoaded", function () {
+                     let dropdown = document.getElementById("dropdownMenu");
+                     let dropdownTrigger = document.querySelector(".dropbtn");
+
+                     // Ensure dropdown is initially hidden
+                     dropdown.style.display = "none";
+
+                     function toggleDropdown(event) {
+                        event.preventDefault();
+                        event.stopPropagation(); // Prevent event bubbling
+                        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+                     }
+
+                     function closeDropdown(event) {
+                        if (!dropdown.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                           dropdown.style.display = "none";
+                        }
+                     }
+
+                     // Toggle dropdown when clicking on "Approvals"
+                     dropdownTrigger.addEventListener("click", toggleDropdown);
+
+                     // Close dropdown when clicking outside
+                     document.addEventListener("click", closeDropdown);
+
+                     // Prevent closing when clicking inside the dropdown itself
+                     dropdown.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                     });
+                  });
+
+               </script>
+
+               <div class="menu-icon">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+               </div>
+
+               <script>
+                  let menuList1 = document.getElementById("menuList1");
+                  menuList1.style.maxHeight = "0px";
+
+                  function toggleMenu1() {
+                     if (menuList1.style.maxHeight == "0px") {
+                        menuList1.style.maxHeight = "300px";
+                     } else {
+                        menuList1.style.maxHeight = "0px";
+                     }
+                  }
+               </script>
+
+            </nav>
+
+            <div class="line"></div>
+
+         </div>
+
+         <div class="search_container">
+
+            <div class="timenav">
+               <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+               <ul id="menuList1" class="timebar">
+
+                  <li>
+                     <input type="radio" id="addprojectRadio" name="sectionRadio"
+                        onclick="showSection('addproject'); toggleContainer('addproject')" style="display: none;">
+                     <label for="addprojectRadio" class="link1"><i class="fa-sharp fa-solid fa-sack-dollar"
+                           style="margin-right: 5px;"></i>Approve Expenses</label>
+                  </li>
+
+                  <li>
+                     <input type="radio" id="adduserRadio" name="sectionRadio"
+                        onclick="showSection('adduser'); toggleContainer('adduser')" style="display: none;">
+                     <label for="adduserRadio" class="link1"> <i class="fa-solid fa-magnifying-glass-dollar"
+                           style="margin-right: 5px;"> </i>View Expenses</label>
+                  </li>
+
+               </ul>
+
+               <div class="menu-icon1">
+                  <i class="fa-solid fa-bars" onclick="toggleMenu1()"></i>
+               </div>
+            </div>
+
+         </div>
+
+         <style>
+            .search_container {
+
+               width: 100%;
+               padding: 10px;
+            }
+
+
+            #projectTable {
+               width: 100%;
+               border-collapse: separate;
+               border-spacing: 0;
+               border-radius: 10px;
+            }
+         </style>
+
+         <div class="addproject" id="addproject" style="display: none;">
+
+            <div class="records table-responsive">
+
+               <div class="container" id="editContainer" style="display: none;">
+
+                  <div class="container_hours">
+
+                     <form class="p-3" action="/admin_expenses" method="POST" enctype="multipart/form-data"
+                        id="projectPoForm">
+
+                        <div class="form-group col-md-2" style="display: none;">
+                           <label for="claim_no" class="form-label">claim_no<span style="color: red;">*</span></label>
+                           <input type="text" class="form-control" id="claim_no" name="claim_no" value="{{claim_no}}"
+                              style="background-color: rgb(235, 223, 209);" readonly>
+                        </div>
+
+                        <div class="flex-row">
+                           <div class="flex-item">
+                              <label for="claim_by" class="form-label">Claim By <span
+                                    style="color: red;">*</span></label>
+                              <input type="text" class="form-control" id="claim_by" name="claim_by"
+                                 style="background-color: rgb(235, 223, 209);" readonly>
+                           </div>
+                           <div class="flex-item">
+                              <label for="claim_id" class="form-label">Claim Id <span
+                                    style="color: red;">*</span></label>
+                              <input type="text" class="form-control" id="claim_id" name="claim_id"
+                                 style="background-color: rgb(235, 223, 209);" readonly>
+                           </div>
+                        </div>
+
+                        <div class="flex-row">
+                           <div class="flex-item">
+                              <label for="claim_date" class="form-label">Claim Date <span
+                                    style="color: red;">*</span></label>
+                              <input type="text" class="form-control" id="claim_date" name="claim_date"
+                                 style="background-color: rgb(235, 223, 209);" readonly>
+                           </div>
+                           <div class="flex-item">
+                              <label for="claim_Total" class="form-label">Total Amount</label>
+                              <input type="text" class="form-control" id="claim_Total" name="claim_Total">
+                           </div>
+                        </div>
+
+                        <div class="flex-row">
+                           <div class="flex-item">
+                              <label for="mode" class="form-label">Mode</label>
+                              <select class="form-control" id="mode" name="mode">
+                                 <option value="" disabled selected hidden>Select</option>
+                                 <option value="TT">TT</option>
+                                 <option value="Cheque">Cheque</option>
+                                 <option value="Cash">Cash</option>
+                              </select>
+                           </div>
+                           <div class="flex-item">
+                              <label for="status" class="form-label">Status</label>
+                              <select class="form-control" id="status" name="status">
+                                 <option value="" disabled selected hidden>Select</option>
+                                 <option value="Rework">Rework</option>
+                                 <option value="Approved">Approved</option>
+                              </select>
+                           </div>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Reference_Code" class="form-label">Reference Code</label>
+                           <input type="text" class="form-control" id="Reference_Code" name="Reference_Code">
+                        </div>
+
+                        <div class="flex-row">
+                           <div class="flex-item">
+                              <label for="Approvedby" class="form-label">Claim Approved By <span
+                                    style="color: red;">*</span></label>
+                              <input type="text" class="form-control" id="Approvedby" name="Approvedby"
+                                 value="{{ user['name'] }}" required>
+                           </div>
+                           <div class="flex-item">
+                              <label for="Approved_date" class="form-label">Claim Approved Date <span
+                                    style="color: red;">*</span></label>
+                              <input type="date" class="form-control" id="Approved_date" name="Approved_date" required>
+                           </div>
+                        </div>
+
+                        <div class="flex-item">
+                           <label for="Comments" class="form-label">Comments</label>
+                           <textarea class="form-control" id="Comments" name="Comments"
+                              style="height: 100px; resize: vertical; border-width: 2px; border-color: #333;"></textarea>
+                        </div>
+
+                        <div class="flex-row">
+
+                           <div class="flex-item">
+                              <label for="reject_radio" style="margin-right: 7px;">Rework</label>
+                              <input type="radio" id="Edit_status" name="Edit_status" value="Yes">
+                           </div>
+
+                           <div class="flex-item">
+                              <button type="submit" name="action" class="custom-btn btn-2"
+                                 value="update_claim">Update</button>
+                           </div>
+
+                           <div class="flex-item">
+                              <button type="submit" name="action" class="custom-btn btn-2"
+                                 value="approve_claim">Approve</button>
+                           </div>
+
+                        </div>
+
+                     </form>
+
+                  </div>
+
+                  <div class="double-container">
+                     <table class="content-table">
+                        <thead>
+                           <tr>
+                              <th class="text-center" style="display: none;">ID</th>
+                              <th class="text-center" style="width: 2%;">Proj</th>
+                              <th class="text-center" style="width: 10%;">Category</th>
+                              <th class="text-center" style="width: 10%;">Sub-Category</th>
+                              <th class="text-center" style="width: 20%;">Sub-Sub-Category</th>
+                              <th class="text-center" style="width: 30%;">Item Name</th>
+                              <th class="text-center" style="width: 3%;">Amount</th>
+                              <th class="text-center" style="width: 3%; display: none;">Action</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <!-- Rows will be added here by JavaScript -->
+                        </tbody>
+                     </table>
+                  </div>
+
+                  <script>
+
+                     document.addEventListener('DOMContentLoaded', () => {
+                        const editLinks = document.querySelectorAll('.edit-link');
+                        const editContainer = document.getElementById('editContainer');
+
+                        editLinks.forEach(link => {
+                           link.addEventListener('click', function (event) {
+                              event.preventDefault(); // Prevent default link behavior
+
+                              const claimId = this.getAttribute('data-claim-id');
+
+                              // Fetch and populate data
+                              fetchClaimDetails(claimId);
+
+                              // Show the container
+                              editContainer.style.display = 'flex';
+
+                              // Scroll to the container (optional)
+                              editContainer.scrollIntoView({ behavior: 'smooth' });
+                           });
+                        });
+
+
+                        function fetchClaimDetails(claimId) {
+                           fetch(`/fetch_cexpenses_details_for_edit/${claimId}`)
+                              .then(response => {
+                                 if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                 }
+                                 return response.json();
+                              })
+                              .then(data => {
+
+                                 // Populate form fields with fetched data
+                                 document.getElementById('claim_no').value = claimId;
+                                 document.getElementById('claim_by').value = data.claim_details.claim_by;
+                                 document.getElementById('claim_id').value = data.claim_details.claim_id;
+                                 document.getElementById('claim_date').value = data.claim_details.claim_date;
+                                 document.getElementById('claim_Total').value = data.claim_details.claim_Total;
+                                 document.getElementById('status').value = data.claim_details.status;
+                                 document.getElementById('Reference_Code').value = data.claim_details.Reference_Code;
+
+                                 // Check if 'approved_by' is None and set the current user's name if it is
+                                 const approvedByElement = document.getElementById('Approvedby');
+                                 if (data.claim_details.approved_by === null || data.claim_details.approved_by === 'None') {
+                                    approvedByElement.value = user['name'];  // Assuming 'user' is a global variable containing the current user's information
+                                 } else {
+                                    approvedByElement.value = data.claim_details.approved_by;
+                                 }
+
+                                 // Check if 'approved_date' is None and set the current date if it is
+                                 document.getElementById('Approved_date').value = data.claim_details.approved_date;
+
+
+                                 document.getElementById('Comments').value = data.claim_details.comments;
+
+                                 // Populate items table
+                                 let itemsTableBody = document.querySelector('.content-table tbody');
+                                 if (data.claim_items.length > 0) {
+                                    let rows = data.claim_items.map(item => `
+                                 <tr>
+                                       <td style="display: none;">${item.id}</td>
+                                       <td class="text-center">${item.projectid}</td>
+                                       <td class="text-center">${item.Category}</td>
+                                       <td class="text-center">${item.Sub_Category}</td>
+                                       <td class="text-center">${item.Sub_Sub_Category}</td>
+                                       <td class="text-center">${item.itemname}</td>
+                                       <td class="text-center">${item.total}</td>
+                                       <td class="text-center" style = 'display:none;'>
+                                          <form action="/admin_claims" method="POST" style="display: inline;">
+                                             <input type="hidden" name="action" value="delete_item">
+                                             <input type="hidden" name="item_id" value="${item.id}">
+                                             <button type="submit" onclick="return confirm('Are you sure you want to delete this item permanently?');" style="border: none; background: none; cursor: pointer;">
+                                                   <span class="icon" style="margin-left: 20px;">
+                                                      <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                                   </span>
+                                             </button>
+                                          </form>
+                                       </td>
+
+                                 </tr>
+                              `).join('');
+                                    itemsTableBody.innerHTML = rows;
+                                 } else {
+                                    itemsTableBody.innerHTML = '<tr><td colspan="8" class="text-center">No items available</td></tr>';
+                                 }
+                              })
+                              .catch(error => {
+                                 console.error('Error fetching claim details:', error);
+                              });
+                        }
+
+                     });
+
+                  </script>
+
+               </div>
+
+            </div>
+
+
+
+            <form id="claimForm" method="POST" action="/admin_expenses">
+
+               <div class="table-responsive">
+
+                  <table class="table table-main" width="100%">
+
+                     <thead>
+                        <tr>
+                           <th class="text-center">Edit</th>
+                           <th class="text-center">Claim ID</th>
+                           <th class="text-center">Claim By</th>
+                           <th class="text-center" id="client-header">Claimed Date</th>
+                           <th class="text-center">Approved Date</th>
+                           <th class="text-center">Comments</th>
+                           <th class="text-center">Status</th>
+                           <th class="text-center">Total</th>
+                           <th class="text-center delete-col" style="width: 3%;">Delete</th>
+                           <th class="text-center" scope="col">
+                              <input type="checkbox" id="select-all-checkbox2">
+                           </th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+
+                        {% for claim in claims %}
+
+                        <tr>
+
+                           <td class="text-center">
+                              <a href="#" data-claim-id="{{ claim.claim_id }}" class="edit-link">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-edit" style="font-size: 1.25em;"></span>
+                                 </span>
+                              </a>
+                           </td>
+
+                           <td class="text-center">{{ claim.claim_id }}</td>
+                           <td class="text-center">{{ claim.claim_by }}</td>
+                           <td class="text-center start-time">{{ claim.claim_date }}</td>
+                           <td class="text-center start-time ">{{ claim.approved_date }}</td>
+                           <td class="text-center">{{ claim.comments }}</td>
+                           <td class="text-center">{{ claim.status }}</td>
+                           <td class="text-center claimReceived">$ {{ claim.claim_Total }}</td>
+
+                           <td class="text-center">
+                              {% if claim.status != 'Approved' %}
+                              <a href="{{ url_for('deleteexpenses', claimid=claim['id']) }}"
+                                 onclick="return confirm('Are you sure you want to delete this claim Permanently?');">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                 </span>
+                              </a>
+                              {% endif %}
+                           </td>
+
+                           <td class="text-center">
+                              {% if claim.status != 'Approved' %}
+                              <input type="checkbox" name="claimdata[]" value="{{ claim.claim_id }}">
+                              {% endif %}
+                           </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                     </tbody>
+
+                  </table>
+
+               </div>
+
+               <div style="display: flex; justify-content: end;">
+                  <button type="submit" name="Delete" class="custom-btn btn-2" id="addSaveButton"
+                     onclick="submitSelectedClaims()">Delete Expenses</button>
+               </div>
+
+            </form>
+
+
+
+         </div>
+
+         <div class="adduser" id="adduser" style="display: none;">
+
+            <div class="records table-responsive">
+
+               <div class="table-responsive">
+
+                  <table class="table table-main" width="100%">
+
+                     <thead>
+                        <tr>
+                           <!-- <th class="text-center" style="display: none;" scope="col">Edit</th> -->
+                           <th class="text-center" scope="col">View</th>
+                           <th class="text-center" scope="col">Expenses ID</th>
+                           <th class="text-center" scope="col">Expenses By</th>
+                           <th class="text-center" scope="col" id="client-header">Claimed Date</th>
+                           <th class="text-center" scope="col">Approved Date</th>
+                           <th class="text-center" scope="col">Comments</th>
+                           <th class="text-center" scope="col">Status</th>
+                           <th class="text-center" scope="col">Total</th>
+                           <th class="text-center" scope="col">Delete</th>
+                        </tr>
+                     </thead>
+
+                     <tbody>
+                        {% for claim in all_claims %}
+                        <tr>
+
+                           <!-- <td class="text-center" style="display: none;">
+                           <a href="#" data-claim-id="{{ claim.claim_id }}" class="edit-link">
+                              <span class="icon">
+                                 <span class="fa-solid fa-edit" style="font-size: 1.25em;"></span>
+                              </span>
+                           </a>
+                        </td> -->
+
+                           <td class="text-center">
+
+                              <a id="viewBtn{{ claim.claim_id }}" href="javascript:void(0);"
+                                 onclick="fetchClaimDetails('{{ claim.claim_id }}');" class="view-button">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-eye" style="font-size: 1.25em; color: orangered;"></span>
+                                 </span>
+                              </a>
+                           </td>
+
+                           <td class="text-center">{{ claim.claim_id }}</td>
+                           <td class="text-center">{{ claim.claim_by }}</td>
+                           <td class="text-center start-time">{{ claim.claim_date }}</td>
+                           <td class="text-center start-time">{{ claim.approved_date }}</td>
+                           <td class="text-center">{{ claim.comments }}</td>
+                           <td class="text-center">{{ claim.status }}</td>
+                           <td class="text-center claimReceived">$ {{ claim.claim_Total }}</td>
+                           <td class="text-center">
+                              {% if claim.status != 'Approved' %}
+                              <a href="{{ url_for('deleteexpenses', claimid=claim['id']) }}"
+                                 onclick="return confirm('Are you sure you want to delete this claim permanently?');">
+                                 <span class="icon">
+                                    <span class="fa-solid fa-trash" style="color: red; font-size: 1.6em;"></span>
+                                 </span>
+                              </a>
+                              {% endif %}
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+
+               </div>
+
+               <div id="myModal" class="modal" style="display:none;">
+                  <!-- Modal content -->
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h2>Expenses Details</h2>
+                     </div>
+                     <div class="modal-body" id="modal-body-content">
+
+                        <div class="table-responsive">
+
+                           <table class="table table-main" width="100%">
+
+                              <thead>
+
+                                 <tr>
+                                    <th class="text-center" scope="col">Proj</th>
+                                    <th class="text-center" scope="col">Expenses By</th>
+                                    <th class="text-center" scope="col">Purchase Type</th>
+                                    <th class="text-center" scope="col">Sub Category</th>
+                                    <th class="text-center" scope="col">Project Name</th>
+                                    <th class="text-center" scope="col">Vendor</th>
+                                    <th class="text-center" scope="col">Item </th>
+                                    <th class="text-center" scope="col">Amount</th>
+                                    <th class="text-center" scope="col">GST</th>
+                                    <th class="text-center" scope="col">Total</th>
+
+                                 </tr>
+
+                              </thead>
+
+                              <tbody>
+
+                                 {% if claim_items %}
+                                 {% for item in claim_items %}
+
+                                 <tr>
+                                    <td class="text-center">{{ item.projectid }}</td>
+                                    <td class="text-center">{{ item.claim_by }}</td>
+                                    <td class="text-center">{{ item.Sub_Category }}</td>
+                                    <td class="text-center">{{ item.additional_input }}</td>
+                                    <td class="text-center">{{ item.project_name }}</td>
+                                    <td class="text-center">{{ item.vendor }}</td>
+                                    <td class="text-center">{{ item.itemname }}</td>
+                                    <td class="text-center">{{ item.amount }}</td>
+                                    <td class="text-center">{{ item.gst }}</td>
+                                    <td class="text-center">{{ item.total }}</td>
+
+                                 </tr>
+
+                                 {% endfor %}
+
+                                 {% else %}
+                                 <tr>
+                                    <td colspan="10" class="text-center">No items available</td>
+                                 </tr>
+                                 {% endif %}
+
+                              </tbody>
+
+                           </table>
+
+                        </div>
+
+                     </div>
+                     <div class="modal-footer">
+                        <h3>Centroid Engineering Solutions</h3>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+            <script>
+               // Get the modal
+               var modal = document.getElementById("myModal");
+
+               // Get the close button
+               var span = document.getElementsByClassName("close")[0];
+
+               // Get all view buttons
+               var viewButtons = document.querySelectorAll(".view-button");
+
+               // Function to handle opening of the modal and fetching claim details
+               function openModalAndFetchDetails(btn) {
+                  var claimId = btn.getAttribute('id').replace('viewBtn', '');
+                  fetchClaimDetails(claimId);
+                  modal.style.display = "block";
+               }
+
+               // Add click event listeners to all view buttons
+               viewButtons.forEach(function (btn) {
+                  btn.onclick = function () {
+                     console.log('Button clicked'); // Debugging statement
+                     openModalAndFetchDetails(btn);
+                  };
+               });
+
+               // When the user clicks on <span> (x), close the modal
+               span.onclick = function () {
+                  modal.style.display = "none";
+               };
+
+               // When the user clicks anywhere outside of the modal, close it
+               window.onclick = function (event) {
+                  if (event.target == modal) {
+                     modal.style.display = "none";
+                  }
+               };
+            </script>
+
+            <!-- Styles -->
+            <style>
+               /* The Modal (background) */
+               .modal {
+                  display: none;
+                  position: fixed;
+                  z-index: 1;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  height: 100%;
+                  overflow: auto;
+                  background-color: rgba(0, 0, 0, 0.4);
+                  -webkit-animation-name: fadeIn;
+                  -webkit-animation-duration: 0.4s;
+                  animation-name: fadeIn;
+                  animation-duration: 0.4s;
+               }
+
+               /* Modal Content */
+               .modal-content {
+                  margin: 10% auto;
+                  padding: 20px;
+                  border: 1px solid #888;
+                  width: 80%;
+                  max-width: 75%;
+                  /* Adjust the max-width for responsiveness */
+                  background-color: #fefefe;
+                  -webkit-animation-name: slideIn;
+                  -webkit-animation-duration: 0.4s;
+                  animation-name: slideIn;
+                  animation-duration: 0.4s;
+                  max-height: 90%;
+                  /* Ensure it fits within the screen */
+                  overflow-y: auto;
+                  /* Add scroll if content exceeds the max height */
+               }
+
+               /* The Close Button */
+               .close {
+                  color: black;
+                  float: right;
+                  font-size: 28px;
+                  font-weight: bold;
+               }
+
+               .close:hover,
+               .close:focus {
+                  color: white;
+                  text-decoration: none;
+                  cursor: pointer;
+               }
+
+               .modal-header {
+                  padding: 10px 16px;
+                  background-color: #acc6aa;
+                  color: black;
+                  justify-content: center;
+                  text-align: center;
+               }
+
+               .modal-body {
+                  padding: 10px 16px;
+               }
+
+               .modal-footer {
+                  padding: 10px 16px;
+                  background-color: #acc6aa;
+                  color: black;
+                  justify-content: center;
+                  text-align: center;
+               }
+
+               /* Add Animation */
+               @-webkit-keyframes slideIn {
+                  from {
+                     bottom: -300px;
+                     opacity: 0;
+                  }
+
+                  to {
+                     bottom: 0;
+                     opacity: 1;
+                  }
+               }
+
+               @keyframes slideIn {
+                  from {
+                     bottom: -300px;
+                     opacity: 0;
+                  }
+
+                  to {
+                     bottom: 0;
+                     opacity: 1;
+                  }
+               }
+
+               @-webkit-keyframes fadeIn {
+                  from {
+                     opacity: 0;
+                  }
+
+                  to {
+                     opacity: 1;
+                  }
+               }
+
+               @keyframes fadeIn {
+                  from {
+                     opacity: 0;
+                  }
+
+                  to {
+                     opacity: 1;
+                  }
+               }
+            </style>
+
+            <script>
+
+               function fetchClaimDetails(claimId) {
+                  console.log('Fetching details for claim:', claimId); // Debugging statement
+
+                  fetch(`/fetch_expenses_details/${claimId}`)
+                     .then(response => {
+                        if (!response.ok) {
+                           throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                     })
+                     .then(data => {
+                        console.log('Data fetched:', data); // Debugging statement
+                        let modalBody = document.getElementById('modal-body-content');
+                        if (data.claim_items.length > 0) {
+                           let tableRows = data.claim_items.map(item => `
+                              <tr>
+                                    <td class="text-center">${item.projectid}</td>
+                                    <td class="text-center">${item.claim_by}</td>
+                                    <td class="text-center">${item.Sub_Category}</td>
+                                    <td class="text-center">${item.additional_input}</td>
+                                    <td class="text-center">${item.project_name}</td>
+                                    <td class="text-center">${item.vendor}</td>
+                                    <td class="text-center">${item.itemname}</td>
+                                    <td class="text-center">${item.amount}</td>
+                                    <td class="text-center">${item.gst}</td>
+                                    <td class="text-center">${item.total}</td>
+                              </tr>
+                           `).join('');
+                           modalBody.innerHTML = `<table class="table table-main" width="100%">
+                              <thead>
+                                    <tr>
+                                       <th class="text-center">Proj</th>
+                                       <th class="text-center">Expenses By</th>
+                                       <th class="text-center" >Purchase Type</th>
+                                       <th class="text-center">Sub Category</th>
+                                       <th class="text-center">Project Name</th>
+                                       <th class="text-center">Vendor</th>
+                                       <th class="text-center">Item</th>
+                                       <th class="text-center">Amount</th>
+                                       <th class="text-center">GST</th>
+                                       <th class="text-center">Total</th>
+                                    </tr>
+                              </thead>
+                              <tbody>${tableRows}</tbody>
+                           </table>`;
+                        } else {
+                           modalBody.innerHTML = '<p>No items available</p>';
+                        }
+                        document.getElementById('myModal').style.display = 'block';
+                     })
+                     .catch(error => {
+                        console.error('Error fetching claim details:', error);
+                     });
+               }
+
+            </script>
+
+
+         </div>
+
+      </div>
+
+   </div>
+
+   <style>
+      .row_align {
+         display: flex;
+         flex-direction: column;
+         /* Align children in a column (vertically) */
+         flex: 1;
+         /* Allow the items to grow and fill the available space */
+         width: 100%;
+         /* Ensure it takes full width */
+         max-width: 600px;
+         /* Optional: limit width */
+         background-color: #efeded;
+         padding: 20px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         /* Light shadow for depth */
+         border-radius: 8px;
+         /* Rounded corners */
+      }
+
+      .page-content1 {
+         display: flex;
+         justify-content: center;
+         /* Center horizontally */
+         align-items: center;
+         /* Center vertically */
+         min-height: 100vh;
+         /* Ensure it takes full viewport height */
+      }
+
+
+
+      .row_align {
+         display: flex;
+         flex-direction: column;
+         /* Align children in a column (vertically) */
+         flex: 1;
+         /* Allow the items to grow and fill the available space */
+      }
+
+      .button-container {
+         display: flex;
+         justify-content: center;
+         /* Center the button horizontally */
+      }
+
+      .row_align {
+         width: 100%;
+      }
+
+      .form-row {
+         margin-bottom: 15px;
+      }
+
+      .date-row {
+         display: flex;
+         justify-content: space-between;
+      }
+
+      .date-row div {
+         flex: 1;
+         margin-right: 10px;
+      }
+
+      .date-row div:last-child {
+         margin-right: 0;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+         .date-row {
+            flex-direction: column;
+         }
+
+         .date-row div {
+            margin-bottom: 10px;
+         }
+
+         .date-row div:last-child {
+            margin-bottom: 0;
+         }
+      }
+   </style>
+
+   <script>
+      function showSection(sectionId) {
+         // Hide all sections
+         var sections = document.querySelectorAll('.addproject, .adduser, .Sub_contract, .Others');
+         sections.forEach(function (section) {
+            section.style.display = 'none';
+         });
+
+         // Show the selected section
+         var selectedSection = document.getElementById(sectionId);
+         if (selectedSection) {
+            selectedSection.style.display = 'block';
+         }
+      }
+
+      window.onload = function () {
+         // Check visibility value from server-side
+         var visibility = '{{ visiblity }}';
+
+         if (visibility === 'approve_claims') {
+            showSection('addproject');
+            document.getElementById('addprojectRadio').checked = true;
+         } else if (visibility === 'view_all_expenses') {
+            showSection('adduser');
+            document.getElementById('adduserRadio').checked = true;
+         }
+      };
+   </script>
+
+
+   <script>
+      document.addEventListener('DOMContentLoaded', function () {
+         // Get the "Select All" checkbox
+         var selectAllCheckbox = document.getElementById('select-all-checkbox2');
+
+         // Add a click event listener to the "Select All" checkbox
+         selectAllCheckbox.addEventListener('click', function () {
+            // Get all checkboxes in the table body
+            var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+
+            // Set the checked property of each checkbox based on the state of the "Select All" checkbox
+            checkboxes.forEach(function (checkbox) {
+               checkbox.checked = selectAllCheckbox.checked;
+            });
+         });
+      });
+   </script>
+
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+         // Function to format a date as DD/MM/YY
+         function formatDateAsDDMMYY(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+               console.error('Invalid date string:', dateString);
+               return dateString; // Return original if date is invalid
+            }
+            return date.toLocaleDateString('en-GB', options);
+         }
+
+         // Format date elements
+         const start_time_elements = document.querySelectorAll(".start-time");
+         start_time_elements.forEach(function (element) {
+            if (element.textContent.trim()) {
+               element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+            }
+         });
+
+         const end_time_elements = document.querySelectorAll(".end-time");
+         end_time_elements.forEach(function (element) {
+            if (element.textContent.trim()) {
+               element.textContent = formatDateAsDDMMYY(element.textContent.trim());
+            }
+         });
+      });
+   </script>
+
+   <style>
+      .form-label {
+         display: block;
+         margin-bottom: 5px;
+         margin-top: 5px;
+      }
+
+      .form-control {
+         width: 100%;
+         padding: 6px;
+         margin-bottom: 0px;
+         box-sizing: border-box;
+      }
+
+      .flex-item-full-width {
+         flex: 1;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         gap: 15px;
+         /* Optional: add spacing between flex items within .flex-row */
+      }
+
+      .flex-item {
+         flex: 1;
+         /* Ensure flex items grow equally */
+      }
+
+      .container_hours {
+         width: 30%;
+         background-color: #d8dcdd;
+         padding: 10px;
+         border-radius: 5px;
+
+      }
+
+      .container {
+         border-radius: 5px;
+         padding: 20px;
+         display: flex;
+         width: 100%;
+         gap: 10px;
+      }
+
+      /* Style for the container of the table */
+      .double-container {
+         background-color: rgb(217, 217, 217);
+         width: 70%;
+         max-height: 600px;
+         /* Adjust the height as needed */
+         overflow-y: auto;
+         /* Enable vertical scrolling */
+         border: 1px solid whitesmoke;
+         /* Optional: Add a border for better visual separation */
+         position: relative;
+         /* Ensure the container is positioned for sticky headers */
+      }
+
+      /* Style for the table head */
+      .content-table thead th {
+         width: 100%;
+         position: sticky;
+         top: 0;
+         background-color: #004B5D;
+         /* Background color of the header */
+         color: whitesmoke;
+         /* Text color of the header */
+         text-align: left;
+         font-weight: bold;
+         z-index: 1;
+         /* Ensure the header is above the table rows */
+         border-bottom: 2px solid #004B5D;
+         /* Border to separate header from table body */
+      }
+
+      /* Style for table cells */
+      .content-table th,
+      .content-table td {
+         padding: 12px 15px;
+      }
+
+      /* Style for table rows */
+      .content-table tbody tr {
+         border-bottom: 1px solid #dddddd;
+      }
+
+      .content-table tbody tr:nth-of-type(even) {
+         background-color: #f3f3f3;
+      }
+
+      .content-table tbody tr:last-of-type {
+         border-bottom: 2px solid #004B5D;
+      }
+
+      .content-table tbody tr.active-row {
+         font-weight: bold;
+         color: #004B5D;
+      }
+
+      .content-table thead th:nth-child(9),
+      .content-table tbody td:nth-child(9),
+      .content-table thead th:nth-child(3),
+      .content-table tbody td:nth-child(3),
+      .content-table thead th:nth-child(4),
+      .content-table tbody td:nth-child(4),
+      .content-table thead th:nth-child(5),
+      .content-table tbody td:nth-child(5),
+      .content-table thead th:nth-child(6),
+      .content-table tbody td:nth-child(6),
+      .content-table thead th:nth-child(8),
+      .content-table tbody td:nth-child(8),
+      .content-table thead th:nth-child(7),
+      .content-table tbody td:nth-child(7) {
+         text-align: center;
+      }
+
+      .content-table .fa-trash,
+      .fa-edit {
+         font-size: 1.2em;
+      }
+   </style>
+
+</body>
+
+</html>

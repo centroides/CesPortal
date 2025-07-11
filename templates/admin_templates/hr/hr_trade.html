@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr" class="active">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        <li>
+                            <a href="{{ url_for('hr_add') }}" class="link">
+                                <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> Add
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('leave_approvals') }}" class="link">
+                                <i class="fas fa-house-user" style="margin-right: 5px;"></i> Leaves
+                            </a>
+                        </li>
+
+                        <li class="active">
+                            <a href="{{ url_for('hr_trade') }}" class="link">
+                                <i class="fa-sharp fa-solid fa-mountain-sun" style="margin-right: 5px;"></i>Trade
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('hr_employee_bio') }}" class="link">
+                                <i class="fa-solid fa-users" style="margin-right: 5px;"></i> Profile
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <form class="p-3" action="/hr_trade" method="POST" id="tradeForm">
+                <div class="record-header1">
+                    <div class="add">
+                        <input type="hidden" name="get_employee_controls" value="get_employee_controls">
+                        <select name="employee" id="employeeSelect" required>
+                            <option value="">Select Employee</option>
+                            {% for username in usernames %}
+                            <option value="{{ username }}">{{ username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="add">
+                        <!-- Trade Dropdown -->
+                        <select name="trade" id="tradeSelect" required>
+                            <option value="">Select Trade</option>
+                            {% for trade in trade_values %}
+                            <option value="{{ trade }}">{{ trade }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="add">
+                        <!-- Container for fetched descriptions -->
+                        <div id="descriptionContainer" style="display: none;">
+                            <h4>Select Descriptions:</h4>
+                            <div id="descriptionDropdown"></div>
+                        </div>
+                    </div>
+
+                    <div class="add">
+                        <button type="submit" class="custom-btn btn-2">Add / Update</button>
+                    </div>
+                </div>
+            </form>
+
+            <script>
+                document.getElementById('tradeSelect').addEventListener('change', function () {
+                    const selectedTrade = this.value;
+                    const descriptionContainer = document.getElementById('descriptionContainer');
+                    const descriptionDropdown = document.getElementById('descriptionDropdown');
+
+                    // Clear previous descriptions
+                    descriptionDropdown.innerHTML = '';
+
+                    if (selectedTrade) {
+                        fetch('/fetch_descriptions', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ trade: selectedTrade }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.descriptions && data.descriptions.length > 0) {
+                                    descriptionContainer.style.display = 'block';
+
+                                    // Create checkboxes for each description
+                                    data.descriptions.forEach(description => {
+                                        const checkboxDiv = document.createElement('div');
+                                        checkboxDiv.innerHTML = `
+                                    <label>
+                                        <input type="checkbox" name="descriptions" value="${description}" class="description-checkbox">
+                                        ${description}
+                                    </label>
+                                `;
+                                        descriptionDropdown.appendChild(checkboxDiv);
+
+                                        // Add a hidden input for unchecked checkboxes
+                                        const hiddenInput = document.createElement('input');
+                                        hiddenInput.type = 'hidden';
+                                        hiddenInput.name = 'descriptions';
+                                        hiddenInput.value = '';  // Assign empty value for unchecked
+                                        descriptionDropdown.appendChild(hiddenInput);
+                                    });
+                                } else {
+                                    descriptionContainer.style.display = 'none';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching descriptions:', error);
+                            });
+                    } else {
+                        descriptionContainer.style.display = 'none';
+                    }
+                });
+
+                // Prevent form submission from being interrupted and handle it manually
+                document.getElementById('tradeForm').addEventListener('submit', function (event) {
+                    const checkboxes = document.querySelectorAll('.description-checkbox');
+
+                    // Remove hidden inputs for unchecked checkboxes before submitting
+                    checkboxes.forEach(checkbox => {
+                        if (!checkbox.checked) {
+                            const hiddenInput = document.querySelector(`input[name="descriptions"][value=""]`);
+                            if (hiddenInput) {
+                                hiddenInput.remove();
+                            }
+                        }
+                    });
+                });
+            </script>
+
+
+        </div>
+
+    </div>
+
+    <style>
+        .record-header1 {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            /* Ensure the header takes full width */
+            margin-top: 0px;
+            background-color: white;
+        }
+
+        .multiselect-dropdown {
+            position: relative;
+            width: 50%;
+            /* Adjust width as needed */
+        }
+
+        .select-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .selected-items {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+        }
+
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            max-height: 200px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+            /* Adds a vertical scroll bar if content exceeds max height */
+
+        }
+
+        .dropdown-search {
+            width: calc(100% - 20px);
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .dropdown-options label {
+            display: block;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .dropdown-options label:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+
+</html>

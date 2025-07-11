@@ -1,0 +1,3176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Centroid Engineering Solutions</title>
+    <link rel="icon" type="image/jpeg" href="static/ces_logo.png">
+    <link rel="stylesheet" href="../static/res_style.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <!-- <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="sidebar">
+
+        <div class="side-header">
+            <h3>C<span>entroid</span></h3>
+        </div>
+
+        <div class="side-content">
+
+            <div class="profile">
+                <div class="profile-img bg-img" style="background-image: url(../static/1.png)"></div>
+                <h4>{{user['name']}}</h4>
+                <small>{{department_code}}</small>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/admin">
+                            <span class="fa-solid fa-user-tie"></span>
+                            <small>Admin</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['Accounts'] == 'On' %}
+                    <li>
+                        <a href="/accounts">
+                            <span class="fa-solid fa-file-invoice-dollar"></span>
+                            <small>Accounts</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleEnquiry'] == 'On' %}
+                    <li>
+                        <a href="/admin_enquiry">
+                            <span class="fa-solid fa-handshake"></span>
+                            <small>Leads</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleHR'] == 'On' %}
+                    <li>
+                        <a href="/hr">
+                            <span class="fa-solid fa-user-plus"></span>
+                            <small>HR</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePlanner'] == 'On' %}
+                    <li>
+                        <a href="/planner">
+                            <span class="fa-solid fa-calendar-check"></span>
+                            <small>Planner</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProfile'] == 'On' %}
+                    <li>
+                        <a href="/profile" class="active">
+                            <span class="fa-solid fa-user"></span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['toggleProjects'] == 'On' %}
+                    <li>
+                        <a href="/projects">
+                            <span class="fa-solid fa-chart-simple"></span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user_access['togglePurchase'] == 'On' %}
+                    <li>
+                        <a href="/purchase">
+                            <span class="fa-solid fa-cart-shopping"></span>
+                            <small>Purchase</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if user_access['toggleResources'] == 'On' %}
+                    <li>
+                        <a href="/resources">
+                            <span class="fa-solid fa-recycle"></span>
+                            <small>Resources</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if department_code == 1000 %}
+                    <li>
+                        <a href="/settings">
+                            <span class="fa-solid fa-gears"></span>
+                            <small>Settings</small>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="fa-solid fa-right-from-bracket"></span>
+                            <small>Log Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <div id="pageLoader">
+            <div class="loader"></div>
+            <script>
+                window.addEventListener("load", function () {
+                    document.getElementById("pageLoader").style.display = "none";
+                });
+            </script>
+
+            <style>
+                #pageLoader {
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .loader {
+                    border: 8px solid #f3f3f3;
+                    /* Light grey */
+                    border-top: 8px solid #3498db;
+                    /* Blue */
+                    border-radius: 50%;
+                    width: 60px;
+                    height: 60px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+
+
+        <div class="page-content" style="background-color: white;">
+
+            <div class="page-header" style="background-color: white;">
+
+                <nav class="navbar1">
+
+                    <ul id="menuList1" class="navitems1">
+
+                        {% if user_access['toggleAccountHub'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_act') }}" class="link">
+                                <i class="fa-solid fa-user" style="margin-right: 5px;"></i> Account Info
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggle_prof_TimeSheet'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_time') }}" class="link">
+                                <i class="fas fa-clock" style="margin-right: 5px;"></i> Time Sheet
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleProfPurchaseRequest'] == 'On' %}
+                        <li class="active">
+                            <a href="{{ url_for('prof_pr') }}" class="link">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i> Purchase Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProfPurchaseOrder'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_po') }}" class="link">
+                                <i class="fa-solid fa-file-invoice" style="margin-right: 5px;"></i> Purchase Order
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleProjectRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_prj') }}" class="link">
+                                <i class="fa-solid fa-project-diagram" style="margin-right: 5px;"></i> Project Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['togglePaymentRequest'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_pay') }}" class="link">
+                                <i class="fa-solid fa-hand-holding-dollar" style="margin-right: 5px;"></i> Payment
+                                Request
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggle_prof_claims'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_claim') }}" class="link">
+                                <i class="fa-solid fa-file-alt" style="margin-right: 5px;"></i> Claims
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user_access['toggleDeliveryOrders'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_do') }}" class="link">
+                                <i class="fa-solid fa-box" style="margin-right: 5px;"></i> Delivery Order
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if user_access['toggleprofSuppliers'] == 'On' %}
+                        <li>
+                            <a href="{{ url_for('prof_supplier') }}" class="link">
+                                <i class="fa-solid fa-truck" style="margin-right: 5px;"></i> Suppliers
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-bars" onclick="toggleMenu()"></i>
+                    </div>
+
+                    <script>
+                        let menuList1 = document.getElementById("menuList1");
+                        menuList1.style.maxHeight = "0px";
+
+                        function toggleMenu1() {
+                            if (menuList1.style.maxHeight == "0px") {
+                                menuList1.style.maxHeight = "300px";
+                            } else {
+                                menuList1.style.maxHeight = "0px";
+                            }
+                        }
+                    </script>
+
+                </nav>
+
+                <div class="line"></div>
+
+            </div>
+
+            <div class="search_container">
+                <h3 style="color: #004274;">Purchase Request's (<span id="requestCount">0</span>) </h3>
+                <input type="text" id="searchInput"
+                    placeholder="Search Created By, PR NO, Project ID, Request On, Status, Supplier ..."
+                    onkeyup="filterTable()">
+                <span class="span_tag">Amount : <span id="totalAmount">$ 0.00</span></span>
+                <span class="span_tag">GST : <span id="totalGST">$ 0.00</span></span>
+                <span class="span_tag">Total : <span id="overallTotal">$ 0.00</span></span>
+
+                <button type="button" id="openModalButton" data-project-id="#"
+                    style="background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55); color: white; font-weight: bold;  padding: 5px; border-radius: 10px;  cursor: pointer;">
+                    + New PR
+                </button>
+
+
+                <div id="modal" class="modal">
+
+                    <div class="modal-content">
+
+                        <div class="button-container1">
+
+                            <h2>New Purchase Request </h2>
+
+                            <span class="close-button">&times;</span>
+
+                        </div>
+
+                        <form id="invoiceForm1" method="POST" onsubmit="handleFormoverheadSubmit(event)">
+
+                            <div class="container">
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+
+                                        <div class="flex-item" id="project_field">
+
+                                            <div class="flex-item" style="display: none;">
+                                                <label for="gst_percent" class="form-label">gst_percent <span
+                                                        style="color: red;">*</span></label>
+                                                <input type="number" class="form-control" id="gst_percent"
+                                                    name="gst_percent" value="{{gst}}" required>
+                                            </div>
+
+                                            <label for="project_id" class="form-label">Proj<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="project_id" name="project_id">
+                                                <option value="">Select</option>
+                                                {% for project in projects %}
+                                                <option value="{{ project }}">{{
+                                                    project }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                let today = new Date();
+                                                let formattedDate = today.toLocaleDateString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: '2-digit'
+                                                }).replace(/\//g, '-');  // Convert `/` to `-`
+
+                                                document.getElementById("PR_Date").value = formattedDate;
+                                            });
+                                        </script>
+
+                                        <div class="flex-item" style="display: none;">
+                                            <label for="PR_Date" class="form-label">PR Date<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="PR_Date" name="PR_Date"
+                                                value="{{ current_date }}" readonly
+                                                style="background-color: antiquewhite;" required>
+                                        </div>
+
+                                        <div class="flex-item" id="expenses_field">
+                                            <label for="Expenses" class="form-label">Expenses <span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Expenses" name="Expenses"
+                                                onchange="updateDescriptionOptions()">
+                                                <option value="" disabled selected> Type</option>
+                                                <option value="2000">Material</option>
+                                                <option value="3000">Sub Contract</option>
+                                                <option value="4000">Site</option>
+                                                <option value="500">Others</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex-item" id="description_field">
+                                            <label for="Description" class="form-label">Description<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Description" name="Description"
+                                                onchange="updateCode()">
+                                                <option value="" disabled selected>Description</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex-item" style="display: none;" id="code_field">
+                                            <label for="code_number" class="form-label">Code</label>
+                                            <input type="number" class="form-control" id="code_number"
+                                                name="code_number" readonly style="background-color: antiquewhite;">
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Attn" class="form-label">Attn <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Attn" name="Attn" required>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Quote_Ref" class="form-label">Quote Ref <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Quote_Ref" name="Quote_Ref"
+                                                required>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+
+                                            <label for="Supplier_Name" class="form-label">Supplier Name<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Supplier_Name" name="Supplier_Name"
+                                                required>
+                                                <option value="">Select Supplier </option>
+                                                {% for supplier in Supplier_Names %}
+                                                <option value="{{ supplier }}">{{
+                                                    supplier }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Payment_Terms" class="form-label">Payment Terms <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" id="Payment_Terms"
+                                                name="Payment_Terms" maxlength="25" required>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="Currency" class="form-label">Currency <span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Currency" name="Currency" required>
+                                                <option value="SGD" selected>SGD - Singapore Dollar</option>
+                                                <option value="USD">USD - US Dollar</option>
+                                                <option value="EUR">EUR - Euro</option>
+                                                <option value="GBP">GBP - British Pound</option>
+                                                <option value="JPY">JPY - Japanese Yen</option>
+                                                <option value="CNY">CNY - Chinese Yuan</option>
+                                                <option value="AUD">AUD - Australian Dollar</option>
+                                                <option value="CAD">CAD - Canadian Dollar</option>
+                                                <option value="INR">INR - Indian Rupee</option>
+                                                <option value="MYR">MYR - Malaysian Ringgit</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Exchange_rate" class="form-label">Exc.Rate <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="number" step="any" class="form-control" id="Exchange_rate"
+                                                name="Exchange_rate" value="1" required>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="gst_option" class="form-label">GST <span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="gst_option" name="gst_option" required>
+
+                                                <option value="Yes" selected>Yes</option>
+                                                <option value="No">No</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex-row">
+
+                                        <div class="flex-item">
+                                            <label for="leat_time" class="form-label">Lead Time<span
+                                                    style="color: red;">*</span></label>
+                                            <input type="number" class="form-control" id="leat_time" name="leat_time"
+                                                required>
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="Unit" class="form-label">Unit <span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" id="Unit" name="Unit" required>
+                                                <option value="" disabled selected>Select Unit</option>
+                                                <option value="Days" selected>Days</option>
+                                                <option value="Weeks">Weeks</option>
+                                                <option value="Months">Months</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-row">
+
+
+
+                                        <div class="flex-item">
+                                            <label for="Contact" class="form-label">Created By</label>
+                                            <input type="text" class="form-control" id="Contact"
+                                                value="{{user['name']}}" name="Contact">
+                                        </div>
+
+                                        <div class="flex-item">
+                                            <label for="phone_number" class="form-label">Phone No</label>
+                                            <input type="number" class="form-control" id="phone_number"
+                                                name="phone_number">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <label for="Delivery" class="form-label">Delivery <span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="Delivery" name="Delivery"
+                                        value="{{  'Centroid Engineering Solutions Pte Ltd' }}" required>
+
+                                    <label for="Address_Line1" class="form-label">Address Line1<span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="Address_Line1" name="Address_Line1"
+                                        value="{{  '11, Woodlands close, #07-10' }}" required>
+
+                                    <label for="Address_Line2" class="form-label">Address Line2<span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="Address_Line2" name="Address_Line2"
+                                        value="{{ 'Singapore - 737853' }}" required>
+
+                                </div>
+
+                                <div class="invice_header">
+
+                                    <label for="comments" class="form-label1">Comments</label>
+                                    <textarea class="form-control" id="comments" name="comments" rows="2.5"></textarea>
+
+                                    <div class="flex-item" id="attachment_field">
+                                        <label for="attachment" class="form-label">Attach Quote<span
+                                                style="color: red;">*</span></label>
+                                        <div class="drop-zone" onclick="document.getElementById('attachment').click()"
+                                            ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                                            <p>Drag & Drop here or click to select</p>
+                                            <input type="file" class="form-control" id="attachment" name="attachment"
+                                                accept="*/*" onchange="updateFileName(this)">
+                                            <div class="file-preview" id="filePreview"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="table-responsive1" style=" background-color: #e6f2ff;">
+
+                                    <table class="mat_rec_table" width="100%" id="dynamicTable">
+
+                                        <thead>
+                                            <tr>
+                                                <th style=" text-align: center; width: 2%;">S/N</th>
+                                                <th style=" text-align: center; width: 14%;">Part No</th>
+                                                <th style=" text-align: center; width: 40%;">Description</th>
+                                                <th style=" text-align: center; width: 8%;">UOM</th>
+                                                <th style=" text-align: center; width: 8%;">Delivary Date</th>
+                                                <th style=" text-align: center; width: 5%;">Qty</th>
+                                                <th style=" text-align: center; width: 7%;">Unit Price</th>
+                                                <th style=" text-align: center; width: 10%;">Total</th>
+                                                <th style=" text-align: center; width: 2%;">Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="itemsTableBody">
+                                            {% for i in range(2) %}
+                                            <tr>
+                                                <td class="text-center">{{ i + 1 }}</td>
+
+                                                <td>
+                                                    <input class="form-control" type="text" name="part_no[]"
+                                                        placeholder="Part No">
+                                                </td>
+
+                                                <td>
+                                                    <div>
+                                                        <button type="button" onclick="toggleDetails(this)"
+                                                            style="background-color: #f8f9fa; color: #007bff; border: 1px solid #ced4da; border-radius: 4px; padding: 3px 8px; font-size: 0.875rem; cursor: pointer;">
+                                                            + Headings
+                                                        </button>
+
+                                                        <div class="extra-details d-none mt-2">
+                                                            <input class="form-control mb-1" type="text"
+                                                                name="description_header[]"
+                                                                placeholder="Header (optional)">
+                                                            <input class="form-control mb-1" type="text"
+                                                                name="description_subheader[]"
+                                                                placeholder="Subheading (optional)">
+                                                        </div>
+                                                        <textarea class="form-control mb-1" name="description_body[]"
+                                                            rows="2" placeholder="Main Description (required)"
+                                                            oninput="fetchSuggestions(this)"
+                                                            onblur="hideSuggestions(this)">
+                                          </textarea>
+                                                        <div class="suggestion-box" style="display:none;"></div>
+
+                                                        <script>
+                                                            function fetchSuggestions(textarea) {
+                                                                const query = textarea.value.trim();
+                                                                const suggestionBox = textarea.nextElementSibling;
+
+                                                                if (query.length < 2) {
+                                                                    suggestionBox.style.display = 'none';
+                                                                    return;
+                                                                }
+
+                                                                fetch(`/get_item_suggestions?q=${encodeURIComponent(query)}`)
+                                                                    .then(response => response.json())
+                                                                    .then(data => {
+                                                                        if (data.length === 0) {
+                                                                            suggestionBox.style.display = 'none';
+                                                                            return;
+                                                                        }
+
+                                                                        suggestionBox.innerHTML = '';
+                                                                        data.forEach(item => {
+                                                                            const div = document.createElement('div');
+                                                                            div.classList.add('suggestion-item');
+                                                                            div.innerHTML = `
+                                                            <strong>${item.item}</strong><br>
+                                                            <small>
+                                                                   Unit Price: ${new Intl.NumberFormat().format(item.Unit_Price)} | 
+
+                                                               Supplier: ${item.Supplier_Name} | 
+                                                               PR No: ${item.PR_no} | 
+                                                               Purchase By: ${item.created_by}  
+                                                            </small>`;
+
+                                                                            div.onclick = () => {
+                                                                                textarea.value = item.item;
+                                                                                suggestionBox.style.display = 'none';
+                                                                            };
+                                                                            suggestionBox.appendChild(div);
+                                                                        });
+
+                                                                        suggestionBox.style.display = 'block';
+                                                                    });
+                                                            }
+
+                                                            function hideSuggestions(textarea) {
+                                                                setTimeout(() => {
+                                                                    const suggestionBox = textarea.nextElementSibling;
+                                                                    suggestionBox.style.display = 'none';
+                                                                }, 200);  // delay to allow click selection
+                                                            }
+                                                        </script>
+
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control" type="text" name="uom[]" maxlength="5"
+                                                        placeholder="UOM" required>
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control" type="date" name="excepted_date[]">
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control" type="number" name="quantity[]" required
+                                                        oninput="calculateTotal(this)" placeholder="Qty">
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control" type="number" step="any"
+                                                        name="unit_price[]" required oninput="calculateTotal(this)"
+                                                        placeholder="Unit Price">
+                                                </td>
+
+                                                <td>
+                                                    <input class="form-control" type="text" name="total[]" readonly
+                                                        placeholder="Total">
+                                                </td>
+
+                                                <td>
+                                                    <button type="button" class="btn-delete" title="Delete row"
+                                                        onclick="deleteRow(this)">
+                                                        <ion-icon name="trash" class="fa-solid fa-trash"
+                                                            style="color:red;"></ion-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                                <div class="button-container1">
+
+                                    <button type="button" class="new-enquiry-btn" onclick="addRow()">+</button>
+
+
+                                    <div class="text-center mt-3">
+                                        <label> Amount : <span id="sumTotal" style="color: #004B5D;">0.00</span></label>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <label for="Discount" style="display: block; margin-bottom: 5px;">Discount (Only
+                                            %)</label>
+                                        <input type="number" style="width: 100%;" step="any" class="form-control"
+                                            id="Discount" name="Discount" value="0" required>
+                                    </div>
+
+                                    <div class="text-center mt-3">
+                                        <label> GST : <span id="gstvalue" style="color: #004B5D;">0.00</span></label>
+                                    </div>
+
+
+                                    <div class="text-center mt-3">
+                                        <label> Total : <span id="overalsumTotal"
+                                                style="color: #004B5D;">0.00</span></label>
+                                    </div>
+
+                                    <div class='flex-item' style="display: none;">
+                                        <input type="text" class="form-control" name="existing_pr" id="existing_pr">
+                                    </div>
+
+                                    <div class="pr-actions">
+                                        <button type="submit" class="new-enquiry-btn" id="generatePRButton"
+                                            onclick="validateForm(event)">Generate PR</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                        <script>
+
+                            function validateForm(event) {
+                                // Check if 'existing_pr' has a value
+                                const existingPRValue = document.getElementById('existing_pr').value.trim();
+
+                                // Set requiredFields conditionally
+                                const requiredFields = existingPRValue
+                                    ? [
+                                        'project_id', 'PR_Date', 'Attn', 'Quote_Ref', 'Exchange_rate',
+                                        'Supplier_Name', 'Payment_Terms', 'Currency', 'leat_time', 'gst_option',
+                                        'Unit', 'Delivery', 'Address_Line1', 'Address_Line2'
+                                    ]
+                                    : [
+                                        'project_id', 'PR_Date', 'Attn', 'Quote_Ref', 'Expenses', 'Exchange_rate',
+                                        'Description', 'Supplier_Name', 'Payment_Terms', 'Currency', 'leat_time', 'gst_option',
+                                        'Unit', 'Delivery', 'Address_Line1', 'Address_Line2', 'attachment'
+                                    ];
+
+
+                                for (const fieldId of requiredFields) {
+                                    const field = document.getElementById(fieldId);
+
+                                    if (field && (!field.value.trim() || field.value === "")) {
+                                        alert(`The field "${fieldId}" is required. Please fill it in.`);
+                                        field.focus();
+                                        return false; // Return false on validation fail
+                                    }
+                                }
+
+                                const rows = document.querySelectorAll('#dynamicTable tbody tr');
+                                for (let row of rows) {
+                                    const quantity = row.querySelector('input[name="quantity[]"]');
+                                    const unitPrice = row.querySelector('input[name="unit_price[]"]');
+
+                                    if (!quantity.value || !unitPrice.value) {
+                                        alert('Please fill out Quantity and Unit Price for all rows with valid values.');
+                                        return false;
+                                    }
+                                }
+
+                                return true; // Validation passed
+                            }
+
+                            let isOverheadClaimSubmitting = false;
+
+                            function handleFormoverheadSubmit(event) {
+                                event.preventDefault();
+
+                                if (isOverheadClaimSubmitting) return;
+                                isOverheadClaimSubmitting = true;
+
+                                const form = document.getElementById('invoiceForm1');
+                                const submitButton = form.querySelector('button[type="submit"]');
+                                const originalButtonText = submitButton.innerText;
+
+                                submitButton.disabled = true;
+                                submitButton.innerText = 'Generating PR...';
+
+                                // ✅ Call your validation function here
+                                if (!validateForm()) {
+                                    submitButton.disabled = false;
+                                    submitButton.innerText = originalButtonText;
+                                    isOverheadClaimSubmitting = false;
+                                    return;
+                                }
+
+                                const formData = new FormData(form);
+
+                                fetch('/generate_prj_pr', {
+                                    method: 'POST',
+                                    body: formData,
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.message) {
+                                            alert(data.message);
+                                            form.reset();
+
+                                            const rows = document.querySelectorAll('#overhead_dynamicTable tbody tr');
+                                            rows.forEach(row => {
+                                                row.querySelectorAll('input').forEach(input => input.value = '');
+                                                row.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                                            });
+
+                                            form.querySelectorAll('input[type="file"]').forEach(input => input.value = '');
+
+                                            window.location.reload();
+
+                                        } else {
+                                            alert('Unexpected response. Please try again.');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('An error occurred. Please try again.');
+                                    })
+                                    .finally(() => {
+                                        submitButton.disabled = false;
+                                        submitButton.innerText = originalButtonText;
+                                        isOverheadClaimSubmitting = false;
+                                    });
+                            }
+
+                        </script>
+
+                    </div>
+
+                    <script>
+                        function editPR(pr_no) {
+                            fetch(`/pr_to_edit/${pr_no}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    document.getElementById("modal").style.display = "block";
+                                    document.querySelector(".button-container1 h2").textContent = "Editing Purchase Request - " + data.PR_no;
+                                    document.getElementById("generatePRButton").textContent = "Update PR";
+
+                                    document.getElementById("attachment_field").style.display = "none";
+                                    document.getElementById("expenses_field").style.display = "none";
+                                    document.getElementById("description_field").style.display = "none";
+                                    document.getElementById("code_field").style.display = "none";
+                                    document.getElementById("project_field").style.display = "none";
+
+                                    document.getElementById("project_id").value = data.project_id;
+                                    document.getElementById("Attn").value = data.Attn || '';
+                                    document.getElementById("Quote_Ref").value = data.Quote_Ref || '';
+                                    document.getElementById("Supplier_Name").value = data.Supplier_Name || '';
+                                    document.getElementById("project_id").value = data.project_id || '';
+                                    document.getElementById("Payment_Terms").value = data.Payment_Terms || '';
+                                    document.getElementById("Currency").value = data.Currency || "SGD";
+                                    document.getElementById("Exchange_rate").value = data.Exchange_rate || "1";
+                                    document.getElementById("Discount").value = data.Discount || "";
+
+                                    document.getElementById("gst_option").value = data.gst_option || "Yes";
+                                    document.getElementById("leat_time").value = (data.leat_time || '').toString().match(/\d+/)?.[0] || '';
+                                    const leadTimeText = data.leat_time || '';
+                                    const leadTimeParts = leadTimeText.trim().split(' ');
+
+                                    // Set lead time number (e.g., "2")
+                                    document.getElementById("leat_time").value = leadTimeParts[0] || '';
+                                    // Set Unit dropdown (e.g., "Days")
+                                    if (leadTimeParts.length > 1) {
+                                        const unit = leadTimeParts[1].charAt(0).toUpperCase() + leadTimeParts[1].slice(1).toLowerCase(); // capitalize first
+                                        const unitSelect = document.getElementById("Unit");
+                                        for (let i = 0; i < unitSelect.options.length; i++) {
+                                            if (unitSelect.options[i].value === unit) {
+                                                unitSelect.selectedIndex = i;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // document.getElementById("Unit").value = data.Unit || 'Days';
+                                    document.getElementById("Contact").value = data.created_by || '';
+                                    document.getElementById("phone_number").value = data.phone_number || '';
+                                    document.getElementById("Delivery").value = data.Delivery || 'Centroid Engineering Solutions Pte Ltd';
+                                    document.getElementById("Address_Line1").value = data.Address_Line1 || '11, Woodlands close, #07-10';
+                                    document.getElementById("Address_Line2").value = data.Address_Line2 || 'Singapore - 737853';
+                                    document.getElementById("comments").value = data.comments || '';
+                                    document.getElementById("existing_pr").value = data.PR_no || '';
+
+
+                                    // Update date
+                                    const date = new Date(data.PR_Date);
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                                    const year = String(date.getFullYear()).slice(-2); // Get last 2 digits of year
+                                    document.getElementById("PR_Date").value = `${day}-${month}-${year}`;
+
+
+                                    // ---------- CLEAR EXISTING TABLE ROWS ----------
+                                    const tbody = document.getElementById("itemsTableBody");
+                                    tbody.innerHTML = ''; // clear old rows
+
+                                    // ---------- ADD ITEMS ----------
+                                    data.items.forEach((item, index) => {
+                                        // Parse description into header, subheader, and body
+                                        const fullText = item.item || '';
+                                        const headerMatch = fullText.match(/Header\s*-\s*(.+)/i);
+                                        const subheaderMatch = fullText.match(/Subheader\s*-\s*(.+)/i);
+                                        const bodyMatch = fullText.match(/Body\s*-\s*([\s\S]*)/i);
+
+                                        const header = headerMatch ? headerMatch[1].trim() : '';
+                                        const subheader = subheaderMatch ? subheaderMatch[1].trim() : '';
+                                        const body = bodyMatch ? bodyMatch[1].trim() : '';
+
+                                        // Create row HTML
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `
+                                       <td class="text-center">${index + 1}</td>
+
+                                       <td><input class="form-control" type="text" name="part_no[]" value="${item.Part_No || ''}" placeholder="Part No"></td>
+
+                                       <td>
+                                          <div>
+                                             <button type="button" onclick="toggleDetails(this)"
+                                                style="background-color: #f8f9fa; color: #007bff; border: 1px solid #ced4da; border-radius: 4px; padding: 3px 8px; font-size: 0.875rem; cursor: pointer;">
+                                                + Headings
+                                             </button>
+
+                                             <div class="extra-details d-none mt-2">
+                                                <input class="form-control mb-1" type="text" name="description_header[]" value="${header}" placeholder="Header (optional)">
+                                                <input class="form-control mb-1" type="text" name="description_subheader[]" value="${subheader}" placeholder="Subheading (optional)">
+                                             </div>
+
+                                             <textarea class="form-control mb-1" name="description_body[]" rows="2" placeholder="Main Description (required)">${body}</textarea>
+                                          </div>
+                                       </td>
+
+                                       <td><input class="form-control" type="text" name="uom[]" value="${item.uom || ''}" maxlength="5" placeholder="UOM" required></td>
+
+                                       <td><input class="form-control" type="date" name="excepted_date[]" value="${item.excepted_date || ''}"></td>
+
+                                       <td><input class="form-control" type="number" name="quantity[]" value="${item.quantity || ''}" oninput="calculateTotal(this)" required placeholder="Qty"></td>
+
+                                       <td><input class="form-control" type="number" step="any" name="unit_price[]" value="${item.Unit_Price || ''}" oninput="calculateTotal(this)" required placeholder="Unit Price"></td>
+
+                                       <td><input class="form-control" type="text" name="total[]" value="${item.total}" readonly placeholder="Total"></td>
+
+                                       <td>
+                                          <button type="button" class="btn-delete" title="Delete row" onclick="deleteRow(this)">
+                                             <ion-icon name="trash" class="fa-solid fa-trash" style="color:red;"></ion-icon>
+                                          </button>
+                                       </td>
+                                    `;
+                                        tbody.appendChild(row);
+                                        updateSumTotal();
+                                    });
+
+
+                                })
+                                .catch(error => {
+                                    console.error("Error fetching PR data:", error);
+                                });
+                        }
+
+                        function toggleDetails(button) {
+                            const detailsDiv = button.nextElementSibling;
+                            detailsDiv.classList.toggle('d-none');
+                        }
+
+                    </script>
+
+                </div>
+
+            </div>
+
+            <div class="table-responsive" style="background-color: white;">
+
+                <table class="table table-main" width="100%" id="projectTable">
+
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;"><span class="fa-solid fa-eye"
+                                    style="font-size: 1.25em; color: black;"></span></th>
+
+                            <th style="text-align: left;">PR NO</th>
+                            <th style="text-align: center;">PR Date</th>
+                            <th style="text-align: left;">Supplier</th>
+                            <th style="text-align: left;">Requested By</th>
+                            <th style="text-align: left;">Terms</th>
+                            <th style="text-align: right;">Amount(S$)</th>
+                            <th style="text-align: right;">GST(S$)</th>
+                            <th style="text-align: right;">Total(S$)</th>
+                            <th style="text-align: left;">Approved By</th>
+                            <th style="text-align: center;">Status</th>
+                            <th style="text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if not grouped_df.empty %}
+                        {% for index, row in grouped_df.iterrows() %}
+                        <tr class="mainRow">
+
+                            <td class="text-center view-col" style="text-align: center;">
+                                <span class="icon" onclick="openPaymentDetails('{{ row['PR_no'] }}')"
+                                    style="cursor: pointer;">
+                                    <span class="fa-solid fa-eye" style="font-size: 1.25em; color: orangered;"></span>
+                                </span>
+                            </td>
+
+                            <td class="text-center PR_no" style="text-align: left;">
+                                {% if row['filename'] %}
+                                <a href="{{ url_for('view_prj_pr_file', filename=row['filename']) }}" target="_blank">
+                                    {{ row['PR_no'] }}
+                                </a>
+                                {% else %}
+                                <span>{{ row['PR_no'] }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center PR_Date" style="text-align: center;"> {{ row['PR_Date']}}</td>
+                            <td class="text-center Supplier_Name">{{ row['Supplier_Name'][:15]}}
+                            </td>
+                            <td class="text-center created_by">{{ row['created_by'] }}</td>
+                            <td class="text-center"> {{ row['leat_time'][:8] }} </td>
+                            <td class="text-center" style="text-align: right;"> {{ '{:,.2f}'.format(row['amount']) }}
+                            </td>
+                            <td class="text-center" style="text-align: right;"> {{ '{:,.2f}'.format(row['GST']) }}</td>
+                            <td class="text-center" style="text-align: right;"> {{ '{:,.2f}'.format(row['total']) }}
+                            </td>
+                            <td class="text-center">{{ row['approved_by'] }}</td>
+
+                            <td class="text-center status" style="font-weight: bold; text-align: center;">
+                                <span style="color: 
+                                    {% if row['status'] == 'Created' %}
+                                        brown;
+                                    {% elif row['status'] == 'Approved' %}
+                                        blue;
+                                    {% elif row['status'] == 'Processed' %}
+                                        green;
+                                    {% elif row['status'] == 'Canceled' %}
+                                        red;
+                                    {% endif %};
+                                    background-color: 
+                                    {% if row['status'] == 'Created' %}
+                                        #f2e1d7; /* Light brown background */
+                                    {% elif row['status'] == 'Approved' %}
+                                        #a4acee; /* Light orange background */
+                                    {% elif row['status'] == 'Processed' %}
+                                        #d0f8e3; /* Light green background */
+                                    {% elif row['status'] == 'Canceled' %}
+                                        #f8d7da; /* Light red background */
+                                    {% endif %};
+                                    padding: 2px 8px; 
+                                    border-radius: 8px; 
+                                    display: inline-block; /* Ensures the span takes up only as much space as needed */
+                                ">
+                                    {{ row['status'] }}
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                {% if (user_access and user_access.get('toggle_PR_all_approve') == 'On' and
+                                row.get('status',
+                                '') == 'Created')
+                                or (row.get('pm', '').strip().lower() == 'yes' and row.get('status', '') == 'Created')
+                                %}
+
+                                <form method="POST" action="#">
+                                    <input type="hidden" name="PR_Approve" value="{{ row.get('PR_no', '') }}">
+                                    <button type="button" class="new-enquiry-btn"
+                                        id="approveButton-{{ row.get('id', '') }}"
+                                        onclick="approvePR('{{ row.get('PR_no', '') }}', this)">
+                                        <span class="button-text">Approve</span>
+                                        <span class="loader" style="display: none; margin-left: 10px;">
+                                            <img src="{{ url_for('static', filename='loader.gif') }}" width="20"
+                                                height="20">
+                                        </span>
+                                    </button>
+                                </form>
+
+                                {% else %}
+                                <!-- Show an empty cell -->
+                                <span>&nbsp;</span>
+                                {% endif %}
+                            </td>
+
+
+                            <script>
+                                function approvePR(prNo, button) {
+                                    const buttonText = button.querySelector('.button-text');
+                                    const loader = button.querySelector('.loader');
+
+                                    // Disable button and show loader
+                                    button.disabled = true;
+                                    buttonText.textContent = "P...";
+                                    loader.style.display = "inline-block";
+
+                                    // Make an AJAX request to approve the PR
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open("POST", "/approve_pr", true);
+                                    xhr.setRequestHeader("Content-Type", "application/json");
+
+                                    xhr.onload = function () {
+                                        if (xhr.status === 200) {
+                                            alert("PR Approved Successfully!");
+                                            location.reload();  // Reload page
+                                        } else {
+                                            alert("Failed to approve PR.");
+                                            button.disabled = false;  // Re-enable button if failed
+                                            buttonText.textContent = "Approve";
+                                            loader.style.display = "none";
+                                        }
+                                    };
+
+                                    xhr.onerror = function () {
+                                        alert("Error in request. Try again.");
+                                        button.disabled = false;
+                                        buttonText.textContent = "Approve";
+                                        loader.style.display = "none";
+                                    };
+
+                                    const data = { PR_no: prNo };
+                                    xhr.send(JSON.stringify(data));
+                                }
+                            </script>
+
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="13" class="text-center"
+                                style="text-align: center; font-size: larger; color: #dc3545;">No
+                                Requests available</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+
+                </table>
+
+                <script>
+
+                    function formatNumber(number) {
+                        return new Intl.NumberFormat('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(number);
+                    }
+
+                    function formatDate(dateString) {
+                        const date = new Date(dateString);
+                        const day = String(date.getDate()).padStart(2, '0');  // Pad with zero if single digit
+                        const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed, so add 1
+                        const year = String(date.getFullYear()).slice(-2);  // Get last two digits of the year
+                        return `${day}/${month}/${year}`;
+                    }
+
+                    function openPaymentDetails(PR_no) {
+                        fetch(`/get_pr_details?PR_no=${PR_no}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log("...........data..........", data);
+                                if (data.success) {
+                                    document.getElementById('vmodalPRNO').textContent = data.pr_details.PR_no;
+                                    document.getElementById('vproject_id').textContent = data.pr_details.project_id;
+                                    document.getElementById('vsupplier_name').textContent = data.pr_details.Supplier_Name;
+                                    document.getElementById('vattention').textContent = data.pr_details.Attn;
+                                    document.getElementById('vphone_number').textContent = data.pr_details.phone_number;
+                                    document.getElementById('vQuote_ref').textContent = data.pr_details.Quote_Ref;
+                                    document.getElementById('vcreated_by').textContent = data.pr_details.created_by;
+                                    document.getElementById('vapproved_by').textContent = data.pr_details.approved_by;
+                                    document.getElementById('vprocessed_by').textContent = data.po_details.PO_Issued_by;
+                                    document.getElementById('vpayment_terms').textContent = data.pr_details.leat_time;
+                                    document.getElementById('vComments').textContent = data.pr_details.comments;
+                                    document.getElementById('vDiscount').textContent = data.pr_details.Discount + ' %';
+                                    document.getElementById('vExc_Rate').textContent = data.pr_details.Exchange_rate;
+                                    document.getElementById('vpr_status').textContent = data.pr_details.status;
+
+                                    const currencySymbols = {
+                                        SGD: 'S$ ',
+                                        USD: '$ ',
+                                        EUR: '€ ',
+                                        GBP: '£ ',
+                                        JPY: '¥ ',
+                                        CNY: '¥ ',
+                                        AUD: 'A$ ',
+                                        CAD: 'C$ ',
+                                        INR: '₹ ',
+                                        MYR: 'R M'
+                                    };
+
+
+                                    const currencyCode = data.pr_details.Currency;
+                                    const symbol = currencySymbols[currencyCode] || ''; // fallback to empty if not found
+
+                                    document.getElementById('vCurrency_field').textContent = currencyCode;
+                                    document.getElementById('vamount').textContent = `${symbol}${formatNumber((data.amount ?? 0).toFixed(2))}`;
+                                    document.getElementById('vgst').textContent = `${symbol}${formatNumber((data.gst_amount ?? 0).toFixed(2))}`;
+                                    document.getElementById('vtotal').textContent = `${symbol}${formatNumber((data.total ?? 0).toFixed(2))}`;
+
+
+                                    document.getElementById('vmaterial_status').textContent = data.po_details.do_staus;
+                                    document.getElementById('vpay_status').textContent = data.po_details.length > 0 && data.po_details[0].payment_status ? data.po_details[0].payment_status : "Open";
+                                    // Populate items list
+                                    let itemsTable = document.getElementById('modalItemsTable');
+                                    itemsTable.innerHTML = "";
+
+                                    data.items.forEach((item, index) => {
+                                        let total = parseFloat(item.total) || 0;  // Ensure total is a number, default to 0
+                                        let quantity = parseFloat(item.quantity) || 0;
+                                        let unitPrice = parseFloat(item.Unit_Price) || 0;
+                                        let itemName = item.item || '';  // If item is null/undefined, default to an empty string
+                                        let uom = item.uom || '';        // If uom is null/undefined, default to an empty string
+                                        let exceptedDate = item.excepted_date || ''; // If excepted_date is null/undefined, default to an empty string
+
+                                        // Ensure the excepted_date is valid before formatting
+                                        let formattedDate = '';
+                                        if (exceptedDate) {
+                                            let dateObj = new Date(exceptedDate);
+                                            if (!isNaN(dateObj.getTime())) {  // Check if it's a valid date
+                                                formattedDate = formatDate(dateObj);  // Assuming formatDate() formats the date correctly
+                                            } else {
+                                                formattedDate = '';  // In case the date is invalid
+                                            }
+                                        }
+
+                                        let formattedItemName = itemName
+                                            .replace(/Header -/g, '<b>Header -</b>')
+                                            .replace(/Subheader -/g, '<b>Subheader -</b>')
+                                            .replace(/Body -/g, '<b>Body -</b>');
+                                        let row = `<tr>
+                                            <td style="width: 5%; text-align: center;">${index + 1}</td>  <!-- Index Column -->
+                                                <td style="width: 70%; text-align: left;"><pre style="margin: 0;">${formattedItemName}</pre></td>
+
+
+                                            <td style="width: 5%; text-align: left;">${uom}</td>
+                                            <td style="width: 5%; text-align: right;">${formatNumber(quantity.toFixed(2))}</td>
+                                            <td style="width: 10%; text-align: right;"> ${formatNumber(unitPrice.toFixed(2))}</td>
+                                            <td style="width: 10%; text-align: right;"> ${formatNumber(total.toFixed(2))}</td>
+                                            <td style="width: 10%; text-align: left;">${formattedDate}</td>
+                                        </tr>`;
+                                        itemsTable.innerHTML += row;
+                                    });
+
+                                    document.getElementById('paymentModal').style.display = 'block';
+                                } else {
+                                    alert('Payment details not found!');
+                                }
+                            })
+                            .catch(error => console.error('Error fetching payment details:', error));
+                    }
+
+                    function closeModal() {
+                        document.getElementById('paymentModal').style.display = 'none';
+                    }
+
+                </script>
+
+            </div>
+
+            <div id="paymentModal" class="modal">
+
+                <div class="modal-content">
+
+                    <div class="button-container1">
+
+                        <h2>Purchase Request Details (<span id="vmodalPRNO"></span>)
+                        </h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+
+                    </div>
+
+                    <style>
+                        .button-container1 h2 {
+                            font-size: 22px;
+                            font-weight: bold;
+                            color: #007AFF;
+                            /* Apple Blue */
+                            letter-spacing: 1px;
+                            background: linear-gradient(45deg, #007AFF, #34AADC);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            text-shadow: 2px 2px 6px rgba(0, 122, 255, 0.3);
+                            animation: fadeIn 0.6s ease-in-out;
+                        }
+
+                        /* Smooth fade-in animation */
+                        @keyframes fadeIn {
+                            from {
+                                opacity: 0;
+                                transform: translateY(-10px);
+                            }
+
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                    </style>
+
+                    <div class="container" style="background-color: #f5f5f7;">
+
+                        <div class="invoice-header">
+                            <div class="invoice-row">
+                                <p><strong>Project ID</strong></p>
+                                <span id="vproject_id"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Supplier</strong></p>
+                                <span id="vsupplier_name"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Attn</strong></p>
+                                <span id="vattention"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Phone Number</strong></p>
+                                <span id="vphone_number"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Quote Ref</strong></p>
+                                <span id="vQuote_ref"></span>
+                            </div>
+
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Created By</strong></p>
+                                <span id="vcreated_by"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Approved By</strong></p>
+                                <span id="vapproved_by"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Processed By</strong></p>
+                                <span id="vprocessed_by"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Lead Time</strong></p>
+                                <span id="vpayment_terms"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Currency</strong></p>
+                                <span id="vCurrency_field"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="invoice-header">
+
+                            <div class="invoice-row">
+                                <p><strong>Exc.Rate</strong></p>
+                                <span id="vExc_Rate"></span>
+                            </div>
+
+                            <div class="invoice-row">
+                                <p><strong>Amount</strong></p>
+                                <span id="vamount"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Discount </strong></p>
+                                <span id="vDiscount"> </span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>GST</strong></p>
+                                <span id="vgst"></span>
+                            </div>
+
+
+                            <div class="invoice-row">
+                                <p><strong>Total</strong></p>
+                                <span id="vtotal"></span>
+                            </div>
+                        </div>
+
+                        <div class="invoice-header">
+                            <div class="invoice-row">
+                                <p><strong>Material Status</strong></p>
+                                <span id="vmaterial_status"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Payment Status</strong></p>
+                                <span id="vpay_status"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>PR Status</strong></p>
+                                <span id="vpr_status"></span>
+                            </div>
+                            <div class="invoice-row">
+                                <p><strong>Comments</strong></p>
+                                <span id="vComments"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+
+                        <div class="table-responsive1">
+
+                            <table class="table table-main" width="100%">
+
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; width: 2%;">S/N</th>
+                                        <th style="text-align: left; width: 45%;">Item</th>
+                                        <th style="text-align: left; width: 3%;">Qty</th>
+                                        <th style="text-align: left; width: 3%;">Uom</th>
+                                        <th style="text-align: left; width: 10%;">Unit Price</th>
+                                        <th style="text-align: left; width: 10%;">Total</th>
+                                        <th style="text-align: left; width: 20%;">Delivary</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalItemsTable">
+                                    <!-- Items will be inserted here -->
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <style>
+                    .table-responsive1 {
+                        width: 100%;
+                        overflow: auto;
+                        max-height: 450px;
+                        border-radius: 10px;
+                        border: 1px solid #ddd;
+                    }
+
+                    .table-responsive {
+                        width: 100%;
+                        overflow: auto;
+                        max-height: 750px;
+                    }
+
+                    .table-main {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .table-main thead {
+                        position: sticky;
+                        top: 0;
+                        background: white;
+                        z-index: 10;
+                    }
+
+                    .container {
+                        background-color: white;
+                        /* Light Gray - Similar to Apple's typical background */
+                        padding: 10px;
+                        border-radius: 10px;
+                        display: flex;
+                        flex: 1;
+                        gap: 20px;
+                        border: 2px solid #d3d3d3;
+                        /* Slightly darker light gray for border */
+                        margin-bottom: 15px;
+                    }
+
+                    .invoice-header {
+                        flex: 1;
+                        background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+                        padding: 20px;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        color: #004d40;
+                        transition: transform 0.2s ease-in-out;
+                    }
+
+                    .invoice-header:hover {
+                        transform: scale(1.02);
+                    }
+
+
+                    .invoice-row {
+                        display: grid;
+                        grid-template-columns: 140px auto;
+                        /* First column for labels, second for values */
+                        gap: 10px;
+                        align-items: center;
+                        padding: 5px 0;
+                    }
+
+                    .invoice-row p {
+                        margin: 0;
+                        font-weight: bold;
+                        text-align: left;
+                    }
+
+                    .invoice-row span {
+                        text-align: left;
+                    }
+
+
+                    .invice_header {
+                        width: 100%;
+                        padding: 10px;
+
+                    }
+
+
+                    .button-container1 {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                    }
+
+                    .button-container1 h2 {
+                        margin: 0;
+                        font-size: 1.5em;
+                        color: #333;
+                    }
+
+
+
+                    .title-box {
+                        display: flex;
+                        padding: 5px;
+                        background-color: white;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        margin-bottom: 10px;
+                        justify-content: space-between;
+
+                    }
+
+                    .title-item {
+                        display: flex;
+                        align-items: center;
+
+                        /* Align title and value on the same row */
+                    }
+
+                    .title-item span {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #004b5d;
+                    }
+
+
+                    @keyframes open {
+                        from {
+                            width: 20px;
+                            /* Start with 0 width */
+                        }
+
+                        to {
+                            width: 573px;
+                            /* Animate to 473px width */
+                        }
+                    }
+
+                    /* Responsive styling for smaller screens */
+                    @media (max-width: 768px) {
+                        .title-box {
+                            flex-direction: column;
+                            /* Stack items vertically on smaller screens */
+                            align-items: flex-start;
+                        }
+
+                        .title-item {
+                            margin-bottom: 15px;
+                            /* Space between stacked items */
+                        }
+                    }
+                </style>
+
+                <style>
+                    .modal-content {
+                        background-color: #fefefe;
+                        margin: 15% auto;
+                        /* 15% from the top and centered */
+                        padding: 20px;
+                        border: 1px solid #888;
+                        width: 80%;
+                        /* Could be more or less, depending on screen size */
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        position: relative;
+                        animation: slideDown 0.5s ease-in-out forwards;
+                    }
+
+                    .flex-item-full-width {
+                        flex: 1;
+                    }
+
+                    .flex-row {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 15px;
+                        /* Optional: add spacing between flex items within .flex-row */
+                    }
+
+                    .flex-item {
+                        flex: 1;
+                        /* Ensure flex items grow equally */
+                    }
+
+                    .form-label {
+                        font-size: 16px;
+                        color: #333;
+                        margin-right: 10px;
+                        flex: 1;
+                    }
+
+                    .form-control {
+                        width: 100%;
+                        padding: 5px 6px;
+                        margin-bottom: 10px;
+                        box-sizing: border-box;
+                        border: 1px solid #ced4da;
+                        border-radius: 6px;
+                        font-size: 1rem;
+                        line-height: 1.0;
+                        color: #495057;
+                        background-color: #fff;
+                        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+                        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+                    }
+
+                    .form-control:focus {
+                        color: #495057;
+                        background-color: #fff;
+                        border-color: chartreuse;
+                        outline: 0;
+                        box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+                    }
+
+                    .form-control::placeholder {
+                        color: #6c757d;
+                        opacity: 1;
+                    }
+
+                    .form-control:disabled,
+                    .form-control[readonly] {
+                        background-color: #e9ecef;
+                        opacity: 1;
+                    }
+
+                    .form-control:hover {
+                        border-color: #b0b4b8;
+                    }
+
+                    .form-control::placeholder {
+                        text-align: center;
+                    }
+
+                    .flex-item-full-width {
+                        flex: 1;
+                        width: 100%;
+                    }
+
+                    .flex-row {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 10px;
+                        /* Adjust spacing as needed */
+                    }
+
+
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        z-index: 1000;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.5);
+                    }
+
+                    .modal-content {
+                        background-color: white;
+                        margin: 1% auto;
+                        padding: 20px;
+                        border-radius: 10px;
+                        width: 85%;
+                        border: 2px solid black;
+
+                    }
+
+
+
+                    .close {
+                        color: #aaa;
+                        font-size: 28px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+
+                    .close:hover,
+                    .close:focus {
+                        color: black;
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+
+                    .table-main th,
+                    .table-main td {
+                        border: 0.5px solid #f3f1f1;
+                        padding: 5px;
+                        text-align: left;
+                    }
+
+                    .table-main thead th {
+                        background-color: #f2f2f2;
+                        font-weight: bold;
+                    }
+                </style>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <style>
+        /* Base styles for the suggestion container */
+        .autocomplete-suggestions {
+            /* Renamed from .suggestion-box for consistency with previous JS */
+            border: 1px solid #ddd;
+            /* Lighter border */
+            border-radius: 6px;
+            /* Slightly rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            /* Soft shadow for depth */
+            max-height: 200px;
+            /* Increased max height for more suggestions */
+            overflow-y: auto;
+            position: absolute;
+            background: #ffffff;
+            /* Pure white background */
+            z-index: 1000;
+            width: 50%;
+            /* You might want to make this dynamic with JS to match input width */
+            list-style: none;
+            /* Remove list bullets if used with <ul> */
+            padding: 0;
+            /* Remove default padding for lists */
+            margin: 4px 0 0 0;
+            /* Small margin from the input */
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            /* Modern, readable font */
+            font-size: 14px;
+            color: #333;
+            /* Darker text for readability */
+        }
+
+        /* Style for individual suggestion items */
+        .suggestion-item {
+            padding: 10px 15px;
+            /* More padding */
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            /* Light separator */
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            /* Smooth hover transition */
+            display: block;
+            /* Ensures full click area */
+            line-height: 1.4;
+            /* Better line spacing */
+        }
+
+        /* Remove border from the last item */
+        .autocomplete-suggestions .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Hover effect for suggestion items */
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+            /* Lighter hover background */
+            /* transform: translateY(-1px); Optional subtle lift effect on hover */
+        }
+
+        /* Active (selected with keyboard) state, if you implement keyboard navigation */
+        .suggestion-item.active {
+            background-color: #e0e0e0;
+            /* Different background for keyboard selected item */
+            color: #222;
+        }
+
+        /* Styles for the text within the suggestion item */
+        .suggestion-item strong {
+            color: #0056b3;
+            /* A distinct color for labels like Item, Unit Price */
+            font-weight: 600;
+            /* Slightly bolder */
+            display: inline-block;
+            /* Helps align labels */
+            min-width: 80px;
+            /* Ensure labels align if multiple lines */
+        }
+
+        .suggestion-item br {
+            line-height: 0;
+            /* Reduce space created by <br> if needed */
+        }
+
+        /* Scrollbar styling (for Webkit browsers) */
+        .autocomplete-suggestions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .autocomplete-suggestions::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+
+        .autocomplete-suggestions::-webkit-scrollbar-track {
+            background-color: #f9f9f9;
+        }
+
+        /* Placeholder style for the textarea */
+        .description-textarea::placeholder {
+            color: #999;
+            opacity: 1;
+            /* Firefox default is lower */
+        }
+
+        .description-textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            /* Allow vertical resize */
+        }
+    </style>
+
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+        }
+    </style>
+
+    <style>
+        .span_tag {
+            font-size: 14px;
+            font-weight: bold;
+            color: #004b5d;
+            padding: 5px 8px;
+            border: 1px solid #004b5d;
+            border-radius: 5px;
+            background-color: #f1f8ff;
+            color: #004b5d;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        #totalAmount {
+            color: #28a745;
+            /* Green for amount */
+        }
+
+        #totalGST {
+            color: #0c8de2;
+            /* Yellow for GST */
+        }
+
+        #overallTotal {
+            color: #dc3545;
+            /* Red for overall total */
+        }
+
+        .search_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+
+        #projectTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+
+
+        #searchInput {
+            width: 40%;
+            padding: 2px;
+            margin: auto;
+            display: block;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            /* Rounded corners */
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #searchInput:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchInput:focus {
+            border-color: #004b5d;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+    <style>
+        .drop-zone {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            min-height: 75px;
+            max-height: 75px;
+        }
+
+        .drop-zone:hover {
+            background-color: #f8f9fa;
+        }
+
+        .drop-zone p {
+            margin: 0;
+            font-weight: bold;
+            color: #007bff;
+            font-size: 11px;
+        }
+
+        .drop-zone input {
+            display: none;
+        }
+
+        .file-preview {
+            color: #333;
+        }
+    </style>
+
+    <script>
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "copy";
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('attachment');
+            fileInput.files = event.dataTransfer.files;
+            updateFileName(fileInput);
+        }
+
+        function updateFileName(input) {
+            const filePreview = document.getElementById("filePreview");
+            if (input.files.length > 0) {
+                filePreview.textContent = "" + input.files[0].name;
+            } else {
+                filePreview.textContent = "";
+            }
+        }
+    </script>
+
+    <script>
+        function toggleDetails(button) {
+            const detailsDiv = button.nextElementSibling;
+            detailsDiv.classList.toggle('d-none');
+            button.textContent = detailsDiv.classList.contains('d-none') ? '+ Headings' : '− Headings';
+        }
+    </script>
+
+    <style>
+        .d-none {
+            display: none;
+        }
+
+        /* Alternate row colors - formal look */
+        #itemsTableBody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+            /* Light grey */
+        }
+
+        #itemsTableBody tr:nth-child(even) {
+            background-color: #ffffff;
+            /* White */
+        }
+
+
+        #itemsTableBody tr:hover {
+            background-color: #f1f7dd;
+            /* Slightly darker grey on hover */
+        }
+    </style>
+
+    <script>
+        document.addEventListener('input', function (e) {
+            if (e.target.tagName.toLowerCase() === 'textarea') {
+                e.target.style.height = 'auto';
+                e.target.style.height = e.target.scrollHeight + 'px';
+            }
+        });
+    </script>
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: space-around;
+            border-radius: 5px;
+            width: 100%;
+            gap: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .invice_header {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(6, 6, 6, 0.1);
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+
+            /* Ensure padding and border are included in width */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn4 {
+                font-size: 14px;
+                padding: 8px 12px;
+                /* Adjusted padding for smaller screens */
+            }
+
+            .row1 {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn4 {
+                font-size: 12px;
+                padding: 6px 10px;
+                /* Further adjusted padding */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flex-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .invice_header {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <style>
+        .table-responsive2 {
+            width: 100%;
+            overflow: auto;
+            max-height: 120px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table-main {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-main thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .container {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            border: 2px solid #ccc;
+            /* Adding border with 2px width and light gray color */
+
+        }
+
+
+        .invoice-row p {
+            margin: 0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .invoice-row span {
+            text-align: left;
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .button-container2 {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #004b5d;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+
+        .mat_rec_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            border: none;
+        }
+
+        .mat_rec_table th,
+        .mat_rec_table td {
+            padding: 5px;
+            text-align: center;
+            /* Removes borders from cells */
+        }
+
+        .mat_rec_table td {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+    </style>
+
+
+    <style>
+        .records {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .record-header {
+            width: 100%;
+            padding: 10px;
+        }
+    </style>
+
+    <script>
+
+        const descriptionOptions = {
+            "2000": [
+                { value: "2001", text: "Mechanical" },
+                { value: "2002", text: "Electrical" },
+                { value: "2003", text: "Instrument" },
+                { value: "2004", text: "PLC Hardware" },
+                { value: "2005", text: "Panel Hardware" },
+                { value: "2006", text: "Consumables" },
+                { value: "2007", text: "Tools" },
+                { value: "2008", text: "Civil" },
+                { value: "2009", text: "Computer" },
+            ],
+            "3000": [
+                { value: "3001", text: "Scaffolding" },
+                { value: "3002", text: "Programming" },
+                { value: "3003", text: "E&I Fabrication" },
+                { value: "3004", text: "Mechanical Fabrication" },
+                { value: "3005", text: "Manpower Supply" },
+                { value: "3006", text: "LEW" },
+                { value: "3007", text: "Calibration" },
+                { value: "3008", text: "Equipment Rent" },
+                { value: "3009", text: "Servicing" },
+                { value: "3010", text: "Others" }
+            ],
+            "4000": [],
+            "500": [
+                { value: "504", text: "Vehicle" },
+                { value: "510", text: "Training" },
+                { value: "511", text: "Medical" },
+                { value: "512", text: "Utilities" },
+                { value: "513", text: "Travel" },
+                { value: "514", text: "Safety" },
+                { value: "515", text: "Office" },
+                { value: "517", text: "Calibration" },
+                { value: "519", text: "Entertainment" },
+                { value: "520", text: "Others" }
+            ]
+        };
+
+        function updateDescriptionOptions() {
+            const expensesSelect = document.getElementById('Expenses');
+            const descriptionSelect = document.getElementById('Description');
+            const selectedValue = expensesSelect.value;
+
+            // Clear existing options
+            descriptionSelect.innerHTML = '<option value="" disabled selected> Description</option>';
+
+            // Populate new options
+            if (descriptionOptions[selectedValue]) {
+                descriptionOptions[selectedValue].forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.value;
+                    newOption.text = option.text;
+                    descriptionSelect.appendChild(newOption);
+                });
+            }
+        }
+
+        function updateCode() {
+            const descriptionSelect = document.getElementById('Description');
+            const codeInput = document.getElementById('code_number');
+            const selectedOption = descriptionSelect.options[descriptionSelect.selectedIndex];
+
+            codeInput.value = selectedOption ? selectedOption.value : '';
+        }
+
+        // Initialize the description options if there's a preselected Expenses Type
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDescriptionOptions();
+            updateCode();
+
+            // Select-all functionality for checkboxes
+            const selectAllCheckbox = document.getElementById('select-all-checkbox2');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_assets[]"]');
+
+            selectAllCheckbox.addEventListener('change', function () {
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var select = document.getElementById('Expenses');
+            var options = select.getElementsByTagName('option');
+
+            for (var i = 1; i < options.length; i++) {
+                if (i % 2 == 0) {
+                    options[i].classList.add('option-color-even');
+                } else {
+                    options[i].classList.add('option-color-odd');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var select = document.getElementById('Supplier_Name');
+            var options = select.getElementsByTagName('option');
+
+            for (var i = 1; i < options.length; i++) {
+                if (i % 2 == 0) {
+                    options[i].classList.add('option-color-even');
+                } else {
+                    options[i].classList.add('option-color-odd');
+                }
+            }
+        });
+    </script>
+
+    <script>
+
+        function deleteRow(button) {
+            var row = button.closest('tr');
+            row.remove();
+            updateRowIndices();
+            updateSumTotal(); // Recalculate totals after row deletion
+        }
+
+        function addRow() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+
+            // Create cells
+            var indexCell = newRow.insertCell(0);
+            var partNoCell = newRow.insertCell(1);
+            var descriptionCell = newRow.insertCell(2);
+            var uomCell = newRow.insertCell(3);
+            var dateCell = newRow.insertCell(4);
+            var quantityCell = newRow.insertCell(5);
+            var unitPriceCell = newRow.insertCell(6);
+            var totalCell = newRow.insertCell(7);
+            var actionCell = newRow.insertCell(8);
+
+            // Row index
+            indexCell.className = 'text-center';
+            indexCell.innerHTML = table.rows.length;
+
+            // Inputs
+            partNoCell.innerHTML = `<input class="form-control" type="text" name="part_no[]" placeholder="Part No">`;
+
+            descriptionCell.innerHTML = `
+                                    <div>
+                                          <button type="button" onclick="toggleDetails(this)"
+                                             style="background-color: #f8f9fa; color: #007bff; border: 1px solid #ced4da; border-radius: 4px; padding: 3px 8px; font-size: 0.875rem; cursor: pointer;">
+                                             + Headings
+                                          </button>
+
+                                       <div class="extra-details d-none mt-2">
+                                          <input class="form-control mb-1" type="text" name="description_header[]" placeholder="Header (optional)">
+                                          <input class="form-control mb-1" type="text" name="description_subheader[]" placeholder="Subheading (optional)">
+                                       </div>
+                                       <textarea class="form-control mb-1" name="description_body[]" rows="2"
+                                             placeholder="Main Description (required)"
+                                             oninput="fetchSuggestions(this)"
+                                             onblur="hideSuggestions(this)">
+                                       </textarea>
+                                       <div class="suggestion-box" style="display:none;"></div>
+                                    </div>
+                                 `;
+
+            uomCell.innerHTML = `<input class="form-control" type="text" name="uom[]" maxlength="5" placeholder="UOM" required>`;
+
+            dateCell.innerHTML = `<input class="form-control" type="date" name="excepted_date[]">`;
+
+            quantityCell.innerHTML = `<input class="form-control" type="number" name="quantity[]" required oninput="calculateTotal(this)" placeholder="Qty">`;
+
+            unitPriceCell.innerHTML = `<input class="form-control" type="number" step="any" name="unit_price[]" required oninput="calculateTotal(this)" placeholder="Unit Price">`;
+
+            totalCell.innerHTML = `<input class="form-control" type="text" name="total[]" readonly placeholder="Total">`;
+
+            actionCell.innerHTML = `
+                                    <button type="button" class="btn-delete" style="color: red;" onclick="deleteRow(this)">
+                                       <ion-icon name="trash" class="fa-solid fa-trash"></ion-icon>
+                                    </button>
+                                 `;
+
+            updateRowIndices();
+        }
+
+        function updateRowIndices() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            for (var i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerHTML = i + 1;
+            }
+        }
+
+        function calculateTotal(input) {
+            var row = input.closest('tr');
+            var quantity = parseFloat(row.querySelector('input[name="quantity[]"]').value);
+            var unitPrice = parseFloat(row.querySelector('input[name="unit_price[]"]').value);
+            var total = quantity * unitPrice;
+            row.querySelector('input[name="total[]"]').value = total.toFixed(2);
+
+            updateSumTotal(); // Update the sum of totals
+        }
+
+
+        function updateSumTotal() {
+            var table = document.getElementById('dynamicTable').getElementsByTagName('tbody')[0];
+            var sumTotal = 0.0;
+            for (var i = 0; i < table.rows.length; i++) {
+                var total = parseFloat(table.rows[i].querySelector('input[name="total[]"]').value);
+                sumTotal += total;
+            }
+
+            const discountInput = document.getElementById('Discount');
+            const discountPercent = parseFloat(discountInput.value) || 0;
+
+            // Step 3: Apply discount to sumTotal (only if it's positive)
+            let discountedAmount = sumTotal;
+            if (discountPercent > 0) {
+                const discountValue = (discountPercent / 100) * sumTotal;
+                discountedAmount = sumTotal - discountValue;
+            }
+
+            const gstOption = document.getElementById('gst_option').value;
+            let gstValue = 0.0;
+            const gstPercent = parseFloat(document.getElementById('gst_percent').value) || 0;
+
+            if (gstOption === 'Yes') {
+                gstValue = (gstPercent / 100) * discountedAmount;
+            }
+
+            const finalTotal = discountedAmount + gstValue;
+
+            document.getElementById('sumTotal').innerText = sumTotal.toFixed(2);
+            document.getElementById('gstvalue').innerText = gstValue.toFixed(2);
+            document.getElementById('overalsumTotal').innerText = finalTotal.toFixed(2);
+            // Optional: Call updateSumTotal when discount or GST option is changed
+            document.getElementById('Discount').addEventListener('input', updateSumTotal);
+            document.getElementById('gst_option').addEventListener('change', updateSumTotal);
+
+
+            // document.getElementById('sumTotal').innerText = sumTotal.toFixed(2); // Display sum of totals
+        }
+
+
+    </script>
+
+    <style>
+        textarea.form-control {
+            resize: vertical;
+            min-height: 40px;
+            overflow-y: auto;
+        }
+
+        input.form-control,
+        textarea.form-control {
+            padding: 6px 10px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+
+        document.getElementById('openModalButton').onclick = function () {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex'; // Show the modal
+        };
+
+        function toggleSelectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('#itemsTableBody input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+
+        document.querySelector('.close-button').onclick = function () {
+            document.getElementById('modal').style.display = 'none';
+            window.location.reload();
+        };
+
+    </script>
+
+    <style>
+        textarea.form-control {
+            resize: vertical;
+            min-height: 40px;
+            overflow-y: auto;
+        }
+
+        input.form-control,
+        textarea.form-control {
+            padding: 6px 10px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .button-container1 {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <!-- CSS for Modal -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Optional animation for smoother appearance */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+
+    <style>
+        .title-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0fabf3;
+        }
+
+        .open {
+            justify-content: space-between;
+            animation-name: open;
+            animation-duration: 1s;
+            animation-timing-function: ease-out;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <style>
+        .table-responsive1 {
+            width: 100%;
+            overflow: auto;
+            max-height: 450px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow: auto;
+            max-height: 750px;
+        }
+
+        .table-main {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-main thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .container {
+            background-color: white;
+            /* Light Gray - Similar to Apple's typical background */
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            border: 2px solid #d3d3d3;
+            /* Slightly darker light gray for border */
+            margin-bottom: 15px;
+        }
+
+        .invoice-header {
+            flex: 1;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #004d40;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .invoice-header:hover {
+            transform: scale(1.02);
+        }
+
+
+        .invoice-row {
+            display: grid;
+            grid-template-columns: 140px auto;
+            /* First column for labels, second for values */
+            gap: 10px;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .invoice-row p {
+            margin: 0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .invoice-row span {
+            text-align: left;
+        }
+
+
+        .invice_header {
+            width: 100%;
+            padding: 10px;
+
+        }
+
+
+        .button-container1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .button-container1 h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+
+
+        .title-box {
+            display: flex;
+            padding: 5px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title-item {
+            display: flex;
+            align-items: center;
+
+            /* Align title and value on the same row */
+        }
+
+        .title-item span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #004b5d;
+        }
+
+
+        @keyframes open {
+            from {
+                width: 20px;
+                /* Start with 0 width */
+            }
+
+            to {
+                width: 573px;
+                /* Animate to 473px width */
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .title-box {
+                flex-direction: column;
+                /* Stack items vertically on smaller screens */
+                align-items: flex-start;
+            }
+
+            .title-item {
+                margin-bottom: 15px;
+                /* Space between stacked items */
+            }
+        }
+    </style>
+
+    <style>
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideDown 0.5s ease-in-out forwards;
+        }
+
+        .flex-item-full-width {
+            flex: 1;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Optional: add spacing between flex items within .flex-row */
+        }
+
+        .flex-item {
+            flex: 1;
+            /* Ensure flex items grow equally */
+        }
+
+        .form-label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 5px 6px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.0;
+            color: #495057;
+            background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: chartreuse;
+            outline: 0;
+            box-shadow: 0 0 0 0.05rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+        }
+
+        .form-control:disabled,
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+
+        .form-control:hover {
+            border-color: #b0b4b8;
+        }
+
+        .form-control::placeholder {
+            text-align: center;
+        }
+
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 1% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 85%;
+            border: 2px solid black;
+
+        }
+
+
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <style>
+        .new-enquiry-btn {
+            background: linear-gradient(45deg, #007AFF, #34AADC, #5856D6, #FF2D55);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 4px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 10px 10px 10px rgba(0, 122, 255, 0.3);
+            /* Soft shadow */
+        }
+
+        /* Hover effect: Darker Gradient + Glow */
+        .new-enquiry-btn:hover {
+            background: linear-gradient(45deg, #0056A3, #2598C1, #4741C1, #D91D48);
+            background-size: 200% 200%;
+            box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5);
+            /* Stronger shadow on hover */
+            transform: scale(1.05);
+        }
+    </style>
+    <!-- Search Table -->
+    <script>
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase().trim();
+            let keywords = input.split(",").map(k => k.trim()).filter(k => k !== "");
+            let rows = document.querySelectorAll(".mainRow");
+
+            rows.forEach(row => {
+                let Project = row.querySelector(".Project") ? row.querySelector(".Project").textContent.trim().toLowerCase() : '';
+                let PR_no = row.querySelector(".PR_no") ? row.querySelector(".PR_no").textContent.trim().toLowerCase() : '';
+                let PR_Date = row.querySelector(".PR_Date") ? row.querySelector(".PR_Date").textContent.trim().toLowerCase() : '';
+                let Supplier_Name = row.querySelector(".Supplier_Name") ? row.querySelector(".Supplier_Name").textContent.trim().toLowerCase() : '';
+                let created_by = row.querySelector(".created_by") ? row.querySelector(".created_by").textContent.trim().toLowerCase() : '';
+                let status = row.querySelector(".status") ? row.querySelector(".status").textContent.trim().toLowerCase() : '';
+
+                let combinedText = [Project, PR_no, PR_Date, Supplier_Name, created_by, status].join(" ");
+
+                // Show the row only if every keyword is found in the combined text
+                let isMatch = keywords.every(keyword => combinedText.includes(keyword));
+
+                row.style.display = isMatch ? "" : "none";
+            });
+
+            updateTotals(); // Recalculate totals after filtering
+        }
+
+
+        function updateTotals() {
+            let requestCount = 0;
+            let totalAmount = 0;
+            let totalGST = 0;
+            let totalSum = 0;
+
+            // Get all table rows (excluding the header row)
+            const rows = document.querySelectorAll("#projectTable tbody tr.mainRow");
+
+            rows.forEach(row => {
+                if (row.style.display !== "none") { // Only include rows that are not hidden
+                    requestCount++;
+
+                    // Extract amount, GST value, and total from each row
+                    let amount = parseFloat(row.querySelector("td:nth-child(7)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                    let gstValue = parseFloat(row.querySelector("td:nth-child(8)").textContent.replace(/[^0-9.]/g, '')) || 0;
+                    let total = parseFloat(row.querySelector("td:nth-child(9)").textContent.replace(/[^0-9.]/g, '')) || 0;
+
+                    totalAmount += amount;
+                    totalGST += gstValue;
+                    totalSum += total;
+                }
+            });
+
+            // Format the totals with international numbering format
+            let formattedAmount = totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedGST = totalGST.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            let formattedTotal = totalSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Update the spans with formatted values
+            document.getElementById("requestCount").textContent = requestCount;
+            document.getElementById("totalAmount").textContent = "S$ " + formattedAmount;
+            document.getElementById("totalGST").textContent = "S$ " + formattedGST;
+            document.getElementById("overallTotal").textContent = "S$ " + formattedTotal;
+        }
+
+        // Call the function when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            updateTotals();
+        });
+
+
+    </script>
+
+    <style>
+        .span_tag {
+            font-size: 14px;
+            font-weight: bold;
+            color: #004b5d;
+            padding: 5px 8px;
+            border: 1px solid #004b5d;
+            border-radius: 5px;
+            background-color: #f1f8ff;
+            color: #004b5d;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        #totalAmount {
+            color: #28a745;
+            /* Green for amount */
+        }
+
+        #totalGST {
+            color: #0c8de2;
+            /* Yellow for GST */
+        }
+
+        #overallTotal {
+            color: #dc3545;
+            /* Red for overall total */
+        }
+
+        .search_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+
+        #projectTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+
+
+        #searchInput {
+            width: 40%;
+            padding: 2px;
+            margin: auto;
+            display: block;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            /* Rounded corners */
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        #searchInput:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchInput:focus {
+            border-color: #004b5d;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+</body>
+
+</html>
